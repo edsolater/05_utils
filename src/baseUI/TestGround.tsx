@@ -1,6 +1,6 @@
 import React from 'react'
-import RichTextEditor from './RichTextEditor'
+import RichEditor from './RichEditor'
 function TestGround() {
-  return <RichTextEditor>hello world</RichTextEditor>
+  return <RichEditor />
 }
 export default TestGround

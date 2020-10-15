@@ -5,16 +5,17 @@ import { FC, ReactElement } from 'react'
 /**
  * 想做个富文本编辑器
  */
-const RichTextEditor: FC<{ clildren?: ReactElement }> = props => {
+const RichEditor: FC<{ clildren?: ReactElement }> = props => {
   return (
     <div
       css={css({
-        backgroundColor: 'red'
+        backgroundColor: '#eee'
       })}
+      contentEditable
     >
-      {props.children}
+      请输入：
     </div>
   )
 }
 
-export default RichTextEditor
+export default RichEditor
