@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { FC, ReactElement, useReducer, useRef } from 'react'
+import { FC, ReactElement, useRef } from 'react'
 
 /**
  * 想做个富文本编辑器
  */
-const SyncScroll: FC<{ clildren?: ReactElement }> = props => {
+const SyncScroll: FC<{}> = ({ children }) => {
   const leftDiv = useRef<HTMLDivElement | null>(null)
   const rightDiv = useRef<HTMLDivElement | null>(null)
 
@@ -25,8 +25,8 @@ const SyncScroll: FC<{ clildren?: ReactElement }> = props => {
             () => {
               if (rightDiv.current) {
                 const scrollDistance =
-                  (el.scrollTop / el.scrollHeight) * rightDiv.current.scrollHeight //FIXME
-                console.log('scrollDistance: ', scrollDistance)
+                  (el.scrollTop / (el.scrollHeight - el.clientHeight)) *
+                  (rightDiv.current.scrollHeight - rightDiv.current.clientHeight) //FIXME 目前很生硬
                 rightDiv.current.scrollTo({
                   top: scrollDistance
                 })
