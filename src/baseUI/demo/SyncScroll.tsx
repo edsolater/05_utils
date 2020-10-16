@@ -1,14 +1,30 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { FC, ReactElement, useRef } from 'react'
+import { FC, useRef } from 'react'
 
 /**
  * 想做个富文本编辑器
  */
-const SyncScroll: FC<{}> = ({ children }) => {
-  const leftDiv = useRef<HTMLDivElement | null>(null)
-  const rightDiv = useRef<HTMLDivElement | null>(null)
-
+const SyncScroll: FC<{}> = ({}) => {
+  const aDiv = useRef<HTMLDivElement | null>(null)
+  const bDiv = useRef<HTMLDivElement | null>(null)
+  const tryToAttachScroll = (a: typeof aDiv, b: typeof bDiv) => {
+    a.current?.addEventListener(
+      'scroll',
+      () => {
+        if (a.current && b.current) {
+          const aAvaliableScrollDistance = a.current.scrollHeight - a.current.clientHeight
+          const bAvaliableScrollDistance = b.current.scrollHeight - b.current.clientHeight
+          const targetScrollTop =
+            (a.current.scrollTop / aAvaliableScrollDistance) * bAvaliableScrollDistance //FIXME 目前很生硬
+          b.current.scrollTo({
+            top: targetScrollTop
+          })
+        }
+      },
+      { passive: true }
+    )
+  }
   return (
     <div
       className='outter'
@@ -19,21 +35,8 @@ const SyncScroll: FC<{}> = ({ children }) => {
     >
       <div
         ref={el => {
-          leftDiv.current = el
-          el?.addEventListener(
-            'scroll',
-            () => {
-              if (rightDiv.current) {
-                const scrollDistance =
-                  (el.scrollTop / (el.scrollHeight - el.clientHeight)) *
-                  (rightDiv.current.scrollHeight - rightDiv.current.clientHeight) //FIXME 目前很生硬
-                rightDiv.current.scrollTo({
-                  top: scrollDistance
-                })
-              }
-            },
-            { passive: true }
-          )
+          aDiv.current = el
+          tryToAttachScroll(aDiv, bDiv)
         }}
         css={css({
           flex: '1',
@@ -87,7 +90,10 @@ const SyncScroll: FC<{}> = ({ children }) => {
         <div>36</div>
       </div>
       <div
-        ref={rightDiv}
+        ref={el => {
+          bDiv.current = el
+          tryToAttachScroll(aDiv, bDiv)
+        }}
         css={css({
           flex: '1',
           margin: 8,

@@ -4,7 +4,7 @@ import SyncScroll from './SyncScroll'
 function TestGround() {
   return (
     <>
-      {/* <RichEditor>hello world</RichEditor> */}
+      <RichEditor />
       <SyncScroll />
     </>
   )

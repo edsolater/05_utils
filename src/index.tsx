@@ -1,4 +1,4 @@
-import TestGround from 'baseUI/TestGround'
+import TestGround from 'baseUI/demo/TestGround'
 import React from 'react'
 import { render } from 'react-dom'
 import './index.css'
