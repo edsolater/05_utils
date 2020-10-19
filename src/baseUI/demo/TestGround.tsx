@@ -5,7 +5,7 @@ function TestGround() {
   return (
     <>
       <RichEditor />
-      <SyncScroll />
+      {/* <SyncScroll /> */}
     </>
   )
 }

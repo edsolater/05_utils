@@ -1,32 +1,28 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { FC, ReactElement, useEffect, useRef, useState } from 'react'
+import { FC, ReactElement, useLayoutEffect, useRef, useState } from 'react'
 
+let range: Range | undefined
+function cursorToLast(commonAncestor: HTMLElement) {
+  const newRange = document.createRange()
+  newRange.selectNodeContents(commonAncestor) //range的开始与结束的公共父节点
+  newRange.collapse(false)
+  const selection = window.getSelection()
+  selection?.removeAllRanges()
+  selection?.addRange(newRange)
+}
 /**
  * 想做个富文本编辑器
  */
-const RichEditor: FC<{ clildren?: ReactElement }> = props => {
-  const ref = useRef<HTMLDivElement>(null)
-  const [innerHTML, setInnerHTML] = useState('hello woerldd')
-  useEffect(() => {
-    document.addEventListener('selectionchange', ev => {
-      const selection = document.getSelection()
-      if (selection?.type == 'Range') {
-        const selectedText = selection.toString()
-        const anchorParentElement = selection.anchorNode?.parentElement
-        const content = (ev.target as HTMLDivElement).innerHTML
-        const [positionA, positionB] = [selection.anchorOffset, selection.focusOffset]
-        const from = Math.min(positionA, positionB)
-        const to = Math.max(positionA, positionB)
-        const targetContent = 'hello <b>world</b>'
-        ;(ev.target as HTMLDivElement).innerHTML = targetContent
-        setInnerHTML(targetContent)
-      }
-    })
-  }, [])
+const RichEditor: FC<{ clildren?: ReactElement }> = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [innerHTML, setInnerHTML] = useState('hello world')
+  useLayoutEffect(() => {
+    if (containerRef.current) cursorToLast(containerRef.current)
+  }, [innerHTML])
   return (
     <div
-      ref={ref}
+      ref={containerRef}
       css={css({
         backgroundColor: '#eee',
         outline: 'none',
@@ -37,10 +33,30 @@ const RichEditor: FC<{ clildren?: ReactElement }> = props => {
         }
       })}
       onInput={({ target }) => {
-        setTimeout(() => {
-          setInnerHTML((target as HTMLDivElement).innerHTML)
-        }, 0)
+        setInnerHTML((target as HTMLDivElement).innerHTML)
       }}
+      // onKeyDown={e => {
+      //   if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+      //     // 阻止弹出我的收藏夹文件夹
+      //     e.preventDefault()
+
+      //     const selection = window.getSelection()
+      //     // 选区的范围
+      //     const range = selection?.getRangeAt(0)
+      //     if (selection && containerRef.current) {
+      //       const start = selection.anchorOffset
+      //       const end = selection.focusOffset
+      //       const rangeText = selection.getRangeAt(0).toString()
+      //       const parentNode = selection.anchorNode?.parentElement
+      //       const parentTextNode = selection.anchorNode as Text
+
+      //       const b = document.createElement('b')
+      //       b.appendChild(document.createTextNode(rangeText))
+      //       parentNode?.insertBefore(b, parentTextNode.splitText(start))
+      //       parentNode?.removeChild(parentTextNode.splitText(end))
+      //     }
+      //   }
+      // }}
       contentEditable
       dangerouslySetInnerHTML={{ __html: innerHTML }}
     ></div>
