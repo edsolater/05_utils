@@ -2,10 +2,16 @@
 import { jsx, css } from '@emotion/core'
 import { FC, ReactElement, useLayoutEffect, useRef, useState } from 'react'
 
+type IRangeInfo = {
+  startContainer: Node
+  startOffset: number
+  endContainer: Node
+  endOffset: number
+}
 /**
  * 将记录下的range的应用到界面上（抄的，暂时还没看懂）
  */
-function applyLastRange(editor: HTMLElement, targetRange?: { start: number; end: number }) {
+function applyLastRange(editor: HTMLElement, targetRange: IRangeInfo) {
   var charIndex = 0
   const range = document.createRange()
   range.setStart(editor, 0)
@@ -16,14 +22,22 @@ function applyLastRange(editor: HTMLElement, targetRange?: { start: number; end:
   let stop = false
 
   while (!stop && (node = nodeStack.pop())) {
-    if (node.nodeType == 3 && targetRange) {
+    if (node.nodeType == 3) {
       var nextCharIndex = charIndex + node.length
-      if (!foundStart && targetRange.start >= charIndex && targetRange.start <= nextCharIndex) {
-        range.setStart(node, targetRange.start - charIndex)
+      if (
+        !foundStart &&
+        targetRange.startOffset >= charIndex &&
+        targetRange.startOffset <= nextCharIndex
+      ) {
+        range.setStart(node, targetRange.startOffset - charIndex)
         foundStart = true
       }
-      if (foundStart && targetRange.end >= charIndex && targetRange.end <= nextCharIndex) {
-        range.setEnd(node, targetRange.end - charIndex)
+      if (
+        foundStart &&
+        targetRange.endOffset >= charIndex &&
+        targetRange.endOffset <= nextCharIndex
+      ) {
+        range.setEnd(node, targetRange.endOffset - charIndex)
         stop = true
       }
       charIndex = nextCharIndex
@@ -34,6 +48,12 @@ function applyLastRange(editor: HTMLElement, targetRange?: { start: number; end:
       }
     }
   }
+  // // 靠传过来的引用，系统是不认账的，所以不行。
+  // const range2 = document.createRange()
+  // range2.setStart(targetRange.startContainer, targetRange.startOffset)
+  // range2.setEnd(targetRange.endContainer, targetRange.endOffset)
+  // range2.collapse()
+  // console.log('range2: ', range, range2)
   const selection = getSelection()
   selection?.removeAllRanges()
   selection?.addRange(range)
@@ -43,11 +63,32 @@ function applyLastRange(editor: HTMLElement, targetRange?: { start: number; end:
  */
 const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [innerHTML, setInnerHTML] = useState('hello world')
-  const lastStateRange = useRef<{ start: number; end: number }>()
+  const [innerHTML, setInnerHTML] = useState('这是一段没有意义的文字')
+
+  const lastStateRange = useRef<IRangeInfo>()
   useLayoutEffect(() => {
-    if (containerRef.current) applyLastRange(containerRef.current, lastStateRange.current)
+    if (containerRef.current && lastStateRange.current)
+      applyLastRange(containerRef.current, lastStateRange.current)
   }, [innerHTML])
+
+  const syncInnerHTML = () => {
+    /**
+     * 记录下一些range的信息
+     */
+    const range = getSelection()?.getRangeAt(0)
+    if (range) {
+      lastStateRange.current = {
+        startContainer: range.startContainer,
+        startOffset: range.startOffset,
+        endContainer: range.endContainer,
+        endOffset: range.endOffset
+      }
+    }
+    // 同步（记录） innerHTML
+    if (containerRef.current) {
+      setInnerHTML(containerRef.current.innerHTML)
+    }
+  }
   return (
     <div
       ref={containerRef}
@@ -60,24 +101,15 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
           maxWidth: 300
         }
       })}
-      onInput={({ target }) => {
-        /**
-         * 记录下一些range的数据（抄的，暂时还没看懂）
-         */
-        const range = getSelection()?.getRangeAt(0)
-        if (range) {
-          const preSelectionRange = range.cloneRange()
-          preSelectionRange.selectNodeContents(range.commonAncestorContainer)
-          preSelectionRange.setEnd(range.startContainer, range.startOffset)
-          const start = preSelectionRange.toString().length
-
-          lastStateRange.current = {
-            start,
-            end: start + range.toString().length
-          }
+      onCompositionEnd={() => {
+        // 输入法结束后，触发同步更新 innerHTML
+        syncInnerHTML()
+      }}
+      onInput={({ nativeEvent }) => {
+        // 不是输入法，都触发同步更新 innerHTML
+        if (!((nativeEvent as InputEvent).inputType == 'insertCompositionText')) {
+          syncInnerHTML()
         }
-
-        setInnerHTML((target as HTMLDivElement).innerHTML)
       }}
       // onKeyDown={e => {
       //   if (e.ctrlKey && e.key.toLowerCase() === 'b') {
