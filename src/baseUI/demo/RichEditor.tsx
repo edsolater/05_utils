@@ -1,74 +1,60 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
+import betweenNumberRange from 'functions/betweenNumberRange'
+import { assertTextNode } from 'functions/typeGards'
 import { FC, ReactElement, useLayoutEffect, useRef, useState } from 'react'
 
 type IRangeInfo = {
-  startContainer: Node
-  startOffset: number
-  endContainer: Node
-  endOffset: number
+  // 划线区的开头，相对与整段文字内容的位置
+  start: number
+  // 划线区的结尾，相对与整段文字内容的位置
+  end: number
 }
 /**
  * 将记录下的range的应用到界面上（抄的，暂时还没看懂）
  */
-function applyLastRange(editor: HTMLElement, targetRange: IRangeInfo) {
+function applyLastRange(editor: HTMLElement, { start, end }: IRangeInfo) {
   var charIndex = 0
-  const range = document.createRange()
-  range.setStart(editor, 0)
-  range.collapse(true)
-  let nodeStack = [editor]
-  let node
-  let foundStart = false
-  let stop = false
+  const newRange = document.createRange()
+  newRange.setStart(editor, 0)
+  newRange.collapse(true)
+  const nodeStack: Node[] = [editor]
+  let foundStart = false // 记录是否已找到了选区的开始处
 
-  while (!stop && (node = nodeStack.pop())) {
-    if (node.nodeType == 3) {
-      var nextCharIndex = charIndex + node.length
-      if (
-        !foundStart &&
-        targetRange.startOffset >= charIndex &&
-        targetRange.startOffset <= nextCharIndex
-      ) {
-        range.setStart(node, targetRange.startOffset - charIndex)
+  while (nodeStack.length) {
+    const node = nodeStack.pop()!
+    if (assertTextNode(node)) {
+      if (!foundStart && betweenNumberRange(start, [charIndex, charIndex + node.length])) {
+        newRange.setStart(node, start - charIndex)
         foundStart = true
       }
-      if (
-        foundStart &&
-        targetRange.endOffset >= charIndex &&
-        targetRange.endOffset <= nextCharIndex
-      ) {
-        range.setEnd(node, targetRange.endOffset - charIndex)
-        stop = true
+      if (foundStart && betweenNumberRange(end, [charIndex, charIndex + node.length])) {
+        newRange.setEnd(node, end - charIndex)
+        // 至此，选取的开始与结尾都记录完毕，不需要继续遍历了
+        break
       }
-      charIndex = nextCharIndex
+      charIndex += node.length
     } else {
-      var i = node.childNodes.length
-      while (i--) {
-        nodeStack.push(node.childNodes[i])
-      }
+      nodeStack.push(...Array.from(node.childNodes))
     }
   }
-  // // 靠传过来的引用，系统是不认账的，所以不行。
-  // const range2 = document.createRange()
-  // range2.setStart(targetRange.startContainer, targetRange.startOffset)
-  // range2.setEnd(targetRange.endContainer, targetRange.endOffset)
-  // range2.collapse()
-  // console.log('range2: ', range, range2)
   const selection = getSelection()
   selection?.removeAllRanges()
-  selection?.addRange(range)
+  selection?.addRange(newRange)
 }
 /**
  * 想做个富文本编辑器
  */
 const RichEditor: FC<{ clildren?: ReactElement }> = () => {
+  // 编辑器框的应用
   const containerRef = useRef<HTMLDivElement>(null)
+  // 保存上一个选取范围的信息
+  const lastRangeInfo = useRef<IRangeInfo>()
+  // 编辑器内部的文本信息
   const [innerHTML, setInnerHTML] = useState('这是一段没有意义的文字')
-
-  const lastStateRange = useRef<IRangeInfo>()
   useLayoutEffect(() => {
-    if (containerRef.current && lastStateRange.current)
-      applyLastRange(containerRef.current, lastStateRange.current)
+    if (containerRef.current && lastRangeInfo.current)
+      applyLastRange(containerRef.current, lastRangeInfo.current)
   }, [innerHTML])
 
   const syncInnerHTML = () => {
@@ -76,12 +62,16 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
      * 记录下一些range的信息
      */
     const range = getSelection()?.getRangeAt(0)
-    if (range) {
-      lastStateRange.current = {
-        startContainer: range.startContainer,
-        startOffset: range.startOffset,
-        endContainer: range.endContainer,
-        endOffset: range.endOffset
+    if (range && containerRef.current) {
+      // 创建选择原选区文字左边的选区（目的是方便计算相对于所有文字的start/end）
+      const preSelectionRange = range.cloneRange()
+      preSelectionRange.selectNodeContents(containerRef.current)
+      preSelectionRange.setEnd(range.startContainer, range.startOffset)
+      const start = preSelectionRange.toString().length
+
+      lastRangeInfo.current = {
+        start,
+        end: start + range.toString().length
       }
     }
     // 同步（记录） innerHTML
@@ -102,12 +92,14 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
         }
       })}
       onCompositionEnd={() => {
+        // TODO 与 onInput 合并地暴露成一个props
         // 输入法结束后，触发同步更新 innerHTML
         syncInnerHTML()
       }}
       onInput={({ nativeEvent }) => {
+        //TODO 当插入图片时，指针要移到图片后
         // 不是输入法，都触发同步更新 innerHTML
-        if (!((nativeEvent as InputEvent).inputType == 'insertCompositionText')) {
+        if ((nativeEvent as InputEvent).inputType !== 'insertCompositionText') {
           syncInnerHTML()
         }
       }}
