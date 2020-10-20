@@ -27,7 +27,7 @@ function getAllTextNodesFromNode(targetRootNode: Node) {
 }
 
 /**
- * 将记录下的range的应用到界面上（抄的，暂时还没看懂）
+ * 将记录下的range的应用到界面上（不完全是自己想的）
  */
 function applyLastRange(editor: HTMLElement, { start, end }: IRangeInfo) {
   var charIndex = 0
@@ -36,7 +36,6 @@ function applyLastRange(editor: HTMLElement, { start, end }: IRangeInfo) {
   let foundStart = false // 记录是否已找到了选区的开始位置
 
   newRange.setStart(editor, 0) //设定好默认的选区开始位置
-  console.log('start,end: ', start, end)
   for (let i = 0; i < textNodeStack.length; i++) {
     const textNode = textNodeStack[i]
     if (!foundStart && betweenNumberRange(start, [charIndex, charIndex + textNode.length])) {
@@ -49,10 +48,8 @@ function applyLastRange(editor: HTMLElement, { start, end }: IRangeInfo) {
     }
     charIndex += textNode.length
   }
-  console.log('newRange: ', newRange)
 
   const selection = getSelection()
-  // 先记录因此导致的selectionChange事件非用户发起的
   selection?.removeAllRanges()
   selection?.addRange(newRange)
 }
