@@ -4,7 +4,7 @@ import betweenNumberRange from 'functions/betweenNumberRange'
 import { isTextNode } from 'functions/typeGards'
 import { FC, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
-type IRangeInfo = {
+type RangeInfo = {
   // 划线区的开头，相对与整段文字内容的位置
   start: number
   // 划线区的结尾，相对与整段文字内容的位置
@@ -29,7 +29,7 @@ function getAllTextNodesFromNode(targetRootNode: Node) {
 /**
  * 将记录下的range的应用到界面上（不完全是自己想的）
  */
-function applyLastRange(editor: HTMLElement, { start, end }: IRangeInfo) {
+function applyLastRange(editor: HTMLElement, { start, end }: RangeInfo) {
   var charIndex = 0
   const newRange = document.createRange()
   const textNodeStack = getAllTextNodesFromNode(editor)
@@ -57,11 +57,13 @@ function applyLastRange(editor: HTMLElement, { start, end }: IRangeInfo) {
 /**
  * 基于选区与文字，加粗
  */
-function blodText(innerHTML: string, { start, end }: IRangeInfo): string {
+function blodText(innerHTML: string, { start, end }: RangeInfo): string {
+  console.log('innerHTML: ', innerHTML)
   const newInnerHTML = `${innerHTML.slice(0, start)}<b>${innerHTML.slice(
     start,
     end
   )}</b>${innerHTML.slice(end)}`
+  console.log('newInnerHTML: ', newInnerHTML)
   return newInnerHTML
 }
 
@@ -88,9 +90,9 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   // 编辑器框的应用
   const editorRef = useRef<HTMLDivElement>(null)
   // 保存上一个选取范围的信息
-  const lastRangeInfo = useRef<IRangeInfo>()
+  const lastRangeInfo = useRef<RangeInfo>()
   // 编辑器内部的文本信息
-  const [innerHTML, setInnerHTML] = useState('这是一段没有意义的文字')
+  const [innerHTML, setInnerHTML] = useState('这是<b>一段没有</b>意义的文字')
   //#endregion
 
   //#region ------------------- 组件内部方法 -------------------
@@ -98,7 +100,6 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   const recordRange = (editor: HTMLDivElement | null, range: Range | undefined) => {
     if (!editor || !range) return
     const info = getRangeInfo(editor, range)
-    console.log('info: ', info)
     lastRangeInfo.current = info
   }
   const syncInnerHTML = () => {
