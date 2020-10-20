@@ -5,8 +5,10 @@ import { isTextNode } from 'functions/typeGards'
 import { FC, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 type RangeInfo = {
+  startContainer: Node
   // 划线区的开头，相对与整段文字内容的位置
   start: number
+  endContainer: Node
   // 划线区的结尾，相对与整段文字内容的位置
   end: number
 }
@@ -57,26 +59,71 @@ function applyLastRange(editor: HTMLElement, { start, end }: RangeInfo) {
 /**
  * 基于选区与文字，加粗
  */
-function blodText(innerHTML: string, { start, end }: RangeInfo): string {
+function blodText(
+  innerHTML: string,
+  { startContainer, endContainer, start, end }: RangeInfo
+): string {
   console.log('innerHTML: ', innerHTML)
-  const newInnerHTML = `${innerHTML.slice(0, start)}<b>${innerHTML.slice(
-    start,
-    end
-  )}</b>${innerHTML.slice(end)}`
-  console.log('newInnerHTML: ', newInnerHTML)
-  return newInnerHTML
+  console.log('start,end: ', start, end)
+  console.log('startContainer: ', startContainer)
+  console.log('endContainer: ', endContainer)
+  console.log('equal: ', startContainer === endContainer)
+
+  //  第一步：根据文字偏移量，计算出插入位置
+  const angleBracketStack: Array<'<'> = []
+  function isNormalText(char: string) {
+    return char !== '<' && char !== '>' && angleBracketStack.length === 0
+  }
+  let leftTextCount = 0
+  let insertStart = 0
+  let insertEnd = 0
+  for (let i = 0; i < innerHTML.length; i++) {
+    const char = innerHTML[i]
+    if (char === '<') {
+      angleBracketStack.push('<')
+    } else if (char === '>') {
+      angleBracketStack.pop()
+    } else if (isNormalText(char)) {
+      leftTextCount += 1
+      if (leftTextCount === start) insertStart = i + 1
+      if (leftTextCount === end) {
+        insertEnd = i + 1
+        break
+      }
+    }
+  }
+
+  // 第二步：设定要插入的标签
+  let [startTag, endTag] = ['<b>', '</b>']
+  if (startContainer === endContainer && endContainer.parentElement?.tagName === 'B') {
+    // 当始末都在同一节点中，且选区始末都是粗体时（此时加粗是将粗体变细）
+    ;[startTag, endTag] = [endTag, startTag]
+  }
+  // 第三步：插入
+  const rawNewInnerHTML = `${innerHTML.slice(0, insertStart)}${startTag}${innerHTML.slice(
+    insertStart,
+    insertEnd
+  )}${endTag}${innerHTML.slice(insertEnd)}`
+
+  // 第四步： 去除原来的无用标签，名为拍平
+  const flatedNewInnerHTML = rawNewInnerHTML.replace('<b></b>', '').replace('</b><b>', '') //FIXME
+  console.log('roughNewInnerHTML: ', rawNewInnerHTML)
+  console.log('flatedNewInnerHTML: ', flatedNewInnerHTML)
+  return flatedNewInnerHTML
 }
 
 /**
  * 记录下一些range的信息
  */
-function getRangeInfo(editor: HTMLDivElement, range: Range) {
+function getRangeInfo(editor: HTMLDivElement, range: Range): RangeInfo {
   const preSelectionRange = range.cloneRange()
-  // 创建选择原选区文字左边的选区（目的是方便计算相对于所有文字的start/end）
+  // 创建选择原选区文字左边的选区（目的是方便计算相对于文档的偏移量）
   preSelectionRange.selectNodeContents(editor)
   preSelectionRange.setEnd(range.startContainer, range.startOffset)
   const start = preSelectionRange.toString().length
   return {
+    startContainer: range.startContainer,
+    endContainer: range.endContainer,
     start,
     end: start + range.toString().length
   }
@@ -92,7 +139,7 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   // 保存上一个选取范围的信息
   const lastRangeInfo = useRef<RangeInfo>()
   // 编辑器内部的文本信息
-  const [innerHTML, setInnerHTML] = useState('这是<b>一段没有</b>意义的文字')
+  const [innerHTML, setInnerHTML] = useState('这是一段没有意义的文字')
   //#endregion
 
   //#region ------------------- 组件内部方法 -------------------
