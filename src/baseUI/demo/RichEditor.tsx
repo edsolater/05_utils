@@ -6,10 +6,10 @@ import { isTextNode } from 'functions/typeGards'
 import { FC, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 type RangeInfo = {
-  startContainer: Node
+  startContainer?: Node
   // 划线区的开头，相对与整段文字内容的位置
   start: number
-  endContainer: Node
+  endContainer?: Node
   // 划线区的结尾，相对与整段文字内容的位置
   end: number
 }
@@ -62,32 +62,17 @@ function getBlodText(
   { startContainer, endContainer, start, end }: RangeInfo
 ): string {
   //  第一步：根据文字偏移量，计算出插入位置
-  const angleBracketStack: Array<'<'> = []
-  function isNormalText(char: string) {
-    return char !== '<' && char !== '>' && angleBracketStack.length === 0
-  }
-  let leftTextCount = 0
-  let insertStart = 0
-  let insertEnd = 0
-  for (let i = 0; i < originalInnerHTML.length; i++) {
-    const char = originalInnerHTML[i]
-    if (char === '<') {
-      angleBracketStack.push('<')
-    } else if (char === '>') {
-      angleBracketStack.pop()
-    } else if (isNormalText(char)) {
-      leftTextCount += 1
-      if (leftTextCount === start) insertStart = i + 1
-      if (leftTextCount === end) {
-        insertEnd = i + 1
-        break
-      }
-    }
-  }
+  const { start: insertStart, end: insertEnd } = computeOffsetRange(originalInnerHTML, start, end)
 
   // 第二步：设定要插入的标签
   let [startTag, endTag] = ['<b>', '</b>']
-  if (startContainer === endContainer && endContainer.parentElement?.tagName === 'B') {
+  // TODO: 应该只用 start 与 end，originalInnerHTML 就能判断的。
+  if (
+    startContainer &&
+    endContainer &&
+    startContainer === endContainer &&
+    endContainer.parentElement?.tagName === 'B'
+  ) {
     console.log(4) // 当始末都在同一节点中，且选区始末都是粗体时（此时加粗是将粗体变细
     const temp = endTag
     endTag = startTag
@@ -139,7 +124,47 @@ function getBlodText(
   // console.log('flatedInnerHTML: ', flatedInnerHTML, flatedInnerHTML.join(''))
   return flatedInnerHTML.join('')
 }
+function getEnteredText(
+  originalInnerHTML: string,
+  { startContainer, endContainer, start, end }: RangeInfo
+) {
+  //  第一步：根据文字偏移量，计算出插入位置
+  const { start: insertStart } = computeOffsetRange(originalInnerHTML, start, end)
+  // 第二步：插入
+  const newInnerHTML = `${originalInnerHTML.slice(0, insertStart)}\n${originalInnerHTML.slice(
+    insertStart
+  )}`
+  return newInnerHTML
+}
 
+/**
+ * 根据文字偏移量，计算出插入位置
+ */
+function computeOffsetRange(originalInnerHTML: string, start: number, end: number) {
+  const angleBracketStack: Array<'<'> = []
+  function isNormalText(char: string) {
+    return char !== '<' && char !== '>' && angleBracketStack.length === 0
+  }
+  let leftTextCount = 0
+  let insertStart = 0
+  let insertEnd = 0
+  for (let i = 0; i < originalInnerHTML.length; i++) {
+    const char = originalInnerHTML[i]
+    if (char === '<') {
+      angleBracketStack.push('<')
+    } else if (char === '>') {
+      angleBracketStack.pop()
+    } else if (isNormalText(char)) {
+      leftTextCount += 1
+      if (leftTextCount === start) insertStart = i + 1
+      if (leftTextCount === end) {
+        insertEnd = i + 1
+        break
+      }
+    }
+  }
+  return { start: insertStart, end: insertEnd }
+}
 /**
  * 记录下一些range的信息
  */
@@ -165,9 +190,9 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   // 编辑器框的应用
   const editorRef = useRef<HTMLDivElement>(null)
   // 保存上一个选取范围的信息
-  const lastRangeInfo = useRef<RangeInfo>()
+  const lastRangeInfo = useRef<RangeInfo>({ start: 0, end: 0 })
   // 编辑器内部的文本信息
-  const [innerHTML, setInnerHTML] = useState('这是<b>一段没</b>有意义<b>的文</b>字')
+  const [innerHTML, setInnerHTML] = useState('')
   //#endregion
 
   //#region ------------------- 组件内部方法 -------------------,
@@ -181,6 +206,12 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
     recordRange(editorRef.current, getSelection()?.getRangeAt(0))
     if (editorRef.current) setInnerHTML(editorRef.current.innerHTML)
   }
+  const offsetRangeInfo = (offsetNumber: number) => {
+    lastRangeInfo.current = {
+      start: lastRangeInfo.current.start + offsetNumber,
+      end: lastRangeInfo.current.end + offsetNumber
+    }
+  }
   //#endregion
 
   //#region ------------------- effect/layoutEffect -------------------
@@ -190,7 +221,6 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
       applyLastRange(editorRef.current, lastRangeInfo.current)
   }, [innerHTML])
   // 改变选区的 selectionChange 事件只能挂载在 document 上
-  // 无用功：有代码应用上一选区时，理论上无需再次记录选区
   useEffect(() => {
     document.addEventListener('selectionchange', () => {
       recordRange(editorRef.current, getSelection()?.getRangeAt(0))
@@ -203,12 +233,19 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
       css={css({
         backgroundColor: '#eee',
         outline: 'none',
+        whiteSpace: 'pre-wrap',
         img: {
           display: 'block',
           maxHeight: 300,
           maxWidth: 300
         }
       })}
+      onFocus={() => {
+        setInnerHTML(innerHTML + '\n') // 加上\n是因为回车换行的需求
+      }}
+      onBlur={() => {
+        setInnerHTML(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
+      }}
       onCompositionEnd={() => {
         // TODO 与 onInput 合并地暴露成一个props
         // 输入法结束后，触发同步更新 innerHTML
@@ -225,7 +262,13 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
         if (e.ctrlKey && e.key.toLowerCase() === 'b') {
           // 阻止弹出我的收藏夹文件夹
           e.preventDefault()
-          if (lastRangeInfo.current) setInnerHTML(getBlodText(innerHTML, lastRangeInfo.current))
+          setInnerHTML(getBlodText(innerHTML, lastRangeInfo.current))
+        }
+        if (e.key === 'Enter') {
+          // 阻止默认的contentEditable回车建立 <div> 的逻辑
+          e.preventDefault()
+          offsetRangeInfo(1) //FIXME：行末回车需要偏移，中断型回车则不需要
+          setInnerHTML(getEnteredText(innerHTML, lastRangeInfo.current))
         }
       }}
       contentEditable
