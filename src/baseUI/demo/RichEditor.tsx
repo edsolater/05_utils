@@ -116,9 +116,6 @@ function getBlodText(
   function isBeginTag(text: string) {
     return isTag(text) && !isEndTag(text)
   }
-  function arePairTags(text1: string, text2: string) {
-    return text1 && text2 && text1.slice(1) === text2.slice(2)
-  }
   let flatedInnerHTML: string[] = []
   const splitedCanPaintInnerHTML = canPaintInnerHTML.replace(/(<.*?>)/g, '/0$1/0').split('/0') //[ "这是", "<b>", "一段没", "</b>", "有", "<b>", "意义的文", "</b>", "字" ]
   const tagStack: Array<string> = []
@@ -130,14 +127,18 @@ function getBlodText(
         if (tagStack.length > 1) continue
       } else if (isEndTag(textPiece)) {
         tagStack.pop()
-        if (tagStack.length > 1) continue
+        if (tagStack.length > 0) continue
       }
     }
     flatedInnerHTML.push(textPiece)
   }
 
-  console.log('splitedCanPaintInnerHTML: ', splitedCanPaintInnerHTML)
-  console.log('flatedInnerHTML: ', flatedInnerHTML)
+  // console.log(
+  //   'splitedCanPaintInnerHTML: ',
+  //   splitedCanPaintInnerHTML,
+  //   splitedCanPaintInnerHTML.join('')
+  // )
+  // console.log('flatedInnerHTML: ', flatedInnerHTML, flatedInnerHTML.join(''))
   return flatedInnerHTML.join('')
 }
 
