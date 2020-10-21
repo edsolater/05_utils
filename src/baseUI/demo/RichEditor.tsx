@@ -59,16 +59,10 @@ function applyLastRange(editor: HTMLElement, { start, end }: RangeInfo) {
 /**
  * 基于选区与文字，加粗
  */
-function blodText(
-  innerHTML: string,
+function getBlodText(
+  originalInnerHTML: string,
   { startContainer, endContainer, start, end }: RangeInfo
 ): string {
-  console.log('innerHTML: ', innerHTML)
-  console.log('start,end: ', start, end)
-  console.log('startContainer: ', startContainer)
-  console.log('endContainer: ', endContainer)
-  console.log('equal: ', startContainer === endContainer)
-
   //  第一步：根据文字偏移量，计算出插入位置
   const angleBracketStack: Array<'<'> = []
   function isNormalText(char: string) {
@@ -77,8 +71,8 @@ function blodText(
   let leftTextCount = 0
   let insertStart = 0
   let insertEnd = 0
-  for (let i = 0; i < innerHTML.length; i++) {
-    const char = innerHTML[i]
+  for (let i = 0; i < originalInnerHTML.length; i++) {
+    const char = originalInnerHTML[i]
     if (char === '<') {
       angleBracketStack.push('<')
     } else if (char === '>') {
@@ -96,20 +90,55 @@ function blodText(
   // 第二步：设定要插入的标签
   let [startTag, endTag] = ['<b>', '</b>']
   if (startContainer === endContainer && endContainer.parentElement?.tagName === 'B') {
-    // 当始末都在同一节点中，且选区始末都是粗体时（此时加粗是将粗体变细）
-    ;[startTag, endTag] = [endTag, startTag]
+    console.log(4) // 当始末都在同一节点中，且选区始末都是粗体时（此时加粗是将粗体变细
+    const temp = endTag
+    endTag = startTag
+    startTag = temp
   }
   // 第三步：插入
-  const rawNewInnerHTML = `${innerHTML.slice(0, insertStart)}${startTag}${innerHTML.slice(
-    insertStart,
+  const rawNewInnerHTML = `${originalInnerHTML.slice(
+    0,
+    insertStart
+  )}${startTag}${originalInnerHTML.slice(insertStart, insertEnd)}${endTag}${originalInnerHTML.slice(
     insertEnd
-  )}${endTag}${innerHTML.slice(insertEnd)}`
+  )}`
 
-  // 第四步： 去除原来的无用标签，名为拍平
-  const flatedNewInnerHTML = rawNewInnerHTML.replace('<b></b>', '').replace('</b><b>', '') //FIXME
-  console.log('roughNewInnerHTML: ', rawNewInnerHTML)
-  console.log('flatedNewInnerHTML: ', flatedNewInnerHTML)
-  return flatedNewInnerHTML
+  // 第四步： 重叠判定（针对对已加粗文本再加粗，）
+  const canPaintInnerHTML = rawNewInnerHTML.replace(/<\/?b><\/?b>/g, '')
+
+  // 第五步： 去除不影响显示，但无用的标签。称为拍平。因为如果有嵌套关系会影响下一次的样式应用
+  function isTag(text: string) {
+    return /^<.*/.test(text)
+  }
+  function isEndTag(text: string) {
+    return /^<\/.*/.test(text)
+  }
+  function isBeginTag(text: string) {
+    return isTag(text) && !isEndTag(text)
+  }
+  function arePairTags(text1: string, text2: string) {
+    return text1 && text2 && text1.slice(1) === text2.slice(2)
+  }
+  let flatedInnerHTML: string[] = []
+  const splitedCanPaintInnerHTML = canPaintInnerHTML.replace(/(<.*?>)/g, '/0$1/0').split('/0') //[ "这是", "<b>", "一段没", "</b>", "有", "<b>", "意义的文", "</b>", "字" ]
+  const tagStack: Array<string> = []
+  for (let i = 0; i < splitedCanPaintInnerHTML.length; i++) {
+    const textPiece = splitedCanPaintInnerHTML[i]
+    if (isTag(textPiece)) {
+      if (isBeginTag(textPiece)) {
+        tagStack.push(textPiece)
+        if (tagStack.length > 1) continue
+      } else if (isEndTag(textPiece)) {
+        tagStack.pop()
+        if (tagStack.length > 1) continue
+      }
+    }
+    flatedInnerHTML.push(textPiece)
+  }
+
+  console.log('splitedCanPaintInnerHTML: ', splitedCanPaintInnerHTML)
+  console.log('flatedInnerHTML: ', flatedInnerHTML)
+  return flatedInnerHTML.join('')
 }
 
 /**
@@ -139,10 +168,10 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   // 保存上一个选取范围的信息
   const lastRangeInfo = useRef<RangeInfo>()
   // 编辑器内部的文本信息
-  const [innerHTML, setInnerHTML] = useState('这是一段没有意义的文字')
+  const [innerHTML, setInnerHTML] = useState('这是<b>一段没</b>有意义<b>的文</b>字')
   //#endregion
 
-  //#region ------------------- 组件内部方法 -------------------
+  //#region ------------------- 组件内部方法 -------------------,
   //同步innerHTML也会记录下选区的信息
   const recordRange = (editor: HTMLDivElement | null, range: Range | undefined) => {
     if (!editor || !range) return
@@ -197,7 +226,7 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
         if (e.ctrlKey && e.key.toLowerCase() === 'b') {
           // 阻止弹出我的收藏夹文件夹
           e.preventDefault()
-          if (lastRangeInfo.current) setInnerHTML(blodText(innerHTML, lastRangeInfo.current))
+          if (lastRangeInfo.current) setInnerHTML(getBlodText(innerHTML, lastRangeInfo.current))
         }
       }}
       contentEditable
