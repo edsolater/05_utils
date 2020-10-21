@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import betweenNumberRange from 'functions/betweenNumberRange'
+import { numberInRange } from 'functions/tools'
+import { applyRange } from 'functions/domHelper'
 import { isTextNode } from 'functions/typeGards'
 import { FC, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
@@ -40,20 +41,17 @@ function applyLastRange(editor: HTMLElement, { start, end }: RangeInfo) {
   newRange.setStart(editor, 0) //设定好默认的选区开始位置
   for (let i = 0; i < textNodeStack.length; i++) {
     const textNode = textNodeStack[i]
-    if (!foundStart && betweenNumberRange(start, [charIndex, charIndex + textNode.length])) {
+    if (!foundStart && numberInRange(start, [charIndex, charIndex + textNode.length])) {
       newRange.setStart(textNode, start - charIndex)
       foundStart = true
     }
-    if (foundStart && betweenNumberRange(end, [charIndex, charIndex + textNode.length])) {
+    if (foundStart && numberInRange(end, [charIndex, charIndex + textNode.length])) {
       newRange.setEnd(textNode, end - charIndex)
       break // 至此，选取的开始与结尾都记录完毕，不需要继续遍历了
     }
     charIndex += textNode.length
   }
-
-  const selection = getSelection()
-  selection?.removeAllRanges()
-  selection?.addRange(newRange)
+  applyRange(newRange)
 }
 
 /**
