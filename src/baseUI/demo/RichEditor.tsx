@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { numberInRange } from 'functions/tools'
+import { clearArray, firstItem, lastItem, numberInRange } from 'functions/tools'
 import { applyRange } from 'functions/domHelper'
 import { isTextNode } from 'functions/typeGards'
 import { FC, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -12,6 +12,10 @@ type RangeInfo = {
   endContainer?: Node
   // 划线区的结尾，相对与整段文字内容的位置
   end: number
+}
+type OperationRecord = {
+  innerHTML: string
+  range: RangeInfo
 }
 
 /**
@@ -32,7 +36,7 @@ function getAllTextNodesFromNode(targetRootNode: Node) {
 /**
  * 将记录下的range的应用到界面上（不完全是自己想的）
  */
-function applyLastRange(editor: HTMLElement, { start, end }: RangeInfo) {
+function applyOffsetRange(editor: HTMLElement, { start, end }: RangeInfo) {
   var charIndex = 0
   const newRange = document.createRange()
   const textNodeStack = getAllTextNodesFromNode(editor)
@@ -141,12 +145,14 @@ function tellCursorPoint(
 ): [point: 'start' | 'middle' | 'end', isCollapse: boolean] {
   //  第一步：根据文字偏移量，计算出插入位置
   const { start: insertStart, end: insertEnd } = computeOffsetRange(innerHTML, start, end)
+  // TODO： 感觉这个模式能提成一个函数，这么多if不够函数化
   let result: 'start' | 'middle' | 'end'
   if (insertStart === 0) {
     result = 'start'
-  } else if (innerHTML[insertEnd] === '\n') {
+  } else if (firstItem(innerHTML.slice(insertEnd).replace(/<.*>/g, '')) === '\n') {
+    // insertEnd 以后的字符串除去标签外，并以'\n'开头
     result = 'end'
-  } else if (innerHTML[insertStart - 1] === '\n') {
+  } else if (lastItem(innerHTML.slice(0, insertStart).replace(/<.*>/g, '')) === '\n') {
     result = 'start'
   } else {
     result = 'middle'
@@ -185,7 +191,7 @@ function computeOffsetRange(originalInnerHTML: string, start: number, end: numbe
 /**
  * 记录下一些range的信息
  */
-function getRangeInfo(editor: HTMLDivElement, range: Range): RangeInfo {
+function translateToRangeInfo(editor: HTMLDivElement, range: Range): RangeInfo {
   const preSelectionRange = range.cloneRange()
   // 创建选择原选区文字左边的选区（目的是方便计算相对于文档的偏移量）
   preSelectionRange.selectNodeContents(editor)
@@ -205,23 +211,66 @@ function getRangeInfo(editor: HTMLDivElement, range: Range): RangeInfo {
 const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   //#region ------------------- 组件的内部状态 -------------------
   // 编辑器框的应用
-  const editorRef = useRef<HTMLDivElement>(null)
+  const editorRef = useRef(document.createElement('div'))
   // 保存上一个选取范围的信息
   const lastRangeInfo = useRef<RangeInfo>({ start: 0, end: 0 })
   // 编辑器内部的文本信息
   const [innerHTML, setInnerHTML] = useState('')
+  // 更改的操作栈
+  const operationStack = useRef<OperationRecord[]>([])
+  // 撤销的操作栈
+  const undoStack = useRef<OperationRecord[]>([])
   //#endregion
 
   //#region ------------------- 组件内部方法 -------------------,
-  //同步innerHTML也会记录下选区的信息
-  const recordRange = (editor: HTMLDivElement | null, range: Range | undefined) => {
-    if (!editor || !range) return
-    const info = getRangeInfo(editor, range)
+  const getDOMRangeInfo = () => {
+    const range = getSelection()?.getRangeAt(0)
+    return editorRef.current && range
+      ? translateToRangeInfo(editorRef.current, range)
+      : ({ start: 0, end: 0 } as RangeInfo)
+  }
+  /** 记录下选区的信息 */
+  const recordCurrentRangeToRef = () => {
+    const info = getDOMRangeInfo()
     lastRangeInfo.current = info
   }
-  const syncInnerHTML = () => {
-    recordRange(editorRef.current, getSelection()?.getRangeAt(0))
-    if (editorRef.current) setInnerHTML(editorRef.current.innerHTML)
+  const syncFromDom = () => {
+    if (editorRef.current) {
+      recordNewInnerHTMLAndRange(editorRef.current.innerHTML, getDOMRangeInfo())
+    }
+  }
+  const syncFromData = (newInnerHTML: string, range?: RangeInfo) => {
+    recordNewInnerHTMLAndRange(newInnerHTML, range)
+  }
+  /** 快照当前的编辑内容与光标位置 */
+  const recordNewInnerHTMLAndRange = (newInnerHTML: string, rangeInfo?: RangeInfo) => {
+    if (innerHTML !== newInnerHTML) setInnerHTML(newInnerHTML)
+    recordCurrentRangeToRef()
+
+    if (undoStack.current.length) clearArray(undoStack.current)
+    operationStack.current.push({
+      innerHTML: newInnerHTML,
+      range: rangeInfo ?? lastRangeInfo.current // 如果没有指定，就复刻上一项的
+    })
+  }
+  const undo = () => {
+    console.log('operationStack: ', operationStack)
+    console.log('undoStack: ', undoStack)
+    if (operationStack.current.length > 1) {
+      undoStack.current.push(operationStack.current.pop()!)
+      const operation = lastItem(operationStack.current)
+      setInnerHTML(operation.innerHTML)
+      applyOffsetRange(editorRef.current!, operation.range) //TODO: 要提取到组件内部，省去`editorRef.current`
+    }
+  }
+  const redo = () => {
+    console.log('redo: ')
+    if (undoStack.current.length) {
+      const operation = undoStack.current.pop()!
+      operationStack.current.push(operation)
+      setInnerHTML(operation.innerHTML)
+      applyOffsetRange(editorRef.current!, operation.range)
+    }
   }
   const offsetRangeInfo = (offsetNumber: number) => {
     lastRangeInfo.current = {
@@ -240,14 +289,19 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   //#region ------------------- effect/layoutEffect -------------------
   // 只要有更新内容，就会触发对光标选区的重新计算
   useLayoutEffect(() => {
+    //TODO 想办法干掉
     if (editorRef.current && lastRangeInfo.current)
-      applyLastRange(editorRef.current, lastRangeInfo.current)
+      applyOffsetRange(editorRef.current, lastRangeInfo.current)
   }, [innerHTML])
   // 改变选区的 selectionChange 事件只能挂载在 document 上
   useEffect(() => {
-    document.addEventListener('selectionchange', () => {
-      recordRange(editorRef.current, getSelection()?.getRangeAt(0))
-    })
+    const selectionChangeCallback = () => {
+      recordCurrentRangeToRef()
+    }
+    document.addEventListener('selectionchange', selectionChangeCallback)
+    return () => {
+      document.removeEventListener('selectionchange', selectionChangeCallback)
+    }
   }, [])
   //#endregion
   return (
@@ -264,29 +318,39 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
         }
       })}
       onFocus={() => {
-        setInnerHTML(innerHTML + '\n') // 加上\n是因为回车换行的需求
+        syncFromData(innerHTML + '\n') // 加上\n是因为回车换行的需求
       }}
       onBlur={() => {
-        setInnerHTML(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
+        syncFromData(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
       }}
       onCompositionEnd={() => {
         // TODO 与 onInput 合并地暴露成一个props
         // 输入法结束后，触发同步更新 innerHTML
-        syncInnerHTML()
+        syncFromDom()
       }}
       onInput={({ nativeEvent }) => {
         //TODO 当插入图片时，指针要移到图片后
         // 不是输入法，都触发同步更新 innerHTML
         if ((nativeEvent as InputEvent).inputType !== 'insertCompositionText') {
-          syncInnerHTML()
+          syncFromDom()
         }
       }}
       onKeyDown={e => {
+        /**
+         * 用户输入：加粗命令
+         */
         if (e.ctrlKey && e.key.toLowerCase() === 'b') {
           // 阻止弹出我的收藏夹文件夹
           e.preventDefault()
-          setInnerHTML(getBlodText(innerHTML, lastRangeInfo.current))
+          recordNewInnerHTMLAndRange(
+            getBlodText(innerHTML, lastRangeInfo.current),
+            getDOMRangeInfo()
+          )
         }
+
+        /**
+         * 用户输入：回车命令
+         */
         if (e.key === 'Enter') {
           // 阻止默认的contentEditable回车建立 <div> 的逻辑
           e.preventDefault()
@@ -294,10 +358,18 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
           if (isCollapse && cursorPoint === 'end') offsetRangeInfo(1) // 行末回车
           const resultText = getEnteredText(innerHTML, lastRangeInfo.current)
           collapseRangeInfo()
-          setInnerHTML(resultText)
+          syncFromData(resultText)
           if (!isCollapse && cursorPoint === 'end') offsetRangeInfo(1) //行末回车
           if (cursorPoint === 'middle') offsetRangeInfo(1) // 行中回车
           if (cursorPoint === 'start') offsetRangeInfo(1) // 行首回车
+        }
+
+        /**
+         * 用户输入：undo/redo
+         */
+        if (e.ctrlKey && e.key.toLowerCase() === 'z') {
+          e.preventDefault()
+          e.shiftKey ? redo() : undo()
         }
       }}
       contentEditable
