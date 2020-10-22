@@ -73,7 +73,7 @@ function getBlodText(
     startContainer === endContainer &&
     endContainer.parentElement?.tagName === 'B'
   ) {
-    console.log(4) // 当始末都在同一节点中，且选区始末都是粗体时（此时加粗是将粗体变细
+    // 当始末都在同一节点中，且选区始末都是粗体时，加粗是将粗体变细。因此交换2者即可
     const temp = endTag
     endTag = startTag
     startTag = temp
@@ -86,10 +86,13 @@ function getBlodText(
     insertEnd
   )}`
 
-  // 第四步： 重叠判定（针对对已加粗文本再加粗，）
-  const canPaintInnerHTML = rawNewInnerHTML.replace(/<\/?b><\/?b>/g, '')
+  // 第四步： 对</b><b>这种相邻无用标签的判定
+  const margedInnerHTML = rawNewInnerHTML.replace(/<\/b>\n*<b>/g, '')
 
-  // 第五步： 去除不影响显示，但无用的标签。称为拍平。因为如果有嵌套关系会影响下一次的样式应用
+  // 第五步： 去除<b>\n</b>或<b></b>, 这种空标签
+  const canPaintInnerHTML = margedInnerHTML.replace(/<b>(\n*)<\/b>/g, '$1')
+
+  // 第六步： 去除不影响显示，但无用的标签。称为拍平。因为如果有嵌套关系会影响下一次的样式应用
   function isTag(text: string) {
     return /^<.*/.test(text)
   }
@@ -115,26 +118,40 @@ function getBlodText(
     }
     flatedInnerHTML.push(textPiece)
   }
-
-  // console.log(
-  //   'splitedCanPaintInnerHTML: ',
-  //   splitedCanPaintInnerHTML,
-  //   splitedCanPaintInnerHTML.join('')
-  // )
-  // console.log('flatedInnerHTML: ', flatedInnerHTML, flatedInnerHTML.join(''))
   return flatedInnerHTML.join('')
 }
-function getEnteredText(
-  originalInnerHTML: string,
-  { startContainer, endContainer, start, end }: RangeInfo
-) {
+function getEnteredText(originalInnerHTML: string, { start, end }: RangeInfo) {
   //  第一步：根据文字偏移量，计算出插入位置
-  const { start: insertStart } = computeOffsetRange(originalInnerHTML, start, end)
+  const { start: insertStart, end: insertEnd } = computeOffsetRange(originalInnerHTML, start, end)
   // 第二步：插入
   const newInnerHTML = `${originalInnerHTML.slice(0, insertStart)}\n${originalInnerHTML.slice(
-    insertStart
+    insertEnd
   )}`
   return newInnerHTML
+}
+
+/**
+ * 输入：原文及选区字符位置的偏移量，
+ * 输出：选在行首/中间/行末， 是选区还是单纯的光标
+ * @param innerHTML 整个文字的innerHTML
+ */
+function tellCursorPoint(
+  innerHTML: string,
+  { start, end }: RangeInfo
+): [point: 'start' | 'middle' | 'end', isCollapse: boolean] {
+  //  第一步：根据文字偏移量，计算出插入位置
+  const { start: insertStart, end: insertEnd } = computeOffsetRange(innerHTML, start, end)
+  let result: 'start' | 'middle' | 'end'
+  if (insertStart === 0) {
+    result = 'start'
+  } else if (innerHTML[insertEnd] === '\n') {
+    result = 'end'
+  } else if (innerHTML[insertStart - 1] === '\n') {
+    result = 'start'
+  } else {
+    result = 'middle'
+  }
+  return [result, start === end]
 }
 
 /**
@@ -212,6 +229,12 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
       end: lastRangeInfo.current.end + offsetNumber
     }
   }
+  const collapseRangeInfo = () => {
+    lastRangeInfo.current = {
+      start: lastRangeInfo.current.start,
+      end: lastRangeInfo.current.start
+    }
+  }
   //#endregion
 
   //#region ------------------- effect/layoutEffect -------------------
@@ -267,8 +290,14 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
         if (e.key === 'Enter') {
           // 阻止默认的contentEditable回车建立 <div> 的逻辑
           e.preventDefault()
-          offsetRangeInfo(1) //FIXME：行末回车需要偏移，中断型回车则不需要
-          setInnerHTML(getEnteredText(innerHTML, lastRangeInfo.current))
+          const [cursorPoint, isCollapse] = tellCursorPoint(innerHTML, lastRangeInfo.current)
+          if (isCollapse && cursorPoint === 'end') offsetRangeInfo(1) // 行末回车
+          const resultText = getEnteredText(innerHTML, lastRangeInfo.current)
+          collapseRangeInfo()
+          setInnerHTML(resultText)
+          if (!isCollapse && cursorPoint === 'end') offsetRangeInfo(1) //行末回车
+          if (cursorPoint === 'middle') offsetRangeInfo(1) // 行中回车
+          if (cursorPoint === 'start') offsetRangeInfo(1) // 行首回车
         }
       }}
       contentEditable
