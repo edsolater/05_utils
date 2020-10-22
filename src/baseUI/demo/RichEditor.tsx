@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { clearArray, firstItem, lastItem, numberInRange } from 'functions/tools'
+import { clearArray, firstItem, lastItem, notEmpty, numberInRange } from 'functions/tools'
 import { applyRange } from 'functions/domHelper'
 import { isTextNode } from 'functions/typeGards'
 import { FC, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
@@ -41,7 +41,6 @@ function applyOffsetRange(editor: HTMLElement, { start, end }: RangeInfo) {
   const newRange = document.createRange()
   const textNodeStack = getAllTextNodesFromNode(editor)
   let foundStart = false // 记录是否已找到了选区的开始位置
-
   newRange.setStart(editor, 0) //设定好默认的选区开始位置
   for (let i = 0; i < textNodeStack.length; i++) {
     const textNode = textNodeStack[i]
@@ -230,23 +229,19 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
       : ({ start: 0, end: 0 } as RangeInfo)
   }
   /** 记录下选区的信息 */
-  const recordCurrentRangeToRef = () => {
-    const info = getDOMRangeInfo()
+  const recordRefRangeInfo = (info = getDOMRangeInfo()) => {
     lastRangeInfo.current = info
   }
   const syncFromDom = () => {
     if (editorRef.current) {
-      recordNewInnerHTMLAndRange(editorRef.current.innerHTML, getDOMRangeInfo())
+      const range = getDOMRangeInfo()
+      recordNewInnerHTMLAndRange(editorRef.current.innerHTML, range)
     }
   }
-  const syncFromData = (newInnerHTML: string, range?: RangeInfo) => {
-    recordNewInnerHTMLAndRange(newInnerHTML, range)
-  }
   /** 快照当前的编辑内容与光标位置 */
-  const recordNewInnerHTMLAndRange = (newInnerHTML: string, rangeInfo?: RangeInfo) => {
+  const recordNewInnerHTMLAndRange = (newInnerHTML: string, rangeInfo: RangeInfo) => {
+    recordRefRangeInfo(rangeInfo)
     if (innerHTML !== newInnerHTML) setInnerHTML(newInnerHTML)
-    recordCurrentRangeToRef()
-
     if (undoStack.current.length) clearArray(undoStack.current)
     operationStack.current.push({
       innerHTML: newInnerHTML,
@@ -254,22 +249,22 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
     })
   }
   const undo = () => {
-    console.log('operationStack: ', operationStack)
-    console.log('undoStack: ', undoStack)
-    if (operationStack.current.length > 1) {
+    if (notEmpty(operationStack.current)) {
       undoStack.current.push(operationStack.current.pop()!)
-      const operation = lastItem(operationStack.current)
+      const operation = lastItem(operationStack.current) ?? {
+        innerHTML: '\n',
+        range: { start: 0, end: 0 }
+      }
       setInnerHTML(operation.innerHTML)
-      applyOffsetRange(editorRef.current!, operation.range) //TODO: 要提取到组件内部，省去`editorRef.current`
+      recordRefRangeInfo(operation.range)
     }
   }
   const redo = () => {
-    console.log('redo: ')
-    if (undoStack.current.length) {
+    if (notEmpty(undoStack.current)) {
       const operation = undoStack.current.pop()!
       operationStack.current.push(operation)
       setInnerHTML(operation.innerHTML)
-      applyOffsetRange(editorRef.current!, operation.range)
+      recordRefRangeInfo(operation.range)
     }
   }
   const offsetRangeInfo = (offsetNumber: number) => {
@@ -289,14 +284,12 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   //#region ------------------- effect/layoutEffect -------------------
   // 只要有更新内容，就会触发对光标选区的重新计算
   useLayoutEffect(() => {
-    //TODO 想办法干掉
-    if (editorRef.current && lastRangeInfo.current)
-      applyOffsetRange(editorRef.current, lastRangeInfo.current)
+    applyOffsetRange(editorRef.current, lastRangeInfo.current)
   }, [innerHTML])
   // 改变选区的 selectionChange 事件只能挂载在 document 上
   useEffect(() => {
     const selectionChangeCallback = () => {
-      recordCurrentRangeToRef()
+      recordRefRangeInfo()
     }
     document.addEventListener('selectionchange', selectionChangeCallback)
     return () => {
@@ -318,10 +311,10 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
         }
       })}
       onFocus={() => {
-        syncFromData(innerHTML + '\n') // 加上\n是因为回车换行的需求
+        setInnerHTML(innerHTML + '\n') // 加上\n是因为回车换行的需求
       }}
       onBlur={() => {
-        syncFromData(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
+        setInnerHTML(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
       }}
       onCompositionEnd={() => {
         // TODO 与 onInput 合并地暴露成一个props
@@ -358,7 +351,7 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
           if (isCollapse && cursorPoint === 'end') offsetRangeInfo(1) // 行末回车
           const resultText = getEnteredText(innerHTML, lastRangeInfo.current)
           collapseRangeInfo()
-          syncFromData(resultText)
+          recordNewInnerHTMLAndRange(resultText, lastRangeInfo.current)
           if (!isCollapse && cursorPoint === 'end') offsetRangeInfo(1) //行末回车
           if (cursorPoint === 'middle') offsetRangeInfo(1) // 行中回车
           if (cursorPoint === 'start') offsetRangeInfo(1) // 行首回车
