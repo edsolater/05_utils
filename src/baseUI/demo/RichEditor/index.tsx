@@ -1,16 +1,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { clearArray, firstItem, lastItem, notEmpty, numberInRange } from 'functions/tools'
 import { applyRange } from 'functions/domHelper'
+import { clearArray, firstItem, lastItem, notEmpty, numberInRange } from 'functions/tools'
 import { isTextNode } from 'functions/typeGards'
-import { FC, ReactElement, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
+// 划线区的开头，相对与整段文字内容的位置
 type RangeInfo = {
-  startContainer?: Node
-  // 划线区的开头，相对与整段文字内容的位置
   start: number
-  endContainer?: Node
-  // 划线区的结尾，相对与整段文字内容的位置
   end: number
 }
 type OperationRecord = {
@@ -19,68 +16,28 @@ type OperationRecord = {
 }
 
 /**
- * 获取某个节点内部的所有文字节点
- * @param targetRootNode 目标节点
+ * 纯函数
+ * 在选区内插入，
+ * 返回插入加粗选区内容后的innerHTML
+ * @param originalInnerHTML 原来的innerHTML
+ * @param param1 始末位置
  */
-function getAllTextNodesFromNode(targetRootNode: Node) {
-  let resultStack = [targetRootNode]
-  while (!resultStack.every(isTextNode)) {
-    // TODO: 计算性能优化。下述做了很多无用判断。理论上O(n)应该是可以做到的，
-    resultStack = resultStack.flatMap(node =>
-      isTextNode(node) ? node : Array.from(node.childNodes)
-    )
-  }
-  return resultStack
-}
-
-/**
- * 将记录下的range的应用到界面上（不完全是自己想的）
- */
-function applyOffsetRange(editor: HTMLElement, { start, end }: RangeInfo) {
-  var charIndex = 0
-  const newRange = document.createRange()
-  const textNodeStack = getAllTextNodesFromNode(editor)
-  let foundStart = false // 记录是否已找到了选区的开始位置
-  newRange.setStart(editor, 0) //设定好默认的选区开始位置
-  for (let i = 0; i < textNodeStack.length; i++) {
-    const textNode = textNodeStack[i]
-    if (!foundStart && numberInRange(start, [charIndex, charIndex + textNode.length])) {
-      newRange.setStart(textNode, start - charIndex)
-      foundStart = true
-    }
-    if (foundStart && numberInRange(end, [charIndex, charIndex + textNode.length])) {
-      newRange.setEnd(textNode, end - charIndex)
-      break // 至此，选取的开始与结尾都记录完毕，不需要继续遍历了
-    }
-    charIndex += textNode.length
-  }
-  applyRange(newRange)
-}
-
-/**
- * 基于选区与文字，加粗
- */
-function getBlodText(
-  originalInnerHTML: string,
-  { startContainer, endContainer, start, end }: RangeInfo
-): string {
+function getBlodText(originalInnerHTML: string, { start, end }: RangeInfo): string {
   //  第一步：根据文字偏移量，计算出插入位置
-  const { start: insertStart, end: insertEnd } = computeOffsetRange(originalInnerHTML, start, end)
+  const { commonNodeTagName, insertStart, insertEnd } = computeOffsetRange(originalInnerHTML, {
+    start,
+    end
+  })
 
   // 第二步：设定要插入的标签
   let [startTag, endTag] = ['<b>', '</b>']
-  // TODO: 应该只用 start 与 end，originalInnerHTML 就能判断的。
-  if (
-    startContainer &&
-    endContainer &&
-    startContainer === endContainer &&
-    endContainer.parentElement?.tagName === 'B'
-  ) {
-    // 当始末都在同一节点中，且选区始末都是粗体时，加粗是将粗体变细。因此交换2者即可
+  if (commonNodeTagName === 'b') {
+    // 当始末都在同一节点中，且选区始末都是粗体时，加粗是将粗体变细。因此交换两者即可
     const temp = endTag
     endTag = startTag
     startTag = temp
   }
+
   // 第三步：插入
   const rawNewInnerHTML = `${originalInnerHTML.slice(
     0,
@@ -123,9 +80,16 @@ function getBlodText(
   }
   return flatedInnerHTML.join('')
 }
+/**
+ * 纯函数
+ * 在选区内插入，
+ * 返回插入回车后的innerHTML
+ * @param originalInnerHTML 原来的innerHTML
+ * @param param1 始末位置
+ */
 function getEnteredText(originalInnerHTML: string, { start, end }: RangeInfo) {
   //  第一步：根据文字偏移量，计算出插入位置
-  const { start: insertStart, end: insertEnd } = computeOffsetRange(originalInnerHTML, start, end)
+  const { insertStart, insertEnd } = computeOffsetRange(originalInnerHTML, { start, end })
   // 第二步：插入
   const newInnerHTML = `${originalInnerHTML.slice(0, insertStart)}\n${originalInnerHTML.slice(
     insertEnd
@@ -134,6 +98,7 @@ function getEnteredText(originalInnerHTML: string, { start, end }: RangeInfo) {
 }
 
 /**
+ * 纯函数
  * 输入：原文及选区字符位置的偏移量，
  * 输出：选在行首/中间/行末， 是选区还是单纯的光标
  * @param innerHTML 整个文字的innerHTML
@@ -143,8 +108,8 @@ function tellCursorPoint(
   { start, end }: RangeInfo
 ): [point: 'start' | 'middle' | 'end', isCollapse: boolean] {
   //  第一步：根据文字偏移量，计算出插入位置
-  const { start: insertStart, end: insertEnd } = computeOffsetRange(innerHTML, start, end)
-  // TODO： 感觉这个模式能提成一个函数，这么多if不够函数化
+  const { insertStart, insertEnd } = computeOffsetRange(innerHTML, { start, end })
+  // TODO：感觉这个模式能提成一个函数，这么多if不够函数化
   let result: 'start' | 'middle' | 'end'
   if (insertStart === 0) {
     result = 'start'
@@ -160,9 +125,10 @@ function tellCursorPoint(
 }
 
 /**
- * 根据文字偏移量，计算出插入位置
+ * 纯函数
+ * 根据文字偏移量，计算出插入位置、是否同属一个节点的麾下、这个节点的名字叫什么
  */
-function computeOffsetRange(originalInnerHTML: string, start: number, end: number) {
+function computeOffsetRange(originalInnerHTML: string, { start, end }: RangeInfo) {
   const angleBracketStack: Array<'<'> = []
   function isNormalText(char: string) {
     return char !== '<' && char !== '>' && angleBracketStack.length === 0
@@ -185,29 +151,73 @@ function computeOffsetRange(originalInnerHTML: string, start: number, end: numbe
       }
     }
   }
-  return { start: insertStart, end: insertEnd }
+
+  const hasCommonParent = !originalInnerHTML.slice(insertStart, insertEnd).includes('<')
+  // 如果innerHTML全是文本节点，就是null。压根就不在同一父节点，也是null
+  const commonNodeTagName = hasCommonParent
+    ? lastItem(originalInnerHTML.slice(0, insertStart).match(/(?<=<)\w+/g) ?? [])
+    : undefined
+  return { hasCommonParent, commonNodeTagName, insertStart, insertEnd }
 }
 /**
- * 记录下一些range的信息
+ * 纯函数
+ * 将基于dom的选区信息
+ * 转换成基于某文章节点的偏移量
  */
-function translateToRangeInfo(editor: HTMLDivElement, range: Range): RangeInfo {
-  const preSelectionRange = range.cloneRange()
+function translateDOMRangeToRangeInfo(relateTo: HTMLDivElement, domRange: Range): RangeInfo {
+  const preSelectionRange = domRange.cloneRange()
   // 创建选择原选区文字左边的选区（目的是方便计算相对于文档的偏移量）
-  preSelectionRange.selectNodeContents(editor)
-  preSelectionRange.setEnd(range.startContainer, range.startOffset)
+  preSelectionRange.selectNodeContents(relateTo)
+  preSelectionRange.setEnd(domRange.startContainer, domRange.startOffset)
   const start = preSelectionRange.toString().length
   return {
-    startContainer: range.startContainer,
-    endContainer: range.endContainer,
     start,
-    end: start + range.toString().length
+    end: start + domRange.toString().length
   }
+}
+/**
+ * 获取某个节点内部的所有文字节点
+ * @param targetRootNode 目标节点
+ */
+function getAllTextNodes(targetRootNode: Node) {
+  let resultStack = [targetRootNode]
+  while (!resultStack.every(isTextNode)) {
+    // TODO: 计算性能优化。下述做了很多无用判断。理论上O(n)应该是可以做到的，
+    resultStack = resultStack.flatMap(node =>
+      isTextNode(node) ? node : Array.from(node.childNodes)
+    )
+  }
+  return resultStack
+}
+/**
+ * 将记录下的range的应用到界面上（不完全是自己想的）
+ * @param relateTo 相对偏移量start、end。相对的元素
+ */
+function applyOffsetRange(relateTo: HTMLElement, start: number, end = start) {
+  var charIndex = 0
+  const newRange = document.createRange()
+  const textNodeStack = getAllTextNodes(relateTo)
+  let foundStart = false // 记录是否已找到了选区的开始位置
+  newRange.setStart(relateTo, 0) //设定好默认的选区开始位置
+  for (let i = 0; i < textNodeStack.length; i++) {
+    const textNode = textNodeStack[i]
+    if (!foundStart && numberInRange(start, [charIndex, charIndex + textNode.length])) {
+      newRange.setStart(textNode, start - charIndex)
+      foundStart = true
+    }
+    if (foundStart && numberInRange(end, [charIndex, charIndex + textNode.length])) {
+      newRange.setEnd(textNode, end - charIndex)
+      break // 至此，选取的开始与结尾都记录完毕，不需要继续遍历了
+    }
+    charIndex += textNode.length
+  }
+  applyRange(newRange)
 }
 
 /**
  * 富文本编辑器
  */
-const RichEditor: FC<{ clildren?: ReactElement }> = () => {
+const RichEditor: FC<{}> = () => {
   //#region ------------------- 组件的内部状态 -------------------
   // 编辑器框的应用
   const editorRef = useRef(document.createElement('div'))
@@ -225,18 +235,17 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   const getDOMRangeInfo = () => {
     const range = getSelection()?.getRangeAt(0)
     return editorRef.current && range
-      ? translateToRangeInfo(editorRef.current, range)
+      ? translateDOMRangeToRangeInfo(editorRef.current, range)
       : ({ start: 0, end: 0 } as RangeInfo)
   }
   /** 记录下选区的信息 */
   const recordRefRangeInfo = (info = getDOMRangeInfo()) => {
     lastRangeInfo.current = info
   }
+  /**用于将用户输入的内容，记录在state中 */
   const syncFromDom = () => {
-    if (editorRef.current) {
-      const range = getDOMRangeInfo()
-      recordNewInnerHTMLAndRange(editorRef.current.innerHTML, range)
-    }
+    const range = getDOMRangeInfo()
+    recordNewInnerHTMLAndRange(editorRef.current.innerHTML, range)
   }
   /** 快照当前的编辑内容与光标位置 */
   const recordNewInnerHTMLAndRange = (newInnerHTML: string, rangeInfo: RangeInfo) => {
@@ -248,6 +257,7 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
       range: rangeInfo ?? lastRangeInfo.current // 如果没有指定，就复刻上一项的
     })
   }
+  /**撤销命令的逻辑 */
   const undo = () => {
     if (notEmpty(operationStack.current)) {
       undoStack.current.push(operationStack.current.pop()!)
@@ -259,6 +269,7 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
       recordRefRangeInfo(operation.range)
     }
   }
+  /**重做命令的逻辑 */
   const redo = () => {
     if (notEmpty(undoStack.current)) {
       const operation = undoStack.current.pop()!
@@ -267,12 +278,14 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
       recordRefRangeInfo(operation.range)
     }
   }
+  /**将目前保存的选区状态整体偏移一定位数 */
   const offsetRangeInfo = (offsetNumber: number) => {
     lastRangeInfo.current = {
       start: lastRangeInfo.current.start + offsetNumber,
       end: lastRangeInfo.current.end + offsetNumber
     }
   }
+  /**将目前保存的选区折叠到选区的start处 */
   const collapseRangeInfo = () => {
     lastRangeInfo.current = {
       start: lastRangeInfo.current.start,
@@ -284,7 +297,7 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
   //#region ------------------- effect/layoutEffect -------------------
   // 只要有更新内容，就会触发对光标选区的重新计算
   useLayoutEffect(() => {
-    applyOffsetRange(editorRef.current, lastRangeInfo.current)
+    applyOffsetRange(editorRef.current, lastRangeInfo.current.start, lastRangeInfo.current.end)
   }, [innerHTML])
   // 改变选区的 selectionChange 事件只能挂载在 document 上
   useEffect(() => {
@@ -340,7 +353,6 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
             getDOMRangeInfo()
           )
         }
-
         /**
          * 用户输入：回车命令
          */
@@ -356,7 +368,6 @@ const RichEditor: FC<{ clildren?: ReactElement }> = () => {
           if (cursorPoint === 'middle') offsetRangeInfo(1) // 行中回车
           if (cursorPoint === 'start') offsetRangeInfo(1) // 行首回车
         }
-
         /**
          * 用户输入：undo/redo
          */
