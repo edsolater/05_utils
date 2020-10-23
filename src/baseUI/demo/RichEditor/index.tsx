@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import { applyRange } from 'functions/domHelper'
-import { clearArray, firstItem, lastItem, notEmpty, numberInRange } from 'functions/tools'
+import { clearArray, firstItem, lastItem, notEmpty, numberInRange, selectIf } from 'functions/tools'
 import { isTextNode } from 'functions/typeGards'
 import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
@@ -109,44 +109,14 @@ function tellCursorPoint(
 ): [point: 'start' | 'middle' | 'end', isCollapse: boolean] {
   //  第一步：根据文字偏移量，计算出插入位置
   const { insertStart, insertEnd } = computeOffsetRange(innerHTML, { start, end })
-  // TODO：感觉这个模式能提成一个函数，这么多if不够函数化
-  let result2: 'start' | 'middle' | 'end'
-  if (insertStart === 0) {
-    result2 = 'start'
-  } else if (firstItem(innerHTML.slice(insertEnd).replace(/<.*>/g, '')) === '\n') {
-    // insertEnd 以后的字符串除去标签外，并以'\n'开头
-    result2 = 'end'
-  } else if (lastItem(innerHTML.slice(0, insertStart).replace(/<.*>/g, '')) === '\n') {
-    result2 = 'start'
-  } else {
-    result2 = 'middle'
-  }
-  const result = conditionallyReturn(
-    [() => insertStart === 0, 'start'],
-    [() => firstItem(innerHTML.slice(insertEnd).replace(/<.*>/g, '')) === '\n', 'end'],
-    [() => lastItem(innerHTML.slice(0, insertStart).replace(/<.*>/g, '')) === '\n', 'start'],
-    [() => true, 'middle']
+  const result = selectIf(
+    [insertStart === 0, 'start'],
+    [firstItem(innerHTML.slice(insertEnd).replace(/<.*>/g, '')) === '\n', 'end'],
+    [lastItem(innerHTML.slice(0, insertStart).replace(/<.*>/g, '')) === '\n', 'start'],
+    [true, 'middle']
   )
   return [result, start === end]
 }
-/**
- * 纯函数
- * 有条件地返回（用于）
- * @param conditionPairs 条件与返回值
- */
-function conditionallyReturn<T extends boolean | number | string | object>(
-  ...conditionPairs: [condition: () => boolean, result: T | (() => T)][]
-): T {
-  for (let i = 0; i < conditionPairs.length; i++) {
-    const [condition, result] = conditionPairs[i]
-    if (condition()) {
-      return typeof result === 'function' ? result() : result
-    }
-  }
-  const fallbackResult = lastItem(conditionPairs)[1]
-  return typeof fallbackResult === 'function' ? fallbackResult() : fallbackResult
-}
-
 /**
  * 纯函数
  * 根据文字偏移量，计算出插入位置、是否同属一个节点的麾下、这个节点的名字叫什么
