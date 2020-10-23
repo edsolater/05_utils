@@ -1,7 +1,16 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { applyRange } from 'functions/domHelper'
-import { clearArray, firstItem, lastItem, notEmpty, numberInRange, selectIf } from 'functions/tools'
+import { applyRange, splitInnerHTMLByTag } from 'functions/domHelper'
+import {
+  clearArray,
+  getFirstChar,
+  getFirstItem,
+  getLastChar,
+  getLastItem,
+  notEmpty,
+  numberInRange,
+  selectIf
+} from 'functions/tools'
 import { isTextNode } from 'functions/typeGards'
 import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
@@ -24,14 +33,16 @@ type OperationRecord = {
  */
 function getBlodText(originalInnerHTML: string, { start, end }: RangeInfo): string {
   //  第一步：根据文字偏移量，计算出插入位置
-  const { commonNodeTagName, insertStart, insertEnd } = computeOffsetRange(originalInnerHTML, {
-    start,
-    end
-  })
-
+  const { inSameTag, startParentNodeTag, insertStart, insertEnd } = computeDOMRange(
+    originalInnerHTML,
+    {
+      start,
+      end
+    }
+  )
   // 第二步：设定要插入的标签
   let [startTag, endTag] = ['<b>', '</b>']
-  if (commonNodeTagName === 'b') {
+  if (inSameTag && startParentNodeTag === '<b>') {
     // 当始末都在同一节点中，且选区始末都是粗体时，加粗是将粗体变细。因此交换两者即可
     const temp = endTag
     endTag = startTag
@@ -63,13 +74,13 @@ function getBlodText(originalInnerHTML: string, { start, end }: RangeInfo): stri
     return isTag(text) && !isEndTag(text)
   }
   let flatedInnerHTML: string[] = []
-  const splitedCanPaintInnerHTML = canPaintInnerHTML.replace(/(<.*?>)/g, '/0$1/0').split('/0') //[ "这是", "<b>", "一段没", "</b>", "有", "<b>", "意义的文", "</b>", "字" ]
-  const tagStack: Array<string> = []
+  const splitedCanPaintInnerHTML = splitInnerHTMLByTag(canPaintInnerHTML)
+  const tagStack: '<b>'[] = []
   for (let i = 0; i < splitedCanPaintInnerHTML.length; i++) {
     const textPiece = splitedCanPaintInnerHTML[i]
     if (isTag(textPiece)) {
       if (isBeginTag(textPiece)) {
-        tagStack.push(textPiece)
+        tagStack.push(textPiece as '<b>' /* TEMP */)
         if (tagStack.length > 1) continue
       } else if (isEndTag(textPiece)) {
         tagStack.pop()
@@ -89,7 +100,8 @@ function getBlodText(originalInnerHTML: string, { start, end }: RangeInfo): stri
  */
 function getEnteredText(originalInnerHTML: string, { start, end }: RangeInfo) {
   //  第一步：根据文字偏移量，计算出插入位置
-  const { insertStart, insertEnd } = computeOffsetRange(originalInnerHTML, { start, end })
+  const { insertStart, insertEnd } = computeDOMRange(originalInnerHTML, { start, end })
+
   // 第二步：插入
   const newInnerHTML = `${originalInnerHTML.slice(0, insertStart)}\n${originalInnerHTML.slice(
     insertEnd
@@ -108,49 +120,54 @@ function tellCursorPoint(
   { start, end }: RangeInfo
 ): [point: 'start' | 'middle' | 'end', isCollapse: boolean] {
   //  第一步：根据文字偏移量，计算出插入位置
-  const { insertStart, insertEnd } = computeOffsetRange(innerHTML, { start, end })
+  const { insertStart, insertEnd } = computeDOMRange(innerHTML, { start, end })
   const result = selectIf(
     [insertStart === 0, 'start'],
-    [firstItem(innerHTML.slice(insertEnd).replace(/<.*>/g, '')) === '\n', 'end'],
-    [lastItem(innerHTML.slice(0, insertStart).replace(/<.*>/g, '')) === '\n', 'start'],
+    [getFirstChar(innerHTML.slice(insertEnd).replace(/<.*?>/g, '')) === '\n', 'end'], // TODO:要封一个clearInnerTag的工具函数
+    [getLastChar(innerHTML.slice(0, insertStart).replace(/<.*?>/g, '')) === '\n', 'start'],
     'middle'
   )
   return [result, start === end]
 }
 /**
  * 纯函数
- * 根据文字偏移量，计算出插入位置、是否同属一个节点的麾下、这个节点的名字叫什么
+ * 根据文字偏移量，计算出插入位置(innerHTML偏移量)、是否同属一个节点的麾下、这个节点的名字叫什么
  */
-function computeOffsetRange(originalInnerHTML: string, { start, end }: RangeInfo) {
-  const angleBracketStack: Array<'<'> = []
-  function isNormalText(char: string) {
-    return char !== '<' && char !== '>' && angleBracketStack.length === 0
+function computeDOMRange(originalInnerHTML: string, { start, end }: RangeInfo) {
+  const tagStack: Array<'<b>'> = []
+  function isNormalText(word: string) {
+    return word !== '<b>' && word !== '</b>'
   }
   let leftTextCount = 0
+  let leftTextAndTagCount = 0
   let insertStart = 0
   let insertEnd = 0
-  for (let i = 0; i < originalInnerHTML.length; i++) {
-    const char = originalInnerHTML[i]
-    if (char === '<') {
-      angleBracketStack.push('<')
-    } else if (char === '>') {
-      angleBracketStack.pop()
-    } else if (isNormalText(char)) {
-      leftTextCount += 1
-      if (leftTextCount === start) insertStart = i + 1
-      if (leftTextCount === end) {
-        insertEnd = i + 1
+  let startParentNodeTag = ''
+  let endParentNodeTag = ''
+  const splited = splitInnerHTMLByTag(originalInnerHTML)
+  for (let i = 0; i < splited.length; i++) {
+    const word = splited[i]
+    const currentCount = word.length
+    if (word === '<b>') {
+      tagStack.push('<b>')
+    } else if (word === '</b>') {
+      tagStack.pop()
+    } else if (isNormalText(word)) {
+      if (leftTextCount <= start && start <= leftTextCount + currentCount) {
+        insertStart = leftTextAndTagCount + (start - leftTextCount)
+        startParentNodeTag = getFirstItem(tagStack) ?? ''
+      }
+      if (leftTextCount <= end && end <= leftTextCount + currentCount) {
+        insertEnd = leftTextAndTagCount + (end - leftTextCount)
+        endParentNodeTag = getLastItem(tagStack) ?? ''
         break
       }
+      leftTextCount += currentCount
     }
+    leftTextAndTagCount += currentCount
   }
-
-  const hasCommonParent = !originalInnerHTML.slice(insertStart, insertEnd).includes('<')
-  // 如果innerHTML全是文本节点，就是null。压根就不在同一父节点，也是null
-  const commonNodeTagName = hasCommonParent
-    ? lastItem(originalInnerHTML.slice(0, insertStart).match(/(?<=<)\w+/g) ?? [])
-    : undefined
-  return { hasCommonParent, commonNodeTagName, insertStart, insertEnd }
+  const inSameTag = !originalInnerHTML.slice(insertStart, insertEnd).includes('<')
+  return { inSameTag, startParentNodeTag, endParentNodeTag, insertStart, insertEnd }
 }
 /**
  * 纯函数
@@ -217,7 +234,7 @@ const RichEditor: FC<{}> = () => {
   // 保存上一个选取范围的信息
   const lastRangeInfo = useRef<RangeInfo>({ start: 0, end: 0 })
   // 编辑器内部的文本信息
-  const [innerHTML, setInnerHTML] = useState('')
+  const [innerHTML, setInnerHTML] = useState('啊手动阀啦撒<b>旦法</b>\n啊<b>撒打发</b>')
   // 更改的操作栈
   const operationStack = useRef<OperationRecord[]>([])
   // 撤销的操作栈
@@ -254,7 +271,7 @@ const RichEditor: FC<{}> = () => {
   const undo = () => {
     if (notEmpty(operationStack.current)) {
       undoStack.current.push(operationStack.current.pop()!)
-      const operation = lastItem(operationStack.current) ?? {
+      const operation = getLastItem(operationStack.current) ?? {
         innerHTML: '\n',
         range: { start: 0, end: 0 }
       }
@@ -339,7 +356,6 @@ const RichEditor: FC<{}> = () => {
          * 用户输入：加粗命令
          */
         if (e.ctrlKey && e.key.toLowerCase() === 'b') {
-          // 阻止弹出我的收藏夹文件夹
           e.preventDefault()
           recordNewInnerHTMLAndRange(
             getBlodText(innerHTML, lastRangeInfo.current),
@@ -350,7 +366,6 @@ const RichEditor: FC<{}> = () => {
          * 用户输入：回车命令
          */
         if (e.key === 'Enter') {
-          // 阻止默认的contentEditable回车建立 <div> 的逻辑
           e.preventDefault()
           const [cursorPoint, isCollapse] = tellCursorPoint(innerHTML, lastRangeInfo.current)
           if (isCollapse && cursorPoint === 'end') offsetRangeInfo(1) // 行末回车
@@ -358,7 +373,9 @@ const RichEditor: FC<{}> = () => {
           collapseRangeInfo()
           recordNewInnerHTMLAndRange(resultText, lastRangeInfo.current)
           if (!isCollapse && cursorPoint === 'end') offsetRangeInfo(1) //行末回车
-          if (cursorPoint === 'middle') offsetRangeInfo(1) // 行中回车
+          if (cursorPoint === 'middle') {
+            offsetRangeInfo(1.5) // FIXME? 1.5 不多不少，修复了回车的bug，但这是为什么呢？感觉像是一块不明但有效的补丁，这可不行
+          } // 行中回车
           if (cursorPoint === 'start') offsetRangeInfo(1) // 行首回车
         }
         /**

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { lastItem } from 'functions/tools'
+import { getLastItem } from 'functions/tools'
 import { isFunction } from '../typeGards'
 
 type Value = boolean | number | string | { [key: string]: unknown }
@@ -19,6 +19,6 @@ export default function selectIf<T extends Value>(
       return isFunction(result) ? result() : result
     }
   }
-  const fallbackResult = lastItem(conditionPairs)[1]
+  const fallbackResult = getLastItem(conditionPairs)[1]
   return isFunction(fallbackResult) ? fallbackResult() : fallbackResult
 }
