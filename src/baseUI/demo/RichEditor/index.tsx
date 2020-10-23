@@ -113,7 +113,7 @@ function tellCursorPoint(
     [insertStart === 0, 'start'],
     [firstItem(innerHTML.slice(insertEnd).replace(/<.*>/g, '')) === '\n', 'end'],
     [lastItem(innerHTML.slice(0, insertStart).replace(/<.*>/g, '')) === '\n', 'start'],
-    [true, 'middle']
+    'middle'
   )
   return [result, start === end]
 }
