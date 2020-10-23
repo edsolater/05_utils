@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { lastItem } from 'functions/tools'
+import { isFunction } from '../typeGards'
 
 /**
  * 纯函数
@@ -11,10 +11,10 @@ export default function rf<T extends boolean | number | string | object>(
 ): T {
   for (let i = 0; i < conditionPairs.length; i++) {
     const [condition, result] = conditionPairs[i]
-    if (typeof condition === 'function' ? condition() : condition) {
-      return typeof result === 'function' ? result() : result
+    if (isFunction(condition) ? condition() : condition) {
+      return isFunction(result) ? result() : result
     }
   }
   const fallbackResult = lastItem(conditionPairs)[1]
-  return typeof fallbackResult === 'function' ? fallbackResult() : fallbackResult
+  return isFunction(fallbackResult) ? fallbackResult() : fallbackResult
 }
