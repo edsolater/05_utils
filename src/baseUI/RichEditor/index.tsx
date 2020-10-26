@@ -234,7 +234,7 @@ const RichEditor: FC<{}> = () => {
   // 保存上一个选取范围的信息
   const lastRangeInfo = useRef<RangeInfo>({ start: 0, end: 0 })
   // 编辑器内部的文本信息
-  const [innerHTML, setInnerHTML] = useState('啊手动阀啦撒<b>旦法</b>\n啊<b>撒打发</b>')
+  const [innerHTML, setInnerHTML] = useState('啊手动阀啦撒<b>旦ddss当时法国啊撒打发啊撒打发搜索法</b>\n啊<b>撒打发</b>')
   // 更改的操作栈
   const operationStack = useRef<OperationRecord[]>([])
   // 撤销的操作栈
@@ -303,6 +303,7 @@ const RichEditor: FC<{}> = () => {
     }
   }
   //#endregion
+  console.log('3: ', 377)
 
   //#region ------------------- effect/layoutEffect -------------------
   // 只要有更新内容，就会触发对光标选区的重新计算
@@ -340,13 +341,11 @@ const RichEditor: FC<{}> = () => {
         setInnerHTML(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
       }}
       onCompositionEnd={() => {
-        // TODO 与 onInput 合并地暴露成一个props
         // 输入法结束后，触发同步更新 innerHTML
         syncFromDom()
       }}
       onInput={({ nativeEvent }) => {
-        //TODO 当插入图片时，指针要移到图片后
-        // 不是输入法，都触发同步更新 innerHTML
+        // 若不是输入法，都触发同步更新 innerHTML
         if ((nativeEvent as InputEvent).inputType !== 'insertCompositionText') {
           syncFromDom()
         }
@@ -385,6 +384,16 @@ const RichEditor: FC<{}> = () => {
           e.preventDefault()
           e.shiftKey ? redo() : undo()
         }
+        // /**
+        //  * 用户指令：粘贴
+        //  */
+        // if (e.ctrlKey && e.key.toLowerCase() === 'v') {
+        //   e.preventDefault()
+        //   console.log('e: ', e.nativeEvent)
+        // }
+      }}
+      onPaste={e => {
+        console.log('e: ', e.nativeEvent)
       }}
       contentEditable
       dangerouslySetInnerHTML={{ __html: innerHTML }}

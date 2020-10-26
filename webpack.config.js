@@ -35,6 +35,19 @@ const config = {
         use: ['style-loader', 'css-loader']
       },
       {
+        test: /\.scss$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader', options: { sourceMap: true } },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      {
         test: /\.(png|svg|jpg|gif|webp|mp3|woff2)$/,
         use: 'file-loader'
       },

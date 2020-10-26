@@ -1,0 +1,110 @@
+.tab-box {
+  position: relative;
+}
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  margin-bottom: 16px;
+  .tab-name {
+    cursor: pointer;
+    padding: 16px 0;
+    flex: 1;
+    text-align: center;
+  }
+  .active-indicator {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: calc(100% / var(--tab-count));
+    height: 4px;
+    transform: scaleX(0.6);
+    background-color: gray;
+  }
+}
+.tab-entries {
+  max-height: 50vw;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  overflow: auto hidden;
+  scroll-snap-type: x mandatory;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.entry-grid {
+  scroll-snap-align: start;
+  flex: 0 0 100%;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  justify-items: center;
+  .entry-item {
+    width: -moz-available;
+    width: -webkit-fill-available;
+    padding: 16px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+    .thumbnail {
+      background-color: lightgray;
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+    }
+  }
+}
+
+.left-entry-grid-arrow,
+.right-entry-grid-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.4;
+  transition: 300ms;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+    filter: brightness(0.9);
+  }
+  &:active {
+    opacity: 0.6;
+    filter: brightness(0.8);
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20%;
+    height: 20%;
+    border: 2px solid #333;
+    transform: translate(-50%, -40%) rotate(45deg);
+  }
+}
+.left-entry-grid-arrow {
+  left: 0;
+  &::after {
+    border-top-width: 0;
+    border-right-width: 0;
+    transform: translate(-25%, -40%) rotate(45deg);
+  }
+}
+.right-entry-grid-arrow {
+  right: 0;
+  &::after {
+    border-bottom-width: 0;
+    border-left-width: 0;
+    transform: translate(-75%, -40%) rotate(45deg);
+  }
+}
