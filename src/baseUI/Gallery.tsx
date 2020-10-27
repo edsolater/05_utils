@@ -25,6 +25,7 @@ const Gallery = (props: {
     eachGridWidth: 0
   })
   const showTab = (tabIndex = 0) => {
+    // 会造成没必要的纵向界面滚动
     entryGrids.current[tabIndex].scrollIntoView({ behavior: 'smooth' })
   }
   return (

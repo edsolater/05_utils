@@ -234,7 +234,9 @@ const RichEditor: FC<{}> = () => {
   // 保存上一个选取范围的信息
   const lastRangeInfo = useRef<RangeInfo>({ start: 0, end: 0 })
   // 编辑器内部的文本信息
-  const [innerHTML, setInnerHTML] = useState('啊手动阀啦撒<b>旦ddss当时法国啊撒打发啊撒打发搜索法</b>\n啊<b>撒打发</b>')
+  const [innerHTML, setInnerHTML] = useState(
+    '啊手动阀啦撒<b>旦ddss当时法国啊撒打发啊撒打发搜索法</b>\n啊<b>撒打发</b>'
+  )
   // 更改的操作栈
   const operationStack = useRef<OperationRecord[]>([])
   // 撤销的操作栈
@@ -322,82 +324,85 @@ const RichEditor: FC<{}> = () => {
   }, [])
   //#endregion
   return (
-    <div
-      ref={editorRef}
-      css={css({
-        backgroundColor: '#eee',
-        outline: 'none',
-        whiteSpace: 'pre-wrap',
-        img: {
-          display: 'block',
-          maxHeight: 300,
-          maxWidth: 300
-        }
-      })}
-      onFocus={() => {
-        setInnerHTML(innerHTML + '\n') // 加上\n是因为回车换行的需求
-      }}
-      onBlur={() => {
-        setInnerHTML(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
-      }}
-      onCompositionEnd={() => {
-        // 输入法结束后，触发同步更新 innerHTML
-        syncFromDom()
-      }}
-      onInput={({ nativeEvent }) => {
-        // 若不是输入法，都触发同步更新 innerHTML
-        if ((nativeEvent as InputEvent).inputType !== 'insertCompositionText') {
+    <div className='outer-box'>
+      <input type='file' id='avatar' name='avatar' accept='image/png, image/jpeg' />
+      <div
+        ref={editorRef}
+        css={css({
+          backgroundColor: '#eee',
+          outline: 'none',
+          whiteSpace: 'pre-wrap',
+          img: {
+            display: 'block',
+            maxHeight: 300,
+            maxWidth: 300
+          }
+        })}
+        onFocus={() => {
+          setInnerHTML(innerHTML + '\n') // 加上\n是因为回车换行的需求
+        }}
+        onBlur={() => {
+          setInnerHTML(innerHTML.slice(0, innerHTML.length - 1)) // 把换行符去掉
+        }}
+        onCompositionEnd={() => {
+          // 输入法结束后，触发同步更新 innerHTML
           syncFromDom()
-        }
-      }}
-      onKeyDown={e => {
-        /**
-         * 用户输入：加粗命令
-         */
-        if (e.ctrlKey && e.key.toLowerCase() === 'b') {
-          e.preventDefault()
-          recordNewInnerHTMLAndRange(
-            getBlodText(innerHTML, lastRangeInfo.current),
-            getDOMRangeInfo()
-          )
-        }
-        /**
-         * 用户输入：回车命令
-         */
-        if (e.key === 'Enter') {
-          e.preventDefault()
-          const [cursorPoint, isCollapse] = tellCursorPoint(innerHTML, lastRangeInfo.current)
-          if (isCollapse && cursorPoint === 'end') offsetRangeInfo(1) // 行末回车
-          const resultText = getEnteredText(innerHTML, lastRangeInfo.current)
-          collapseRangeInfo()
-          recordNewInnerHTMLAndRange(resultText, lastRangeInfo.current)
-          if (!isCollapse && cursorPoint === 'end') offsetRangeInfo(1) //行末回车
-          if (cursorPoint === 'middle') {
-            offsetRangeInfo(1.5) // FIXME? 1.5 不多不少，修复了回车的bug，但这是为什么呢？感觉像是一块不明但有效的补丁，这可不行
-          } // 行中回车
-          if (cursorPoint === 'start') offsetRangeInfo(1) // 行首回车
-        }
-        /**
-         * 用户输入：undo/redo
-         */
-        if (e.ctrlKey && e.key.toLowerCase() === 'z') {
-          e.preventDefault()
-          e.shiftKey ? redo() : undo()
-        }
-        // /**
-        //  * 用户指令：粘贴
-        //  */
-        // if (e.ctrlKey && e.key.toLowerCase() === 'v') {
-        //   e.preventDefault()
-        //   console.log('e: ', e.nativeEvent)
-        // }
-      }}
-      onPaste={e => {
-        console.log('e: ', e.nativeEvent)
-      }}
-      contentEditable
-      dangerouslySetInnerHTML={{ __html: innerHTML }}
-    ></div>
+        }}
+        onInput={({ nativeEvent }) => {
+          // 若不是输入法，都触发同步更新 innerHTML
+          if ((nativeEvent as InputEvent).inputType !== 'insertCompositionText') {
+            syncFromDom()
+          }
+        }}
+        onKeyDown={e => {
+          /**
+           * 用户输入：加粗命令
+           */
+          if (e.ctrlKey && e.key.toLowerCase() === 'b') {
+            e.preventDefault()
+            recordNewInnerHTMLAndRange(
+              getBlodText(innerHTML, lastRangeInfo.current),
+              getDOMRangeInfo()
+            )
+          }
+          /**
+           * 用户输入：回车命令
+           */
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            const [cursorPoint, isCollapse] = tellCursorPoint(innerHTML, lastRangeInfo.current)
+            if (isCollapse && cursorPoint === 'end') offsetRangeInfo(1) // 行末回车
+            const resultText = getEnteredText(innerHTML, lastRangeInfo.current)
+            collapseRangeInfo()
+            recordNewInnerHTMLAndRange(resultText, lastRangeInfo.current)
+            if (!isCollapse && cursorPoint === 'end') offsetRangeInfo(1) //行末回车
+            if (cursorPoint === 'middle') {
+              offsetRangeInfo(1.5) // FIXME? 1.5 不多不少，修复了回车的bug，但这是为什么呢？感觉像是一块不明但有效的补丁，这可不行
+            } // 行中回车
+            if (cursorPoint === 'start') offsetRangeInfo(1) // 行首回车
+          }
+          /**
+           * 用户输入：undo/redo
+           */
+          if (e.ctrlKey && e.key.toLowerCase() === 'z') {
+            e.preventDefault()
+            e.shiftKey ? redo() : undo()
+          }
+          // /**
+          //  * 用户指令：粘贴
+          //  */
+          // if (e.ctrlKey && e.key.toLowerCase() === 'v') {
+          //   e.preventDefault()
+          //   console.log('e: ', e.nativeEvent)
+          // }
+        }}
+        onPaste={e => {
+          console.log('e: ', e.nativeEvent)
+        }}
+        contentEditable
+        dangerouslySetInnerHTML={{ __html: innerHTML }}
+      ></div>
+    </div>
   )
 }
 

@@ -23,11 +23,10 @@
   }
 }
 .tab-entries {
-  max-height: 50vw;
   position: relative;
   display: flex;
   align-items: flex-start;
-  overflow: auto hidden;
+  overflow: auto;
   scroll-snap-type: x mandatory;
   &::-webkit-scrollbar {
     display: none;
