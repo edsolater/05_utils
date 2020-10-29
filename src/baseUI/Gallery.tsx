@@ -1,4 +1,4 @@
-import isNullish from 'functions/typeGards/isNullish'
+import { isNullish } from 'functions'
 import React, { useRef, useState } from 'react'
 import './Gallery.scss'
 

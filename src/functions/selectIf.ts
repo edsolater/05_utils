@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { getLastItem } from 'functions/tools'
+import { getLastItem } from 'functions/functions'
 import { isFunction } from '../typeGards'
 
 type Value = boolean | number | string | { [key: string]: unknown }

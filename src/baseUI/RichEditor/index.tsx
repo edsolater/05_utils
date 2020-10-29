@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { applyRange, splitInnerHTMLByTag } from 'functions/domHelper'
+import { applyRange, splitInnerHTMLByTag } from 'helpers'
 import {
   clearArray,
   getFirstChar,
@@ -9,9 +9,9 @@ import {
   getLastItem,
   notEmpty,
   numberInRange,
-  selectIf
-} from 'functions/tools'
-import { isTextNode } from 'functions/typeGards'
+  selectIf,
+  isTextNode
+} from 'functions'
 import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 // 划线区的开头，相对与整段文字内容的位置

@@ -1,5 +1,5 @@
 /**
- * 纯函数
+ * (纯函数)
  * 分割innerHTML
  * @param canPaintInnerHTML 输入的innerHTML
  * @example
