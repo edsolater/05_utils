@@ -1,16 +1,17 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { applyRange, splitInnerHTMLByTag } from 'helpers'
 import {
-  clearArray,
+  splitInnerHTMLByTag,
   getFirstChar,
-  getFirstItem,
   getLastChar,
+  getFirstItem,
   getLastItem,
-  notEmpty,
+  isTextNode,
   numberInRange,
-  selectIf,
-  isTextNode
+  applyRange,
+  clearArray,
+  notEmpty,
+  smartIf
 } from 'functions'
 import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
@@ -121,7 +122,7 @@ function tellCursorPoint(
 ): [point: 'start' | 'middle' | 'end', isCollapse: boolean] {
   //  第一步：根据文字偏移量，计算出插入位置
   const { insertStart, insertEnd } = computeDOMRange(innerHTML, { start, end })
-  const result = selectIf(
+  const result = smartIf(
     [insertStart === 0, 'start'],
     [getFirstChar(innerHTML.slice(insertEnd).replace(/<.*?>/g, '')) === '\n', 'end'], // TODO:要封一个clearInnerTag的工具函数
     [getLastChar(innerHTML.slice(0, insertStart).replace(/<.*?>/g, '')) === '\n', 'start'],

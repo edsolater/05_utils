@@ -1,7 +1,8 @@
 /**
- * 纯函数
- * 取数组中的首项(为了与getLast保持对称性，才)
+ * (纯函数)
+ * 获取数组中的第一项(为了与getLastItem保持对称性)
+ * @param arr 目标数组
  */
-export default function getFirstItem<T>(target: T[]): T {
-  return target[0] 
+export default function getFirstItem<T>(arr: T[]): T {
+  return arr[0] 
 }

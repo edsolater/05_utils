@@ -1,4 +1,4 @@
-import { isFunction } from '.'
+import isFunction  from './isFunction'
 
 /**
  * (纯函数)

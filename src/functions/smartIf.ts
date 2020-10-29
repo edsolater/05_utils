@@ -1,15 +1,15 @@
 //@ts-nocheck
-import { getLastItem } from 'functions/functions'
-import { isFunction } from '../typeGards'
+import getLastItem from './getLastItem'
+import isFunction from './isFunction'
 
 type Value = boolean | number | string | { [key: string]: unknown }
 
 /**
- * 纯函数
+ * (纯函数)
  * 有条件地返回（用于简化链式的if）
  * @param conditionPairs 条件与返回值
  */
-export default function selectIf<T extends Value>(
+export default function smartIf<T extends Value>(
   ...conditionPairs: ([condition: boolean | (() => boolean), result: T | (() => T)] | T)[]
 ): T {
   for (let i = 0; i < conditionPairs.length; i++) {
