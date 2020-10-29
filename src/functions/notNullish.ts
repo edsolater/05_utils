@@ -1,7 +1,9 @@
 /**
  * (纯函数)
- * 判断是否是否值
- * @param value 需要判断的值
+ * 
+ * 判断是否非`undefined`或`null`
+ * 
+ * @param value 被检测的值
  * @example
  * notNullish('') // true
  * notNullish(undefined) // false
