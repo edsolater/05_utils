@@ -1,8 +1,8 @@
 /**
  * 判断两个值全等
- * @param value1 一个值
- * @param value2 另一个值
+ * @param val1 一个值
+ * @param val2 另一个值
  */
-export default function areSame(value1: any, value2: any): boolean {
-  return Object.is(value1, value2)
+export default function areSame(val1: unknown, val2: unknown): boolean {
+  return Object.is(val1, val2)
 }

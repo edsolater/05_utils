@@ -1,5 +1,5 @@
 import areSame from './areSame'
-import haveEqualKeys from './haveEqualKeys'
+import haveSameKeys from './haveSameKeys'
 import isArray from './isArray'
 import isObjectLiteral from './isObjectLiteral'
 
@@ -14,7 +14,7 @@ import isObjectLiteral from './isObjectLiteral'
 export default function areDeepEqual(val1: unknown, val2: unknown) {
   if (areSame(val1, val2)) return true
   if ((isObjectLiteral(val1) && isObjectLiteral(val2)) || (isArray(val1) && isArray(val2))) {
-    return haveEqualKeys(val1, val2)
+    return haveSameKeys(val1, val2)
       ? Object.keys(val1).every(key => areDeepEqual(val1[key], val2[key]))
       : false
   }

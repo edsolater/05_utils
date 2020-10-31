@@ -1,4 +1,4 @@
-import isEmpty from './isEmpty'
+import isEmptyArray from './isEmptyArray'
 
 /**
  * (纯函数)
@@ -11,5 +11,5 @@ import isEmpty from './isEmpty'
  * notEmpty([1]) // true
  */
 export default function notEmpty(target: any[] | string): boolean {
-  return !isEmpty(target)
+  return !isEmptyArray(target)
 }
