@@ -3,9 +3,9 @@
  * @param val 需要判定的值
  * @param arr 数组（可能包含目标值）
  * @example
- * matchToArray(2, [1, 2, 3]) // true
- * matchToArray('hello', ['hello', 'world']) // true
+ * inArray(2, [1, 2, 3]) // true
+ * inArray('hello', ['hello', 'world']) // true
  */
-export default function matchToArray<T extends unknown>(val: T, arr: T[]) {
+export default function inArray<T extends unknown>(val: T, arr: T[]) {
   return arr.includes(val)
 }
