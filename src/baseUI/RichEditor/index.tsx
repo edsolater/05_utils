@@ -7,7 +7,7 @@ import {
   getFirstItem,
   getLastItem,
   isTextNode,
-  numberInRange,
+  inRange,
   applyRange,
   clearArray,
   notEmpty,
@@ -212,11 +212,11 @@ function applyOffsetRange(relateTo: HTMLElement, start: number, end = start) {
   newRange.setStart(relateTo, 0) //设定好默认的选区开始位置
   for (let i = 0; i < textNodeStack.length; i++) {
     const textNode = textNodeStack[i]
-    if (!foundStart && numberInRange(start, [charIndex, charIndex + textNode.length])) {
+    if (!foundStart && inRange(start, [charIndex, charIndex + textNode.length])) {
       newRange.setStart(textNode, start - charIndex)
       foundStart = true
     }
-    if (foundStart && numberInRange(end, [charIndex, charIndex + textNode.length])) {
+    if (foundStart && inRange(end, [charIndex, charIndex + textNode.length])) {
       newRange.setEnd(textNode, end - charIndex)
       break // 至此，选取的开始与结尾都记录完毕，不需要继续遍历了
     }
