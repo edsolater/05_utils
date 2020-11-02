@@ -1,4 +1,5 @@
 import React from 'react'
+import Avatar from './Avatar'
 import Gallery from './Gallery'
 import RichEditor from './RichEditor'
 // import SyncScroll from './SyncScroll'
@@ -68,6 +69,7 @@ function TestGround() {
   ]
   return (
     <>
+      <Avatar />
       <RichEditor />
       {/* <SyncScroll /> */}
       <Gallery data={tabInfo} />
