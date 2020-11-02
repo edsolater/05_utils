@@ -13,7 +13,7 @@
  */
 export default function objectFilter<T extends object>(
   target: T,
-  judger: (entry: [key: keyof T, value: T[keyof T]], index: number, obj: T) => boolean
+  judger: <U extends keyof T>(entry: [key: U, value: T[U]], index: number, obj: T) => boolean
 ) {
   //@ts-ignore
   return Object.fromEntries(Object.entries(target).filter(judger))

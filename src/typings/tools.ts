@@ -5,3 +5,4 @@ export type StyleNames<T extends string[]> = { [name in T[number]]: Interpolatio
 export type MayArray<T> = T | Array<T>
 
 export type MayFunction<T> = T | (() => T)
+
