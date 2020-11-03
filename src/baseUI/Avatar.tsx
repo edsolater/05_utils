@@ -1,6 +1,6 @@
 import Div, { allPropsName } from './Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
-import { objectReduce } from 'functions'
+import { divideByPropertyNames } from 'functions'
 const placeholderColor = 'gray'
 /**
  * 用户头像
@@ -13,24 +13,7 @@ const Avatar: FC<
     color?: CSSProperties['backgroundColor']
   } & ImgHTMLAttributes<HTMLImageElement>
 > = ({ isPlaceholder = false, size = 40, color = placeholderColor, src, ...restProps }) => {
-  // function splitByPropertyName<T extends object>(
-  //   obj: T,
-  //   propNameList: ReadonlyArray<keyof T | string>
-  // ): [Partial<T>, Partial<T>] {
-  //   return objectReduce(
-  //     obj,
-  //     (acc, [key]) => {
-  //       if (propNameList.includes(key)) {
-  //         acc[0][key] = obj[key]
-  //       } else {
-  //         acc[1][key] = obj[key]
-  //       }
-  //       return acc
-  //     },
-  //     [{}, {}]
-  //   )
-  // }
-  // const [restPropsForDiv, restPropsForImg] = splitByPropertyName(restProps, allPropsName)
+  const [restPropsForDiv, restPropsForImg] = divideByPropertyNames(restProps, allPropsName)
   return (
     <Div
       css={{
