@@ -1,6 +1,6 @@
 import Div, { allPropsName } from './Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
-import { divideByPropertyNames } from 'functions'
+import { divideByPropertyNames, kickByPropertyNames } from 'functions'
 const placeholderColor = 'gray'
 /**
  * 用户头像
@@ -16,12 +16,17 @@ const Avatar: FC<
   const [restPropsForDiv, restPropsForImg] = divideByPropertyNames(restProps, allPropsName)
   return (
     <Div
-      css={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        backgroundColor: isPlaceholder ? placeholderColor : color
-      }}
+      css={[
+        {
+          width: size,
+          height: size,
+          borderRadius: '50%',
+          backgroundColor: isPlaceholder ? placeholderColor : color
+        },
+        //@ts-expect-error //todo: 总觉得有点慌啊
+        restProps.css
+      ]}
+      {...kickByPropertyNames(restPropsForDiv, ['css'])}
     >
       {src && (
         <img
@@ -32,7 +37,7 @@ const Avatar: FC<
             objectFit: 'contain'
           }}
           src={src}
-          {...restProps}
+          {...restPropsForImg}
         />
       )}
     </Div>
