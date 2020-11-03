@@ -6,15 +6,15 @@
  *
  * 类似于array.protoype.filter
  *
- * @param target 目标对象
+ * @param obj 目标对象
  * @param judger 映射函数
  * @example
  * objectFilter({ a: 1, b: 2 }, ([, value]) => value > 1) // { b: 2 }
  */
 export default function objectFilter<T extends object>(
-  target: T,
+  obj: T,
   judger: <U extends keyof T>(entry: [key: U, value: T[U]], index: number, obj: T) => boolean
-) {
+):Partial<T> {
   //@ts-ignore
-  return Object.fromEntries(Object.entries(target).filter(judger))
+  return Object.fromEntries(Object.entries(obj).filter(judger))
 }
