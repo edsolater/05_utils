@@ -1,17 +1,15 @@
-import { isUndefined } from "lodash"
+import objectFilter from './objectFilter'
 
 /**
- * (会更改目标对象)
- * 删除对象的所有undefined属性
+ * 删除对象的所有undefined属性，
+ * 就是非undifined版的objectFilter
  * @param obj 目标对象
  * @todo 可选地提供判定为不必要的判定函数
  */
-export default function clearObject<T extends object>(obj: T) {
-  const objectEntries = Object.entries(obj)
-  for (let i = 0; i < objectEntries.length; i++) {
-    const [key, value] = objectEntries[i]
-    if (isUndefined(value)) {
-      delete obj[key]
-    }
-  }
+export default function clearObject<T extends object, K extends keyof T>(
+  obj: T
+): { [P in T[K] extends T ? never : K]: T[P] } {
+  return objectFilter(obj, ([_, value]) => value !== undefined)
 }
+const obja = { a: 1, b: undefined }
+const objb = clearObject(obja)
