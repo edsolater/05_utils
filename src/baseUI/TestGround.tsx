@@ -1,5 +1,6 @@
 import React from 'react'
 import Avatar from './Avatar'
+import Div from './Div'
 import Gallery from './Gallery'
 import Grid from './Grid'
 import RichEditor from './RichEditor'
@@ -24,7 +25,7 @@ function TestGround() {
         { name: 'Brunei' },
         { name: 'Cook Islands' },
         { name: 'Zambia' },
-        { name: 'Indonesia' },
+        { name: 'Indonesia' }
       ]
     },
     {
@@ -71,7 +72,25 @@ function TestGround() {
   return (
     <>
       {/* <Avatar /> */}
-      <Grid type='1d-row-3-slot'/>
+      <Grid type='1d-row-3-slot'>
+        <Div
+          className='grid-item'
+          css={{
+            background: '#fff8'
+          }}
+        >
+          A
+        </Div>
+        <Div className='grid-item' css={{ background: '#fff8' }}>
+          B
+        </Div>
+        <Div className='grid-item' css={{ background: '#fff8' }}>
+          C
+        </Div>
+        <Div className='grid-item' css={{ background: '#fff8' }}>
+          D
+        </Div>
+      </Grid>
       {/* <RichEditor /> */}
       {/* <SyncScroll /> */}
       {/* <Gallery data={tabInfo} /> */}

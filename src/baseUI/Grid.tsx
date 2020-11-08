@@ -80,10 +80,6 @@ const gridTemplates: {
     }
   }
 }
-const gridItemBasicCSS: Interpolation = {
-  background: '#fff8',
-}
-
 const Grid: FC<{
   /**
    * grid的预定义样式
@@ -92,15 +88,15 @@ const Grid: FC<{
   noCssGap?: boolean
   cssGap?: CSSObject['gap']
   cssBlocks?: Interpolation
-}> = ({ type, noCssGap, cssGap = 8, cssBlocks }) => {
+}> = ({ type, noCssGap, cssGap = 8, cssBlocks, children }) => {
   return (
     <Div
       className='grid-box'
       css={[
         {
-          maxWidth: '100vw',
-          height: '80vh',
-          padding: 8
+          maxWidth: '100vw', //TEMP 为了方便测试，正式使用应该去除
+          height: '80vh', //TEMP 为了方便测试，正式使用应该去除
+          padding: 8 //TEMP 为了方便测试，正式使用应该去除
         },
         {
           display: 'grid',
@@ -120,18 +116,7 @@ const Grid: FC<{
         cssBlocks
       ]}
     >
-      <Div className='grid-item' css={[gridItemBasicCSS]}>
-        A
-      </Div>
-      <Div className='grid-item' css={[gridItemBasicCSS]}>
-        B
-      </Div>
-      <Div className='grid-item' css={[gridItemBasicCSS]}>
-        C
-      </Div>
-      <Div className='grid-item' css={[gridItemBasicCSS]}>
-        D
-      </Div>
+      {children}
     </Div>
   )
 }
