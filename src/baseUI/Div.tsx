@@ -12,7 +12,7 @@ export const allPropsName: Readonly<Array<keyof DivProps>> = ['css'] as const
  */
 const Div: ForwardRefRenderFunction<
   any,
-  JSX.IntrinsicElements['div'] & { css?: MayArray<Interpolation> }
+  JSX.IntrinsicElements['div'] & { css?: Interpolation }
 > = ({ css: emotionCss, children, ...restProps }, ref) => (
   <div ref={ref} css={css(emotionCss)} {...restProps}>
     {children}
