@@ -9,6 +9,6 @@ function removeByValues<T extends Readonly<object>, U extends Values<T>>(
   ...values: U[]
 ): Partial<T>{
   //@ts-ignore
-  return objectFilter(obj, ([, value]) => values.includes(value))
+  return objectFilter(obj, ([, value]) => !values.includes(value))
 }
 export default removeByValues
