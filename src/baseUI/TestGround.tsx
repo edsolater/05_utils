@@ -71,7 +71,7 @@ function TestGround() {
   return (
     <>
       {/* <Avatar /> */}
-      <Grid />
+      <Grid type='1d-row-3-slot'/>
       {/* <RichEditor /> */}
       {/* <SyncScroll /> */}
       {/* <Gallery data={tabInfo} /> */}

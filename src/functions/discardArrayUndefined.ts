@@ -9,6 +9,5 @@ type NonUndefined<T> = T extends undefined ? never : T
  * discardArrayUndefined([42, 21, undefined, 50, 40, undefined, 9]) // [42, 21, 50, 40, 9]
  */
 export default function discardArrayUndefined<T extends unknown>(arr: T[]): Array<NonUndefined<T>> {
-  //@ts-expect-error
   return arr.filter(notUndefined)
 }
