@@ -3,6 +3,7 @@ import Avatar from './Avatar'
 import Div from './Div'
 import Gallery from './Gallery'
 import Grid from './Grid'
+import ResizeableBox from './ResizeableBox'
 import RichEditor from './RichEditor'
 // import SyncScroll from './SyncScroll'
 function TestGround() {
@@ -72,7 +73,7 @@ function TestGround() {
   return (
     <>
       {/* <Avatar /> */}
-      <Grid type='1d-row-3-slot'>
+      {/* <Grid type='1d-row-3-slot'>
         <Div
           className='grid-item'
           css={{
@@ -90,7 +91,8 @@ function TestGround() {
         <Div className='grid-item' css={{ background: '#fff8' }}>
           D
         </Div>
-      </Grid>
+      </Grid> */}
+      <ResizeableBox />
       {/* <RichEditor /> */}
       {/* <SyncScroll /> */}
       {/* <Gallery data={tabInfo} /> */}

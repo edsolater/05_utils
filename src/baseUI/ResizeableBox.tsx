@@ -1,63 +1,90 @@
 import Div from './Div'
-import React, { FC } from 'react'
-import { Interpolation } from '@emotion/core'
+import React, { FC, useEffect, useRef } from 'react'
 import getBoundingClientRect from 'functions/getBoundingClientRect'
 import toPx from 'functions/toPx'
 import pxToNumber from 'functions/pxToNumber'
+function attachInlineLayoutCssIfNeeded(el: HTMLElement | null, cssPropName: 'width' | 'height') {
+  if (el && !el.style[cssPropName]) {
+    el.style[cssPropName] = toPx(getBoundingClientRect(el)[cssPropName])
+  }
+}
+function changeLayoutByDelta(
+  el: HTMLElement | null,
+  deltaPx: number,
+  cssPropName: 'width' | 'height'
+) {
+  if (!el) return
+  const newPx = toPx(pxToNumber(el.style[cssPropName]) + deltaPx)
+  el.style[cssPropName] = newPx
+}
 
-// TODO: 刚成一个想法，还很残破
+//交替触发2个trigger有bug，右下角还需要个双向resizer
 const ResizeableBox: FC<{}> = ({}) => {
-  const mouseMoveHandler = (ev: MouseEvent) => {
-    const el = ev.target as HTMLDivElement
-    console.log(ev.movementX, ev.movementY)
-    if (!el.style.width) {
-      // TODO：要把它抽象成一个方法
-      el.style.width = toPx(getBoundingClientRect(el).width)
+  const box = useRef<HTMLDivElement>(null)
+  const triggerRight = useRef<HTMLDivElement>(null)
+  const triggerBottom = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const mouseMoveHandler = (ev: MouseEvent) => {
+      ev.preventDefault()
+      attachInlineLayoutCssIfNeeded(box.current, 'width')
+      changeLayoutByDelta(box.current, ev.movementX, 'width')
     }
-    const newWidth = toPx(pxToNumber(el.style.width) + ev.movementX)
-    el.style.width = newWidth
-  }
-  const bindHandler = () => {
-    document.addEventListener('mousemove', mouseMoveHandler)
-    document.addEventListener('mouseup', clearHandler)
-  }
-  const clearHandler = () => {
-    document.removeEventListener('mousemove', mouseMoveHandler)
-    document.removeEventListener('mouseup', clearHandler)
-  }
-  const gridItemBasicCSS: Interpolation = {
-    background: '#fff8',
-    position: 'relative'
-  }
+    const bindHandler = () => {
+      document.addEventListener('mousemove', mouseMoveHandler)
+      document.addEventListener('mouseup', clearHandler)
+    }
+    const clearHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler)
+      document.removeEventListener('mouseup', clearHandler)
+    }
+    triggerRight.current?.addEventListener('mousedown', bindHandler)
+  }, [])
+
+  useEffect(() => {
+    const mouseMoveHandler = (ev: MouseEvent) => {
+      ev.preventDefault()
+      attachInlineLayoutCssIfNeeded(box.current, 'height')
+      changeLayoutByDelta(box.current, ev.movementY, 'height')
+    }
+    const bindHandler = () => {
+      document.addEventListener('mousemove', mouseMoveHandler)
+      document.addEventListener('mouseup', clearHandler)
+    }
+    const clearHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler)
+      document.removeEventListener('mouseup', clearHandler)
+    }
+    triggerBottom.current?.addEventListener('mousedown', bindHandler)
+  }, [])
+
   return (
     <Div
-      className='grid-box'
+      ref={box}
+      className='resizable'
       css={{
-        maxWidth: '100vw',
-        height: '80vh',
-        padding: 8,
-        display: 'grid',
-        gridAutoFlow: 'column',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 1,
-        background: 'dodgerblue',
-        overflow: 'hidden',
-        resize: 'both'
+        width: 1000,
+        height: 1000,
+        backgroundColor: 'dodgerblue',
+        position: 'relative'
       }}
     >
-      <Div className='grid-item' css={[gridItemBasicCSS]}>
-        <Div className='content'></Div>
-        <Div
-          className='resize-trigger-right'
-          css={[
-            { position: 'absolute', width: 10, top: 0, right: -5, bottom: 0, background: '#0001' },
-            { '&:hover': {cursor:'', background: '#0003' } }
-          ]}
-          onMouseDown={bindHandler}
-        ></Div>
-        <Div className='resize-trigger-bottom'></Div>
-      </Div>
-      <Div className='grid-item' css={[gridItemBasicCSS]} />
+      <Div
+        ref={triggerRight}
+        className='resize-trigger-right'
+        css={[
+          { position: 'absolute', width: 8, top: 0, right: -4, bottom: 0, background: '#0001' },
+          { ':hover': { cursor: 'col-resize', background: '#0003' } }
+        ]}
+      ></Div>
+      <Div
+        ref={triggerBottom}
+        className='resize-trigger-bottom'
+        css={[
+          { position: 'absolute', height: 8, left: 0, bottom: -4, right: 0, background: '#0001' },
+          { ':hover': { cursor: 'row-resize', background: '#0003' } }
+        ]}
+      ></Div>
     </Div>
   )
 }
