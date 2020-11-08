@@ -1,23 +1,37 @@
+import isArray from './isArray'
+import isNull from './isNull'
+import isObject from './isObject'
+
 /**
- * 获取值的类型（以小写形式）
+ * 获取值的粗略类型（以小写形式）（不会显示是什么对象）
  * @param val 目标值
  * @returns 代表类型的字符串
  * @example
- * getType({}) // 'object'
- * getType(Object.create(null)) // 'object'
- * getType([]) // 'array'
- * getType(3) // 'number'
  * getType(null) // 'null'
  * getType(undefined) // 'undefined'
- * getType('xxx') // 'string'
  * getType(true) // 'boolean'
- * getType(Promise.resolve(2)) // 'promise'
+ * getType(3) // 'number'
+ * getType('xxx') // 'string'
+ * getType(11n) // 'bigint'
+ * getType(Symbol.for('hello')) // 'symbol'
+ * getType([]) // 'array'
  * getType(() => {}) // 'function'
- * getType(async () => {}) // 'asyncfunction'
- * getType(function* () {}) // 'generatorfunction'
- * getType(new Date()) // 'date'
+ * getType({}) // 'object'
+ * getType(Object.create(null)) // 'object'
+ * getType(new Date()) // 'object'
  */
-export default function getType(val: unknown) {
-  const typeString = Object.prototype.toString.call(val)
-  return typeString.slice(8, typeString.length - 1).toLowerCase()
+export default function getType(
+  val: unknown
+):
+  | 'null'
+  | 'undefined'
+  | 'boolean'
+  | 'number'
+  | 'string'
+  | 'bigint'
+  | 'symbol'
+  | 'array'
+  | 'function'
+  | 'object' {
+  return isNull(val) ? 'null' : isArray(val) ? 'array' : isObject(val) ? 'object' : typeof val
 }

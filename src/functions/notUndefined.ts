@@ -1,3 +1,4 @@
-export default function notUndefined(val: unknown): val is undefined {
+type NotUndefined<T> = T extends undefined ? never : T
+export default function notUndefined<T>(val: T): val is NotUndefined<T> {
   return val !== undefined
 }
