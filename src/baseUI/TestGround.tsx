@@ -73,7 +73,7 @@ function TestGround() {
   return (
     <>
       {/* <Avatar /> */}
-      {/* <Grid type='1d-row-3-slot'>
+      {/* <Grid type='1d-article-toc'>
         <Div
           className='grid-item'
           css={{

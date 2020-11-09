@@ -4,30 +4,48 @@ import { CSSObject, Interpolation } from '@emotion/core'
 import chainIf from 'functions/chainIf'
 
 type GridType =
-  | 'verticle' //全纵向排列
-  | 'horizontal' //横向排列
-  | '2d-4-slot' // 田字格
+  | 'in-col' //全纵向排列
+  | 'in-row' //横向排列
+  | '2d-4-equal-slot' // 田字格
   | '2d-user-profile' // 经典图片在左，文字在右的布局
-  | '2d-app-menu-nav-content' // 经典APP布局：导航条在上，菜单在左，内容在右
-  | '1d-row-3-slot' // 横向3格布局
-  | '1d-row-2-slot-solid-prefix' // 横向2格布局(前缀是icon}
-  | '1d-row-2-slot-solid-suffix' // 横向2格布局(后缀是icon}
+  | '2d-nav-space-content-space' // 经典APP布局：导航条在上，内容在正中，两边有留白
+  | '2d-nav-menu-content' // 经典APP布局：导航条在上，菜单在左，内容在右
+  | '1d-icon-text-icon' // 横向3格布局
+  | '1d-article-toc' // 横向2格布局，文章占大部分，toc占小部分
+  | '1d-icon-text' // 横向2格布局（icon在前）
+  | 'id-text-icon' // 横向2格布局（文字在前）
 
 const gridTemplates: {
   [K in GridType]: Interpolation
 } = {
-  verticle: {
+  'in-col': {
     gridAutoFlow: 'row dense'
   },
-  horizontal: {
+  'in-row': {
     gridAutoFlow: 'column dense'
   },
-  '2d-4-slot': {
+  '2d-4-equal-slot': {
     gridTemplate: `
       'a b' 1fr
       'c d' 1fr / 1fr 1fr
     `,
     '> :nth-child(n+5)': {
+      display: 'none'
+    }
+  },
+  '2d-nav-space-content-space': {
+    gridTemplate: `
+      'nav    nav    nav' auto
+      '  .  article  .  ' 1fr / 1fr clamp(400px, 60%, 1000px) 1fr
+    `,
+    '> :nth-child(1)': {
+      gridArea: 'nav'
+    },
+    '> :nth-child(2)': {
+      gridArea: 'article',
+      height: '300vh'
+    },
+    '> :nth-child(n+3)': {
       display: 'none'
     }
   },
@@ -43,7 +61,7 @@ const gridTemplates: {
       display: 'none'
     }
   },
-  '2d-app-menu-nav-content': {
+  '2d-nav-menu-content': {
     gridTemplate: `
       'menu  nav' auto
       'menu  cnt' 1fr / auto 1fr
@@ -55,25 +73,33 @@ const gridTemplates: {
       display: 'none'
     }
   },
-  '1d-row-3-slot': {
+  '1d-icon-text-icon': {
     gridTemplate: `
-      'a b c' / auto 1fr auto
+      'iconA text iconB' / auto 1fr auto
     `,
     '> :nth-child(n+4)': {
       display: 'none'
     }
   },
-  '1d-row-2-slot-solid-prefix': {
+  '1d-article-toc': {
     gridTemplate: `
-      'a b' / auto 1fr
+      'article toc' / 1fr min(40%, 400px)
     `,
     '> :nth-child(n+3)': {
       display: 'none'
     }
   },
-  '1d-row-2-slot-solid-suffix': {
+  '1d-icon-text': {
     gridTemplate: `
-      'a b' / 1fr auto
+      'icon text' / auto 1fr
+    `,
+    '> :nth-child(n+3)': {
+      display: 'none'
+    }
+  },
+  'id-text-icon': {
+    gridTemplate: `
+      'text icon' / 1fr auto
     `,
     '> :nth-child(n+3)': {
       display: 'none'
@@ -96,6 +122,7 @@ const Grid: FC<{
         {
           maxWidth: '100vw', //TEMP 为了方便测试，正式使用应该去除
           height: '80vh', //TEMP 为了方便测试，正式使用应该去除
+          overflow: 'auto',
           padding: 8 //TEMP 为了方便测试，正式使用应该去除
         },
         {
@@ -104,14 +131,16 @@ const Grid: FC<{
         },
         { background: 'dodgerblue' },
         chainIf(
-          [type === 'verticle', gridTemplates.verticle],
-          [type === 'horizontal', gridTemplates.horizontal],
-          [type === '2d-4-slot', gridTemplates['2d-4-slot']],
+          [type === 'in-col', gridTemplates['in-col']],
+          [type === 'in-row', gridTemplates['in-row']],
+          [type === '2d-4-equal-slot', gridTemplates['2d-4-equal-slot']],
           [type === '2d-user-profile', gridTemplates['2d-user-profile']],
-          [type === '2d-app-menu-nav-content', gridTemplates['2d-app-menu-nav-content']],
-          [type === '1d-row-3-slot', gridTemplates['1d-row-3-slot']],
-          [type === '1d-row-2-slot-solid-prefix', gridTemplates['1d-row-2-slot-solid-prefix']],
-          [type === '1d-row-2-slot-solid-suffix', gridTemplates['1d-row-2-slot-solid-suffix']]
+          [type === '2d-nav-space-content-space', gridTemplates['2d-nav-space-content-space']],
+          [type === '2d-nav-menu-content', gridTemplates['2d-nav-menu-content']],
+          [type === '1d-icon-text-icon', gridTemplates['1d-icon-text-icon']],
+          [type === '1d-article-toc', gridTemplates['1d-article-toc']],
+          [type === '1d-icon-text', gridTemplates['1d-icon-text']],
+          [type === 'id-text-icon', gridTemplates['id-text-icon']]
         ),
         cssBlocks
       ]}
