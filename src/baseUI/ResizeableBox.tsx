@@ -24,39 +24,44 @@ const ResizeableBox: FC<{}> = ({}) => {
   const triggerRight = useRef<HTMLDivElement>(null)
   const triggerBottom = useRef<HTMLDivElement>(null)
 
+  // 绑定右部触发器
   useEffect(() => {
     const mouseMoveHandler = (ev: MouseEvent) => {
       ev.preventDefault()
       attachInlineLayoutCssIfNeeded(box.current, 'width')
       changeLayoutByDelta(box.current, ev.movementX, 'width')
     }
-    const bindHandler = () => {
+    triggerRight.current?.addEventListener('mousedown', e => e.preventDefault())
+    triggerRight.current?.addEventListener('mousedown', () => {
       document.addEventListener('mousemove', mouseMoveHandler)
-      document.addEventListener('mouseup', clearHandler)
-    }
-    const clearHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler)
-      document.removeEventListener('mouseup', clearHandler)
-    }
-    triggerRight.current?.addEventListener('mousedown', bindHandler)
+      document.addEventListener(
+        'mouseup',
+        () => document.removeEventListener('mousemove', mouseMoveHandler),
+        { once: true }
+      )
+    })
   }, [])
 
+  // 绑定底部触发器
   useEffect(() => {
     const mouseMoveHandler = (ev: MouseEvent) => {
       ev.preventDefault()
       attachInlineLayoutCssIfNeeded(box.current, 'height')
       changeLayoutByDelta(box.current, ev.movementY, 'height')
     }
-    const bindHandler = () => {
+    triggerBottom.current?.addEventListener('mousedown', e => e.preventDefault())
+    triggerBottom.current?.addEventListener('mousedown', () => {
       document.addEventListener('mousemove', mouseMoveHandler)
-      document.addEventListener('mouseup', clearHandler)
-    }
-    const clearHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler)
-      document.removeEventListener('mouseup', clearHandler)
-    }
-    triggerBottom.current?.addEventListener('mousedown', bindHandler)
+      document.addEventListener(
+        'mouseup',
+        () => document.removeEventListener('mousemove', mouseMoveHandler),
+        { once: true }
+      )
+    })
   }, [])
+
+  // 绑定右下角触发器
+  // TODO
 
   return (
     <Div
