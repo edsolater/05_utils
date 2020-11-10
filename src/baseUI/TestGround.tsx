@@ -92,7 +92,16 @@ function TestGround() {
           D
         </Div>
       </Grid> */}
-      <ResizeableBox />
+      <ResizeableBox>
+        <Div
+          css={{
+            margin: 8,
+            width: '80%',
+            height: '80%',
+            background: 'crimson'
+          }}
+        />
+      </ResizeableBox>
       {/* <RichEditor /> */}
       {/* <SyncScroll /> */}
       {/* <Gallery data={tabInfo} /> */}
