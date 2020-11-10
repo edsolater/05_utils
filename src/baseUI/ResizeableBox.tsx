@@ -32,8 +32,8 @@ const ResizeableBox: FC<{}> = ({ children }) => {
       attachInlineLayoutCssIfNeeded(box.current, 'width')
       changeLayoutByDelta(box.current, ev.movementX, 'width')
     }
-    triggerRight.current?.addEventListener('mousedown', e => e.preventDefault())
-    triggerRight.current?.addEventListener('mousedown', () => {
+    triggerRight.current?.addEventListener('mousedown', ev => {
+      ev.preventDefault()
       document.addEventListener('mousemove', mouseMoveHandler)
       document.addEventListener(
         'mouseup',
@@ -50,8 +50,8 @@ const ResizeableBox: FC<{}> = ({ children }) => {
       attachInlineLayoutCssIfNeeded(box.current, 'height')
       changeLayoutByDelta(box.current, ev.movementY, 'height')
     }
-    triggerBottom.current?.addEventListener('mousedown', e => e.preventDefault())
-    triggerBottom.current?.addEventListener('mousedown', () => {
+    triggerBottom.current?.addEventListener('mousedown', ev => {
+      ev.preventDefault()
       document.addEventListener('mousemove', mouseMoveHandler)
       document.addEventListener(
         'mouseup',
@@ -70,8 +70,9 @@ const ResizeableBox: FC<{}> = ({ children }) => {
       changeLayoutByDelta(box.current, ev.movementX, 'width')
       changeLayoutByDelta(box.current, ev.movementY, 'height')
     }
-    triggerBottomRight.current?.addEventListener('mousedown', e => e.preventDefault())
-    triggerBottomRight.current?.addEventListener('mousedown', () => {
+    //TODO 抽象成 whenDrag 方法
+    triggerBottomRight.current?.addEventListener('mousedown', ev => {
+      ev.preventDefault()
       document.addEventListener('mousemove', mouseMoveHandler)
       document.addEventListener(
         'mouseup',
