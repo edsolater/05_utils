@@ -96,8 +96,6 @@ function TestGround() {
         <Div
           css={{
             margin: 8,
-            width: '80%',
-            height: '80%',
             background: 'crimson'
           }}
         />

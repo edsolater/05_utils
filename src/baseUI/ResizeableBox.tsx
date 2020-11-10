@@ -19,7 +19,7 @@ function changeLayoutByDelta(
 }
 
 //交替触发2个trigger有bug，右下角还需要个双向resizer
-const ResizeableBox: FC<{}> = ({children}) => {
+const ResizeableBox: FC<{}> = ({ children }) => {
   const box = useRef<HTMLDivElement>(null)
   const triggerRight = useRef<HTMLDivElement>(null)
   const triggerBottom = useRef<HTMLDivElement>(null)
@@ -88,6 +88,7 @@ const ResizeableBox: FC<{}> = ({children}) => {
       css={{
         width: 500,
         height: 500,
+        display: 'grid',
         backgroundColor: 'dodgerblue',
         position: 'relative'
       }}
@@ -97,24 +98,48 @@ const ResizeableBox: FC<{}> = ({children}) => {
         ref={triggerRight}
         className='resize-trigger-right'
         css={[
-          { position: 'absolute', width: 8, top: 0, right: -4, bottom: -4, background: '#0001' },
-          { ':hover': { cursor: 'e-resize', background: '#0003' } }
+          {
+            position: 'absolute',
+            width: 8,
+            top: 0,
+            right: -4,
+            bottom: -4,
+            cursor: 'e-resize',
+            background: '#0001'
+          },
+          { ':hover': { background: '#0003' } }
         ]}
       ></Div>
       <Div
         ref={triggerBottom}
         className='resize-trigger-bottom'
         css={[
-          { position: 'absolute', height: 8, left: 0, bottom: -4, right: -4, background: '#0001' },
-          { ':hover': { cursor: 'n-resize', background: '#0003' } }
+          {
+            position: 'absolute',
+            height: 8,
+            left: 0,
+            bottom: -4,
+            right: -4,
+            cursor: 'n-resize',
+            background: '#0001'
+          },
+          { ':hover': { background: '#0003' } }
         ]}
       ></Div>
       <Div
         ref={triggerBottomRight}
         className='resize-trigger-bottom-right'
         css={[
-          { position: 'absolute', height: 8, width: 8, bottom: -4, right: -4, background: '#0001' },
-          { ':hover': { cursor: 'all-scroll', background: '#0003' } }
+          {
+            position: 'absolute',
+            height: 8,
+            width: 8,
+            bottom: -4,
+            right: -4,
+            cursor: 'nw-resize',
+            background: '#0001'
+          },
+          { ':hover': { background: '#0003' } }
         ]}
       ></Div>
     </Div>
