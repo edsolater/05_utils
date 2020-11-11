@@ -3,6 +3,7 @@ import React, { FC, useEffect, useRef } from 'react'
 import getBoundingClientRect from 'functions/getBoundingClientRect'
 import toPx from 'functions/toPx'
 import pxToNumber from 'functions/pxToNumber'
+import attachDragHandler from 'functions/attachDragHandler'
 function attachInlineLayoutCssIfNeeded(el: HTMLElement | null, cssPropName: 'width' | 'height') {
   if (el && !el.style[cssPropName]) {
     el.style[cssPropName] = toPx(getBoundingClientRect(el)[cssPropName])
@@ -27,58 +28,27 @@ const ResizeableBox: FC<{}> = ({ children }) => {
 
   // 绑定右部触发器
   useEffect(() => {
-    const mouseMoveHandler = (ev: MouseEvent) => {
-      ev.preventDefault()
+    attachDragHandler(triggerRight.current, (_, delta) => {
       attachInlineLayoutCssIfNeeded(box.current, 'width')
-      changeLayoutByDelta(box.current, ev.movementX, 'width')
-    }
-    triggerRight.current?.addEventListener('mousedown', ev => {
-      ev.preventDefault()
-      document.addEventListener('mousemove', mouseMoveHandler)
-      document.addEventListener(
-        'mouseup',
-        () => document.removeEventListener('mousemove', mouseMoveHandler),
-        { once: true }
-      )
+      changeLayoutByDelta(box.current, delta.x, 'width')
     })
   }, [])
 
   // 绑定底部触发器
   useEffect(() => {
-    const mouseMoveHandler = (ev: MouseEvent) => {
-      ev.preventDefault()
+    attachDragHandler(triggerBottom.current, (_, delta) => {
       attachInlineLayoutCssIfNeeded(box.current, 'height')
-      changeLayoutByDelta(box.current, ev.movementY, 'height')
-    }
-    triggerBottom.current?.addEventListener('mousedown', ev => {
-      ev.preventDefault()
-      document.addEventListener('mousemove', mouseMoveHandler)
-      document.addEventListener(
-        'mouseup',
-        () => document.removeEventListener('mousemove', mouseMoveHandler),
-        { once: true }
-      )
+      changeLayoutByDelta(box.current, delta.y, 'height')
     })
   }, [])
 
   // 绑定右下角触发器
   useEffect(() => {
-    const mouseMoveHandler = (ev: MouseEvent) => {
-      ev.preventDefault()
+    attachDragHandler(triggerBottomRight.current, (_, delta) => {
       attachInlineLayoutCssIfNeeded(box.current, 'width')
+      changeLayoutByDelta(box.current, delta.x, 'width')
       attachInlineLayoutCssIfNeeded(box.current, 'height')
-      changeLayoutByDelta(box.current, ev.movementX, 'width')
-      changeLayoutByDelta(box.current, ev.movementY, 'height')
-    }
-    //TODO 抽象成 whenDrag 方法
-    triggerBottomRight.current?.addEventListener('mousedown', ev => {
-      ev.preventDefault()
-      document.addEventListener('mousemove', mouseMoveHandler)
-      document.addEventListener(
-        'mouseup',
-        () => document.removeEventListener('mousemove', mouseMoveHandler),
-        { once: true }
-      )
+      changeLayoutByDelta(box.current, delta.y, 'height')
     })
   }, [])
 
