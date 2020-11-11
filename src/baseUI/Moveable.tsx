@@ -4,7 +4,7 @@ import attachDragHandler from 'functions/attachDragHandler'
 function changeTranslateByDelta(el: HTMLElement | null, delta: { x: number; y: number }) {
   if (!el) return
   const newDeltaX = (Number(el.style.getPropertyValue('--dx')) ?? 0) + delta.x
-  const newDeltaY = Number(el.style.getPropertyValue('--dy') ?? 0) + delta.y
+  const newDeltaY = (Number(el.style.getPropertyValue('--dy')) ?? 0) + delta.y
   el.style.setProperty('--dx', `${newDeltaX}`)
   el.style.setProperty('--dy', `${newDeltaY}`)
 }
