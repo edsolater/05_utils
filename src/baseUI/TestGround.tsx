@@ -3,7 +3,8 @@ import Avatar from './Avatar'
 import Div from './Div'
 import Gallery from './Gallery'
 import Grid from './Grid'
-import ResizeableBox from './ResizeableBox'
+import Moveable from './Moveable'
+import Resizeable from './Resizeable'
 import RichEditor from './RichEditor'
 // import SyncScroll from './SyncScroll'
 function TestGround() {
@@ -92,14 +93,42 @@ function TestGround() {
           D
         </Div>
       </Grid> */}
-      <ResizeableBox>
-        {/* <Div
+      {/* <Resizeable>
+        <Div
           css={{
-            margin: 8,
-            background: 'crimson',
+            width: '100%',
+            height: '100%',
+            background: 'crimson'
           }}
-        /> */}
-      </ResizeableBox>
+        />
+      </Resizeable> */}
+      <Moveable>
+        <Div
+          css={{
+            width: '100%',
+            height: '100%',
+            background: 'crimson'
+          }}
+        />
+      </Moveable>
+      <Moveable>
+        <Div
+          css={{
+            width: '100%',
+            height: '100%',
+            background: 'crimson'
+          }}
+        />
+      </Moveable>
+      <Moveable>
+        <Div
+          css={{
+            width: '100%',
+            height: '100%',
+            background: 'crimson'
+          }}
+        />
+      </Moveable>
       {/* <RichEditor /> */}
       {/* <SyncScroll /> */}
       {/* <Gallery data={tabInfo} /> */}

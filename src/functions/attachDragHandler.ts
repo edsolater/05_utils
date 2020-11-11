@@ -10,9 +10,15 @@ export default function attachDragHandler(
   dragEventHandler: (ev: MouseEvent, delta: { x: number; y: number }) => void,
   options?: boolean | EventListenerOptions
 ) {
+  /**
+   * 记录上一次的屏幕位置
+   */
   let lastClientX = 0
   let lastClientY = 0
   const preventedDragHandler = (e: MouseEvent) => {
+    /**
+     * 相对于上一次的偏移量
+     */
     const deltaX = e.clientX - lastClientX
     const deltaY = e.clientY - lastClientY
     lastClientX = e.clientX

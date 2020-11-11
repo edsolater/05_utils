@@ -4,12 +4,12 @@ import getBoundingClientRect from 'functions/getBoundingClientRect'
 import toPx from 'functions/toPx'
 import pxToNumber from 'functions/pxToNumber'
 import attachDragHandler from 'functions/attachDragHandler'
-function attachInlineLayoutCssIfNeeded(el: HTMLElement | null, cssPropName: 'width' | 'height') {
+function attachSizeIfNeeded(el: HTMLElement | null, cssPropName: 'width' | 'height') {
   if (el && !el.style[cssPropName]) {
     el.style[cssPropName] = toPx(getBoundingClientRect(el)[cssPropName])
   }
 }
-function changeLayoutByDelta(
+function changeSizeByDelta(
   el: HTMLElement | null,
   deltaPx: number,
   cssPropName: 'width' | 'height'
@@ -19,8 +19,7 @@ function changeLayoutByDelta(
   el.style[cssPropName] = newPx
 }
 
-//交替触发2个trigger有bug，右下角还需要个双向resizer
-const ResizeableBox: FC<{}> = ({ children }) => {
+const Resizeable: FC<{}> = ({ children }) => {
   const box = useRef<HTMLDivElement>(null)
   const triggerRight = useRef<HTMLDivElement>(null)
   const triggerBottom = useRef<HTMLDivElement>(null)
@@ -29,26 +28,26 @@ const ResizeableBox: FC<{}> = ({ children }) => {
   // 绑定右部触发器
   useEffect(() => {
     attachDragHandler(triggerRight.current, (_, delta) => {
-      attachInlineLayoutCssIfNeeded(box.current, 'width')
-      changeLayoutByDelta(box.current, delta.x, 'width')
+      attachSizeIfNeeded(box.current, 'width')
+      changeSizeByDelta(box.current, delta.x, 'width')
     })
   }, [])
 
   // 绑定底部触发器
   useEffect(() => {
     attachDragHandler(triggerBottom.current, (_, delta) => {
-      attachInlineLayoutCssIfNeeded(box.current, 'height')
-      changeLayoutByDelta(box.current, delta.y, 'height')
+      attachSizeIfNeeded(box.current, 'height')
+      changeSizeByDelta(box.current, delta.y, 'height')
     })
   }, [])
 
   // 绑定右下角触发器
   useEffect(() => {
     attachDragHandler(triggerBottomRight.current, (_, delta) => {
-      attachInlineLayoutCssIfNeeded(box.current, 'width')
-      changeLayoutByDelta(box.current, delta.x, 'width')
-      attachInlineLayoutCssIfNeeded(box.current, 'height')
-      changeLayoutByDelta(box.current, delta.y, 'height')
+      attachSizeIfNeeded(box.current, 'width')
+      changeSizeByDelta(box.current, delta.x, 'width')
+      attachSizeIfNeeded(box.current, 'height')
+      changeSizeByDelta(box.current, delta.y, 'height')
     })
   }, [])
 
@@ -57,11 +56,11 @@ const ResizeableBox: FC<{}> = ({ children }) => {
       ref={box}
       className='resizable'
       css={{
+        // TODO：具体的css尺寸要靠传进来的
         width: 500,
         height: 500,
         display: 'grid',
-        backgroundColor: 'dodgerblue',
-        position: 'relative'
+        position: 'relative',
       }}
     >
       {children}
@@ -116,4 +115,4 @@ const ResizeableBox: FC<{}> = ({ children }) => {
     </Div>
   )
 }
-export default ResizeableBox
+export default Resizeable
