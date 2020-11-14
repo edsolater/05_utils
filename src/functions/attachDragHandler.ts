@@ -1,3 +1,5 @@
+import { Delta2d } from 'typings/constants'
+
 /**
  * 绑定元素的drag事件（pointerDown + pointerMove + pointerUp，会禁用掉浏览器的默认事件），
  * 会触发时在document上绑定事件，但会自动清理，
@@ -7,7 +9,7 @@
  */
 export default function attachDragHandler(
   el: HTMLElement | null,
-  dragEventHandler: (ev: MouseEvent, delta: { x: number; y: number }) => void,
+  dragEventHandler: (ev: MouseEvent, delta: Delta2d) => void,
   options?: boolean | EventListenerOptions
 ) {
   /**
@@ -24,7 +26,7 @@ export default function attachDragHandler(
     lastClientX = e.clientX
     lastClientY = e.clientY
     e.preventDefault()
-    dragEventHandler(e, { x: deltaX, y: deltaY })
+    dragEventHandler(e, { dx: deltaX, dy: deltaY })
   }
   el?.addEventListener(
     'pointerdown',

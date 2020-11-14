@@ -29,7 +29,7 @@ const Resizeable: FC<{}> = ({ children }) => {
   useEffect(() => {
     attachDragHandler(triggerRight.current, (_, delta) => {
       attachSizeIfNeeded(box.current, 'width')
-      changeSizeByDelta(box.current, delta.x, 'width')
+      changeSizeByDelta(box.current, delta.dx, 'width')
     })
   }, [])
 
@@ -37,7 +37,7 @@ const Resizeable: FC<{}> = ({ children }) => {
   useEffect(() => {
     attachDragHandler(triggerBottom.current, (_, delta) => {
       attachSizeIfNeeded(box.current, 'height')
-      changeSizeByDelta(box.current, delta.y, 'height')
+      changeSizeByDelta(box.current, delta.dy, 'height')
     })
   }, [])
 
@@ -45,9 +45,9 @@ const Resizeable: FC<{}> = ({ children }) => {
   useEffect(() => {
     attachDragHandler(triggerBottomRight.current, (_, delta) => {
       attachSizeIfNeeded(box.current, 'width')
-      changeSizeByDelta(box.current, delta.x, 'width')
+      changeSizeByDelta(box.current, delta.dx, 'width')
       attachSizeIfNeeded(box.current, 'height')
-      changeSizeByDelta(box.current, delta.y, 'height')
+      changeSizeByDelta(box.current, delta.dy, 'height')
     })
   }, [])
 

@@ -1,10 +1,11 @@
 import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
 import attachDragHandler from 'functions/attachDragHandler'
-function changeTranslateByDelta(el: HTMLElement | null, delta: { x: number; y: number }) {
+import { Delta2d } from '../typings/constants'
+function changeTranslateByDelta(el: HTMLElement | null, delta: Delta2d) {
   if (!el) return
-  const newDeltaX = (Number(el.style.getPropertyValue('--dx')) ?? 0) + delta.x
-  const newDeltaY = (Number(el.style.getPropertyValue('--dy')) ?? 0) + delta.y
+  const newDeltaX = (Number(el.style.getPropertyValue('--dx')) ?? 0) + delta.dx
+  const newDeltaY = (Number(el.style.getPropertyValue('--dy')) ?? 0) + delta.dy
   el.style.setProperty('--dx', `${newDeltaX}`)
   el.style.setProperty('--dy', `${newDeltaY}`)
 }
