@@ -2,10 +2,16 @@ import Div from './Div'
 import React, { CSSProperties, FC } from 'react'
 
 const Logo: FC<{
+  shape?: 'circle' | 'capsule'
   width?: CSSProperties['width']
   height?: CSSProperties['height']
   color?: CSSProperties['backgroundColor']
-}> = ({ width = 200, height = 56, color = '#333' }) => (
+}> = ({
+  shape = 'circle',
+  height = 56,
+  width = shape === 'circle' ? 200 : height,
+  color = '#333'
+}) => (
   <Div
     css={{
       width: width,

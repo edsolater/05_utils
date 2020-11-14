@@ -2,12 +2,11 @@ import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
 import attachDragHandler from 'functions/attachDragHandler'
 import { Delta2d } from '../typings/constants'
+import setCSSVariable from '../functions/setCSSVariable'
 function changeTranslateByDelta(el: HTMLElement | null, delta: Delta2d) {
   if (!el) return
-  const newDeltaX = (Number(el.style.getPropertyValue('--dx')) ?? 0) + delta.dx
-  const newDeltaY = (Number(el.style.getPropertyValue('--dy')) ?? 0) + delta.dy
-  el.style.setProperty('--dx', `${newDeltaX}`)
-  el.style.setProperty('--dy', `${newDeltaY}`)
+  setCSSVariable(el, '--dx', original => Number(original) + delta.dx)
+  setCSSVariable(el, '--dy', original => Number(original) + delta.dy)
 }
 
 const Moveable: FC<{}> = ({ children }) => {
@@ -37,3 +36,4 @@ const Moveable: FC<{}> = ({ children }) => {
   )
 }
 export default Moveable
+
