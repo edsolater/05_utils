@@ -2,7 +2,6 @@
 import getLastItem from './getLastItem'
 import isFunction from './isFunction'
 
-
 /**
  * (纯函数)
  * 有条件地返回（用于简化链式的if）
@@ -22,9 +21,13 @@ import isFunction from './isFunction'
  *   [type === 'all-in-row', gridTypeAllInRow]
  * )
  */
+export default function chainIf<T extends string>(
+  ...conditionPairs: ([condition: boolean | (() => boolean), result: T | (() => T)] | T)[]
+): T
 export default function chainIf<T>(
   ...conditionPairs: ([condition: boolean | (() => boolean), result: T | (() => T)] | T)[]
-): T {
+): T
+export default function chainIf(...conditionPairs) {
   const newConditionPairs = conditionPairs.map(conditionPair =>
     Array.isArray(conditionPair) ? conditionPair : [true, conditionPair]
   )
