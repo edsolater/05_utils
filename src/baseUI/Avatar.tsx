@@ -1,6 +1,7 @@
-import Div, { allPropsName } from './Div'
+import Div, { allPropsName, DivProps } from './Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
-import { divideByPropertyNames, kickByPropertyNames } from 'functions'
+import divideByPropertyNames from 'functions/divideByPropertyNames'
+import kickByPropertyNames from 'functions/kickByPropertyNames'
 const placeholderColor = 'gray'
 /**
  * 用户头像
@@ -11,7 +12,7 @@ const Avatar: FC<
     src?: string
     size?: CSSProperties['width']
     color?: CSSProperties['backgroundColor']
-  } & ImgHTMLAttributes<HTMLImageElement>
+  } & ImgHTMLAttributes<HTMLImageElement> & DivProps
 > = ({ isPlaceholder = false, size = 40, color = placeholderColor, src, ...restProps }) => {
   const [restPropsForDiv, restPropsForImg] = divideByPropertyNames(restProps, allPropsName)
   return (
@@ -23,7 +24,6 @@ const Avatar: FC<
           borderRadius: '50%',
           backgroundColor: isPlaceholder ? placeholderColor : color
         },
-        //@ts-expect-error //todo: 总觉得有点慌啊
         restProps.css
       ]}
       {...kickByPropertyNames(restPropsForDiv, ['css'])}

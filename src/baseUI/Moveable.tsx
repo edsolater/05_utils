@@ -1,7 +1,7 @@
 import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
 import attachDragHandler from 'functions/attachDragHandler'
-import { Delta2d } from '../typings/constants'
+import { Delta2d } from '../typings/typeConstants'
 import setCSSVariable from '../functions/setCSSVariable'
 function changeTranslateByDelta(el: HTMLElement | null, delta: Delta2d) {
   if (!el) return

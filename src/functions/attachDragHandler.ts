@@ -1,4 +1,4 @@
-import { Delta2d } from 'typings/constants'
+import { Delta2d } from 'typings/typeConstants'
 
 /**
  * 绑定元素的drag事件（pointerDown + pointerMove + pointerUp，会禁用掉浏览器的默认事件），

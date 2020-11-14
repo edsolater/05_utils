@@ -1,18 +1,16 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import {
-  splitInnerHTMLByTag,
-  getFirstChar,
-  getLastChar,
-  getFirstItem,
-  getLastItem,
-  isTextNode,
-  inRange,
-  applyRange,
-  clearArray,
-  notEmpty,
-  chainIf
-} from 'functions'
+import applyRange from 'functions/applyRange'
+import chainIf from 'functions/chainIf'
+import getFirstChar from 'functions/getFirstChar'
+import getFirstItem from 'functions/getFirstItem'
+import getLastChar from 'functions/getLastChar'
+import getLastItem from 'functions/getLastItem'
+import inRange from 'functions/inRange'
+import isTextNode from 'functions/isTextNode'
+import notEmpty from 'functions/notEmpty'
+import splitInnerHTMLByTag from 'functions/splitInnerHTMLByTag'
+
 import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 // 划线区的开头，相对与整段文字内容的位置
@@ -264,7 +262,7 @@ const RichEditor: FC<{}> = () => {
   const recordNewInnerHTMLAndRange = (newInnerHTML: string, rangeInfo: RangeInfo) => {
     recordRefRangeInfo(rangeInfo)
     if (innerHTML !== newInnerHTML) setInnerHTML(newInnerHTML)
-    if (undoStack.current.length) clearArray(undoStack.current)
+    undoStack.current = []
     operationStack.current.push({
       innerHTML: newInnerHTML,
       range: rangeInfo ?? lastRangeInfo.current // 如果没有指定，就复刻上一项的
@@ -408,3 +406,6 @@ const RichEditor: FC<{}> = () => {
 }
 
 export default RichEditor
+
+type C = typeof c[number]
+const c = ['a', 'b'] as const

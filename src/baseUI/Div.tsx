@@ -5,16 +5,25 @@ import { MayArray } from 'typings/tools'
 
 export type DivProps = {
   css?: MayArray<Interpolation>
+  /**
+   * 强制使用disabled的样式
+   */
+  disabled?: boolean
 }
-export const allPropsName: Readonly<Array<keyof DivProps>> = ['css'] as const
+export const allPropsName = ['css', 'disabled'] as ReadonlyArray<keyof DivProps>
 /**
  * 在`<div>`之上提供 emotion 的 css 属性
  */
-const Div: ForwardRefRenderFunction<
-  any,
-  JSX.IntrinsicElements['div'] & { css?: Interpolation }
-> = ({ css: emotionCss, children, ...restProps }, ref) => (
-  <div ref={ref} css={css(emotionCss)} {...restProps}>
+const Div: ForwardRefRenderFunction<any, Omit<JSX.IntrinsicElements['div'], 'style'> & DivProps> = (
+  { disabled, css: emotionCss, children, ...restProps },
+  ref
+) => (
+  <div
+    ref={ref}
+    style={{ ...(disabled && { opacity: '.3', cursor: 'not-allowed' }) }}
+    css={css(emotionCss)}
+    {...restProps}
+  >
     {children}
   </div>
 )
