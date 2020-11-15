@@ -1,21 +1,22 @@
 import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
 import attachPointerMove from 'functions/attachPointerMove'
-import { Delta2dTranslate } from '../typings/typeConstants'
+import { Delta2dScale, Delta2dTranslate } from '../typings/typeConstants'
 import setCSSVariable from '../functions/setCSSVariable'
-function changeTranslateByDelta(el: HTMLElement | null, delta: Delta2dTranslate) {
-  if (!el) return
-  setCSSVariable(el, '--dx', original => Number(original) + delta.dx)
-  setCSSVariable(el, '--dy', original => Number(original) + delta.dy)
+import attachGestureScale from 'functions/attachGestureScale'
+function changeTranslateByDelta(el: HTMLElement, delta: Delta2dTranslate) {
+  setCSSVariable(el, '--x', original => Number(original) + delta.dx)
+  setCSSVariable(el, '--y', original => Number(original) + delta.dy)
+}
+function changeScaleByDelta(el: HTMLElement, scale: Delta2dScale) {
+  setCSSVariable(el, '--scale', scale.scale)
 }
 
 const Moveable: FC<{}> = ({ children }) => {
   const box = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
-    attachPointerMove(box.current, (_, delta) => {
-      changeTranslateByDelta(box.current, delta)
-    })
+    attachPointerMove(box.current, (_, delta) => changeTranslateByDelta(box.current!, delta))
+    attachGestureScale(box.current, (_, delta) => changeScaleByDelta(box.current!, delta))
   }, [])
 
   return (
@@ -28,8 +29,10 @@ const Moveable: FC<{}> = ({ children }) => {
         height: 100,
         display: 'grid',
         position: 'relative',
-        transform: 'translate(calc(var(--dx, 0) * 1px), calc(var(--dy, 0) * 1px))',
-        touchAction: 'none'
+        transform:
+          'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(var(--scale, 1))',
+        touchAction: 'none',
+        '--x': 3
       }}
     >
       {children}
@@ -37,4 +40,3 @@ const Moveable: FC<{}> = ({ children }) => {
   )
 }
 export default Moveable
-
