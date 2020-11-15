@@ -1,6 +1,6 @@
 import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
-import attachDragHandler from 'functions/attachDragHandler'
+import attachPointermove from 'functions/attachPointermove'
 import { Delta2d } from '../typings/typeConstants'
 import setCSSVariable from '../functions/setCSSVariable'
 function changeTranslateByDelta(el: HTMLElement | null, delta: Delta2d) {
@@ -13,7 +13,7 @@ const Moveable: FC<{}> = ({ children }) => {
   const box = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    attachDragHandler(box.current, (_, delta) => {
+    attachPointermove(box.current, (_, delta) => {
       changeTranslateByDelta(box.current, delta)
     })
   }, [])
@@ -28,7 +28,8 @@ const Moveable: FC<{}> = ({ children }) => {
         height: 100,
         display: 'grid',
         position: 'relative',
-        transform: 'translate(calc(var(--dx, 0) * 1px), calc(var(--dy, 0) * 1px))'
+        transform: 'translate(calc(var(--dx, 0) * 1px), calc(var(--dy, 0) * 1px))',
+        touchAction: 'none'
       }}
     >
       {children}

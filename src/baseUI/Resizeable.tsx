@@ -3,7 +3,7 @@ import React, { FC, useEffect, useRef } from 'react'
 import getBoundingClientRect from 'functions/getBoundingClientRect'
 import toPx from 'functions/toPx'
 import pxToNumber from 'functions/pxToNumber'
-import attachDragHandler from 'functions/attachDragHandler'
+import attachPointermove from 'functions/attachPointermove'
 function attachSizeIfNeeded(el: HTMLElement | null, cssPropName: 'width' | 'height') {
   if (el && !el.style[cssPropName]) {
     el.style[cssPropName] = toPx(getBoundingClientRect(el)[cssPropName])
@@ -27,7 +27,7 @@ const Resizeable: FC<{}> = ({ children }) => {
 
   // 绑定右部触发器
   useEffect(() => {
-    attachDragHandler(triggerRight.current, (_, delta) => {
+    attachPointermove(triggerRight.current, (_, delta) => {
       attachSizeIfNeeded(box.current, 'width')
       changeSizeByDelta(box.current, delta.dx, 'width')
     })
@@ -35,7 +35,7 @@ const Resizeable: FC<{}> = ({ children }) => {
 
   // 绑定底部触发器
   useEffect(() => {
-    attachDragHandler(triggerBottom.current, (_, delta) => {
+    attachPointermove(triggerBottom.current, (_, delta) => {
       attachSizeIfNeeded(box.current, 'height')
       changeSizeByDelta(box.current, delta.dy, 'height')
     })
@@ -43,7 +43,7 @@ const Resizeable: FC<{}> = ({ children }) => {
 
   // 绑定右下角触发器
   useEffect(() => {
-    attachDragHandler(triggerBottomRight.current, (_, delta) => {
+    attachPointermove(triggerBottomRight.current, (_, delta) => {
       attachSizeIfNeeded(box.current, 'width')
       changeSizeByDelta(box.current, delta.dx, 'width')
       attachSizeIfNeeded(box.current, 'height')
