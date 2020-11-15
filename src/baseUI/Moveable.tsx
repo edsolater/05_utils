@@ -1,9 +1,9 @@
 import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
-import attachPointermove from 'functions/attachPointermove'
-import { Delta2d } from '../typings/typeConstants'
+import attachPointerMove from 'functions/attachPointerMove'
+import { Delta2dTranslate } from '../typings/typeConstants'
 import setCSSVariable from '../functions/setCSSVariable'
-function changeTranslateByDelta(el: HTMLElement | null, delta: Delta2d) {
+function changeTranslateByDelta(el: HTMLElement | null, delta: Delta2dTranslate) {
   if (!el) return
   setCSSVariable(el, '--dx', original => Number(original) + delta.dx)
   setCSSVariable(el, '--dy', original => Number(original) + delta.dy)
@@ -13,7 +13,7 @@ const Moveable: FC<{}> = ({ children }) => {
   const box = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    attachPointermove(box.current, (_, delta) => {
+    attachPointerMove(box.current, (_, delta) => {
       changeTranslateByDelta(box.current, delta)
     })
   }, [])

@@ -1,34 +1,33 @@
-import { Delta2d } from 'typings/typeConstants'
-
+import { Delta2dTranslate } from 'typings/typeConstants'
 /**
  * 绑定元素的pointermove（pointerDown + pointerMove + pointerUp），但会自动清理，
  * @param el 目标元素
- * @param dragEventHandler
+ * @param eventHandler
  */
-export default function attachPointermove(
+export default function attachPointerMove(
   el: HTMLElement | null,
-  dragEventHandler: (ev: PointerEvent, delta: Delta2d) => void,
+  eventHandler: (ev: PointerEvent, delta: Delta2dTranslate) => void
 ) {
+  // TODO: 感觉这种带有自动过期行为的Map，可以抽为一个数据结构，暂时简单点，用永不过期
   let lastClientX = 0
   let lastClientY = 0
-
-  function downHandler(e: PointerEvent) {
-    lastClientX = e.clientX
-    lastClientY = e.clientY
-    el?.addEventListener('pointermove', moveHandler)
-    el?.setPointerCapture(e.pointerId)
+  function pointerDown(ev: PointerEvent) {
+    lastClientX = ev.clientX
+    lastClientY = ev.clientY
+    el?.addEventListener('pointermove', pointerMove)
+    el?.setPointerCapture(ev.pointerId)
   }
-  function cancelHandler(e: PointerEvent) {
-    el?.removeEventListener('pointermove', moveHandler)
+  function pointerMove(ev: PointerEvent) {
+    const deltaX = ev.clientX - lastClientX
+    const deltaY = ev.clientY - lastClientY
+    lastClientX = ev.clientX
+    lastClientY = ev.clientY
+    eventHandler(ev, { dx: deltaX, dy: deltaY })
+  }
+  function pointerUp(ev: PointerEvent) {
+    el?.removeEventListener('pointermove', pointerMove)
     // el?.releasePointerCapture(e.pointerId) 标准写明会自动清理
   }
-  const moveHandler = (e: PointerEvent) => {
-    const deltaX = e.clientX - lastClientX
-    const deltaY = e.clientY - lastClientY
-    lastClientX = e.clientX
-    lastClientY = e.clientY
-    dragEventHandler(e, { dx: deltaX, dy: deltaY })
-  }
-  el?.addEventListener('pointerdown', downHandler)
-  el?.addEventListener('pointerup', cancelHandler)
+  el?.addEventListener('pointerdown', pointerDown)
+  el?.addEventListener('pointerup', pointerUp)
 }
