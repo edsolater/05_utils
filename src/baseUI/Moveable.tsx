@@ -31,8 +31,7 @@ const Moveable: FC<{}> = ({ children }) => {
         position: 'relative',
         transform:
           'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(var(--scale, 1))',
-        touchAction: 'none',
-        '--x': 3
+        touchAction: 'none'
       }}
     >
       {children}

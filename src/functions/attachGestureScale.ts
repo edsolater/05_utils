@@ -1,7 +1,8 @@
 import { Delta2dScale } from 'typings/typeConstants'
+import getDistance from './getDistance'
 /**
  * 处理双指缩放手势
- * @todo 暂且使用Touch，最后要大统一地使用Pointer
+ * @todo 暂且使用Touch，最后要使用大一统的Pointer
  * @param el 目标元素
  * @param eventHandler
  */
@@ -15,16 +16,17 @@ export default function attachGestureScale(
   //TODO：scale orgin
   function touchStart(ev: TouchEvent) {
     if (ev.touches.length === 2) {
-      const dw = Math.abs(Array.from(ev.touches, touch => touch.clientX).reduce((a, b) => a - b, 0))
-      const dh = Math.abs(Array.from(ev.touches, touch => touch.clientY).reduce((a, b) => a - b, 0))
+      const dw = getDistance(...Array.from(ev.touches, touch => touch.clientX))
+      const dh = getDistance(...Array.from(ev.touches, touch => touch.clientY))
       initDistance = Math.sqrt(dw ** 2 + dh ** 2)
       document?.addEventListener('touchmove', touchMove)
     }
   }
   function touchMove(ev: TouchEvent) {
     if (ev.touches.length === 2) {
-      const dw = Math.abs(Array.from(ev.touches, touch => touch.clientX).reduce((a, b) => a - b, 0))
-      const dh = Math.abs(Array.from(ev.touches, touch => touch.clientY).reduce((a, b) => a - b, 0))
+      ev.stopPropagation()
+      const dw = getDistance(...Array.from(ev.touches, touch => touch.clientX))
+      const dh = getDistance(...Array.from(ev.touches, touch => touch.clientY))
       const newDistance = Math.sqrt(dw ** 2 + dh ** 2)
       eventHandler(ev, { scale: newDistance / initDistance })
     }
@@ -37,3 +39,4 @@ export default function attachGestureScale(
   el?.addEventListener('touchstart', touchStart)
   el?.addEventListener('touchend', touchEnd)
 }
+
