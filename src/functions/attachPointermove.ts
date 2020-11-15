@@ -8,7 +8,6 @@ export default function attachPointerMove(
   el: HTMLElement | null,
   eventHandler: (ev: PointerEvent, delta: Delta2dTranslate) => void
 ) {
-  // TODO: 感觉这种带有自动过期行为的Map，可以抽为一个数据结构，暂时简单点，用永不过期
   let lastClientX = 0
   let lastClientY = 0
   function pointerDown(ev: PointerEvent) {
