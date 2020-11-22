@@ -10,22 +10,30 @@ export default function attachPointerMove(
 ) {
   let lastClientX = 0
   let lastClientY = 0
+  let pointerId = 0 //ponterId 限定死了同时能作用的指针只有一个
   function pointerDown(ev: PointerEvent) {
-    lastClientX = ev.clientX
-    lastClientY = ev.clientY
-    el?.addEventListener('pointermove', pointerMove)
-    el?.setPointerCapture(ev.pointerId)
+    if (!pointerId) {
+      pointerId = ev.pointerId
+      lastClientX = ev.clientX
+      lastClientY = ev.clientY
+      el?.addEventListener('pointermove', pointerMove)
+      el?.setPointerCapture(ev.pointerId)
+    }
   }
   function pointerMove(ev: PointerEvent) {
-    const deltaX = ev.clientX - lastClientX
-    const deltaY = ev.clientY - lastClientY
-    lastClientX = ev.clientX
-    lastClientY = ev.clientY
-    eventHandler(ev, { dx: deltaX, dy: deltaY })
+    if(ev.pointerId === pointerId) {
+      const deltaX = ev.clientX - lastClientX
+      const deltaY = ev.clientY - lastClientY
+      lastClientX = ev.clientX
+      lastClientY = ev.clientY
+      eventHandler(ev, { dx: deltaX, dy: deltaY })
+    }
   }
   function pointerUp(ev: PointerEvent) {
-    el?.removeEventListener('pointermove', pointerMove)
-    // el?.releasePointerCapture(e.pointerId) 标准写明会自动清理
+    if(ev.pointerId === pointerId) {
+      el?.removeEventListener('pointermove', pointerMove)
+      pointerId = 0
+    }
   }
   el?.addEventListener('pointerdown', pointerDown)
   el?.addEventListener('pointerup', pointerUp)

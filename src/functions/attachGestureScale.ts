@@ -19,7 +19,6 @@ export default function attachGestureScale(
   //TODO：scale orgin
   function touchStart(ev: TouchEvent) {
     if (ev.touches.length === 2 && areSame(...toArray(ev.touches).map(extract('target')))) {
-      console.log(333)
       const dw = calcDistance(...toArray(ev.touches, extract('clientX')))
       const dh = calcDistance(...toArray(ev.touches, extract('clientY')))
       initDistance = Math.sqrt(dw ** 2 + dh ** 2)
@@ -41,4 +40,3 @@ export default function attachGestureScale(
   el?.addEventListener('touchstart', touchStart)
   el?.addEventListener('touchend', touchEnd)
 }
-
