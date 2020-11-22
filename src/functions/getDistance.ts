@@ -7,7 +7,7 @@
  * getDistance(3, 4, 6) // 3
  * getDistance(3, 4, 6, 7) // 4
  */
-export default function getDistance(...ns: number[]) {
+export default function computeDistance(...ns: number[]) {
   let result = 0;
   for (let i = 1; i < ns.length; i++) {
     const pre = ns[i - 1];

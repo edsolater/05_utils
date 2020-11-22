@@ -1,5 +1,8 @@
 import { Delta2dScale } from 'typings/typeConstants'
-import getDistance from './getDistance'
+import areSame from './areSame'
+import extract from './extract'
+import calcDistance from './getDistance'
+import { toArray } from './toArray'
 /**
  * 处理双指缩放手势
  * @todo 暂且使用Touch，最后要使用大一统的Pointer
@@ -15,9 +18,10 @@ export default function attachGestureScale(
   let initDistance = 0
   //TODO：scale orgin
   function touchStart(ev: TouchEvent) {
-    if (ev.touches.length === 2) {
-      const dw = getDistance(...Array.from(ev.touches, touch => touch.clientX))
-      const dh = getDistance(...Array.from(ev.touches, touch => touch.clientY))
+    if (ev.touches.length === 2 && areSame(...toArray(ev.touches).map(extract('target')))) {
+      console.log(333)
+      const dw = calcDistance(...toArray(ev.touches, extract('clientX')))
+      const dh = calcDistance(...toArray(ev.touches, extract('clientY')))
       initDistance = Math.sqrt(dw ** 2 + dh ** 2)
       document?.addEventListener('touchmove', touchMove)
     }
@@ -25,16 +29,14 @@ export default function attachGestureScale(
   function touchMove(ev: TouchEvent) {
     if (ev.touches.length === 2) {
       ev.stopPropagation()
-      const dw = getDistance(...Array.from(ev.touches, touch => touch.clientX))
-      const dh = getDistance(...Array.from(ev.touches, touch => touch.clientY))
+      const dw = calcDistance(...toArray(ev.touches, extract('clientX')))
+      const dh = calcDistance(...toArray(ev.touches, extract('clientY')))
       const newDistance = Math.sqrt(dw ** 2 + dh ** 2)
       eventHandler(ev, { scale: newDistance / initDistance })
     }
   }
   function touchEnd(ev: TouchEvent) {
-    if (ev.touches.length === 2) {
-      document.removeEventListener('touchmove', touchMove)
-    }
+    document.removeEventListener('touchmove', touchMove)
   }
   el?.addEventListener('touchstart', touchStart)
   el?.addEventListener('touchend', touchEnd)
