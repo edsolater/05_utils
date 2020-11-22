@@ -9,13 +9,6 @@ import objectFilter from './objectFilter'
 export default function clearObjectUndefined<T extends object, K extends keyof T>(
   obj: T
 ): { [P in K extends undefined ? never : K]: T[P] } {
+  //@ts-ignore
   return objectFilter(obj, ([_, value]) => value !== undefined)
 }
-type Obja = { a: 1; b: undefined }
-type Objb = Extract<Obja> // {a:1}
-
-const data = [42, 21, undefined, 50, 40, undefined, 9];
-
-const newX = data.filter(function( element ) {
-   return element !== undefined;
-});
