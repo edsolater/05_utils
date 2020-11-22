@@ -1,1 +1,2 @@
-export const toArray = Array.from
+const toArray = Array.from
+export default toArray
