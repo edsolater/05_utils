@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
 import applyRange from 'functions/applyRange'
-import chainIf from 'functions/chainIf'
+import parallelIf from 'functions/parallelIf'
 import getFirstChar from 'functions/getFirstChar'
 import getFirstItem from 'functions/getFirstItem'
 import getLastChar from 'functions/getLastChar'
@@ -120,7 +120,7 @@ function tellCursorPoint(
 ): [point: 'start' | 'middle' | 'end', isCollapse: boolean] {
   //  第一步：根据文字偏移量，计算出插入位置
   const { insertStart, insertEnd } = computeDOMRange(innerHTML, { start, end })
-  const result = chainIf(
+  const result = parallelIf(
     [insertStart === 0, 'start'],
     [getFirstChar(innerHTML.slice(insertEnd).replace(/<.*?>/g, '')) === '\n', 'end'], // TODO:要封一个clearInnerTag的工具函数
     [getLastChar(innerHTML.slice(0, insertStart).replace(/<.*?>/g, '')) === '\n', 'start'],

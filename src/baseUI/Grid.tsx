@@ -1,7 +1,7 @@
 import Div from './Div'
 import React, { FC } from 'react'
 import { CSSObject, Interpolation } from '@emotion/core'
-import chainIf from 'functions/chainIf'
+import parallelIf from 'functions/parallelIf'
 
 type GridType =
   | 'in-col' //全纵向排列
@@ -130,7 +130,7 @@ const Grid: FC<{
           gap: noCssGap ? 0 : cssGap
         },
         { background: 'dodgerblue' },
-        chainIf(
+        parallelIf(
           [type === 'in-col', gridTemplates['in-col']],
           [type === 'in-row', gridTemplates['in-row']],
           [type === '2d-4-equal-slot', gridTemplates['2d-4-equal-slot']],
