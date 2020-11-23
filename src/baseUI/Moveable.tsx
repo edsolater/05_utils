@@ -5,20 +5,41 @@ import { Delta2dScale, Delta2dTranslate } from '../typings/typeConstants'
 import setCSSVariable from '../functions/setCSSVariable'
 import attachGestureScale from 'functions/attachGestureScale'
 
-const Moveable: FC<{}> = ({ children }) => {
+const Moveable: FC<{
+  moveable?: boolean
+  scaleable?: boolean
+  /** 惯性滑动 */
+  inertialSlide?: boolean
+  /** 摩擦系数 */
+  firctionCoefficient?: number
+}> = ({
+  moveable = true,
+  scaleable = false,
+  inertialSlide = true, // temp
+  firctionCoefficient = 1,
+  children,
+}) => {
   const box = useRef<HTMLDivElement>(null)
-  function changeTranslate(el: HTMLElement, delta: Delta2dTranslate) {
-    setCSSVariable(el, '--x', (original) => Number(original) + delta.dx)
-    setCSSVariable(el, '--y', (original) => Number(original) + delta.dy)
+  function changeTranslate(delta: Delta2dTranslate) {
+    setCSSVariable(box.current!, '--x', (original) => Number(original) + delta.dx)
+    setCSSVariable(box.current!, '--y', (original) => Number(original) + delta.dy)
   }
-  function changeScale(el: HTMLElement, scale: Delta2dScale) {
-    setCSSVariable(el, '--scale', scale.scaleRate)
+  function changeScale(scale: Delta2dScale) {
+    setCSSVariable(box.current!, '--scale', scale.scaleRate)
   }
   useEffect(() => {
-    attachPointerMove(box.current, (_, delta) => changeTranslate(box.current!, delta))
-    attachGestureScale(box.current, {
-      moving: (_, delta) => changeScale(box.current!, delta),
-    })
+    moveable &&
+      attachPointerMove(box.current, {
+        move: (_, delta) => changeTranslate(delta),
+        end: (_, speedVector) => {
+          console.log('speedVector: ', speedVector)
+          return changeTranslate
+        },
+      })
+    scaleable &&
+      attachGestureScale(box.current, {
+        moving: (_, delta) => changeScale(delta),
+      })
   }, [])
 
   return (
