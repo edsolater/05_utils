@@ -4,6 +4,14 @@ import calcHypotenuse from './calcHypotenuse'
 import extract from './extract'
 import calcDistance from './getDistance'
 import toArray from './toArray'
+
+function getTouchesInElement(ev: TouchEvent, el: HTMLElement | null) {
+  //FIXME: 使用 parentElement
+  return toArray(ev.touches).filter(touch =>
+    areSame(el, (touch.target as HTMLElement).parentElement)
+  )
+}
+
 /**
  * 处理双指缩放手势
  * @todo 暂且使用Touch，最后要使用大一统的PointerEvents
@@ -21,27 +29,31 @@ export default function attachGestureScale(
   // TODO: 感觉这种带有自动过期行为的Map，可以抽为一个数据结构，暂时简单点，用永不过期
   // const activePointers = new Map<TouchEvent['pointerId'], TouchEvent>()
   let initDistance = 0
-  let isScaling = false
   let lastScaling = 1
   let currentScaling = 1
-  // TODO：scale orgin
+  let isScaling = false
+  let touchIds = [0, 0]
   function touchstart(ev: TouchEvent) {
-    // FIXME 这有问题：屏幕中只能出现2根手指，才能生效
-    if (ev.touches.length === 2 && areSame(...toArray(ev.touches).map(extract('target')))) {
+    const touchesOnElement = getTouchesInElement(ev, el)
+    if (touchesOnElement.length === 2) {
       isScaling = true
-      // TODO: 感觉需要增加灵活度，让extract也能接收一个对象数组
-      const dx = calcDistance(...toArray(ev.touches, extract('clientX')))
-      const dy = calcDistance(...toArray(ev.touches, extract('clientY')))
+      touchIds = touchesOnElement.map(extract('identifier'))
+      const dx = calcDistance(...touchesOnElement.map(extract('clientX')))
+      const dy = calcDistance(...touchesOnElement.map(extract('clientY')))
       initDistance = calcHypotenuse(dx, dy)
       addEventListeners(document, { touchmove })
       eventHandlers.start?.(ev)
     }
   }
   function touchmove(ev: TouchEvent) {
-    if (ev.touches.length === 2) {
+    const touchesOnElement = getTouchesInElement(ev, el)
+    if (
+      touchesOnElement.length === 2 &&
+      touchesOnElement.every(({ identifier }) => touchIds.includes(identifier))
+    ) {
       ev.stopPropagation()
-      const dx = calcDistance(...toArray(ev.touches, extract('clientX')))
-      const dy = calcDistance(...toArray(ev.touches, extract('clientY')))
+      const dx = calcDistance(...touchesOnElement.map(extract('clientX')))
+      const dy = calcDistance(...touchesOnElement.map(extract('clientY')))
       const newDistance = calcHypotenuse(dx, dy)
       currentScaling = lastScaling * (newDistance / initDistance)
       eventHandlers.moving(ev, { scaleRate: currentScaling })
@@ -49,7 +61,7 @@ export default function attachGestureScale(
   }
   function touchend(ev: TouchEvent) {
     removeEventListeners(document, { touchmove })
-    console.log(isScaling)
+    touchIds = []
     if (isScaling) {
       lastScaling = currentScaling
       eventHandlers.end?.(ev, { scaleRate: lastScaling })
@@ -60,7 +72,7 @@ export default function attachGestureScale(
   addEventListeners(el, { touchstart, touchend })
 }
 
-// TODO 可选地: 绑定 start/up 需要能自动 remove 掉 end/down
+// TODO 可选地: 绑定 start/up 需要能自动 remove 掉 end/down，就很cool了
 function addEventListeners(
   el: Document,
   events: Partial<{ [eventName in keyof DocumentEventMap]: any }>
