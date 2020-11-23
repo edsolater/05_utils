@@ -31,17 +31,15 @@ export default function attachGestureScale(
   let initDistance = 0
   let lastScaling = 1
   let currentScaling = 1
-  let isScaling = false
-  let touchIds = [0, 0]
+  let touchIds: number[] = [] // ponterId 限定死了同时能作用的指针有且只有2个
   function touchstart(ev: TouchEvent) {
     const touchesOnElement = getTouchesInElement(ev, el)
     if (touchesOnElement.length === 2) {
-      isScaling = true
       touchIds = touchesOnElement.map(extract('identifier'))
       const dx = calcDistance(...touchesOnElement.map(extract('clientX')))
       const dy = calcDistance(...touchesOnElement.map(extract('clientY')))
       initDistance = calcHypotenuse(dx, dy)
-      addEventListeners(document, { touchmove })
+      document.addEventListener('touchmove', touchmove)
       eventHandlers.start?.(ev)
     }
   }
@@ -60,49 +58,16 @@ export default function attachGestureScale(
     }
   }
   function touchend(ev: TouchEvent) {
-    removeEventListeners(document, { touchmove })
-    touchIds = []
-    if (isScaling) {
+    document.removeEventListener('touchmove', touchmove)
+    if ((touchIds.length = 2)) {
       lastScaling = currentScaling
+      touchIds = []
       eventHandlers.end?.(ev, { scaleRate: lastScaling })
       currentScaling = 1
-      isScaling = false
     }
   }
-  addEventListeners(el, { touchstart, touchend })
+  el?.addEventListener('touchstart', touchstart)
+  el?.addEventListener('touchend', touchend)
 }
 
 // TODO 可选地: 绑定 start/up 需要能自动 remove 掉 end/down，就很cool了
-function addEventListeners(
-  el: Document,
-  events: Partial<{ [eventName in keyof DocumentEventMap]: any }>
-)
-function addEventListeners(
-  el: HTMLElement | null,
-  events: Partial<{ [eventName in keyof HTMLElementEventMap]: any }>
-)
-function addEventListeners(
-  el: HTMLElement | null | Document,
-  events: Partial<{ [eventName in keyof HTMLElementEventMap]: any }>
-) {
-  Object.entries(events).forEach(([eventName, handler]) => {
-    el?.addEventListener(eventName, handler)
-  })
-}
-
-function removeEventListeners(
-  el: Document,
-  events: Partial<{ [eventName in keyof DocumentEventMap]: any }>
-)
-function removeEventListeners(
-  el: HTMLElement | null,
-  events: Partial<{ [eventName in keyof HTMLElementEventMap]: any }>
-)
-function removeEventListeners(
-  el: HTMLElement | null | Document,
-  events: Partial<{ [eventName in keyof HTMLElementEventMap]: any }>
-) {
-  Object.entries(events).forEach(([eventName, handler]) => {
-    el?.removeEventListener(eventName, handler)
-  })
-}

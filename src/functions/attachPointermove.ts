@@ -10,7 +10,7 @@ export default function attachPointerMove(
 ) {
   let lastClientX = 0
   let lastClientY = 0
-  let pointerId = 0 //ponterId 限定死了同时能作用的指针只有一个
+  let pointerId = 0 // ponterId 限定死了同时能作用的指针有且只有1个
   function pointerDown(ev: PointerEvent) {
     if (!pointerId) {
       pointerId = ev.pointerId
