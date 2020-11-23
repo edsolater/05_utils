@@ -6,7 +6,7 @@ export type Delta2dTranslate = {
 }
 export type Delta2dScale = {
   // 水平放大倍数
-  scale:number
+  scaleRate:number
 }
 export type Location2d = {
   // 横坐标
