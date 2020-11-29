@@ -5,6 +5,20 @@ import { Delta2dScale, Delta2dTranslate, SpeedVector } from '../typings/typeCons
 import setCSSVariable from '../functions/setCSSVariable'
 import attachGestureScale from 'functions/attachGestureScale'
 import calcHypotenuse from 'functions/calcHypotenuse'
+/**
+ * 无论值怎么变，保证他符号不变，否则就归零（负数依然是负数，正数依然是正数）
+ * @param number 值
+ * @param sign 符号
+ */
+function staySameSign(number: number, sign: number) {
+  if (Math.sign(sign) === -1) {
+    return number > 0 ? 0 : number
+  } else if (Math.sign(sign) === 1) {
+    return number < 0 ? 0 : number
+  } else {
+    return 0
+  }
+}
 
 const Moveable: FC<{
   moveable?: boolean
@@ -19,13 +33,13 @@ const Moveable: FC<{
   moveable = true,
   scaleable = false,
   inertialSlide = true, // temp
-  acc = 0.005,
-  maxInitSpeed = 2.5,
+  acc = 0.004,
+  maxInitSpeed = 3,
   children,
 }) => {
   const box = useRef<HTMLDivElement>(null)
+
   /**
-   *
    * 根据偏移量，重新设定--x与--y
    * @param delta 偏移量
    */
@@ -33,16 +47,16 @@ const Moveable: FC<{
     setCSSVariable(box.current, '--x', (original) => Number(original) + delta.dx)
     setCSSVariable(box.current, '--y', (original) => Number(original) + delta.dy)
   }
+
   /**
-   *
    * 根据尺寸变化指数，重新设定--scale
    * @param scale 尺寸变化指数
    */
   function changeScaleDirectly(scale: Delta2dScale) {
     setCSSVariable(box.current, '--scale', scale.scaleRate)
   }
+
   /**
-   *
    * （用于惯性滑动）
    * 根据初始速度，设定--x与--y
    * @param speedVector 初始速度的向量表示（x，y坐标）
@@ -61,8 +75,8 @@ const Moveable: FC<{
       const elapsed = timestamp - lastTimestamp
       lastTimestamp = timestamp
       const currentVector = {
-        x: Math[accInX > 0 ? 'min' : 'max'](lastVector.x + accInX * elapsed, 0), // 速度应总是与加速度相反的方向
-        y: Math[accInY > 0 ? 'min' : 'max'](lastVector.y + accInY * elapsed, 0), // 速度应总是与加速度相反的方向
+        x: staySameSign(lastVector.x + accInX * elapsed, -accInX), // 速度应总是与加速度相反的方向(所以要保持符号相同)
+        y: staySameSign(lastVector.y + accInY * elapsed, -accInY), // 速度应总是与加速度相反的方向(所以要保持符号相同)
       }
       const dx = ((lastVector.x + currentVector.x) / 2) * elapsed
       const dy = ((lastVector.y + currentVector.y) / 2) * elapsed
