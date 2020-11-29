@@ -29,6 +29,8 @@ const Moveable: FC<{
   acc?: number
   /** 惯性滑动的最大初速度（的绝对值） */
   maxInitSpeed?: number
+  /** TODO: 可滑动的范围 */
+  moveArea?: [top: number, left: number, width: number, height: number] | HTMLElement
 }> = ({
   moveable = true,
   scaleable = false,
