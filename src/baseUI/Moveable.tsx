@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
 import Div from './Div'
 import attachPointerMove from 'functions/attachPointerMove'
-import { Delta2dScale, Delta2dTranslate, SpeedVector, Location2d } from '../typings/typeConstants'
+import { Delta2dScale, Delta2dTranslate, SpeedVector } from '../typings/typeConstants'
 import setCSSVariable from '../functions/setCSSVariable'
 import attachGestureScale from 'functions/attachGestureScale'
 import calcHypotenuse from 'functions/calcHypotenuse'
@@ -9,19 +9,23 @@ import calcHypotenuse from 'functions/calcHypotenuse'
 const Moveable: FC<{
   moveable?: boolean
   scaleable?: boolean
-  /** 惯性滑动 */
+  /** 开启惯性滑动 */
   inertialSlide?: boolean
-  /** 摩擦系数 */
-  firctionCoefficient?: number
+  /** 惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
+  acc?: number
+  /** 惯性滑动的最大初速度（的绝对值） */
+  maxInitSpeed?: number
 }> = ({
   moveable = true,
   scaleable = false,
   inertialSlide = true, // temp
-  firctionCoefficient = 1,
+  acc = 0.005,
+  maxInitSpeed = 2.5,
   children,
 }) => {
   const box = useRef<HTMLDivElement>(null)
   /**
+   *
    * 根据偏移量，重新设定--x与--y
    * @param delta 偏移量
    */
@@ -30,6 +34,7 @@ const Moveable: FC<{
     setCSSVariable(box.current, '--y', (original) => Number(original) + delta.dy)
   }
   /**
+   *
    * 根据尺寸变化指数，重新设定--scale
    * @param scale 尺寸变化指数
    */
@@ -37,33 +42,33 @@ const Moveable: FC<{
     setCSSVariable(box.current, '--scale', scale.scaleRate)
   }
   /**
+   *
    * （用于惯性滑动）
    * 根据初始速度，设定--x与--y
    * @param speedVector 初始速度的向量表示（x，y坐标）
    */
   function changeTranslateByVector(speedVector: SpeedVector) {
+    const totalSpeedValue = calcHypotenuse(speedVector.x, speedVector.y)
     let lastTimestamp = performance.now()
-    let lastVector = speedVector
-    const a = -0.005 // 加速度
-    const aInX = a * (speedVector.x / calcHypotenuse(speedVector.x, speedVector.y)) // x方向上的加速度
-    const aInY = a * (speedVector.y / calcHypotenuse(speedVector.x, speedVector.y)) // y方向上的加速度
+    let lastVector = {
+      x: speedVector.x * (totalSpeedValue > maxInitSpeed ? maxInitSpeed / totalSpeedValue : 1),
+      y: speedVector.y * (totalSpeedValue > maxInitSpeed ? maxInitSpeed / totalSpeedValue : 1),
+    }
+    const accInX = -acc * (speedVector.x / calcHypotenuse(speedVector.x, speedVector.y)) // x方向上的摩擦力加速度
+    const accInY = -acc * (speedVector.y / calcHypotenuse(speedVector.x, speedVector.y)) // y方向上的摩擦力加速度
     //TODO: 这个animationFrame的命名机制可以封装起来
     function animateFunction(timestamp: number) {
-      // console.log(4)
-      //TODO 需要一点初中物理
       const elapsed = timestamp - lastTimestamp
       lastTimestamp = timestamp
       const currentVector = {
-        x: lastVector.x + aInX * elapsed,
-        y: lastVector.y + aInY * elapsed,
+        x: Math[accInX > 0 ? 'min' : 'max'](lastVector.x + accInX * elapsed, 0), // 速度应总是与加速度相反的方向
+        y: Math[accInY > 0 ? 'min' : 'max'](lastVector.y + accInY * elapsed, 0), // 速度应总是与加速度相反的方向
       }
       const dx = ((lastVector.x + currentVector.x) / 2) * elapsed
       const dy = ((lastVector.y + currentVector.y) / 2) * elapsed
-      // console.log('dx: ', dx)
-      // console.log('dy: ', dy)
       lastVector = currentVector
-      if (dx > 0 || dy > 0) {
-        changeTranslate({ dx: Math.max(dx, 0), dy: Math.max(dy, 0) })
+      if (dx !== 0 || dy !== 0) {
+        changeTranslate({ dx, dy })
         window.requestAnimationFrame(animateFunction)
       }
     }
