@@ -33,7 +33,7 @@ const Moveable: FC<{
   moveArea?: [top: number, left: number, width: number, height: number] | HTMLElement
 }> = ({
   moveable = true,
-  scaleable = false,
+  scaleable = true,
   inertialSlide = true, // temp
   acc = 0.004,
   maxInitSpeed = 3,
@@ -108,9 +108,7 @@ const Moveable: FC<{
       ref={box}
       className="movable"
       css={{
-        // TODO：具体的css尺寸要靠传进来的
-        width: 100,
-        height: 100,
+        width: 'max-content',
         display: 'grid',
         position: 'relative',
         transform:

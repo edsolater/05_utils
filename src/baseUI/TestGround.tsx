@@ -6,7 +6,9 @@ import Grid from './Grid'
 import Moveable from './Moveable'
 import Resizeable from './Resizeable'
 import RichEditor from './RichEditor'
+import VideoBlock from './VideoBlock'
 // import SyncScroll from './SyncScroll'
+// TODO：浮动（可自动排布）面板
 function TestGround() {
   const tabInfo = [
     {
@@ -27,8 +29,8 @@ function TestGround() {
         { name: 'Brunei' },
         { name: 'Cook Islands' },
         { name: 'Zambia' },
-        { name: 'Indonesia' }
-      ]
+        { name: 'Indonesia' },
+      ],
     },
     {
       tabName: '为设计',
@@ -37,8 +39,8 @@ function TestGround() {
         { name: 'Sri Lanka' },
         { name: 'Christmas Island' },
         { name: 'Dominica' },
-        { name: 'Armenia' }
-      ]
+        { name: 'Armenia' },
+      ],
     },
     {
       tabName: '为数据',
@@ -47,8 +49,8 @@ function TestGround() {
         { name: 'Guernsey' },
         { name: "Côte d'Ivoire" },
         { name: 'Philippines' },
-        { name: 'Malawi' }
-      ]
+        { name: 'Malawi' },
+      ],
     },
     {
       tabName: '为运营',
@@ -57,8 +59,8 @@ function TestGround() {
         { name: 'Congo - Brazzaville' },
         { name: 'Bulgaria' },
         { name: 'Ascension Island' },
-        { name: 'Poland' }
-      ]
+        { name: 'Poland' },
+      ],
     },
     {
       tabName: '为管理',
@@ -67,9 +69,9 @@ function TestGround() {
         { name: 'Canary Islands' },
         { name: 'Germany' },
         { name: 'Pakistan' },
-        { name: 'Kuwait' }
-      ]
-    }
+        { name: 'Kuwait' },
+      ],
+    },
   ]
   return (
     <>
@@ -103,32 +105,10 @@ function TestGround() {
         />
       </Resizeable> */}
       <Moveable>
-        <Div
-          disabled
-          css={{
-            width: '100%',
-            height: '100%',
-            background: 'crimson'
-          }}
-        />
+        <VideoBlock />
       </Moveable>
       <Moveable>
-        <Div
-          css={{
-            width: '100%',
-            height: '100%',
-            background: 'crimson'
-          }}
-        />
-      </Moveable>
-      <Moveable>
-        <Div
-          css={{
-            width: '100%',
-            height: '100%',
-            background: 'crimson'
-          }}
-        />
+        <VideoBlock />
       </Moveable>
       {/* <RichEditor /> */}
       {/* <SyncScroll /> */}
@@ -136,4 +116,5 @@ function TestGround() {
     </>
   )
 }
+
 export default TestGround
