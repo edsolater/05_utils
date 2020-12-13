@@ -1,9 +1,9 @@
 import { Delta2dScale } from 'typings/typeConstants'
-import areSame from './areSame'
-import calcHypotenuse from './calcHypotenuse'
-import extract from './extract'
-import calcDistance from './getDistance'
-import toArray from './toArray'
+import areSame from '../../functions/areSame'
+import calcHypotenuse from '../../functions/calcHypotenuse'
+import extract from '../../functions/extract'
+import calcDistance from '../../functions/getDistance'
+import toArray from '../../functions/toArray'
 
 /**
  * 获取专属于某个元素的触摸

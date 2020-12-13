@@ -1,7 +1,7 @@
 import toPx from 'functions/toPx'
 import pxToNumber from 'functions/pxToNumber'
 
-export function changeSizeByDelta(
+export default function changeSizeByDelta(
   el: HTMLElement | null,
   deltaPx: number,
   cssPropName: 'width' | 'height'
