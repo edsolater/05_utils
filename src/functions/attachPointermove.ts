@@ -20,7 +20,7 @@ export default function attachPointerMove(
     }
   }
   function pointerMove(ev: PointerEvent) {
-    if (ev.pointerId === events[events.length - 1].pointerId) {
+    if (events.length && ev.pointerId === events[events.length - 1].pointerId) {
       events.push(ev)
       const deltaX = ev.clientX - events[events.length - 2].clientX
       const deltaY = ev.clientY - events[events.length - 2].clientY
@@ -28,7 +28,7 @@ export default function attachPointerMove(
     }
   }
   function pointerUp(ev: PointerEvent) {
-    if (ev.pointerId === events[events.length - 1].pointerId) {
+    if (events.length && ev.pointerId === events[events.length - 1].pointerId) {
       events.push(ev)
       const eventNumber = 4
       const fromPoint = events[events.length - eventNumber] ?? events[0]

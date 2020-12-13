@@ -9,7 +9,7 @@ const VideoBlock: FC<{
 }> = ({ width = 200, height = width, round = 1000 }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio:true }).then((stream) => {
       videoRef.current!.srcObject = stream
       videoRef.current!.play()
     })

@@ -7,6 +7,7 @@ import Moveable from './Moveable'
 import Resizeable from './Resizeable'
 import RichEditor from './RichEditor'
 import VideoBlock from './VideoBlock'
+import VideoBlockIfUserPermit from './VideoBlockIfUserPermit'
 // import SyncScroll from './SyncScroll'
 // TODO：浮动（可自动排布）面板
 function TestGround() {
@@ -95,21 +96,27 @@ function TestGround() {
           D
         </Div>
       </Grid> */}
-      {/* <Resizeable>
+      <Moveable>
         <Div
           css={{
-            width: '100%',
-            height: '100%',
+            width: '400px',
+            height: '400px',
             background: 'crimson'
           }}
         />
-      </Resizeable> */}
-      <Moveable>
-        <VideoBlock />
       </Moveable>
       <Moveable>
-        <VideoBlock />
+        <Div
+          css={{
+            width: '400px',
+            height: '400px',
+            background: 'crimson'
+          }}
+        />
       </Moveable>
+      {/* <Moveable>
+        <VideoBlock />
+      </Moveable> */}
       {/* <RichEditor /> */}
       {/* <SyncScroll /> */}
       {/* <Gallery data={tabInfo} /> */}
@@ -118,3 +125,4 @@ function TestGround() {
 }
 
 export default TestGround
+

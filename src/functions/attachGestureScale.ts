@@ -5,7 +5,12 @@ import extract from './extract'
 import calcDistance from './getDistance'
 import toArray from './toArray'
 
-function getTouchesInElement(ev: TouchEvent, el: HTMLElement | null) {
+/**
+ * 获取专属于某个元素的触摸
+ * @param ev 
+ * @param el 
+ */
+function getTouchesInEvent(ev: TouchEvent, el: HTMLElement | null) {
   //FIXME: 使用 parentElement
   return toArray(ev.touches).filter(touch =>
     areSame(el, (touch.target as HTMLElement).parentElement)
@@ -33,7 +38,7 @@ export default function attachGestureScale(
   let currentScaling = 1
   let touchIds: number[] = [] // ponterId 限定死了同时能作用的指针有且只有2个
   function touchstart(ev: TouchEvent) {
-    const touchesOnElement = getTouchesInElement(ev, el)
+    const touchesOnElement = getTouchesInEvent(ev, el)
     if (touchesOnElement.length === 2) {
       touchIds = touchesOnElement.map(extract('identifier'))
       const dx = calcDistance(...touchesOnElement.map(extract('clientX')))
@@ -44,7 +49,7 @@ export default function attachGestureScale(
     }
   }
   function touchmove(ev: TouchEvent) {
-    const touchesOnElement = getTouchesInElement(ev, el)
+    const touchesOnElement = getTouchesInEvent(ev, el)
     if (
       touchesOnElement.length === 2 &&
       touchesOnElement.every(({ identifier }) => touchIds.includes(identifier))
