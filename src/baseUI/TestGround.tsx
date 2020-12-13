@@ -7,7 +7,6 @@ import Transformable from './Transformable'
 import Resizeable from './Resizeable'
 import RichEditor from './RichEditor'
 import VideoBlock from './VideoBlock'
-import VideoBlockIfUserPermit from './VideoBlockIfUserPermit'
 // import SyncScroll from './SyncScroll'
 // TODO：浮动（可自动排布）面板
 function TestGround() {
