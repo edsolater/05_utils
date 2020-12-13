@@ -5,22 +5,8 @@ import { Delta2dScale, Delta2dTranslate, SpeedVector } from '../typings/typeCons
 import setCSSVariable from '../functions/setCSSVariable'
 import attachGestureScale from 'functions/attachGestureScale'
 import calcHypotenuse from 'functions/calcHypotenuse'
-/**
- * 无论值怎么变，保证他符号不变，否则就归零（负数依然是负数，正数依然是正数）
- * @param number 值
- * @param sign 符号
- */
-function staySameSign(number: number, sign: number) {
-  if (Math.sign(sign) === -1) {
-    return number > 0 ? 0 : number
-  } else if (Math.sign(sign) === 1) {
-    return number < 0 ? 0 : number
-  } else {
-    return 0
-  }
-}
-
-const Moveable: FC<{
+import { staySameSign } from '../functions/math'
+const Transformable: FC<{
   moveable?: boolean
   scaleable?: boolean
   /** 开启惯性滑动 */
@@ -120,4 +106,4 @@ const Moveable: FC<{
     </Div>
   )
 }
-export default Moveable
+export default Transformable

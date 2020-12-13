@@ -3,7 +3,7 @@ import Avatar from './Avatar'
 import Div from './Div'
 import Gallery from './Gallery'
 import Grid from './Grid'
-import Moveable from './Moveable'
+import Transformable from './Transformable'
 import Resizeable from './Resizeable'
 import RichEditor from './RichEditor'
 import VideoBlock from './VideoBlock'
@@ -96,7 +96,7 @@ function TestGround() {
           D
         </Div>
       </Grid> */}
-      <Moveable>
+      <Transformable>
         <Div
           css={{
             width: '400px',
@@ -104,8 +104,8 @@ function TestGround() {
             background: 'crimson'
           }}
         />
-      </Moveable>
-      <Moveable>
+      </Transformable>
+      <Transformable>
         <Div
           css={{
             width: '400px',
@@ -113,7 +113,7 @@ function TestGround() {
             background: 'crimson'
           }}
         />
-      </Moveable>
+      </Transformable>
       {/* <Moveable>
         <VideoBlock />
       </Moveable> */}
