@@ -1,6 +1,6 @@
 import isArray from '../judgers/isArray'
 import isObject from '../judgers/isObject'
-import mergeArrays from '../array/mergeArrays'
+import mergeArrays from '../array/merge'
 import mergeObjects from './mergeObjects'
 
 /**
