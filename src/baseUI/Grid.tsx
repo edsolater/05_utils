@@ -1,7 +1,7 @@
 import Div from './Div'
 import React, { FC } from 'react'
 import { CSSObject, Interpolation } from '@emotion/core'
-import parallelIf from 'functions/core/parallelIf'
+import parallelIf from 'functions/magic/parallelIf'
 
 type GridType =
   | 'in-col' //全纵向排列

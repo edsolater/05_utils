@@ -1,4 +1,4 @@
-import getType from '../core/getType'
+import getType from '../string/getType'
 /**
  * 检测值是否是个对象字面量
  * @param val 检测值

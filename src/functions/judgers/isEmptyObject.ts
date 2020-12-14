@@ -1,4 +1,4 @@
-import getObjectSize from '../core/getObjectSize'
+import getObjectSize from '../object/getObjectSize'
 import isObject from './isObject'
 
 /**

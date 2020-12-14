@@ -1,5 +1,5 @@
 //@ts-nocheck
-import getLastItem from './getLastItem'
+import getLastItem from '../array/getLastItem'
 import isFunction from '../judgers/isFunction'
 
 /**

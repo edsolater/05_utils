@@ -1,4 +1,4 @@
-import overwriteFunctionName from "./overwriteFunctionName"
+import overwriteFunctionName from "../object/overwriteFunctionName"
 
 //TODO: 这个类型描述是抄的，感觉太过复杂了
 type Tail<F extends Function, S extends Number> = S extends 0

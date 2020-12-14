@@ -1,7 +1,7 @@
 // 弃用， 只不过是开启了底部与右部的resize-trigger
 import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
-import getBoundingClientRect from 'functions/core/getBoundingClientRect'
+import getBoundingClientRect from 'helper/domElement/getBoundingClientRect'
 import toPx from 'helper/manageCss/toPx'
 import { attachPointerMove } from 'helper/manageEvent'
 import { changeSizeByDelta } from 'helper/manageCss'

@@ -1,15 +1,15 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import applyRange from 'helper/domEditor/applyRange'
-import parallelIf from 'functions/core/parallelIf'
-import getFirstChar from 'functions/core/getFirstChar'
-import getFirstItem from 'functions/core/getFirstItem'
-import getLastChar from 'functions/core/getLastChar'
-import getLastItem from 'functions/core/getLastItem'
+import applyRange from 'helper/domElement/applyRange'
+import parallelIf from 'functions/magic/parallelIf'
+import getFirstChar from 'functions/string/getFirstChar'
+import getFirstItem from 'functions/array/getFirstItem'
+import getLastChar from 'functions/string/getLastChar'
+import getLastItem from 'functions/array/getLastItem'
 import inRange from 'functions/judgers/inRange'
 import isTextNode from 'functions/judgers/isTextNode'
 import notEmpty from 'functions/judgers/notEmpty'
-import splitInnerHTMLByTag from 'helper/domEditor/splitInnerHTMLByTag'
+import splitInnerHTMLByTag from 'helper/domElement/splitInnerHTMLByTag'
 
 import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
