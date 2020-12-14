@@ -1,5 +1,5 @@
-import isIn from './isIn'
+import isItemOf from './isIn'
 
 export default function hasItem<T>(arr: T[], item: T) {
-  return isIn(item, arr)
+  return isItemOf(item, arr)
 }

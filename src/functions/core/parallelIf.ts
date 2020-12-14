@@ -1,6 +1,6 @@
 //@ts-nocheck
 import getLastItem from './getLastItem'
-import isFunction from './isFunction'
+import isFunction from '../judgers/isFunction'
 
 /**
  * (纯函数)

@@ -1,5 +1,5 @@
 import getCSSVariable from './getCSSVariable'
-import isFunction from '../../functions/isFunction'
+import isFunction from '../../functions/judgers/isFunction'
 
 /**
  * 设定CSS Variable

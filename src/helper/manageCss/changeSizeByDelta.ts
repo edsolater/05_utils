@@ -1,5 +1,5 @@
 import toPx from 'helper/manageCss/toPx'
-import pxToNumber from 'functions/pxToNumber'
+import pxToNumber from 'helper/manageCss/pxToNumber'
 
 export default function changeSizeByDelta(
   el: HTMLElement | null,

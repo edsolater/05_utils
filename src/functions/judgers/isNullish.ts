@@ -1,4 +1,4 @@
-import notNullish from './notNullish'
+import notNullish from '../notNullish'
 
 /**
  * 判断是否是`undefined`或`null

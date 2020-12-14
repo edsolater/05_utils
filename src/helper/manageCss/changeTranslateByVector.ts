@@ -1,6 +1,6 @@
 import { SpeedVector } from '../../typings/typeConstants'
-import calcHypotenuse from 'functions/calcHypotenuse'
-import { staySameSign } from '../../functions/math'
+import calcHypotenuse from 'functions/core/calcHypotenuse'
+import staySameSign from "../../functions/core/staySameSign"
 import changeTranslate from './changeTranslate'
 
 /**

@@ -1,4 +1,4 @@
-import isNullish from 'functions/isNullish'
+import isNullish from 'functions/judgers/isNullish'
 import React, { useRef, useState } from 'react'
 import './Gallery.scss'
 

@@ -1,6 +1,6 @@
-import isArray from './isArray'
-import isNull from './isNull'
-import isObject from './isObject'
+import isArray from '../judgers/isArray'
+import isNull from '../judgers/isNull'
+import isObject from '../judgers/isObject'
 
 /**
  * 获取值的粗略类型（以小写形式）（不会显示是什么对象）

@@ -1,6 +1,6 @@
-import isIn from './isIn'
+import isItemOf from '../judgers/isIn'
 
 export default function hasKey<T extends object>(obj: T, key: keyof T) {
   //@ts-ignore
-  return isIn(key, Object.keys(obj))
+  return isItemOf(key, Object.keys(obj))
 }

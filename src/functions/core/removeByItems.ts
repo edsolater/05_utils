@@ -1,4 +1,4 @@
-import isIndex from './isIndex'
+import isIndex from '../judgers/isIndex'
 
 /**
  * 基于items删除数组项（返回新数组）
