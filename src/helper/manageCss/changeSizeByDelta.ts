@@ -1,4 +1,4 @@
-import toPx from 'functions/toPx'
+import toPx from 'helper/manageCss/toPx'
 import pxToNumber from 'functions/pxToNumber'
 
 export default function changeSizeByDelta(

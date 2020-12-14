@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import applyRange from 'functions/applyRange'
+import applyRange from 'helper/domEditor/applyRange'
 import parallelIf from 'functions/parallelIf'
 import getFirstChar from 'functions/getFirstChar'
 import getFirstItem from 'functions/getFirstItem'
@@ -9,7 +9,7 @@ import getLastItem from 'functions/getLastItem'
 import inRange from 'functions/inRange'
 import isTextNode from 'functions/isTextNode'
 import notEmpty from 'functions/notEmpty'
-import splitInnerHTMLByTag from 'functions/splitInnerHTMLByTag'
+import splitInnerHTMLByTag from 'helper/domEditor/splitInnerHTMLByTag'
 
 import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 

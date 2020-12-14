@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
 import Div from './Div'
-import { changeTranslate, changeTranslateByVector, changeScaleDirectly } from 'helper/CSSManage'
-import { attachGestureScale, attachPointerMove } from 'helper/eventManage'
+import { changeTranslate, changeTranslateByVector, changeScaleDirectly } from 'helper/manageCss'
+import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
 const Transformable: FC<{
   moveable?: boolean
   scaleable?: boolean

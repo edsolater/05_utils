@@ -1,5 +1,5 @@
 import { Delta2dScale } from '../../typings/typeConstants'
-import setCSSVariable from '../../functions/setCSSVariable'
+import setCSSVariable from './setCSSVariable'
 
 /**
  * 根据尺寸变化指数，重新设定元素样式的--scale

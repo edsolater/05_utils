@@ -1,5 +1,5 @@
 import { Delta2dTranslate } from '../../typings/typeConstants'
-import setCSSVariable from '../../functions/setCSSVariable'
+import setCSSVariable from './setCSSVariable'
 
 /**
  * 根据偏移量，重新设定元素样式的--x与--y

@@ -2,9 +2,9 @@
 import Div from './Div'
 import React, { FC, useEffect, useRef } from 'react'
 import getBoundingClientRect from 'functions/getBoundingClientRect'
-import toPx from 'functions/toPx'
-import { attachPointerMove } from 'helper/eventManage'
-import { changeSizeByDelta } from 'helper/CSSManage'
+import toPx from 'helper/manageCss/toPx'
+import { attachPointerMove } from 'helper/manageEvent'
+import { changeSizeByDelta } from 'helper/manageCss'
 function attachSizeIfNeeded(el: HTMLElement | null, cssPropName: 'width' | 'height') {
   if (el && !el.style[cssPropName]) {
     el.style[cssPropName] = toPx(getBoundingClientRect(el)[cssPropName])

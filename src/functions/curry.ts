@@ -1,4 +1,4 @@
-import bindFunctionName from './bindFunctionName'
+import overwriteFunctionName from './overwriteFunctionName'
 
 //TODO: 这个类型描述是抄的，感觉太过复杂了
 type Tail<F extends Function, S extends Number> = S extends 0
@@ -53,7 +53,7 @@ type Curry = <F extends (...args: any) => any>(func: F) => Curried<F>
  * @param fn 任意函数
  */
 const curry: Curry = fn =>
-  bindFunctionName(
+  overwriteFunctionName(
     (...args) =>
       //@ts-ignore
       args.length < fn.length ? curry(fn.bind(undefined, ...args)) : fn(...args),
