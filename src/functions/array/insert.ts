@@ -1,7 +1,7 @@
 /**
  * 插入新的数组项（返回新数组）
  */
-function insertItems<T extends Array<any>, U extends number, V extends Array<any>>(
+function insert<T extends Array<any>, U extends number, V extends Array<any>>(
   target: T,
   fromIndex: U,
   ...items: V
@@ -11,5 +11,5 @@ function insertItems<T extends Array<any>, U extends number, V extends Array<any
   //@ts-ignore
   return newArray
 }
-export default insertItems
+export default insert
 

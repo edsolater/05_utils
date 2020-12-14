@@ -1,7 +1,7 @@
 /**
  * 基于index删除数组项（返回新数组）
  */
-function removeByIndex<T extends Array<any>, U extends number, V extends number>(
+function remove<T extends Array<any>, U extends number, V extends number>(
   arr: T,
   fromIndex: U,
   length: V
@@ -11,4 +11,4 @@ function removeByIndex<T extends Array<any>, U extends number, V extends number>
   //@ts-ignore
   return newArray
 }
-export default removeByIndex
+export default remove
