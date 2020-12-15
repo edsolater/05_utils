@@ -3,7 +3,12 @@ import Div from './Div'
 import { changeTranslate, changeTranslateByVector, changeScaleDirectly } from 'helper/manageCss'
 import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
 import isHTMLElement from 'helper/domElement/isHTMLElement'
-
+export type BoundingRect = {
+  left: number
+  top: number
+  right: number
+  bottom: number
+}
 const Transformable: FC<{
   movable?: boolean
   scalable?: boolean
@@ -14,7 +19,7 @@ const Transformable: FC<{
   /** 惯性滑动的最大初速度（的绝对值） */
   maxInitSpeed?: number
   /** TODO: 可滑动的范围 */
-  moveArea?: { left: number; top: number; width: number; height: number } | HTMLElement
+  moveArea?: BoundingRect | HTMLElement
 }> = ({
   movable = true,
   scalable = true,

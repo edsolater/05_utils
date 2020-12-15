@@ -2,14 +2,10 @@ import { SpeedVector } from '../../typings/typeConstants'
 import calcHypotenuse from 'functions/math/calcHypotenuse'
 import staySameSign from '../../functions/math/staySameSign'
 import changeTransformTranslate from './changeTransform'
+import { BoundingRect } from 'baseUI/Transformable'
 const viewportWidth = window.innerWidth
 const viewportHeight = window.innerHeight
-type BoundingRect = {
-  left: number
-  top: number
-  right: number
-  bottom: number
-}
+
 
 /**
  * （用于惯性滑动）
