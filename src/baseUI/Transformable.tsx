@@ -9,6 +9,8 @@ export type BoundingRect = {
   right: number
   bottom: number
 }
+const viewportWidth = window.innerWidth
+const viewportHeight = window.innerHeight
 const Transformable: FC<{
   movable?: boolean
   scalable?: boolean
@@ -25,9 +27,9 @@ const Transformable: FC<{
   scalable = true,
   inertialSlide = true, // temp
   acc = 0.004,
-  maxInitSpeed = 3,
+  maxInitSpeed = 2,
   children,
-  moveArea,
+  moveArea = { left: 0, top: 0, right: viewportWidth, bottom: viewportHeight },
 }) => {
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -61,8 +63,9 @@ const Transformable: FC<{
         width: 'max-content',
         display: 'grid',
         position: 'relative',
-        transform:
-          'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(var(--scale, 1))',
+        transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${
+          scalable && 'scale(var(--scale, 1))'
+        }`,
         touchAction: 'none',
       }}
     >

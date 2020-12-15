@@ -3,9 +3,6 @@ import calcHypotenuse from 'functions/math/calcHypotenuse'
 import staySameSign from '../../functions/math/staySameSign'
 import changeTransformTranslate from './changeTransform'
 import { BoundingRect } from 'baseUI/Transformable'
-const viewportWidth = window.innerWidth
-const viewportHeight = window.innerHeight
-
 
 /**
  * （用于惯性滑动）
@@ -20,7 +17,7 @@ export default function changeTranslateByVector(
   {
     acc = 0.004,
     maxInitSpeed = 3,
-    boundingBox = { left: 0, top: 0, right: viewportWidth, bottom: viewportHeight }
+    boundingBox
   }: {
     acc?: number
     maxInitSpeed?: number
@@ -57,19 +54,19 @@ export default function changeTranslateByVector(
     elPosition.right += dx
     elPosition.top += dy
     elPosition.bottom += dy
-    if (elPosition.left <= boundingBox.left) {
+    if (boundingBox && elPosition.left <= boundingBox.left) {
       dx += boundingBox.left - elPosition.left
       elPosition.left = boundingBox.left
     }
-    if (elPosition.right >= boundingBox.right) {
+    if (boundingBox && elPosition.right >= boundingBox.right) {
       dx += boundingBox.right - elPosition.right
       elPosition.right = boundingBox.right
     }
-    if (elPosition.top <= boundingBox.top) {
+    if (boundingBox && elPosition.top <= boundingBox.top) {
       dy += boundingBox.top - elPosition.top
       elPosition.top = boundingBox.top
     }
-    if (elPosition.bottom >= boundingBox.bottom) {
+    if (boundingBox && elPosition.bottom >= boundingBox.bottom) {
       dy += boundingBox.bottom - elPosition.bottom
       elPosition.bottom = boundingBox.bottom
     }
