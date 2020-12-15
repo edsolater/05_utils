@@ -1,7 +1,15 @@
 import { SpeedVector } from '../../typings/typeConstants'
 import calcHypotenuse from 'functions/math/calcHypotenuse'
-import staySameSign from "../../functions/math/staySameSign"
-import changeTranslate from './changeTranslate'
+import staySameSign from '../../functions/math/staySameSign'
+import changeTransformTranslate from './changeTransform'
+const viewportWidth = window.innerWidth
+const viewportHeight = window.innerHeight
+type BoundingRect = {
+  left: number
+  top: number
+  right: number
+  bottom: number
+}
 
 /**
  * （用于惯性滑动）
@@ -13,16 +21,31 @@ import changeTranslate from './changeTranslate'
 export default function changeTranslateByVector(
   el: HTMLElement,
   speedVector: SpeedVector,
-  { acc = 0.004, maxInitSpeed = 3 }: { acc?: number; maxInitSpeed?: number } = {}
+  {
+    acc = 0.004,
+    maxInitSpeed = 3,
+    boundingBox = { left: 0, top: 0, right: viewportWidth, bottom: viewportHeight }
+  }: {
+    acc?: number
+    maxInitSpeed?: number
+    boundingBox?: BoundingRect
+  } = {}
 ) {
   const totalSpeedValue = calcHypotenuse(speedVector.x, speedVector.y)
+  const accInX = -acc * (speedVector.x / calcHypotenuse(speedVector.x, speedVector.y)) // x方向上的摩擦力加速度
+  const accInY = -acc * (speedVector.y / calcHypotenuse(speedVector.x, speedVector.y)) // y方向上的摩擦力加速度
+  const rect = el.getBoundingClientRect()
+  const elPosition: BoundingRect = {
+    left: rect.left,
+    top: rect.top,
+    right: rect.right,
+    bottom: rect.bottom
+  }
   let lastTimestamp = performance.now()
   let lastVector = {
     x: speedVector.x * (totalSpeedValue > maxInitSpeed ? maxInitSpeed / totalSpeedValue : 1),
     y: speedVector.y * (totalSpeedValue > maxInitSpeed ? maxInitSpeed / totalSpeedValue : 1)
   }
-  const accInX = -acc * (speedVector.x / calcHypotenuse(speedVector.x, speedVector.y)) // x方向上的摩擦力加速度
-  const accInY = -acc * (speedVector.y / calcHypotenuse(speedVector.x, speedVector.y)) // y方向上的摩擦力加速度
 
   //TODO: 这个animationFrame的命名机制可以封装起来
   function animateFunction(timestamp: number) {
@@ -32,11 +55,31 @@ export default function changeTranslateByVector(
       x: staySameSign(lastVector.x + accInX * elapsed, -accInX),
       y: staySameSign(lastVector.y + accInY * elapsed, -accInY)
     }
-    const dx = ((lastVector.x + currentVector.x) / 2) * elapsed
-    const dy = ((lastVector.y + currentVector.y) / 2) * elapsed
+    let dx = ((lastVector.x + currentVector.x) / 2) * elapsed
+    let dy = ((lastVector.y + currentVector.y) / 2) * elapsed
+    elPosition.left += dx
+    elPosition.right += dx
+    elPosition.top += dy
+    elPosition.bottom += dy
+    if (elPosition.left <= boundingBox.left) {
+      dx += boundingBox.left - elPosition.left
+      elPosition.left = boundingBox.left
+    }
+    if (elPosition.right >= boundingBox.right) {
+      dx += boundingBox.right - elPosition.right
+      elPosition.right = boundingBox.right
+    }
+    if (elPosition.top <= boundingBox.top) {
+      dy += boundingBox.top - elPosition.top
+      elPosition.top = boundingBox.top
+    }
+    if (elPosition.bottom >= boundingBox.bottom) {
+      dy += boundingBox.bottom - elPosition.bottom
+      elPosition.bottom = boundingBox.bottom
+    }
     lastVector = currentVector
     if (dx !== 0 || dy !== 0) {
-      changeTranslate(el, { dx, dy })
+      changeTransformTranslate(el, { translate: { dx, dy } })
       window.requestAnimationFrame(animateFunction)
     }
   }
