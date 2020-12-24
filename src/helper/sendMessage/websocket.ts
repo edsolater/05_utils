@@ -3,9 +3,7 @@
  ***********/
 import { ID, URL } from 'typings/typeConstants'
 
-let websocketId = 0
-const pool = new Map<ID, WebSocket>()
-interface WebSocketController<Commands extends { [command: string]: any } = {}> {
+export interface WebSocketController<Commands extends { [command: string]: any } = {}> {
   readonly id: ID
   readonly label: string
   readonly state: 'CONNECTING' | 'OPEN' | 'CLOSING' | 'CLOSED'
@@ -14,6 +12,8 @@ interface WebSocketController<Commands extends { [command: string]: any } = {}> 
   close(): void
 }
 
+let websocketId = 0
+const pool = new Map<ID, WebSocket>()
 /**
  * 脏函数
  * 创建一条websocket
@@ -99,6 +99,6 @@ export function deleteWebsocket(id: ID): boolean {
  * 脏函数
  * 返回该应用中存在的websocket的数量
  */
-export function getExistedWebsockCount() {
+export function getExistedWebsockCount(): number {
   return pool.size
 }
