@@ -24,6 +24,7 @@ export default function attachPointerMove(
       events.push(ev)
       const deltaX = ev.clientX - events[events.length - 2].clientX
       const deltaY = ev.clientY - events[events.length - 2].clientY
+      //TODO: 要把元素相对于当前视口的位置也放进去
       eventHandler.move(ev, { dx: deltaX, dy: deltaY })
     }
   }

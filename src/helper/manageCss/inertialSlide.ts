@@ -11,18 +11,19 @@ import { BoundingRect } from 'baseUI/Transformable'
  * @param el 目标元素
  * @param speedVector 初始速度的向量表示（x，y坐标）
  */
-export default function changeTranslateByVector(
+export default function inertialSlide(
   el: HTMLElement,
-  speedVector: SpeedVector,
   {
+    speedVector,
     acc = 0.004,
     maxInitSpeed = 3,
     boundingBox
   }: {
+    speedVector: SpeedVector
     acc?: number
     maxInitSpeed?: number
     boundingBox?: BoundingRect
-  } = {}
+  }
 ) {
   const totalSpeedValue = calcHypotenuse(speedVector.x, speedVector.y)
   const accInX = -acc * (speedVector.x / calcHypotenuse(speedVector.x, speedVector.y)) // x方向上的摩擦力加速度

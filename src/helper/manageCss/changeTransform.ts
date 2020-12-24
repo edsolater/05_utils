@@ -8,9 +8,7 @@ import setCSSVariable from './setCSSVariable'
  */
 export default function changeTransform(el: HTMLElement, delta: { translate?: Delta2dTranslate }) {
   if (delta.translate) {
-    const translateInfo = delta.translate
-    setCSSVariable(el, '--x', original => Number(original) + translateInfo.dx)
-    setCSSVariable(el, '--y', original => Number(original) + translateInfo.dy)
+    setCSSVariable(el, '--x', original => Number(original) + delta.translate!.dx)
+    setCSSVariable(el, '--y', original => Number(original) + delta.translate!.dy)
   }
 }
-

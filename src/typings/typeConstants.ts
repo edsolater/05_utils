@@ -45,3 +45,12 @@ export type Location2d = {
  * 2d变换量
  */
 export type Delta2d = Delta2dTranslate & Delta2dScale
+
+/**
+ * 就是常见的ID
+ */
+export type ID = string
+/**
+ * 就是常见的url
+ */
+export type URL = string
