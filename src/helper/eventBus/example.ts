@@ -13,7 +13,7 @@ emit('hello') // 3
  * 使用 {once}
  */
 on('world', () => console.log(4), { once: true })
-emit('world')
+emit('world') // 4
 emit('world') // 因为once，就只会触发一次
 
 /* -------------------------------------------------------------------------- */
@@ -28,4 +28,4 @@ on('dd', () => console.log(5)) // 5
  * 关闭延迟调用
  */
 emit('df')
-on('df', () => console.log(6), { affactPrev: false })
+on('df', () => console.log(6), { flush: 'normal' })
