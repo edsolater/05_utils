@@ -1,5 +1,5 @@
 import { addDefaultMutably } from 'functions/magic/addDefault'
-import { EventBus } from './inputType'
+import { EventBus } from './configType'
 
 type EventNames = keyof EventBus
 type EventArgs<N extends keyof EventBus = keyof EventBus> = Parameters<EventBus[N]>
