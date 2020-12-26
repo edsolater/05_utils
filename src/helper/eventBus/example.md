@@ -1,11 +1,14 @@
-import { emit, on } from '.'
+调用示例：
+
+```ts
+import { on, emit } from 'helper/eventBus'
 
 /**
  * 正常使用
  */
-on('hello', () => console.log(3))
-emit('hello') // 3
-emit('hello') // 3
+on('loadPage', name => console.log(3))
+emit('loadPage') // 3
+emit('loadPage') // 3
 
 /* -------------------------------------------------------------------------- */
 
@@ -29,3 +32,4 @@ on('dd', () => console.log(5)) // 5
  */
 emit('df')
 on('df', () => console.log(6), { flush: 'normal' })
+```
