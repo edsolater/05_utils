@@ -1,5 +1,5 @@
-import { addDefaultMutably } from 'functions/magic/addDefault'
-import { EventBus } from './configType'
+import addDefault from 'functions/magic/addDefault'
+import { EventBus } from './config'
 
 type EventNames = keyof EventBus
 type EventArgs<N extends keyof EventBus = keyof EventBus> = Parameters<EventBus[N]>
@@ -32,9 +32,9 @@ const emitMap: Map<EventNames, EventArgs> = new Map()
 export function on<T extends EventNames>(
   eventName: T,
   callback: EventListener<T>,
-  config: EventConfig = {}
+  initConfig: EventConfig = {}
 ) {
-  addDefaultMutably(config, { flush: 'pre' })
+  const config = addDefault(initConfig, { flush: 'pre' })
   recordListener({ eventName, callback, config })
   if (config.flush === 'pre' && emitMap.has(eventName))
     evokeListener({ eventName, callback, eventArgs: emitMap.get(eventName) as EventArgs<T> })

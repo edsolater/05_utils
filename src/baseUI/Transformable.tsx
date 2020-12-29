@@ -12,11 +12,16 @@ export type BoundingRect = {
 const viewportWidth = window.innerWidth
 const viewportHeight = window.innerHeight
 
+/**
+ * 包裹一层div，使该元素与其子元素能被随意拖动
+ * 注意：不可与draggable混淆
+ * @param param0 
+ */
 const Transformable: FC<{
   movable?: boolean
   scalable?: boolean
   /** 开启惯性滑动 */
-  canInertialSlide?: boolean
+  disableInertialSlide?: boolean
   /** 惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
   acc?: number
   /** 惯性滑动的最大初速度（的绝对值） */
@@ -26,7 +31,7 @@ const Transformable: FC<{
 }> = ({
   movable = true,
   scalable = true,
-  canInertialSlide = true, // temp
+  disableInertialSlide = false, // temp
   acc = 0.004,
   maxInitSpeed = 2,
   moveArea = { left: 0, top: 0, right: viewportWidth, bottom: viewportHeight },
@@ -41,7 +46,7 @@ const Transformable: FC<{
           changeTranslate(box.current!, { translate: delta })
         },
         end(_, speedVector) {
-          if (canInertialSlide) {
+          if (!disableInertialSlide) {
             const movableArea = isHTMLElement(moveArea)
               ? moveArea.getBoundingClientRect()
               : moveArea
