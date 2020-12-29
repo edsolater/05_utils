@@ -4,7 +4,7 @@
 import notNullish from 'functions/judgers/notNullish'
 import genuuid from 'helper/uuid'
 import React, { useEffect, useRef } from 'react'
-import Div from '../baseUI/Div'
+import Div from './Div'
 
 const draggingElements = new Map<string, HTMLElement>()
 
