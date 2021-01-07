@@ -1,3 +1,9 @@
+/*******************************
+ * 
+ * 有些类型声明看着冗余，但这是写更可读的代码所必须的
+ *  
+ ******************************/
+
 /**
  * 移动距离
  */
@@ -54,3 +60,13 @@ export type ID = string
  * 就是常见的url
  */
 export type URL = string
+
+/**
+ * 2个方向
+ */
+export type Direction = 'x' | 'y'
+
+/**
+ * 3个方向
+ */
+export type Direction3D = 'x' | 'y' | 'z'

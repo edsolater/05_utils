@@ -1,43 +1,40 @@
 /*******************************
  * 实验 draggable list 的
  ******************************/
-import notNullish from 'functions/judgers/notNullish'
-import React, { useEffect, useRef } from 'react'
-import Div, { DivProps } from '../baseUI/Div'
+import Transformable from 'baseUI/Transformable'
+import React, { FC, Ref, useRef } from 'react'
+import { Direction } from 'typings/typeConstants'
+import Div, { CSSProperties } from '../baseUI/Div'
 
-const draggingElements = new Map<string, HTMLElement>()
-
+const draggableItemCSS: CSSProperties = {
+  padding: 16,
+  margin: 8,
+  background: 'lightgray'
+}
 // SHUT 用错了，不应该使用dragAndDrop进行拖动重排
-const TestDaggableList = () => {
-  const draggableItemCSS: DivProps['css'] = {
-    padding: 16,
-    margin: 8,
-    background: 'lightgray'
-  }
-  const draggingItemIndex = useRef<number>()
+const TestDaggableList: FC<{
+  direction: Direction
+}> = ({ direction = 'y' }) => {
+  const itemData = ['AAAA', 'BBBB', 'CCC', 'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD']
+  const itemRefs = useRef<Map<number, Ref<HTMLDivElement>>>(new Map())
+  const sizeInfo = useRef<Map<number, DOMRect>>(new Map())
+
   return (
     <Div css={{ display: 'grid', gap: 8 }}>
-      {['AAAA', 'BBBB', 'CCC', 'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD'].map((text, index) => (
-        <Div
-          css={[
-            draggableItemCSS,
-            draggingItemIndex.current === index && { position: 'absolute', left: 10000 }
-          ]}
+      {itemData.map((text, index) => (
+        <Transformable
+          ref={ref => itemRefs.current.set(index, ref)}
           key={index}
-          draggable
-          onMouseDown={preventDefault}
-          onDragEnter={preventDefault}
-          onDragStart={e => {
-            draggingItemIndex.current = index
-            const cloned = (e.target as HTMLDivElement).cloneNode(true) as HTMLDivElement
-            cloned.style.setProperty('position', 'absolute')
-            cloned.style.setProperty('left', '10000px')
-            document.body.appendChild(cloned)
-            e.dataTransfer.setDragImage(cloned, 0, 0)
+          moveDirection={direction}
+          onMoveStart={el => {
+            const rect = el.current?.getBoundingClientRect()
+            if (rect) sizeInfo.current.set(index, rect)
           }}
         >
-          {text}
-        </Div>
+          <Div className='temp-item' css={draggableItemCSS}>
+            {text}
+          </Div>
+        </Transformable>
       ))}
     </Div>
   )
@@ -45,11 +42,4 @@ const TestDaggableList = () => {
 
 export default TestDaggableList
 
-function assert(condition: any, msg?: string): asserts condition {
-  if (!condition) {
-    throw new Error(msg)
-  }
-}
-function preventDefault(ev: UIEvent | React.UIEvent) {
-  ev.preventDefault()
-}
+

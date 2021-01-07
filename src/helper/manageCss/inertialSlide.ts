@@ -17,12 +17,14 @@ export default function inertialSlide(
     speedVector,
     acc = 0.004,
     maxInitSpeed = 3,
-    boundingBox
+    boundingBox,
+    onSlideEnd
   }: {
     speedVector: SpeedVector
     acc?: number
     maxInitSpeed?: number
     boundingBox?: BoundingRect
+    onSlideEnd?:()=>void
   }
 ) {
   const totalSpeedValue = calcHypotenuse(speedVector.x, speedVector.y)
@@ -75,6 +77,8 @@ export default function inertialSlide(
     if (dx !== 0 || dy !== 0) {
       changeTransformTranslate(el, { translate: { dx, dy } })
       window.requestAnimationFrame(animateFunction)
+    } else {
+      onSlideEnd?.()
     }
   }
   window.requestAnimationFrame(animateFunction)
