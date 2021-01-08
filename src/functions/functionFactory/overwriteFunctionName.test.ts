@@ -1,4 +1,4 @@
-import overwriteFunctionName from '../object/overwriteFunctionName'
+import overwriteFunctionName from './overwriteFunctionName'
 const testFn = () => {}
 
 test('基础案例', () => {
