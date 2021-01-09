@@ -1,4 +1,12 @@
-import React, { forwardRef, ReactNode, Ref, RefObject, useEffect, useRef } from 'react'
+import React, {
+  forwardRef,
+  ForwardRefExoticComponent,
+  ReactNode,
+  Ref,
+  RefObject,
+  useEffect,
+  useRef
+} from 'react'
 import Div from './Div'
 import { changeTranslate, inertialSlide, changeScaleDirectly } from 'helper/manageCss'
 import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
@@ -18,26 +26,35 @@ const viewportHeight = window.innerHeight
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
  */
-const Transformable = forwardRef<
-  any,
-  {
-    movable?: boolean
-    moveDirection?: Direction | 'both'
-    onMoveStart?: (elRef: RefObject<HTMLDivElement>) => void
-    onMoveEnd?: (elRef: RefObject<HTMLDivElement>, speedVector: Vector) => void
+const Transformable: ForwardRefExoticComponent<{
+  /* ----------------------------------- 拖动 ----------------------------------- */
 
-    /** 开启惯性滑动 */
-    canInertialSlide?: boolean
-    /** （前提：已开启惯性滚动）惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
-    acc?: number
-    /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
-    maxInitSpeed?: number
-    /** （前提：已开启惯性滚动）可滑动的范围 */
-    slideArea?: BoundingRect | HTMLElement
-    onSlideEnd?: (elRef: RefObject<HTMLDivElement>) => void
-    scalable?: boolean
-  } & { children?: ReactNode }
->(
+  movable?: boolean
+  moveDirection?: Direction | 'both'
+  onMoveStart?: (elRef: RefObject<HTMLDivElement>) => void
+  onMoveEnd?: (elRef: RefObject<HTMLDivElement>, speedVector: Vector) => void
+
+  /* ---------------------------------- 惯性滑动 ---------------------------------- */
+
+  /** 开启惯性滑动 */
+  canInertialSlide?: boolean
+  /** （前提：已开启惯性滚动）惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
+  acc?: number
+  /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
+  maxInitSpeed?: number
+  /** （前提：已开启惯性滚动）可滑动的范围 */
+  slideArea?: BoundingRect | HTMLElement
+  onSlideEnd?: (elRef: RefObject<HTMLDivElement>) => void
+
+  /* ---------------------------------- 大小变化 ---------------------------------- */
+
+  scalable?: boolean
+
+  /* ----------------------------------- 特殊 ----------------------------------- */
+
+  ref?: Ref<any>
+  children?: ReactNode
+}> = forwardRef(
   (
     {
       movable = true,
@@ -78,7 +95,7 @@ const Transformable = forwardRef<
                 acc,
                 maxInitSpeed,
                 boundingBox: movableArea,
-                onSlideEnd() {
+                onSlideEnd: () => {
                   onSlideEnd?.(box)
                 }
               })
