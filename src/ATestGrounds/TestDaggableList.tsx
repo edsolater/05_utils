@@ -21,7 +21,7 @@ const TestDaggableList: FC<{
   useEffect(() => {}, [])
 
   return (
-    <Div css={{ display: 'grid', gap: 8 }}>
+    <Div css={{ position: 'absolute', display: 'grid', gap: 8 }}>
       {itemData.map((text, index) => (
         <Transformable
           ref={ref => {
@@ -31,7 +31,7 @@ const TestDaggableList: FC<{
           key={index}
           moveDirection={direction}
           onMoveStart={el => {
-            const blankSpanceDiv = <Div css={{ display: 'grid' }}></Div>
+            const blankSpanceDiv = <Div></Div>
             const rect = el.current?.getBoundingClientRect()
             if (rect) sizeInfo.current.set(index, rect)
           }}
