@@ -1,13 +1,13 @@
 /** @jsx jsx */
-import { jsx, css, Interpolation, ObjectInterpolation } from '@emotion/core'
+import { jsx, css, Interpolation } from '@emotion/core'
 import { forwardRef } from 'react'
 import { MayArray } from 'typings/tools'
 import { mergeRefs } from '../helper/reactHelper/mergeRefs'
 /**
  * 尽量别用，这会造成typescript的推断缓慢
  */
-export type CSSObject = ObjectInterpolation<undefined> 
-export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style'> { // 这好像会开启typescript的缓存机制
+export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style'> {
+  // 这会开启typescript的缓存机制
   // 对interface，typescript有缓存
   disabled?: boolean
   /**

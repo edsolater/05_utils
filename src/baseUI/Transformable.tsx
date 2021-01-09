@@ -1,4 +1,5 @@
 import React, {
+  CSSProperties,
   forwardRef,
   ForwardRefExoticComponent,
   ReactNode,
@@ -13,6 +14,7 @@ import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
 import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { Direction, Vector } from 'typings/typeConstants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
+
 export type BoundingRect = {
   left: number
   top: number
@@ -21,12 +23,12 @@ export type BoundingRect = {
 }
 const viewportWidth = window.innerWidth
 const viewportHeight = window.innerHeight
-const wrapperCSS = {
+const wrapperCSS: CSSProperties = {
   width: 'max-content',
   display: 'grid',
   position: 'relative',
-  touchAction: 'none'
-} as const
+  touchAction: 'none',
+}
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
@@ -121,7 +123,7 @@ const Transformable: ForwardRefExoticComponent<{
           ...wrapperCSS,
           transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${
             scalable && 'scale(var(--scale, 1))'
-          }`
+          }`,
         }}
       >
         {children}
