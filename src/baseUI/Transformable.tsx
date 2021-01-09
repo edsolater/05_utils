@@ -21,7 +21,12 @@ export type BoundingRect = {
 }
 const viewportWidth = window.innerWidth
 const viewportHeight = window.innerHeight
-
+const wrapperCSS = {
+  width: 'max-content',
+  display: 'grid',
+  position: 'relative',
+  touchAction: 'none'
+} as const
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
@@ -113,13 +118,10 @@ const Transformable: ForwardRefExoticComponent<{
         ref={mergeRefs([ref, box])}
         className='movable-wrapper'
         css={{
-          width: 'max-content',
-          display: 'grid',
-          position: 'relative',
+          ...wrapperCSS,
           transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${
             scalable && 'scale(var(--scale, 1))'
-          }`,
-          touchAction: 'none'
+          }`
         }}
       >
         {children}

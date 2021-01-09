@@ -4,9 +4,9 @@
 import Transformable from 'baseUI/Transformable'
 import React, { FC, Ref, useEffect, useRef } from 'react'
 import { Direction } from 'typings/typeConstants'
-import Div, { CSSProperties } from '../baseUI/Div'
+import Div, { CSSObject } from '../baseUI/Div'
 
-const draggableItemCSS: CSSProperties = {
+const draggableItemCSS: CSSObject = {
   padding: 16,
   margin: 8,
   background: 'lightgray'
@@ -26,12 +26,12 @@ const TestDaggableList: FC<{
         <Transformable
           ref={ref => {
             itemRefs.current.set(index, ref)
-            sizeInfo.current.set(index,ref)
+            sizeInfo.current.set(index, ref)
           }}
           key={index}
           moveDirection={direction}
           onMoveStart={el => {
-            const blankSpanceDiv = <Div css={}></Div>
+            const blankSpanceDiv = <Div css={{ display: 'grid' }}></Div>
             const rect = el.current?.getBoundingClientRect()
             if (rect) sizeInfo.current.set(index, rect)
           }}

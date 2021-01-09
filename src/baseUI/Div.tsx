@@ -1,15 +1,19 @@
 /** @jsx jsx */
-import { jsx, css, Interpolation } from '@emotion/core'
-import { forwardRef, } from 'react'
+import { jsx, css, Interpolation, ObjectInterpolation } from '@emotion/core'
+import { forwardRef } from 'react'
 import { MayArray } from 'typings/tools'
 import { mergeRefs } from '../helper/reactHelper/mergeRefs'
-export type CSSProperties = MayArray<Interpolation>
-export type DivProps = {
+/**
+ * 尽量别用，这会造成typescript的推断缓慢
+ */
+export type CSSObject = ObjectInterpolation<undefined> 
+export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style'> { // 这好像会开启typescript的缓存机制
+  // 对interface，typescript有缓存
   disabled?: boolean
   /**
    * 专门用于放css variable的
    */
-  css?: CSSProperties
+  css?: MayArray<Interpolation>
   /**
    * 强制使用disabled的样式
    */
@@ -28,7 +32,7 @@ export type DivProps = {
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'disabled', 'cssVaraible']
 
-const Div = forwardRef<any, Omit<JSX.IntrinsicElements['div'], 'style'> & DivProps>(
+const Div = forwardRef<any, DivProps>(
   ({ disabled, css: emotionCss, draggable, cssVaraible = {}, children, ...restProps }, ref) => {
     // // TODO: draggable droppable 都要支持
     // const currentRef = useRef<HTMLDivElement>()
