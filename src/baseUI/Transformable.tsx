@@ -23,12 +23,6 @@ export type BoundingRect = {
 }
 const viewportWidth = window.innerWidth
 const viewportHeight = window.innerHeight
-const wrapperCSS: CSSProperties = {
-  width: 'max-content',
-  display: 'grid',
-  position: 'relative',
-  touchAction: 'none',
-}
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
@@ -80,7 +74,7 @@ const Transformable: ForwardRefExoticComponent<{
   ) => {
     const box = useRef<HTMLDivElement>(null)
     useEffect(() => {
-      movable &&
+      if (movable) {
         attachPointerMove(box.current, {
           move(_, delta) {
             onMoveStart?.(box)
@@ -109,10 +103,12 @@ const Transformable: ForwardRefExoticComponent<{
             }
           }
         })
-      scalable &&
+      }
+      if (scalable) {
         attachGestureScale(box.current, {
           moving: (_, delta) => changeScaleDirectly(box.current!, delta)
         })
+      }
     }, [])
 
     return (
@@ -120,10 +116,13 @@ const Transformable: ForwardRefExoticComponent<{
         ref={mergeRefs([ref, box])}
         className='movable-wrapper'
         css={{
-          ...wrapperCSS,
+          width: 'max-content',
+          display: 'grid',
+          position: 'relative',
+          touchAction: 'none',
           transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${
             scalable && 'scale(var(--scale, 1))'
-          }`,
+          }`
         }}
       >
         {children}
