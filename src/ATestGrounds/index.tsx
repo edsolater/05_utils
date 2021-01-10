@@ -1,5 +1,5 @@
 import React from 'react'
-import TestDaggableList from './TestDaggableList'
+import SortableList from './SortableList'
 
-const TestGrounds = () => <TestDaggableList />
+const TestGrounds = () => <SortableList />
 export default TestGrounds
