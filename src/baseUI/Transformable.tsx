@@ -3,7 +3,7 @@ import Div from './Div'
 import { changeTranslate, inertialSlide, changeScaleDirectly } from 'helper/manageCss'
 import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
 import isHTMLElement from 'helper/domElement/isHTMLElement'
-import { Direction, Vector } from 'typings/typeConstants'
+import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/typeConstants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import { IFC } from 'typings/reactType'
 type RootElement = HTMLDivElement
@@ -27,6 +27,7 @@ const Transformable: IFC<
     moveDirection?: Direction | 'both'
     onMoveStart?: (el: RootElement) => void
     onMoveEnd?: (el: RootElement, speedVector: Vector) => void
+    onMove?: (el: RootElement, delta: Delta2dTranslate) => void
 
     /* ---------------------------------- 惯性滑动 ---------------------------------- */
 
@@ -54,6 +55,7 @@ const Transformable: IFC<
   slideArea = { left: 0, top: 0, right: viewportWidth, bottom: viewportHeight },
   moveDirection = 'both',
   onMoveStart,
+  onMove,
   onMoveEnd,
   onSlideEnd,
   children,
@@ -66,11 +68,12 @@ const Transformable: IFC<
         start() {
           onMoveStart?.(box.current!)
         },
-        move(_, delta) {
-          const computedDelta: typeof delta = {
-            dx: moveDirection === 'both' || moveDirection === 'x' ? delta.dx : 0,
-            dy: moveDirection === 'both' || moveDirection === 'y' ? delta.dy : 0
+        move(_, pointDelta) {
+          const computedDelta: typeof pointDelta = {
+            dx: moveDirection === 'both' || moveDirection === 'x' ? pointDelta.dx : 0,
+            dy: moveDirection === 'both' || moveDirection === 'y' ? pointDelta.dy : 0
           }
+          onMove?.(box.current!, computedDelta)
           // TODO： 或者，保持对称，也包一层？
           changeTranslate(box.current!, { translate: computedDelta })
         },
