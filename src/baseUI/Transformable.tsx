@@ -6,7 +6,7 @@ import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { Direction, Vector } from 'typings/typeConstants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import { IFC } from 'typings/reactType'
-
+type RootElement = HTMLDivElement
 export type BoundingRect = {
   left: number
   top: number
@@ -19,30 +19,33 @@ const viewportHeight = window.innerHeight
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
  */
-const Transformable: IFC<{
-  /* ----------------------------------- 拖动 ----------------------------------- */
+const Transformable: IFC<
+  {
+    /* ----------------------------------- 拖动 ----------------------------------- */
 
-  movable?: boolean
-  moveDirection?: Direction | 'both'
-  onMoveStart?: (el: HTMLDivElement) => void
-  onMoveEnd?: (el: HTMLDivElement, speedVector: Vector) => void
+    movable?: boolean
+    moveDirection?: Direction | 'both'
+    onMoveStart?: (el: RootElement) => void
+    onMoveEnd?: (el: RootElement, speedVector: Vector) => void
 
-  /* ---------------------------------- 惯性滑动 ---------------------------------- */
+    /* ---------------------------------- 惯性滑动 ---------------------------------- */
 
-  /** 开启惯性滑动 */
-  canInertialSlide?: boolean
-  /** （前提：已开启惯性滚动）惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
-  acc?: number
-  /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
-  maxInitSpeed?: number
-  /** （前提：已开启惯性滚动）可滑动的范围 */
-  slideArea?: BoundingRect | HTMLElement
-  onSlideEnd?: (el: HTMLDivElement) => void
+    /** 开启惯性滑动 */
+    canInertialSlide?: boolean
+    /** （前提：已开启惯性滚动）惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
+    acc?: number
+    /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
+    maxInitSpeed?: number
+    /** （前提：已开启惯性滚动）可滑动的范围 */
+    slideArea?: BoundingRect | HTMLElement
+    onSlideEnd?: (el: RootElement) => void
 
-  /* ---------------------------------- 大小变化 ---------------------------------- */
+    /* ---------------------------------- 大小变化 ---------------------------------- */
 
-  scalable?: boolean
-}> = ({
+    scalable?: boolean
+  },
+  RootElement
+> = ({
   movable = true,
   scalable = true,
   canInertialSlide = false, // temp
@@ -56,12 +59,14 @@ const Transformable: IFC<{
   children,
   domRef
 }) => {
-  const box = useRef<HTMLDivElement>(null)
+  const box = useRef<RootElement>(null)
   useEffect(() => {
     if (movable) {
       attachPointerMove(box.current, {
-        move(_, delta) {
+        start() {
           onMoveStart?.(box.current!)
+        },
+        move(_, delta) {
           const computedDelta: typeof delta = {
             dx: moveDirection === 'both' || moveDirection === 'x' ? delta.dx : 0,
             dy: moveDirection === 'both' || moveDirection === 'y' ? delta.dy : 0

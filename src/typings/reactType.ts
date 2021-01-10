@@ -1,5 +1,4 @@
-import { FC, RefObject } from 'react'
+import { FC, MutableRefObject } from 'react'
 
-type IRef<T> = ((el: T) => void) | RefObject<T> | null
-
-export interface IFC<T> extends FC<T & { domRef?: IRef<HTMLElement> }> {}
+export type IRef<T> = ((el: T) => void) | MutableRefObject<T | null> | null
+export interface IFC<T, E extends HTMLElement = HTMLDivElement> extends FC<T & { domRef?: IRef<E> }> {}
