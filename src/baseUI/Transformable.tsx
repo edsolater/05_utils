@@ -25,6 +25,8 @@ const Transformable: IFC<
 
     movable?: boolean
     moveDirection?: Direction | 'both'
+    /** 可拖动的区域 */
+    moveBoundary?: 'offsetParent' | 'none'
     onMoveStart?: (el: RootElement) => void
     onMoveEnd?: (el: RootElement, speedVector: Vector) => void
     onMove?: (el: RootElement, delta: Delta2dTranslate) => void
@@ -37,8 +39,6 @@ const Transformable: IFC<
     acc?: number
     /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
     maxInitSpeed?: number
-    /** （前提：已开启惯性滚动）可滑动的范围 */
-    slideArea?: BoundingRect | HTMLElement
     onSlideEnd?: (el: RootElement) => void
 
     /* ---------------------------------- 大小变化 ---------------------------------- */
@@ -52,7 +52,7 @@ const Transformable: IFC<
   canInertialSlide = false, // temp
   acc = 0.004,
   maxInitSpeed = 2,
-  slideArea = { left: 0, top: 0, right: viewportWidth, bottom: viewportHeight },
+  moveBoundary = 'offsetParent',
   moveDirection = 'both',
   onMoveStart,
   onMove,
@@ -64,30 +64,56 @@ const Transformable: IFC<
   const box = useRef<RootElement>(null)
   useEffect(() => {
     if (movable) {
+      const offsetRect =
+        moveBoundary === 'offsetParent'
+          ? box.current?.offsetParent?.getBoundingClientRect()
+          : undefined
       attachPointerMove(box.current, {
         start() {
           onMoveStart?.(box.current!)
         },
-        move(_, pointDelta) {
-          const computedDelta: typeof pointDelta = {
-            dx: moveDirection === 'both' || moveDirection === 'x' ? pointDelta.dx : 0,
-            dy: moveDirection === 'both' || moveDirection === 'y' ? pointDelta.dy : 0
+        move({ prev, curr }) {
+          const dx = curr.x - prev.x
+          const dy = curr.y - prev.y
+          let computedDx = 0
+          let computedDy = 0
+          const boxRect = box.current!.getBoundingClientRect()
+          if (moveDirection === 'both' || moveDirection === 'x') {
+            computedDx = dx
+            if (offsetRect) {
+              if (boxRect.left + dx < offsetRect.left) {
+                computedDx = offsetRect.left - boxRect.left
+              } else if (boxRect.right + dx > offsetRect.right) {
+                computedDx = boxRect.right - offsetRect.right
+              }
+            }
+          }
+          if (moveDirection === 'both' || moveDirection === 'y') {
+            computedDy = dy
+            if (offsetRect) {
+              if (boxRect.top + dy < offsetRect.top) {
+                computedDy = offsetRect.top - boxRect.top
+              } else if (boxRect.bottom + dy > offsetRect.bottom) {
+                computedDy = boxRect.bottom - offsetRect.bottom
+              }
+            }
+          }
+          console.log('computedDy: ', computedDy) //FIXME: 很尴尬，为什么这会跳动呢？
+          const computedDelta: Delta2dTranslate = {
+            dx: computedDx,
+            dy: computedDy
           }
           onMove?.(box.current!, computedDelta)
-          // TODO： 或者，保持对称，也包一层？
           changeTranslate(box.current!, { translate: computedDelta })
         },
-        end(_, speedVector) {
+        end({ speedVector }) {
           onMoveEnd?.(box.current!, speedVector)
           if (canInertialSlide) {
-            const movableArea = isHTMLElement(slideArea)
-              ? slideArea.getBoundingClientRect()
-              : slideArea
             inertialSlide(box.current!, {
               speedVector,
               acc,
               maxInitSpeed,
-              boundingBox: movableArea,
+              boundingBox: offsetRect,
               onSlideEnd: () => {
                 onSlideEnd?.(box.current!)
               }

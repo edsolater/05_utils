@@ -1,4 +1,4 @@
-import { Delta2dTranslate, SpeedVector } from 'typings/typeConstants'
+import { Delta2dTranslate, Location2d, SpeedVector } from 'typings/typeConstants'
 /**
  * 绑定元素的pointermove（pointerDown + pointerMove + pointerUp），但会自动清理，
  * @param el 目标元素
@@ -7,9 +7,9 @@ import { Delta2dTranslate, SpeedVector } from 'typings/typeConstants'
 export default function attachPointerMove(
   el: HTMLElement | null,
   eventHandlers: {
-    start?: (ev: PointerEvent) => void
-    move: (ev: PointerEvent, delta: Delta2dTranslate) => void
-    end?: (ev: PointerEvent, speedVector: SpeedVector) => void
+    start?: (i: { curr: Location2d }) => void
+    move: (i: { delta: Delta2dTranslate; prev: Location2d; curr: Location2d }) => void
+    end?: (i: { speedVector: SpeedVector }) => void
   }
 ) {
   const events: PointerEvent[] = []
@@ -18,16 +18,18 @@ export default function attachPointerMove(
       events.push(ev)
       el?.addEventListener('pointermove', pointerMove)
       el?.setPointerCapture(ev.pointerId)
-      eventHandlers.start?.(ev)
+      eventHandlers.start?.({ curr: { x: ev.clientX, y: ev.clientY } })
     }
   }
   function pointerMove(ev: PointerEvent) {
     if (events.length && ev.pointerId === events[events.length - 1].pointerId) {
       events.push(ev)
-      const deltaX = ev.clientX - events[events.length - 2].clientX
-      const deltaY = ev.clientY - events[events.length - 2].clientY
-      //TODO: 要把元素相对于当前视口的位置也放进去
-      eventHandlers.move(ev, { dx: deltaX, dy: deltaY })
+      const prevEvent = events[events.length - 2]
+      eventHandlers.move({
+        prev: { x: prevEvent.clientX, y: prevEvent.clientY },
+        curr: { x: ev.clientX, y: ev.clientY },
+        delta: { dx: ev.clientX - prevEvent.clientX, dy: ev.clientY - prevEvent.clientY }
+      })
     }
   }
   function pointerUp(ev: PointerEvent) {
@@ -38,7 +40,9 @@ export default function attachPointerMove(
       const deltaX = ev.clientX - fromPoint.clientX
       const deltaY = ev.clientY - fromPoint.clientY
       const deltaTime = ev.timeStamp - fromPoint.timeStamp
-      eventHandlers.end?.(ev, { x: deltaX / deltaTime || 0, y: deltaY / deltaTime || 0 })
+      eventHandlers.end?.({
+        speedVector: { x: deltaX / deltaTime || 0, y: deltaY / deltaTime || 0 }
+      })
       events.splice(0, events.length)
       el?.removeEventListener('pointermove', pointerMove)
     }

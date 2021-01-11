@@ -12,7 +12,7 @@ const testGridContainerCSS: Interpolation = {
   background: 'lightgray',
   height: '100vh'
 }
-const testGridItemCSS: Interpolation = { background: 'white', position: 'relative' }
+const testGridItemCSS: Interpolation = { background: 'white', position: 'relative',overflow:'hidden' }
 const testLabelCSS: Interpolation = {
   position: 'absolute',
   left: '50%',
@@ -35,7 +35,6 @@ const TestGrounds = () => (
       <CollapseWatcher />
     </Div>
     <Div css={testGridItemCSS}>
-      <CollapseWatcher />
     </Div>
   </Div>
 )

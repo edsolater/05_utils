@@ -60,7 +60,7 @@ const SortableList: FC<{
             // el.style.removeProperty('z-index')
           }}
         >
-          <Div className='temp-item' css={draggableItemCSS} draggable>
+          <Div className='temp-item' css={draggableItemCSS}>
             {text}
           </Div>
         </Transformable>
