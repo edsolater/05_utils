@@ -9,9 +9,9 @@ interface ItemInfo {
 const CollapseWatcher = () => {
   const timeoutId = useRef(0)
   const [itemOrderState, setItemOrderState] = useState([
-    { width: 200, height: 200, background: 'seagreen' },
-    { width: 200, height: 200, background: 'crimson' },
-    { width: 200, height: 200, background: 'dodgerblue' }
+    { width: 100, height: 100, background: 'seagreen' },
+    { width: 100, height: 100, background: 'crimson' },
+    { width: 100, height: 100, background: 'dodgerblue' }
   ])
   const itemOrderRef = useRef<(ItemInfo & { el?: HTMLDivElement })[]>(itemOrderState)
   function sortItem() {

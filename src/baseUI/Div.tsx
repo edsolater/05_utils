@@ -2,14 +2,14 @@
 import { jsx, css, Interpolation } from '@emotion/core'
 import { IFC } from 'typings/reactType'
 import { mergeRefs } from '../helper/reactHelper/mergeRefs'
-export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style'> {
+export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css'> {
   // 这会开启typescript的缓存机制
   // 对interface，typescript有缓存
   disabled?: boolean
   /**
    * 专门用于放css variable的
    */
-  css?: Interpolation
+  css?: Interpolation | { [cssProperty: string]: number | string }
   /**
    * 强制使用disabled的样式
    */

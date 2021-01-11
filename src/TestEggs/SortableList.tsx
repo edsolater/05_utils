@@ -26,6 +26,7 @@ const SortableList: FC<{
 
   return (
     <Div css={{ position: 'absolute', display: 'grid', gap: 8 }}>
+      
       {itemData.map((text, index) => (
         <Transformable
           key={index}
@@ -59,7 +60,7 @@ const SortableList: FC<{
             // el.style.removeProperty('z-index')
           }}
         >
-          <Div className='temp-item' css={draggableItemCSS}>
+          <Div className='temp-item' css={draggableItemCSS} draggable>
             {text}
           </Div>
         </Transformable>
