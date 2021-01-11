@@ -1,6 +1,6 @@
 import React from 'react'
-import ElementCollapse from './ElementCollapse'
+import CollapseWatcher from './CollapseWatcher'
 import SortableList from './SortableList'
 
-const TestGrounds = () => <ElementCollapse />
+const TestGrounds = () => <CollapseWatcher />
 export default TestGrounds

@@ -1,8 +1,6 @@
 /** @jsx jsx */
 import { jsx, css, Interpolation } from '@emotion/core'
-import { FC, forwardRef, ReactNode, Ref } from 'react'
 import { IFC } from 'typings/reactType'
-import { MayArray } from 'typings/tools'
 import { mergeRefs } from '../helper/reactHelper/mergeRefs'
 export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style'> {
   // 这会开启typescript的缓存机制
@@ -11,7 +9,7 @@ export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style'> {
   /**
    * 专门用于放css variable的
    */
-  css?: MayArray<Interpolation>
+  css?: Interpolation
   /**
    * 强制使用disabled的样式
    */
