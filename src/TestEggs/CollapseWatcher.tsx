@@ -22,7 +22,7 @@ const CollapseWatcher = () => {
       timeoutId.current = window.setTimeout(() => {
         // 清空timeoutID
         timeoutId.current = 0
-        console.log(3)
+        console.log('100ms 执行一次')
       }, 100)
     }
   }

@@ -13,6 +13,13 @@ export type BoundingRect = {
   right: number
   bottom: number
 }
+function asyncInvoke<T extends Array<any>>(fn: ((...any: T) => any) | undefined, ...args: T): void {
+  if (fn) {
+    window.requestIdleCallback(() => {
+      fn(...args)
+    })
+  }
+}
 const viewportWidth = window.innerWidth
 const viewportHeight = window.innerHeight
 /**
@@ -30,6 +37,7 @@ const Transformable: IFC<
     onMoveStart?: (el: RootElement) => void
     onMoveEnd?: (el: RootElement, speedVector: Vector) => void
     onMove?: (el: RootElement, delta: Delta2dTranslate) => void
+    onReachOffsetBoundary?: (el: RootElement, boundary: 'left' | 'top' | 'right' | 'bottom') => void
 
     /* ---------------------------------- 惯性滑动 ---------------------------------- */
 
@@ -56,6 +64,7 @@ const Transformable: IFC<
   moveDirection = 'both',
   onMoveStart,
   onMove,
+  onReachOffsetBoundary,
   onMoveEnd,
   onSlideEnd,
   children,
@@ -71,34 +80,38 @@ const Transformable: IFC<
       attachPointerMove(box.current, {
         start() {
           onMoveStart?.(box.current!)
+          // TODO:此时应该更新offsetRect的, 或者用resizeObserver监控更新
         },
         move({ prev, curr }) {
           const dx = curr.x - prev.x
           const dy = curr.y - prev.y
           let computedDx = 0
           let computedDy = 0
-          const boxRect = box.current!.getBoundingClientRect()
+          const moveboxRect = box.current!.getBoundingClientRect()
           if (moveDirection === 'both' || moveDirection === 'x') {
             computedDx = dx
             if (offsetRect) {
-              if (boxRect.left + dx < offsetRect.left) {
-                computedDx = offsetRect.left - boxRect.left
-              } else if (boxRect.right + dx > offsetRect.right) {
-                computedDx = boxRect.right - offsetRect.right
+              if (offsetRect.left > dx + moveboxRect.left) {
+                computedDx = offsetRect.left - moveboxRect.left
+                asyncInvoke(onReachOffsetBoundary, box.current!, 'left')
+              } else if (offsetRect.right < dx + moveboxRect.right) {
+                computedDx = offsetRect.right - moveboxRect.right
+                asyncInvoke(onReachOffsetBoundary, box.current!, 'right')
               }
             }
           }
           if (moveDirection === 'both' || moveDirection === 'y') {
             computedDy = dy
             if (offsetRect) {
-              if (boxRect.top + dy < offsetRect.top) {
-                computedDy = offsetRect.top - boxRect.top
-              } else if (boxRect.bottom + dy > offsetRect.bottom) {
-                computedDy = boxRect.bottom - offsetRect.bottom
+              if (offsetRect.top > moveboxRect.top + dy) {
+                computedDy = offsetRect.top - moveboxRect.top
+                asyncInvoke(onReachOffsetBoundary, box.current!, 'top')
+              } else if (offsetRect.bottom < moveboxRect.bottom + dy) {
+                computedDy = offsetRect.bottom - moveboxRect.bottom
+                asyncInvoke(onReachOffsetBoundary, box.current!, 'bottom')
               }
             }
           }
-          console.log('computedDy: ', computedDy) //FIXME: 很尴尬，为什么这会跳动呢？
           const computedDelta: Delta2dTranslate = {
             dx: computedDx,
             dy: computedDy
