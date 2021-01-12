@@ -2,17 +2,22 @@ import { Interpolation } from '@emotion/core'
 import Div from 'baseUI/Div'
 import React from 'react'
 import CollapseWatcher from './CollapseWatcher'
+import GroupScroll from './groupScroll'
 import SortableList from './SortableList'
 
 const testGridContainerCSS: Interpolation = {
   display: 'grid',
   gridTemplate: '1fr 1fr / 1fr 1fr',
   gap: 8,
-  overflow:'hidden',
+  overflow: 'hidden',
   background: 'lightgray',
   height: '100vh'
 }
-const testGridItemCSS: Interpolation = { background: 'white', position: 'relative',overflow:'hidden' }
+const testGridItemCSS: Interpolation = {
+  background: 'white',
+  position: 'relative',
+  overflow: 'hidden'
+}
 const testLabelCSS: Interpolation = {
   position: 'absolute',
   left: '50%',
@@ -32,10 +37,63 @@ const TestGrounds = () => (
       <CollapseWatcher />
     </Div>
     <Div css={testGridItemCSS}>
-      <CollapseWatcher />
+      <Div css={testLabelCSS}>整片翻页</Div>
+      <GroupScroll
+        items={[
+          'Dollie',
+          'Timothy',
+          'Zachary',
+          'Cory',
+          'Joe',
+          'Lola',
+          'Katharine',
+          'Mittie',
+          'Mae',
+          'Maria',
+          'Wesley',
+          'Harriet',
+          'Lora',
+          'Rodney',
+          'Marcus',
+          'Cody',
+          'Ruby',
+          'Nora',
+          'Marvin',
+          'Willie',
+          'Jane',
+          'Vera',
+          'Georgie',
+          'Brett',
+          'Georgie',
+          'Christopher',
+          'Estelle',
+          'Milton',
+          'Rena',
+          'Eleanor',
+          'Brent',
+          'Lettie',
+          'Lloyd',
+          'Leon',
+          'Jennie',
+          'Chris'
+        ]}
+        renderItem={(n, idx) => (
+          <Div
+            key={idx}
+            css={{
+              background: 'dodgerblue',
+              color: 'white',
+              display: 'grid',
+              placeItems: 'center',
+              fontSize: 22
+            }}
+          >
+            {n}
+          </Div>
+        )}
+      />
     </Div>
-    <Div css={testGridItemCSS}>
-    </Div>
+    <Div css={testGridItemCSS}></Div>
   </Div>
 )
 export default TestGrounds
