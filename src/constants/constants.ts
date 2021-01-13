@@ -1,6 +1,4 @@
-export const fourDirection = {
-  left: 'left',
-  top: 'top',
-  right: 'right',
-  bottom: 'bottom'
-} as const
+export const DIRECTION_LEFT = 'left'
+export const DIRECTION_TOP = 'top'
+export const DIRECTION_RIGHT = 'right'
+export const DIRECTION_BOTTOM = 'bottom'

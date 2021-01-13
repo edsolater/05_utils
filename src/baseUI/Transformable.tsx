@@ -6,6 +6,7 @@ import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/typeConstants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import { IFC } from 'typings/reactType'
+import { DIRECTION_BOTTOM, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_TOP } from 'constants/constants'
 type RootElement = HTMLDivElement
 export type BoundingRect = {
   left: number
@@ -93,10 +94,10 @@ const Transformable: IFC<
             if (offsetRect) {
               if (offsetRect.left > dx + moveboxRect.left) {
                 computedDx = offsetRect.left - moveboxRect.left
-                asyncInvoke(onReachOffsetBoundary, box.current!, 'left')
+                asyncInvoke(onReachOffsetBoundary, box.current!, DIRECTION_LEFT)
               } else if (offsetRect.right < dx + moveboxRect.right) {
                 computedDx = offsetRect.right - moveboxRect.right
-                asyncInvoke(onReachOffsetBoundary, box.current!, 'right')
+                asyncInvoke(onReachOffsetBoundary, box.current!, DIRECTION_RIGHT)
               }
             }
           }
@@ -105,10 +106,10 @@ const Transformable: IFC<
             if (offsetRect) {
               if (offsetRect.top > moveboxRect.top + dy) {
                 computedDy = offsetRect.top - moveboxRect.top
-                asyncInvoke(onReachOffsetBoundary, box.current!, 'top')
+                asyncInvoke(onReachOffsetBoundary, box.current!, DIRECTION_TOP)
               } else if (offsetRect.bottom < moveboxRect.bottom + dy) {
                 computedDy = offsetRect.bottom - moveboxRect.bottom
-                asyncInvoke(onReachOffsetBoundary, box.current!, 'bottom')
+                asyncInvoke(onReachOffsetBoundary, box.current!, DIRECTION_BOTTOM)
               }
             }
           }
