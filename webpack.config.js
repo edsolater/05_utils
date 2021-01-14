@@ -10,7 +10,7 @@ const config = {
     main: './src/index.tsx'
   },
   // Enable sourcemaps for debugging webpack's output.
-  devtool: 'eval-cheap-module-source-map',
+  devtool: 'inline-source-map',
   devServer: { contentBase: ['./dist', './public'], inline: true },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
