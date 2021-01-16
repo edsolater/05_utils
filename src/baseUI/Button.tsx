@@ -2,6 +2,7 @@ import Div, { allPropsName, DivProps } from './Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
 import divideByPropertyNames from 'utils/object/divideByPropertyNames'
 import { IFC } from 'typings/reactType'
+const placeholderColor = 'gray'
 /**
  * 普通Button，TODO
  */

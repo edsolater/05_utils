@@ -6,7 +6,12 @@ import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/constants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import { IFC } from 'typings/reactType'
-import { DIRECTION_BOTTOM, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_TOP } from 'constants/constants'
+import {
+  DIRECTION_BOTTOM,
+  DIRECTION_LEFT,
+  DIRECTION_RIGHT,
+  DIRECTION_TOP
+} from 'constants/constants'
 type RootElement = HTMLDivElement
 export type BoundingRect = {
   left: number
@@ -58,7 +63,7 @@ const Transformable: IFC<
 > = ({
   movable = true,
   scalable = true,
-  canInertialSlide = false, // temp
+  canInertialSlide = false,
   acc = 0.004,
   maxInitSpeed = 2,
   moveBoundary = 'offsetParent',
@@ -70,6 +75,8 @@ const Transformable: IFC<
   onSlideEnd,
   children,
   domRef,
+  className,
+  css,
   ...restProps
 }) => {
   const box = useRef<RootElement>(null)
@@ -147,16 +154,19 @@ const Transformable: IFC<
   return (
     <Div
       domRef={mergeRefs(domRef, box)}
-      className='movable-wrapper'
-      css={{
-        width: 'max-content',
-        display: 'grid',
-        position: 'relative',
-        touchAction: 'none',
-        transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${
-          scalable && 'scale(var(--scale, 1))'
-        }`
-      }}
+      className={`movable-wrapper ${className}`} //这么写好像有点冗余
+      css={[
+        {
+          width: 'max-content',
+          display: 'grid',
+          position: 'relative',
+          touchAction: 'none',
+          transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${
+            scalable && 'scale(var(--scale, 1))'
+          }`
+        },
+        css
+      ]}
       {...restProps}
     >
       {children}

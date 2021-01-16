@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core'
+import { jsx, css as cssMerge, Interpolation } from '@emotion/core'
 import { CSSProperties, FC, useEffect, useRef } from 'react'
 
 const Video: FC<{
@@ -7,7 +7,9 @@ const Video: FC<{
   fitMode?: CSSProperties['objectFit']
   srcObject?: MediaStream
   onSourceLoad?: (srcInfo: { width: number; height: number }) => void
-}> = ({ shape = 'rect', fitMode = 'cover', srcObject, onSourceLoad }) => {
+  css?: Interpolation
+  className?: string
+}> = ({ shape = 'rect', fitMode = 'cover', srcObject, onSourceLoad, css, className }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   useEffect(() => {
     videoRef.current!.onplaying = () => {
@@ -25,10 +27,14 @@ const Video: FC<{
   return (
     <video
       ref={videoRef}
-      css={css({
-        objectFit: fitMode,
-        borderRadius: shape === 'circle' ? 10000 : undefined
-      })}
+      className={className}
+      css={cssMerge([
+        {
+          objectFit: fitMode,
+          borderRadius: shape === 'circle' ? 10000 : undefined
+        },
+        css
+      ])}
     />
   )
 }

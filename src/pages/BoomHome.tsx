@@ -34,18 +34,16 @@ const BoomHome = () => {
         setisPlaying(true)
         setwindowStream(stream)
       },
-      openLocalCamera() {
-        return evokeCamera().then(stream => {
-          if (stream) setcameraStream(stream)
-          return stream
-        })
+      async openLocalCamera() {
+        const stream = await evokeCamera()
+        if (stream) setcameraStream(stream)
+        return stream
       },
-      openLocalWindow() {
-        return evokeWindow({ video: { width: 1920, frameRate: 60 } }).then(stream => {
-          setisPlaying(true)
-          if (stream) setwindowStream(stream)
-          return stream
-        })
+      async openLocalWindow() {
+        const stream = await evokeWindow({ video: { width: 1920, frameRate: 60 } })
+        setisPlaying(true)
+        if (stream) setwindowStream(stream)
+        return stream
       },
       onStatusChange: setrtcStatus,
       onIdentityChange: setuserIdentity
@@ -55,27 +53,42 @@ const BoomHome = () => {
     <Div css={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
       <Transformable
         className='camera-view'
-        css={`
-          position: fixed;
-          left: 80vw;
-          top: 20vh;
-          width: 200px;
-          height: 200px;
-          z-index: 9;
-        `}
+        css={{
+          position: 'fixed',
+          left: '80vw',
+          top: '20vh',
+          zIndex: 9
+        }}
       >
-        <Video fitMode='cover' srcObject={cameraStream} shape='circle' />
+        <Video
+          fitMode='cover'
+          css={{ width: 200, height: 200 }}
+          srcObject={cameraStream}
+          shape='circle'
+        />
       </Transformable>
-      {!isPlaying && <StyledButton className='join-btn' onClick={handleClickJoinBtn} />}
-      <Transformable
-        className='window-view'
-        // :initPx="{ width: state.initWindowWidth, height: state.initWindowHeight }"
-      >
+      {!isPlaying && (
+        <StyledButton
+          className='join-btn'
+          css={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 1
+          }}
+          onClick={handleClickJoinBtn}
+        >
+          boom
+        </StyledButton>
+      )}
+      <Transformable className='window-view'>
         <Video
           onSourceLoad={initWindowSize}
           fitMode='contain'
           srcObject={windowStream}
           shape='rect'
+          css={windowSize}
         />
         <Div className='user-identity'>当前身份：{userIdentity}</Div>
       </Transformable>

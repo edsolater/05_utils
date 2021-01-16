@@ -25,7 +25,7 @@ export type WebRTCStatus =
   | 'waiting' // 等待连接状态
   | 'pending' // 已感知到对方，正在交换证书、传输数据
   | 'done' // 只要发出了candidate，就是done
-export type IProps = {
+export type IParams = {
   //TODO: 配置暂时写死在文件中，后得靠传进来
   onReady?: (...args: any[]) => void
   onIdentityChange?: (identity: WebRTCIdentity) => void
@@ -116,9 +116,9 @@ const rtcConfiguration: RTCConfiguration = {
  * 从头建立一条webRTC(一切的开始)
  * @param props 建立webRTC所使用的配置项
  */
-export function createConnect(props: IProps) {
+export function createConnect(props: IParams) {
   //TODO: 我觉得这些配置可以放在一个大对象里，统一管理，代表一条链接的信息
-  let roomId = '80' // TODO：应该在UI上，由观众自己定
+  let roomId = '82' // TODO：应该在UI上，由观众自己定
   let userId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
   // TODO： 暂时使用userID代替sessionID
   // let userId: SessionID
@@ -146,7 +146,6 @@ export function createConnect(props: IProps) {
     switch (command) {
       case 'IDENTITY': {
         const payload: GetPayload<typeof command> = message.payload // 我总觉得有办法把这两者并列地放一块儿
-
         //记录后端敲定的userId与roomId
         userId = payload.userId
         roomId = payload.roomId

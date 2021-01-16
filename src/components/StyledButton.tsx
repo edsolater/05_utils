@@ -22,6 +22,10 @@ const cssButton: Interpolation = {
   fontSize: '1.3em',
   position: 'relative'
 }
+const cssPrimaryButton: Interpolation = {
+  color: 'var(--primary-button-text-color, white)',
+  background: 'var(--primary-bg-color, dodgerblue)'
+}
 const cssWave: Interpolation = {
   pointerEvents: 'none',
   position: 'absolute',
@@ -39,14 +43,16 @@ const cssWave: Interpolation = {
   )`,
   animation: `${KeyframeRadarWave} 1s infinite`
 }
-const StyledButton: IFC<
-  { text?: string; onClick?: (e: MouseEvent) => void },
-  HTMLButtonElement
-> = ({ className, text = '', onClick }) => {
+const StyledButton: IFC<{ onClick?: (e: MouseEvent) => void }, HTMLButtonElement> = ({
+  className,
+  css,
+  onClick,
+  children
+}) => {
   return (
     //@ts-expect-error interface extend 有问题
-    <button css={cssButton} className={className} onClick={onClick}>
-      {text}
+    <button css={[cssButton, cssPrimaryButton, css]} className={className} onClick={onClick}>
+      {children}
       <Div className='wave1' css={cssWave}></Div>
       <Div className='wave2' css={[cssWave, { animationDelay: '.3s' }]}></Div>
     </button>
