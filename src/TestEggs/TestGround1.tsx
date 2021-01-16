@@ -6,7 +6,7 @@ import Grid from '../baseUI/Grid'
 import Transformable from '../baseUI/Transformable'
 import Resizeable from '../baseUI/Resizeable'
 import RichEditor from '../baseUI/RichEditor'
-import VideoBlock from '../baseUI/VideoBlock'
+import VideoBlock from '../baseUI/Video'
 // import SyncScroll from './SyncScroll'
 // TODO：浮动（可自动排布）面板
 function TestGround1() {

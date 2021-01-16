@@ -1,7 +1,7 @@
 /**********
  * 还没经过实战的检验
  ***********/
-import { ID, URL } from 'typings/typeConstants'
+import { ID, URL } from 'typings/constants'
 
 export interface WebSocketController<Commands extends { [command: string]: any } = {}> {
   readonly id: ID
