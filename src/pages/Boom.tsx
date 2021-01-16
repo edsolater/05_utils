@@ -5,6 +5,9 @@ import StyledButton from 'components/StyledButton'
 import { createConnect, WebRTCIdentity, WebRTCStatus } from 'helper/createConnect/core'
 import { evokeCamera, evokeWindow } from 'helper/evokeMedia'
 import React, { useState } from 'react'
+import { cssCalc, cssVar } from 'style/cssFunctions'
+import { toVw } from 'style/cssUnits'
+import cssVariables from 'style/cssVaraiableList'
 
 const BoomHome = () => {
   const [rtcStatus, setrtcStatus] = useState<WebRTCStatus>('waiting')
@@ -53,6 +56,7 @@ const BoomHome = () => {
     <Div css={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
       <Transformable
         className='camera-view'
+        moveBoundary='none'
         css={{
           position: 'fixed',
           left: '80vw',
@@ -82,15 +86,25 @@ const BoomHome = () => {
           boom
         </StyledButton>
       )}
-      <Transformable className='window-view'>
+      <Transformable className='window-view' moveBoundary='none'>
         <Video
           onSourceLoad={initWindowSize}
           fitMode='contain'
           srcObject={windowStream}
           shape='rect'
-          css={windowSize}
+          css={{
+            '--aspect-ratio': cssCalc(16 / 9),
+            width: windowSize.width || toVw(100),
+            height: windowSize.height || cssCalc(`${toVw(100)} / ${cssVar('aspect-ratio', 1.78)}`),
+            background: cssVar(cssVariables['window-video-background-color'], 'black')
+          }}
         />
-        <Div className='user-identity'>当前身份：{userIdentity}</Div>
+        <Div
+          className='user-identity'
+          css={{ position: 'absolute', top: 20, left: 20, color: 'hsla(0, 0%, 100%, 0.3)' }}
+        >
+          当前身份：{userIdentity}
+        </Div>
       </Transformable>
     </Div>
   )

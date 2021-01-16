@@ -9,15 +9,15 @@ import SortableList from './SortableList'
 const TestGrounds = () => (
   <Div css={CSStestGridContainer}>
     <Div css={CSStestGridItem}>
-      <Div css={CSSgridItemTextLabel}>拖拽排序</Div>
+      <Div css={CSSgridItemTextLabel()}>拖拽排序</Div>
       <SortableList />
     </Div>
     <Div css={CSStestGridItem}>
-      <Div css={CSSgridItemTextLabel}>多item碰撞检测</Div>
+      <Div css={CSSgridItemTextLabel()}>多item碰撞检测</Div>
       <CollapseWatcher />
     </Div>
     <Div css={CSStestGridItem}>
-      <Div css={CSSgridItemTextLabel}>整片翻页</Div>
+      <Div css={CSSgridItemTextLabel()}>整片翻页</Div>
       <GroupScroll
         items={[
           'Dollie',

@@ -9,7 +9,7 @@ export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style' | '
   /**
    * 专门用于放css variable的
    */
-  css?: Interpolation | (() => Interpolation)
+  css?: Interpolation
   /**
    * 强制使用disabled的样式
    */

@@ -26,8 +26,6 @@ function asyncInvoke<T extends Array<any>>(fn: ((...any: T) => any) | undefined,
     })
   }
 }
-const viewportWidth = window.innerWidth
-const viewportHeight = window.innerHeight
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
@@ -96,10 +94,11 @@ const Transformable: IFC<
           const dy = curr.y - prev.y
           let computedDx = 0
           let computedDy = 0
-          const moveboxRect = box.current!.getBoundingClientRect()
+          let moveboxRect: DOMRect | undefined = undefined
           if (moveDirection === 'both' || moveDirection === 'x') {
             computedDx = dx
             if (offsetRect) {
+              if (!moveboxRect) moveboxRect = box.current!.getBoundingClientRect()
               if (offsetRect.left > dx + moveboxRect.left) {
                 computedDx = offsetRect.left - moveboxRect.left
                 asyncInvoke(onReachOffsetBoundary, box.current!, DIRECTION_LEFT)
@@ -112,6 +111,7 @@ const Transformable: IFC<
           if (moveDirection === 'both' || moveDirection === 'y') {
             computedDy = dy
             if (offsetRect) {
+              if (!moveboxRect) moveboxRect = box.current!.getBoundingClientRect()
               if (offsetRect.top > moveboxRect.top + dy) {
                 computedDy = offsetRect.top - moveboxRect.top
                 asyncInvoke(onReachOffsetBoundary, box.current!, DIRECTION_TOP)
@@ -157,8 +157,6 @@ const Transformable: IFC<
       className={`movable-wrapper ${className}`} //这么写好像有点冗余
       css={[
         {
-          width: 'max-content',
-          display: 'grid',
           position: 'relative',
           touchAction: 'none',
           transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${

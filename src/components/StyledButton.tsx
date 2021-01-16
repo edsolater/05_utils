@@ -38,7 +38,7 @@ const cssWave: Interpolation = {
   background: `radial-gradient(
     circle at center,
     transparent 0 50%,
-    var(--color-primary) 75%,
+    var(--primary-color) 75%,
     transparent 75%
   )`,
   animation: `${KeyframeRadarWave} 1s infinite`
