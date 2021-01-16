@@ -2,7 +2,7 @@
  * 还没经过实战的检验
  ***********/
 
-import { ID, URL } from 'typings/constantss'
+import { ID, URL } from 'typings/constants'
 import deepJSONParse  from 'utils/string/deepJSONParse'
 
 export interface WebSocketController<Commands extends { [command: string]: any } = {}> {

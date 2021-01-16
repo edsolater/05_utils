@@ -3,7 +3,7 @@ import Div from './Div'
 import { changeTranslate, inertialSlide, changeScaleDirectly } from 'helper/manageCss'
 import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
 import isHTMLElement from 'helper/domElement/isHTMLElement'
-import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/constantss'
+import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/constants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import { IFC } from 'typings/reactType'
 import { DIRECTION_BOTTOM, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_TOP } from 'constants/constants'
@@ -69,7 +69,8 @@ const Transformable: IFC<
   onMoveEnd,
   onSlideEnd,
   children,
-  domRef
+  domRef,
+  ...restProps
 }) => {
   const box = useRef<RootElement>(null)
   useEffect(() => {
@@ -156,6 +157,7 @@ const Transformable: IFC<
           scalable && 'scale(var(--scale, 1))'
         }`
       }}
+      {...restProps}
     >
       {children}
     </Div>
