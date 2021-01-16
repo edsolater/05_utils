@@ -57,6 +57,10 @@ export type Delta2d = Delta2dTranslate & Delta2dScale
  */
 export type ID = string
 /**
+ * 就是常见的ID
+ */
+export type SessionID = ID
+/**
  * 就是常见的url
  */
 export type URL = string

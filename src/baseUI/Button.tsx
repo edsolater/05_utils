@@ -1,22 +1,23 @@
 import Div, { allPropsName, DivProps } from './Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
 import divideByPropertyNames from 'utils/object/divideByPropertyNames'
-import kickByPropertyNames from 'utils/object/kickByPropertyNames'
+import { IFC } from 'typings/reactType'
 const placeholderColor = 'gray'
 /**
- * 用户头像
+ * 普通Button，TODO
  */
-const Avatar: FC<
+const Button: IFC<
   {
     isPlaceholder?: boolean
     src?: string
     size?: CSSProperties['width']
     color?: CSSProperties['backgroundColor']
-  } & ImgHTMLAttributes<HTMLImageElement> & DivProps
+  } & ImgHTMLAttributes<HTMLImageElement> &
+    DivProps
 > = ({ isPlaceholder = false, size = 40, color = placeholderColor, src, ...restProps }) => {
-  const [restPropsForDiv, restPropsForImg] = divideByPropertyNames(restProps, allPropsName)
   return (
     <Div
+      {...restProps}
       css={[
         {
           width: size,
@@ -26,22 +27,9 @@ const Avatar: FC<
         },
         restProps.css
       ]}
-      {...kickByPropertyNames(restPropsForDiv, ['css'])}
     >
-      {src && (
-        <img
-          css={{
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            objectFit: 'contain'
-          }}
-          src={src}
-          {...restPropsForImg}
-        />
-      )}
     </Div>
   )
 }
 
-export default Avatar
+export default Button

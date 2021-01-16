@@ -1,6 +1,6 @@
-import { SpeedVector } from '../../typings/typeConstants'
-import calcHypotenuse from 'functions/math/calcHypotenuse'
-import staySameSign from '../../functions/math/staySameSign'
+import { SpeedVector } from '../../typings/constantss'
+import calcHypotenuse from 'utils/math/calcHypotenuse'
+import staySameSign from '../../utils/math/staySameSign'
 import changeTransformTranslate from './changeTransform'
 import { BoundingRect } from 'baseUI/Transformable'
 

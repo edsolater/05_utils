@@ -1,9 +1,9 @@
-import areSame from 'functions/judgers/areSame'
-import { Delta2dScale } from 'typings/typeConstants'
-import calcHypotenuse from '../../functions/math/calcHypotenuse'
-import extract from '../../functions/object/extractProperty'
-import calcDistance from '../../functions/math/getDistance'
-import toArray from '../../functions/array/toArray'
+import areSame from 'utils/judgers/areSame'
+import { Delta2dScale } from 'typings/constantss'
+import calcHypotenuse from '../../utils/math/calcHypotenuse'
+import extract from '../../utils/object/extractProperty'
+import calcDistance from '../../utils/math/getDistance'
+import toArray from '../../utils/array/toArray'
 
 /**
  * 获取专属于某个元素的触摸

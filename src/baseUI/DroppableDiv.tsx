@@ -1,7 +1,7 @@
 /*******************************
  * 实验 draggable tab 的
  ******************************/
-import notNullish from 'functions/judgers/notNullish'
+import notNullish from 'utils/judgers/notNullish'
 import genuuid from 'helper/uuid'
 import React, { useEffect, useRef } from 'react'
 import Div from './Div'

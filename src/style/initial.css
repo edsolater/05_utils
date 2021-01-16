@@ -1,0 +1,22 @@
+html {
+  scrollbar-width: none;
+}
+body {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  background-color: rgb(22, 22, 22);
+}
+video {
+  display: block;
+}
+* {
+  box-sizing: border-box;
+}
+:focus {
+  outline: none;
+}
+::-moz-focus-inner {
+  border: 0;
+}

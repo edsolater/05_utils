@@ -1,35 +1,37 @@
-import { Delta2dTranslate, Location2d, SpeedVector } from 'typings/constantss'
+import { Delta2dTranslate, SpeedVector } from '../typings/mathematical'
+
 /**
+ * DOM操作的封装
  * 绑定元素的pointermove（pointerDown + pointerMove + pointerUp），但会自动清理，
  * @param el 目标元素
- * @param eventHandlers
+ * @param eventHandler
  */
-export default function attachPointerMove(
-  el: HTMLElement | null,
-  eventHandlers: {
-    start?: (i: { curr: Location2d }) => void
-    move: (i: { delta: Delta2dTranslate; prev: Location2d; curr: Location2d }) => void
-    end?: (i: { speedVector: SpeedVector }) => void
+export function attachPointerMove(
+  el: HTMLElement,
+  eventHandler: {
+    move: (ev: PointerEvent, delta: Delta2dTranslate) => void
+    end?: (ev: PointerEvent, speedVector: SpeedVector) => void
   }
 ) {
   const events: PointerEvent[] = []
+  /**
+   *
+   * @param {Event} ev
+   */
   function pointerDown(ev: PointerEvent) {
     if (!events.length) {
       events.push(ev)
       el?.addEventListener('pointermove', pointerMove)
       el?.setPointerCapture(ev.pointerId)
-      eventHandlers.start?.({ curr: { x: ev.clientX, y: ev.clientY } })
+      ev.stopPropagation()
     }
   }
   function pointerMove(ev: PointerEvent) {
     if (events.length && ev.pointerId === events[events.length - 1].pointerId) {
       events.push(ev)
-      const prevEvent = events[events.length - 2]
-      eventHandlers.move({
-        prev: { x: prevEvent.clientX, y: prevEvent.clientY },
-        curr: { x: ev.clientX, y: ev.clientY },
-        delta: { dx: ev.clientX - prevEvent.clientX, dy: ev.clientY - prevEvent.clientY }
-      })
+      const deltaX = ev.clientX - events[events.length - 2].clientX
+      const deltaY = ev.clientY - events[events.length - 2].clientY
+      eventHandler.move(ev, { dx: deltaX, dy: deltaY })
     }
   }
   function pointerUp(ev: PointerEvent) {
@@ -40,8 +42,9 @@ export default function attachPointerMove(
       const deltaX = ev.clientX - fromPoint.clientX
       const deltaY = ev.clientY - fromPoint.clientY
       const deltaTime = ev.timeStamp - fromPoint.timeStamp
-      eventHandlers.end?.({
-        speedVector: { x: deltaX / deltaTime || 0, y: deltaY / deltaTime || 0 }
+      eventHandler.end?.(ev, {
+        x: deltaX / deltaTime || 0,
+        y: deltaY / deltaTime || 0,
       })
       events.splice(0, events.length)
       el?.removeEventListener('pointermove', pointerMove)
@@ -49,4 +52,19 @@ export default function attachPointerMove(
   }
   el?.addEventListener('pointerdown', pointerDown)
   el?.addEventListener('pointerup', pointerUp)
+}
+
+/**
+ * DOM操作的封装
+ * 绑定元素的wheel事件
+ * @param el 目标元素
+ * @param eventHandler 事件回调
+ */
+export function attachWheel(
+  el: HTMLElement,
+  eventHandler: (ev: WheelEvent, deltaY: number) => void
+) {
+  el.addEventListener('wheel', (ev) => {
+    eventHandler(ev, ev.deltaY)
+  })
 }

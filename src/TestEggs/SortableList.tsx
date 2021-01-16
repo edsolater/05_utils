@@ -4,7 +4,7 @@
 import Transformable from 'baseUI/Transformable'
 import { isElement } from 'lodash'
 import React, { FC, Ref, useEffect, useRef } from 'react'
-import { Direction } from 'typings/typeConstants'
+import { Direction } from 'typings/constantss'
 import Div from '../baseUI/Div'
 
 const draggableItemCSS = {
