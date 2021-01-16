@@ -1,7 +1,7 @@
 import Div, { allPropsName, DivProps } from './Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
-import divideByPropertyNames from 'functions/object/divideByPropertyNames'
-import kickByPropertyNames from 'functions/object/kickByPropertyNames'
+import divideByPropertyNames from 'utils/object/divideByPropertyNames'
+import kickByPropertyNames from 'utils/object/kickByPropertyNames'
 const placeholderColor = 'gray'
 /**
  * 用户头像

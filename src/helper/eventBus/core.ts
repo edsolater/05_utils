@@ -1,4 +1,4 @@
-import addDefault from 'functions/magic/addDefault'
+import addDefault from 'utils/magic/addDefault'
 import { EventBus } from './config'
 
 type EventNames = keyof EventBus
