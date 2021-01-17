@@ -6,7 +6,7 @@ import { createConnect, WebRTCIdentity, WebRTCStatus } from 'helper/createConnec
 import { evokeCamera, evokeWindow } from 'helper/evokeMedia'
 import React, { useState } from 'react'
 import { cssCalc, cssVar } from 'style/cssFunctions'
-import { toVw } from 'style/cssUnits'
+import { fullVw, toVw } from 'style/cssUnits'
 import cssVariables from 'style/cssVaraiableList'
 
 const BoomHome = () => {
@@ -79,7 +79,8 @@ const BoomHome = () => {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            zIndex: 1
+            zIndex: 1,
+            fontSize:28
           }}
           onClick={handleClickJoinBtn}
         >
@@ -94,8 +95,8 @@ const BoomHome = () => {
           shape='rect'
           css={{
             '--aspect-ratio': cssCalc(16 / 9),
-            width: windowSize.width || toVw(100),
-            height: windowSize.height || cssCalc(`${toVw(100)} / ${cssVar('aspect-ratio', 1.78)}`),
+            width: windowSize.width || fullVw,
+            height: windowSize.height || cssCalc(`${fullVw} / ${cssVar('aspect-ratio', 16 / 9)}`),
             background: cssVar(cssVariables['window-video-background-color'], 'black')
           }}
         />

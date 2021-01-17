@@ -118,7 +118,7 @@ const rtcConfiguration: RTCConfiguration = {
  */
 export function createConnect(props: IParams) {
   //TODO: 我觉得这些配置可以放在一个大对象里，统一管理，代表一条链接的信息
-  let roomId = '82' // TODO：应该在UI上，由观众自己定
+  let roomId = '84' // TODO：应该在UI上，由观众自己定
   let userId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
   // TODO： 暂时使用userID代替sessionID
   // let userId: SessionID
