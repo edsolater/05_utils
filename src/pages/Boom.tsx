@@ -24,7 +24,7 @@ const BoomHome = () => {
     if (videoRatio > viewportRatio) {
       setwindowSize({ width: viewportWidth, height: viewportWidth / videoRatio })
     } else {
-      setwindowSize({ width: viewportHeight, height: viewportHeight * videoRatio })
+      setwindowSize({ width: viewportHeight * videoRatio, height: viewportHeight })
     }
   }
   function handleClickJoinBtn() {
@@ -80,7 +80,7 @@ const BoomHome = () => {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             zIndex: 1,
-            fontSize:28
+            fontSize: 28
           }}
           onClick={handleClickJoinBtn}
         >
