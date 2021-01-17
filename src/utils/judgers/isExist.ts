@@ -1,4 +1,4 @@
-import notUndefined from './notUndefined'
+import notNullish from './notNullish'
 
-const isExist = notUndefined
+const isExist = notNullish
 export default isExist

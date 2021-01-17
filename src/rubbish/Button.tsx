@@ -1,4 +1,4 @@
-import Div, { allPropsName, DivProps } from './Div'
+import Div, { allPropsName, DivProps } from '../baseUI/Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
 import divideByPropertyNames from 'utils/object/divideByPropertyNames'
 import { IFC } from 'typings/reactType'

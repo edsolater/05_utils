@@ -56,6 +56,7 @@ const BoomHome = () => {
     <Div css={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
       <Transformable
         className='camera-view'
+        innerShape="circle"
         moveBoundary='none'
         css={{
           position: 'fixed',
@@ -69,7 +70,7 @@ const BoomHome = () => {
       >
         <Video
           fitMode='cover'
-          css={{ width: '100%', height: '100%' }}
+          css={{ width: '100%', height: '100%', background:'crimson' }}
           srcObject={cameraStream}
           shape='circle'
         />
@@ -106,7 +107,9 @@ const BoomHome = () => {
           shape='rect'
           css={{
             '--aspect-ratio': cssCalc(16 / 9),
-            background: cssVar(cssVariables['window-video-background-color'], 'black')
+            background: cssVar(cssVariables['window-video-background-color'], 'black'),
+            width: '100%',
+            height: '100%'
           }}
         />
         <Div

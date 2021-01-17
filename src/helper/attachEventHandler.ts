@@ -1,4 +1,5 @@
 import { Delta2dTranslate, SpeedVector } from "typings/constants"
+import attachSizeIfNeeded from "./manageStyle/attachSizeIfNeeded"
 
 /**
  * DOM操作的封装
@@ -64,6 +65,7 @@ export function attachWheel(
   el: HTMLElement,
   eventHandler: (ev: WheelEvent, deltaY: number) => void
 ) {
+  attachSizeIfNeeded(el)
   el.addEventListener('wheel', (ev) => {
     eventHandler(ev, ev.deltaY)
   })

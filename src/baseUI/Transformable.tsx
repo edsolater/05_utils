@@ -1,13 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import Div from './Div'
-import {
-  changeTransform,
-  inertialSlide,
-  changeScaleDirectly,
-  attachSizeIfNeeded,
-  changeSizeByDeltaWidth
-} from 'helper/manageStyle'
-import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
+
 import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/constants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
@@ -19,6 +12,15 @@ import {
   DIRECTION_TOP
 } from 'constants/constants'
 import { attachWheel } from 'helper/attachEventHandler'
+import changeScaleDirectly from 'helper/manageStyle/changeScaleDirectly'
+import changeSizeByDeltaWidth from 'helper/manageStyle/changeSizeByDeltaWidth'
+import changeTransform from 'helper/manageStyle/changeTransform'
+import inertialSlide from 'helper/manageStyle/inertialSlide'
+import attachGestureScale from 'helper/manageEvent/attachGestureScale'
+import attachPointer from 'helper/manageEvent/attachPointer'
+import { fullVw, halfPe, toPe } from 'style/cssUnits'
+import { cssScale, cssTransform, cssTranslate } from 'style/cssFunctions'
+import cssColor from 'style/cssColor'
 type RootElement = HTMLDivElement
 export type BoundingRect = {
   left: number
@@ -70,7 +72,7 @@ const Transformable: IFC<
     /**放大缩小的触发器，有滚轮、鼠标拖拽点 */
     resizeBy?: ResizeBy | ResizeBy[]
     /**内部元素的形状，会影响鼠标拖拽点的位置 */
-    elementShape?: 'rect' | 'circle'
+    innerShape?: 'rect' | 'circle'
     /**滚轮改变大小的速度 */
     resizeWheelSpeed?: number
     /**改变大小的下限 */
@@ -87,7 +89,7 @@ const Transformable: IFC<
   resizeWheelSpeed = 0.5,
   resizeMaxRatio = 50,
   resizeMinRatio = 0.8,
-  elementShape = 'rect',
+  innerShape = 'rect',
   canInertialSlide = false,
   acc = 0.004,
   maxInitSpeed = 2,
@@ -105,13 +107,14 @@ const Transformable: IFC<
   ...restProps
 }) => {
   const box = useRef<RootElement>(null)
+  const rightBottomTrigger = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (movable) {
       const offsetRect =
         moveBoundary === 'offsetParent'
           ? box.current?.offsetParent?.getBoundingClientRect()
           : undefined
-      attachPointerMove(box.current, {
+      attachPointer(box.current, {
         start() {
           onMoveStart?.(box.current!)
           // TODO:此时应该更新offsetRect的, 或者用resizeObserver监控更新
@@ -177,12 +180,20 @@ const Transformable: IFC<
       })
     }
     if (resizable) {
-      attachSizeIfNeeded(box.current!)
       attachWheel(box.current!, (ev, deltaY) => {
+        //TODO: 这种API要统一
         changeSizeByDeltaWidth(box.current!, deltaY * resizeWheelSpeed, {
           minRatio: resizeMinRatio,
           maxRatio: resizeMaxRatio
         })
+      })
+      attachPointer(rightBottomTrigger.current!, {
+        move: ({ delta }) => {
+          changeSizeByDeltaWidth(box.current!, delta.dx, {
+            minRatio: resizeMinRatio,
+            maxRatio: resizeMaxRatio
+          })
+        }
       })
     }
   }, [])
@@ -197,13 +208,45 @@ const Transformable: IFC<
           touchAction: 'none',
           transform: `${
             movable ? 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))' : ''
-          } ${scalable ? 'scale(var(--scale, 1))' : ''}`
+          }${scalable ? ' scale(var(--scale, 1))' : ''}`,
+          borderRadius: innerShape === 'circle' ? fullVw : '',
+          '&:hover': {
+            boxShadow: '0px 0px 0px 2px rgba(30, 143, 255, 0.219)'
+          }
         },
         css
       ]}
       {...restProps}
     >
       {children}
+      {resizable && (
+        <Div
+          className='resize-trigger'
+          css={{
+            position: 'absolute',
+            right: innerShape === 'circle' ? toPe(14.625) : 0,
+            bottom: innerShape === 'circle' ? toPe(14.625) : 0,
+            width: 8,
+            height: 8,
+            background: cssColor.dodgerblue,
+            borderRadius: halfPe,
+            cursor: 'nw-resize',
+            opacity: 0,
+            transform: cssTransform({ translate: [halfPe, halfPe] }),
+            transition: '200ms',
+            '.movable-wrapper:hover &': {
+              opacity: 1
+            },
+            '&:hover': {
+              transform: cssTransform({
+                translate: [halfPe, halfPe],
+                scale: [2]
+              })
+            }
+          }}
+          domRef={rightBottomTrigger}
+        />
+      )}
     </Div>
   )
 }
