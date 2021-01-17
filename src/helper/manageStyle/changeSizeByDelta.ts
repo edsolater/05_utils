@@ -1,5 +1,4 @@
-import toPx from 'helper/manageCss/toPx'
-import pxToNumber from 'helper/manageCss/pxToNumber'
+import { fromPx, toPx } from './withPx'
 
 export default function changeSizeByDelta(
   el: HTMLElement | null,
@@ -7,6 +6,6 @@ export default function changeSizeByDelta(
   cssPropName: 'width' | 'height'
 ) {
   if (!el) return
-  const newPx = toPx(pxToNumber(el.style[cssPropName]) + deltaPx)
+  const newPx = toPx(fromPx(el.style[cssPropName]) + deltaPx)
   el.style[cssPropName] = newPx
 }

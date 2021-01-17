@@ -1,5 +1,5 @@
 import areSame from 'utils/judgers/areSame'
-import { Delta2dScale } from 'typings/constantss'
+import { Delta2dScale } from 'typings/constants'
 import calcHypotenuse from '../../utils/math/calcHypotenuse'
 import extract from '../../utils/object/extractProperty'
 import calcDistance from '../../utils/math/getDistance'

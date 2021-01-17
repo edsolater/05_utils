@@ -61,12 +61,15 @@ const BoomHome = () => {
           position: 'fixed',
           left: '80vw',
           top: '20vh',
-          zIndex: 9
+          zIndex: 9,
+          width: 200,
+          height: 200
         }}
+        resizable
       >
         <Video
           fitMode='cover'
-          css={{ width: 200, height: 200 }}
+          css={{ width: '100%', height: '100%' }}
           srcObject={cameraStream}
           shape='circle'
         />
@@ -87,7 +90,15 @@ const BoomHome = () => {
           boom
         </StyledButton>
       )}
-      <Transformable className='window-view' moveBoundary='none'>
+      <Transformable
+        className='window-view'
+        moveBoundary='none'
+        resizable
+        css={{
+          width: windowSize.width || fullVw,
+          height: windowSize.height || cssCalc(`${fullVw} / ${cssVar('aspect-ratio', 16 / 9)}`)
+        }}
+      >
         <Video
           onSourceLoad={initWindowSize}
           fitMode='contain'
@@ -95,8 +106,6 @@ const BoomHome = () => {
           shape='rect'
           css={{
             '--aspect-ratio': cssCalc(16 / 9),
-            width: windowSize.width || fullVw,
-            height: windowSize.height || cssCalc(`${fullVw} / ${cssVar('aspect-ratio', 16 / 9)}`),
             background: cssVar(cssVariables['window-video-background-color'], 'black')
           }}
         />

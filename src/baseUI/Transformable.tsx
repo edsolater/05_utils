@@ -1,6 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import Div from './Div'
-import { changeTranslate, inertialSlide, changeScaleDirectly } from 'helper/manageCss'
+import {
+  changeTransform,
+  inertialSlide,
+  changeScaleDirectly,
+  attachSizeIfNeeded,
+  changeSizeByDeltaWidth
+} from 'helper/manageStyle'
 import { attachGestureScale, attachPointerMove } from 'helper/manageEvent'
 import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/constants'
@@ -12,6 +18,7 @@ import {
   DIRECTION_RIGHT,
   DIRECTION_TOP
 } from 'constants/constants'
+import { attachWheel } from 'helper/attachEventHandler'
 type RootElement = HTMLDivElement
 export type BoundingRect = {
   left: number
@@ -26,6 +33,7 @@ function asyncInvoke<T extends Array<any>>(fn: ((...any: T) => any) | undefined,
     })
   }
 }
+type ResizeBy = 'wheel' | 'right-bottom dot'
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
@@ -54,13 +62,32 @@ const Transformable: IFC<
     onSlideEnd?: (el: RootElement) => void
 
     /* ---------------------------------- 大小变化 ---------------------------------- */
-
+    /**会放大缩小，但只是影响试图 */
     scalable?: boolean
+
+    /**会放大缩小，会影响元素的大小 */
+    resizable?: boolean
+    /**放大缩小的触发器，有滚轮、鼠标拖拽点 */
+    resizeBy?: ResizeBy | ResizeBy[]
+    /**内部元素的形状，会影响鼠标拖拽点的位置 */
+    elementShape?: 'rect' | 'circle'
+    /**滚轮改变大小的速度 */
+    resizeWheelSpeed?: number
+    /**改变大小的下限 */
+    resizeMinRatio?: number
+    /**改变大小的上限 */
+    resizeMaxRatio?: number
   },
   RootElement
 > = ({
   movable = true,
-  scalable = true,
+  scalable = false,
+  resizable = false,
+  resizeBy = 'wheel',
+  resizeWheelSpeed = 0.5,
+  resizeMaxRatio = 50,
+  resizeMinRatio = 0.8,
+  elementShape = 'rect',
   canInertialSlide = false,
   acc = 0.004,
   maxInitSpeed = 2,
@@ -126,7 +153,7 @@ const Transformable: IFC<
             dy: computedDy
           }
           onMove?.(box.current!, computedDelta)
-          changeTranslate(box.current!, { translate: computedDelta })
+          changeTransform(box.current!, { translate: computedDelta })
         },
         end({ speedVector }) {
           onMoveEnd?.(box.current!, speedVector)
@@ -149,6 +176,15 @@ const Transformable: IFC<
         moving: (_, delta) => changeScaleDirectly(box.current!, delta)
       })
     }
+    if (resizable) {
+      attachSizeIfNeeded(box.current!)
+      attachWheel(box.current!, (ev, deltaY) => {
+        changeSizeByDeltaWidth(box.current!, deltaY * resizeWheelSpeed, {
+          minRatio: resizeMinRatio,
+          maxRatio: resizeMaxRatio
+        })
+      })
+    }
   }, [])
 
   return (
@@ -159,9 +195,9 @@ const Transformable: IFC<
         {
           position: 'relative',
           touchAction: 'none',
-          transform: `${movable && 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))'} ${
-            scalable && 'scale(var(--scale, 1))'
-          }`
+          transform: `${
+            movable ? 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))' : ''
+          } ${scalable ? 'scale(var(--scale, 1))' : ''}`
         },
         css
       ]}

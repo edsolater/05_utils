@@ -1,4 +1,4 @@
-import { Delta2dTranslate } from '../../typings/constantss'
+import { Delta2dTranslate } from 'typings/constants'
 import setCSSVariable from './setCSSVariable'
 
 /**

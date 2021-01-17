@@ -1,4 +1,4 @@
-import { SpeedVector } from '../../typings/constantss'
+import { SpeedVector } from 'typings/constants'
 import calcHypotenuse from 'utils/math/calcHypotenuse'
 import staySameSign from '../../utils/math/staySameSign'
 import changeTransformTranslate from './changeTransform'

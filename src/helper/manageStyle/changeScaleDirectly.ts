@@ -1,4 +1,4 @@
-import { Delta2dScale } from '../../typings/constantss'
+import { Delta2dScale } from 'typings/constants'
 import setCSSVariable from './setCSSVariable'
 
 /**

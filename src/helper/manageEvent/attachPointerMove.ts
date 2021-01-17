@@ -1,4 +1,4 @@
-import { Delta2dTranslate, Location2d, SpeedVector } from 'typings/constantss'
+import { Delta2dTranslate, Location2d, SpeedVector } from 'typings/constants'
 /**
  * 绑定元素的pointermove（pointerDown + pointerMove + pointerUp），但会自动清理，
  * @param el 目标元素

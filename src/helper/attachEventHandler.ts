@@ -1,4 +1,4 @@
-import { Delta2dTranslate, SpeedVector } from '../typings/mathematical'
+import { Delta2dTranslate, SpeedVector } from "typings/constants"
 
 /**
  * DOM操作的封装
