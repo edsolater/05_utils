@@ -22,7 +22,7 @@ const BoomHome = () => {
     const viewportHeight = window.innerHeight
     const viewportRatio = viewportWidth / viewportHeight
     if (videoRatio > viewportRatio) {
-      setwindowSize({ width, height: viewportWidth / videoRatio })
+      setwindowSize({ width: viewportWidth, height: viewportWidth / videoRatio })
     } else {
       setwindowSize({ width: viewportHeight, height: viewportHeight * videoRatio })
     }
