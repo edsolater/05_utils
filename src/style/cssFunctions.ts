@@ -6,7 +6,7 @@ const toCSS = (v: CSSValue) => (typeof v === 'number' ? toPx(v) : v)
 /* ---------------------------------- css变量 --------------------------------- */
 
 export const cssVar = (cssVariableName: string, fallback?: CSSValue) =>
-  `var(--${cssVariableName}${fallback ? ', ' + fallback : ''})`
+  `var(${cssVariableName}${fallback ? ', ' + fallback : ''})`
 
 /* --------------------------------- 传统css函数 -------------------------------- */
 

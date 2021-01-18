@@ -205,7 +205,7 @@ const Transformable: IFC<
       css={[
         {
           position: 'relative',
-          width:'max-content',
+          width: 'max-content',
           touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
           transform: `${
             movable ? 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))' : ''
@@ -235,7 +235,7 @@ const Transformable: IFC<
             opacity: 0,
             transform: cssTransform({ translate: [halfPe, halfPe] }),
             transition: '200ms',
-            '.movable-wrapper:hover &': {
+            '*:hover > &': {
               opacity: 1
             },
             '&:hover': {

@@ -6,8 +6,9 @@ import { createConnect, WebRTCIdentity, WebRTCStatus } from 'helper/createConnec
 import { evokeCamera, evokeWindow } from 'helper/evokeMedia'
 import React, { useState } from 'react'
 import { cssCalc, cssVar } from 'style/cssFunctions'
-import { fullVw, toVw } from 'style/cssUnits'
+import { fullPe, fullVw } from 'style/cssUnits'
 import cssVariables from 'style/cssVaraiableList'
+
 
 const BoomHome = () => {
   const [rtcStatus, setrtcStatus] = useState<WebRTCStatus>('waiting')
@@ -56,7 +57,7 @@ const BoomHome = () => {
     <Div css={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
       <Transformable
         className='camera-view'
-        innerShape="circle"
+        innerShape='circle'
         moveBoundary='none'
         css={{
           position: 'fixed',
@@ -70,7 +71,7 @@ const BoomHome = () => {
       >
         <Video
           fitMode='cover'
-          css={{ width: '100%', height: '100%', background:'crimson' }}
+          css={{ width: fullPe, height: fullPe }}
           srcObject={cameraStream}
           shape='circle'
         />
@@ -95,9 +96,9 @@ const BoomHome = () => {
         className='window-view'
         moveBoundary='none'
         resizable
-        css={{
+        style={{
           width: windowSize.width || fullVw,
-          height: windowSize.height || cssCalc(`${fullVw} / ${cssVar('aspect-ratio', 16 / 9)}`)
+          height: windowSize.height || cssCalc(`${fullVw} / ${cssVar('aspect-ratio', 30 / 9)}`)
         }}
       >
         <Video
@@ -106,10 +107,9 @@ const BoomHome = () => {
           srcObject={windowStream}
           shape='rect'
           css={{
-            '--aspect-ratio': cssCalc(16 / 9),
-            background: cssVar(cssVariables['window-video-background-color'], 'black'),
-            width: '100%',
-            height: '100%'
+            background: cssVar(cssVariables['--window-video-background-color'], 'black'),
+            width: fullPe,
+            height: fullPe
           }}
         />
         <Div
