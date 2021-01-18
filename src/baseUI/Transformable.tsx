@@ -181,7 +181,7 @@ const Transformable: IFC<
     }
     if (resizable) {
       attachWheel(box.current!, (ev, deltaY) => {
-        //TODO: 这种API要统一
+        //TODO: 这种attach系列的API要风格统一
         changeSizeByDeltaWidth(box.current!, deltaY * resizeWheelSpeed, {
           minRatio: resizeMinRatio,
           maxRatio: resizeMaxRatio
@@ -205,10 +205,11 @@ const Transformable: IFC<
       css={[
         {
           position: 'relative',
-          touchAction: 'none',
+          width:'max-content',
+          touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
           transform: `${
             movable ? 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))' : ''
-          }${scalable ? ' scale(var(--scale, 1))' : ''}`,
+          }${scalable ? ' scale(var(--scale, 1))' : ''}`, // TODO: 下面那个用var加px单位的也要放到函数中去
           borderRadius: innerShape === 'circle' ? fullVw : '',
           '&:hover': {
             boxShadow: '0px 0px 0px 2px rgba(30, 143, 255, 0.219)'
