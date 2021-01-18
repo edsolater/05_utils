@@ -1,23 +1,22 @@
 import Div from 'baseUI/Div'
-import { CSStestGridContainer, CSStestGridItem } from 'css/mixin/grid'
-import { CSSgridItemTextLabel } from 'css/mixin/text'
 import React from 'react'
+import { applyMixins } from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'
 import GroupScroll from './groupScroll'
 import SortableList from './SortableList'
 
 const TestGrounds = () => (
-  <Div css={CSStestGridContainer}>
-    <Div css={CSStestGridItem}>
-      <Div css={CSSgridItemTextLabel()}>拖拽排序</Div>
+  <Div css={applyMixins({testGridContainer:[]})}>
+    <Div css={applyMixins({testGridItem:[]})}>
+      <Div css={applyMixins({gridItemTextLabel:[]})}>拖拽排序</Div>
       <SortableList />
     </Div>
-    <Div css={CSStestGridItem}>
-      <Div css={CSSgridItemTextLabel()}>多item碰撞检测</Div>
+    <Div css={applyMixins({testGridItem:[]})}>
+      <Div css={applyMixins({gridItemTextLabel:[]})}>多item碰撞检测</Div>
       <CollapseWatcher />
     </Div>
-    <Div css={CSStestGridItem}>
-      <Div css={CSSgridItemTextLabel()}>整片翻页</Div>
+    <Div css={applyMixins({testGridItem:[]})}>
+      <Div css={applyMixins({gridItemTextLabel:[]})}>整片翻页</Div>
       <GroupScroll
         items={[
           'Dollie',
@@ -73,7 +72,7 @@ const TestGrounds = () => (
         )}
       />
     </Div>
-    <Div css={CSStestGridItem}></Div>
+    <Div css={applyMixins({testGridItem:[]})}></Div>
   </Div>
 )
 export default TestGrounds
