@@ -6,7 +6,7 @@ import { createConnect, WebRTCIdentity, WebRTCStatus } from 'helper/createConnec
 import { evokeCamera, evokeWindow } from 'helper/evokeMedia'
 import React, { useState } from 'react'
 import { cssCalc, cssVar } from 'style/cssFunctions'
-import { fullPe, fullVw } from 'style/cssUnits'
+import { fullPer, fullVw } from 'style/cssUnits'
 import cssVariables from 'style/cssVaraiableList'
 
 
@@ -71,7 +71,7 @@ const BoomHome = () => {
       >
         <Video
           fitMode='cover'
-          css={{ width: fullPe, height: fullPe }}
+          css={{ width: fullPer, height: fullPer }}
           srcObject={cameraStream}
           shape='circle'
         />
@@ -108,8 +108,8 @@ const BoomHome = () => {
           shape='rect'
           css={{
             background: cssVar(cssVariables['--window-video-background-color'], 'black'),
-            width: fullPe,
-            height: fullPe
+            width: fullPer,
+            height: fullPer
           }}
         />
         <Div

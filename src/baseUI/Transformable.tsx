@@ -18,7 +18,7 @@ import changeTransform from 'helper/manageStyle/changeTransform'
 import inertialSlide from 'helper/manageStyle/inertialSlide'
 import attachGestureScale from 'helper/manageEvent/attachGestureScale'
 import attachPointer from 'helper/manageEvent/attachPointer'
-import { fullVw, halfPe, toPe } from 'style/cssUnits'
+import { fullVw, halfPer, toPer } from 'style/cssUnits'
 import { cssScale, cssTransform, cssTranslate } from 'style/cssFunctions'
 import cssColor from 'style/cssColor'
 type RootElement = HTMLDivElement
@@ -225,22 +225,22 @@ const Transformable: IFC<
           className='resize-trigger'
           css={{
             position: 'absolute',
-            right: innerShape === 'circle' ? toPe(14.625) : 0,
-            bottom: innerShape === 'circle' ? toPe(14.625) : 0,
+            right: innerShape === 'circle' ? toPer(14.625) : 0,
+            bottom: innerShape === 'circle' ? toPer(14.625) : 0,
             width: 8,
             height: 8,
             background: cssColor.dodgerblue,
-            borderRadius: halfPe,
+            borderRadius: halfPer,
             cursor: 'nw-resize',
             opacity: 0,
-            transform: cssTransform({ translate: [halfPe, halfPe] }),
+            transform: cssTransform({ translate: [halfPer, halfPer] }),
             transition: '200ms',
             '*:hover > &': {
               opacity: 1
             },
             '&:hover': {
               transform: cssTransform({
-                translate: [halfPe, halfPe],
+                translate: [halfPer, halfPer],
                 scale: [2]
               })
             }
