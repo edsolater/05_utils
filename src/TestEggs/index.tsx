@@ -1,22 +1,22 @@
 import Div from 'baseUI/Div'
 import React from 'react'
-import { applyMixins } from 'style/cssMixins'
+import { mix } from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'
 import GroupScroll from './groupScroll'
 import SortableList from './SortableList'
 
 const TestGrounds = () => (
-  <Div css={applyMixins({testGridContainer:[]})}>
-    <Div css={applyMixins({testGridItem:[]})}>
-      <Div css={applyMixins({gridItemTextLabel:[]})}>拖拽排序</Div>
+  <Div css={mix('testGridContainer')}>
+    <Div css={mix('testGridItem')}>
+      <Div css={mix('gridItemTextLabel')}>拖拽排序</Div>
       <SortableList />
     </Div>
-    <Div css={applyMixins({testGridItem:[]})}>
-      <Div css={applyMixins({gridItemTextLabel:[]})}>多item碰撞检测</Div>
+    <Div css={mix('testGridItem')}>
+      <Div css={mix('gridItemTextLabel')}>多item碰撞检测</Div>
       <CollapseWatcher />
     </Div>
-    <Div css={applyMixins({testGridItem:[]})}>
-      <Div css={applyMixins({gridItemTextLabel:[]})}>整片翻页</Div>
+    <Div css={mix('testGridItem')}>
+      <Div css={mix('gridItemTextLabel')}>整片翻页</Div>
       <GroupScroll
         items={[
           'Dollie',
@@ -72,7 +72,7 @@ const TestGrounds = () => (
         )}
       />
     </Div>
-    <Div css={applyMixins({testGridItem:[]})}></Div>
+    <Div css={mix('testGridItem')}></Div>
   </Div>
 )
 export default TestGrounds
