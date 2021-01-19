@@ -1,5 +1,7 @@
 import clamp from 'utils/math/clamp'
+import attachSizeIfNeeded from './attachSizeIfNeeded'
 
+//TODO: 这里操作的是真实的width/height，而不是--s这种scale()的缩放比例，是不是会与--x、--y不一致？
 /**
  * DOM操作：等比例改变宽高
  * @param  el
@@ -10,7 +12,7 @@ export default function changeSizeByDeltaWidth(
   deltaWidth: number,
   { minRatio = 0, maxRatio = 10000 }: { minRatio?: number; maxRatio?: number } = {}
 ) {
-  // TODO: 如果元素的style上没有width、height怎么办呢？
+  attachSizeIfNeeded(el)
   const originalWidth = parseFloat(el.style['width'])
   const newWidth = clamp(
     minRatio * originalWidth,
