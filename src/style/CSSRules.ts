@@ -17,5 +17,5 @@ export const padding = (
   val: CSSLongValue //这个类型原版里没有
 ): CSSRule<'padding'> => ({
   padding: toCSSString(val)
-})
+}) // 好处：有利于使代码更简洁
 // TODO疑问: 真的有必要吗？我觉得可以在<Div>上做文章
