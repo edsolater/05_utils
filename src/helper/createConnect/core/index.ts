@@ -12,9 +12,9 @@ import { createDataChannel, acceptDataChannel, handleDataChannelMessage } from '
 import {
   cacheIdTarget,
   cacheStream,
-  getIdTargets as generateIdTargets,
+  generateIdTargets,
   initStreamCache,
-  loadStream,
+  loadStream
 } from './transmitStream'
 
 export type WebRTCIdentity =
@@ -36,7 +36,7 @@ export type IParams = {
   openLocalWindow: (...args: any[]) => Promise<MediaStream | undefined>
 }
 
-// TODO: 如何检测offer失效？
+// TODO: 如何检测offer失效？延后
 type Commands = {
   /* --------------------------------- 告知后端的命令 -------------------------------- */
 
@@ -95,60 +95,55 @@ type Commands = {
 }
 type AllCommands = keyof Commands
 type GetPayload<T extends keyof Commands> = Commands[T]
+
+// 对Offer的设置
 const offerOptions: RTCOfferOptions = {
   iceRestart: true,
-  offerToReceiveAudio: true, //true,由于没有麦克风，所有如果请求音频，会报错，不过不会影响视频流播放
-  offerToReceiveVideo: true,
+  offerToReceiveAudio: true, //true,由于没有麦克风，如果请求音频，会报错，不过不会影响视频流播放
+  offerToReceiveVideo: true
 }
+//缓存本地流
 const localCache = {
   cameraStream: undefined as MediaStream | undefined,
-  windowStream: undefined as MediaStream | undefined,
+  windowStream: undefined as MediaStream | undefined
 }
+
 const peerConnections = new Map<SessionID, RTCPeerConnection>()
 
 const rtcConfiguration: RTCConfiguration = {
-  iceServers: [
-    { urls: 'stun:stun.services.mozilla.com' },
-    { urls: 'stun:stun.l.google.com:19302' },
-  ],
+  iceServers: [{ urls: 'stun:stun.services.mozilla.com' }, { urls: 'stun:stun.l.google.com:19302' }]
 }
+
+const roomId = '87' // TODO：应该在UI上，由观众自己定
+const userId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
+
+// 一加载就立马创建一条websocket
+const websocketServiceUrl = `ws://47.101.188.77:8899/websocket/${roomId}/${userId}` //TODO：‘userId’放在url里语义上是不是不对
+const { addMessageListener } = createWebsocket<Commands>({
+  url: websocketServiceUrl,
+  onOpen({ send }) {
+    send('JOIN', { roomId, userId })
+  }
+})
+
 /**
  * 从头建立一条webRTC(一切的开始)
  * @param props 建立webRTC所使用的配置项
  */
-export function createConnect(props: IParams) {
+export function createConnection(props: IParams) {
   //TODO: 我觉得这些配置可以放在一个大对象里，统一管理，代表一条链接的信息
-  let roomId = '86' // TODO：应该在UI上，由观众自己定
-  let userId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
-  // TODO： 暂时使用userID代替sessionID
-  // let userId: SessionID
-  let identity: WebRTCIdentity
-  let peerConnection: RTCPeerConnection
-  let localDataChannel: RTCDataChannel
-
-  //由后端告之
-  const websocketServiceUrl = `ws://47.101.188.77:8899/websocket/${roomId}/${userId}` //TODO：‘userId’放在url里语义上是不是不对
-  const { send: sendMessage } = createWebsocket<Commands>(websocketServiceUrl, {
-    only: true,
-    onOpen(_ws, { send }) {
-      send('JOIN', { roomId, userId })
-      props.onStatusChange?.('waiting')
-    },
-    onMessage: handleWebsocketMessage,
-  })
+  const peerConnection = new RTCPeerConnection(rtcConfiguration)
 
   /**
    * 处理后端传来的信息(也是调度中心)
    * @param event 带有后端传来的信息的事件
    */
-  function handleWebsocketMessage(message: { command: any; payload: any }) {
+  const handleWebsocketMessage = (message: { command: any; payload: any }) => {
     const command: AllCommands = message.command // 我总觉得有办法把这两者并列地放一块儿
     switch (command) {
       case 'IDENTITY': {
         const payload: GetPayload<typeof command> = message.payload // 我总觉得有办法把这两者并列地放一块儿
         //记录后端敲定的userId与roomId
-        userId = payload.userId
-        roomId = payload.roomId
 
         // 从后端返回中推断出自己的身份
         identity = payload.talkerId === userId ? 'TALKER' : 'AUDIENCE'
@@ -172,7 +167,7 @@ export function createConnect(props: IParams) {
             onFinished: () => {
               props.onStatusChange?.('done')
               props.onReady?.()
-            },
+            }
           })
 
           // 向主播索要新的offer
@@ -194,30 +189,30 @@ export function createConnect(props: IParams) {
         acceptIceCandidate({ peerConnection })
 
         // 创建dataChannel
-        localDataChannel = createDataChannel({
+        createDataChannel({
           peerConnection,
           onOpen: (_dataChannel, { send }) => {
             send(
               'TALK_IDS',
               generateIdTargets({
                 cameraStream: localCache.cameraStream,
-                windowStream: localCache.windowStream,
+                windowStream: localCache.windowStream
               })
             )
-          },
+          }
         })
 
         // 向peerconnection装载stream
         loadStream({ peerConnection, streams: [localCache.cameraStream, localCache.windowStream] })
 
         // 创建新offer并发送
-        createRTCOffer({ peerConnection, offerOptions }).then((offer) => {
+        createRTCOffer({ peerConnection, offerOptions }).then(offer => {
           console.info('(WebRTC)RPOCESS: send OFFER', offer)
           sendMessage('OFFER', {
             content: offer,
             fromUserId: payload.toUserId,
             toUserId: payload.fromUserId,
-            roomId,
+            roomId
           })
         })
         break
@@ -240,14 +235,14 @@ export function createConnect(props: IParams) {
           peerConnection,
           onMessage(ev) {
             handleDataChannelMessage(ev, { TALK_IDS: cacheIdTarget })
-          },
+          }
         })
 
         // 将新创建的peerConnection缓存起来
         peerConnections.set(payload.fromUserId, peerConnection)
 
         // 定义如何接收主播端传来的track
-        peerConnection.addEventListener('track', (event) => {
+        peerConnection.addEventListener('track', event => {
           const stream = event.streams[0]
           const id = stream.id
           cacheStream({ id, stream })
@@ -258,14 +253,14 @@ export function createConnect(props: IParams) {
           props.onIdentityChange?.('AUDIENCE')
           createRTCAnswer({
             peerConnection,
-            offerOptions,
-          }).then((answer) => {
+            offerOptions
+          }).then(answer => {
             console.info('(WebRTC)RPOCESS: 观众开始发送ANSWER', answer)
             sendMessage('ANSWER', {
               content: answer,
               fromUserId: payload.toUserId,
               toUserId: payload.fromUserId,
-              roomId,
+              roomId
             })
           })
         })
@@ -282,13 +277,13 @@ export function createConnect(props: IParams) {
         receiveRTCAnswer({ peerConnection, content: payload.content }).then(() => {
           sendCandidates({
             peerConnection,
-            action: (candidate) =>
+            action: candidate =>
               sendMessage('CANDIDATE', {
                 content: candidate,
                 fromUserId: payload.toUserId,
                 toUserId: payload.fromUserId,
-                roomId,
-              }),
+                roomId
+              })
           })
           // 触发回调：连接状态改变（所有处理已完毕）
           props.onStatusChange?.('done')
@@ -304,13 +299,13 @@ export function createConnect(props: IParams) {
           sendCandidates({
             //实际上只有观众会触发
             peerConnection,
-            action: (candidate) =>
+            action: candidate =>
               sendMessage('CANDIDATE', {
                 content: candidate,
                 fromUserId: payload.toUserId,
                 toUserId: payload.fromUserId,
-                roomId,
-              }),
+                roomId
+              })
           })
           // 触发回调：连接状态改变（所有处理已完毕（此时视频流已装载，但还没有流过实际内容））
           props.onStatusChange?.('done')
@@ -322,6 +317,6 @@ export function createConnect(props: IParams) {
       }
     }
   }
-
-  return peerConnections
+  addMessageListener(({ message }) => handleWebsocketMessage(message))
+  return peerConnection
 }

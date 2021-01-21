@@ -73,7 +73,7 @@ export function loadStream(props: {
  * 通过主播端的stream，计算出idTargets信息包
  * @param props
  */
-export function getIdTargets(props: {
+export function generateIdTargets(props: {
   cameraStream: MediaStream | undefined
   windowStream: MediaStream | undefined
 }) {
