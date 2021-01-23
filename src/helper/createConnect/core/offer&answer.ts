@@ -23,7 +23,7 @@ export async function receiveRTCOffer(info: {
   content: RTCSessionDescriptionInit
 }): Promise<void> {
   const offer = info.content
-  await info.peerConnection.setRemoteDescription(info.content)
+  await info.peerConnection.setRemoteDescription(offer)
   console.log('(WebRTC)RPOCESS: setRemoteDescription 完毕')
 }
 

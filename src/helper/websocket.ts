@@ -1,25 +1,38 @@
 import { ID, URL } from 'typings/constants'
 import deepJSONParse from 'utils/string/deepJSONParse'
 let websocketId = 1
+// websocket message 的定义类型的格式
+type WebsocketMessageTypeFormat = { [command: string]: any }
 
-// 向后端发送消息
-type WebsocketSend<Commands extends { [command: string]: any }> = <C extends keyof Commands>(
+// websocket message 的格式
+export type WebsocketMessageRuntimeFormat<Commands, T = keyof Commands> = T extends keyof Commands
+  ? { command: T; payload: Commands[T] }
+  : never
+
+// 向后端发送消息的 send方法
+export type WebsocketSend<Commands extends WebsocketMessageTypeFormat> = <C extends keyof Commands>(
   command: C,
   payload: Commands[C]
 ) => void
 
-// 从后端接收消息
-type AddWebsockMessageListener<Commands extends { [command: string]: any }> = (
+// 监听来自后端的消息的 addWebsockMessageListener 方法
+export type AddWebsockMessageListener<Commands extends WebsocketMessageTypeFormat> = (
   messageListener: (info: {
-    message: { command: keyof Commands; payload: Commands[keyof Commands] }
+    message: WebsocketMessageRuntimeFormat<Commands>
     send: WebsocketSend<Commands>
   }) => void
 ) => void
 
-interface WebsocketListeners<Commands extends { [command: string]: any }> {
+// 初始化时websocket所能接收的listeners
+interface WebsocketListeners<Commands extends WebsocketMessageTypeFormat> {
   onOpen?: (info: { send: WebsocketSend<Commands> }) => void
   onClose?: (info: { send: WebsocketSend<Commands> }) => void
   onError?: (info: { send: WebsocketSend<Commands> }) => void
+  onMessage?: (info: {
+    message: WebsocketMessageRuntimeFormat<Commands>
+    send: WebsocketSend<Commands>
+    addMessageListener: AddWebsockMessageListener<Commands>
+  }) => void
 }
 
 /**
@@ -27,12 +40,13 @@ interface WebsocketListeners<Commands extends { [command: string]: any }> {
  * 创建一条websocket
  * @param url 建立此调websocket的地址
  */
-export function createWebsocket<Commands extends { [command: string]: any } = {}>({
+export function createWebsocket<Commands extends WebsocketMessageTypeFormat = {}>({
   url,
   label = '',
   onOpen,
   onClose,
-  onError
+  onError,
+  onMessage
 }: {
   /* 强行规定websocket的后端地址 */
   url: URL
@@ -57,7 +71,6 @@ export function createWebsocket<Commands extends { [command: string]: any } = {}
   const addMessageListener: AddWebsockMessageListener<Commands> = messageListener => {
     websocket.addEventListener('message', ev => {
       const message = deepJSONParse(ev.data)
-      console.info(`PROCESS: websocket收到信息`, message)
       messageListener({ message, send: websocketSend })
     })
   }
@@ -72,6 +85,11 @@ export function createWebsocket<Commands extends { [command: string]: any } = {}
   websocket.addEventListener('error', ev => {
     console.warn(`PROCESS: websocket出错`, ev)
     onError?.({ send: websocketSend })
+  })
+  websocket.addEventListener('message', ev => {
+    const message = deepJSONParse(ev.data)
+    console.info(`PROCESS: websocket收到信息`, message)
+    onMessage?.({ message, send: websocketSend, addMessageListener })
   })
   return { websocket, addMessageListener, websocketSend }
 }

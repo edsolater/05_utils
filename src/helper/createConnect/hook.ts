@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { WebRTCIdentity, WebRTCStatus, createConnect } from './core'
+import { WebRTCIdentity, WebRTCStatus, createConnection } from './core'
 
 export default function useWebRTC(configs: {
   onIdentityChange?: (curIdentity: WebRTCIdentity, prevIdentity: WebRTCIdentity) => void
@@ -13,7 +13,7 @@ export default function useWebRTC(configs: {
     status: 'waiting' as WebRTCStatus,
     userIdentity: 'unknown' as WebRTCIdentity,
   })
-  createConnect({
+  createConnection({
     ...configs,
     onIdentityChange(identity) {
       state.userIdentity = identity

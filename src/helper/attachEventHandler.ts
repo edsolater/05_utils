@@ -1,5 +1,5 @@
-import { Delta2dTranslate, SpeedVector } from "typings/constants"
-import attachSizeIfNeeded from "./manageStyle/attachSizeIfNeeded"
+import { Delta2dTranslate, SpeedVector } from 'typings/constants'
+import attachSizeIfNeeded from './manageStyle/attachSizeIfNeeded'
 
 /**
  * DOM操作的封装
@@ -45,7 +45,7 @@ export function attachPointerMove(
       const deltaTime = ev.timeStamp - fromPoint.timeStamp
       eventHandler.end?.(ev, {
         x: deltaX / deltaTime || 0,
-        y: deltaY / deltaTime || 0,
+        y: deltaY / deltaTime || 0
       })
       events.splice(0, events.length)
       el?.removeEventListener('pointermove', pointerMove)
@@ -66,7 +66,11 @@ export function attachWheel(
   eventHandler: (ev: WheelEvent, deltaY: number) => void
 ) {
   attachSizeIfNeeded(el)
-  el.addEventListener('wheel', (ev) => {
-    eventHandler(ev, ev.deltaY)
-  })
+  el.addEventListener(
+    'wheel',
+    ev => {
+      eventHandler(ev, ev.deltaY)
+    },
+    { passive: true }
+  )
 }

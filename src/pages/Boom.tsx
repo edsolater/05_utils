@@ -2,13 +2,17 @@ import Div from 'baseUI/Div'
 import Transformable from 'baseUI/Transformable'
 import Video from 'baseUI/Video'
 import StyledButton from 'components/StyledButton'
-import { createConnect, WebRTCIdentity, WebRTCStatus } from 'helper/createConnect/core'
+import {
+  createConnection,
+  initAppWebsocket,
+  WebRTCIdentity,
+  WebRTCStatus
+} from 'helper/createConnect/core'
 import { evokeCamera, evokeWindow } from 'helper/evokeMedia'
 import React, { useState } from 'react'
 import { cssCalc, cssVar } from 'style/cssFunctions'
 import { fullPer, fullVw } from 'style/cssUnits'
 import cssVariables from 'style/cssVaraiableList'
-
 
 const BoomHome = () => {
   const [rtcStatus, setrtcStatus] = useState<WebRTCStatus>('waiting')
@@ -30,7 +34,7 @@ const BoomHome = () => {
   }
   function handleClickJoinBtn() {
     setisPlaying(true)
-    createConnect({
+    initAppWebsocket({
       onPrintRemoteCamera(stream) {
         setcameraStream(stream)
       },
