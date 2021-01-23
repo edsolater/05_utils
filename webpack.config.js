@@ -11,7 +11,12 @@ const config = {
   },
   // Enable sourcemaps for debugging webpack's output.
   devtool: 'inline-source-map',
-  devServer: { contentBase: ['./dist', './public'], inline: true },
+  devServer: {
+    contentBase: ['./dist', './public'],
+    inline: true,
+    host: '10.127.54.155', // TODO: 每次需要动态更改很烦 // powershell 里输ipconfig，局域网IPV4
+    port: '8080'
+  },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: ['.ts', '.tsx', '.js'],
@@ -26,15 +31,15 @@ const config = {
         use: {
           loader: 'ts-loader',
           options: {
-            transpileOnly: true // 大大提升 ts 文件的编译速度//但损失了 type-checking 编译报错（vscode飘红不变）（更好了！）//可以安装 fork-ts-checker-webpack-plugin 弥补
+            transpileOnly: true // 大大提升 ts 文件的编译速度 // 但损失了 type-checking 编译报错（vscode飘红不变）（更好了！）//可以安装 fork-ts-checker-webpack-plugin 弥补
           }
         }
       },
-      {
+      { // 未来这个可以去除
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
       },
-      {
+      { // 未来这个可以去除
         test: /\.scss$/,
         use: [
           { loader: 'style-loader' },
@@ -42,10 +47,10 @@ const config = {
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
-            },
-          },
-        ],
+              sourceMap: true
+            }
+          }
+        ]
       },
       {
         test: /\.(png|svg|jpg|gif|webp|mp3|woff2)$/,
