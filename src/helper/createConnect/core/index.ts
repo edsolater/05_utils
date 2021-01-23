@@ -125,7 +125,7 @@ export function initAppWebsocket(props: IParams) {
         case 'IDENTITY': {
           const peers = message.payload.members.filter(memberId => `${memberId}` !== `${userId}`)
           for (const peerId of peers) {
-            //FIXME
+            send('CREATE_CONNECT', { fromUserId: userId, toUserId: peerId, roomId: roomId })
           }
           //TODO: 要把用户信息，展示在屏幕界面上
           // //记录后端敲定的userId与roomId
