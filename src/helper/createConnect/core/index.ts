@@ -22,6 +22,7 @@ import {
   loadStream
 } from './transmitStream'
 import assert from 'utils/magic/assert'
+import { ObjectValues } from 'typings/tools'
 
 export type WebRTCIdentity =
   | 'unknown' // 未知
@@ -165,7 +166,6 @@ export async function initAppWebsocket(events: RTCEvents) {
   })
 }
 
-type ObjectValue<O> = O[keyof O]
 /**
  * 新建一条peerConnection（此时必须已经建立websocket）
  * @param events 建立webRTC所使用的配置项
@@ -178,7 +178,7 @@ export function createConnection(
     peerId: ID
     websocketSend: WebsocketSend<Commands>
     addMessageListener: AddWebsockMessageListener<Commands>
-    side: ObjectValue<typeof PeerConnectionSide>
+    side: ObjectValues<typeof PeerConnectionSide>
   }
 ) {
   // 我觉得可以拆成单独的函数：init，createOffer等等
