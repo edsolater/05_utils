@@ -24,23 +24,11 @@ import {
 import assert from 'utils/magic/assert'
 import { ObjectValues } from 'typings/tools'
 
-export type WebRTCIdentity =
-  | 'unknown' // 未知
-  | 'TALKER' // 主播
-  | 'AUDIENCE' // 观众
-export type WebRTCStatus =
-  | 'waiting' // 等待连接状态
-  | 'pending' // 已感知到对方，正在交换证书、传输数据
-  | 'done' // 只要发出了candidate，就是done
 export type RTCEvents = {
   //TODO: 配置暂时写死在文件中，后得靠传进来
   onReady?: (...args: any[]) => void
-  onIdentityChange?: (identity: WebRTCIdentity) => void
-  onStatusChange?: (currentStatus: WebRTCStatus) => void
-  onPrintRemoteCamera: (stream: MediaStream) => void
-  onPrintRemoteWindow: (stream: MediaStream) => void
-  openLocalCamera: (...args: any[]) => Promise<MediaStream | undefined>
-  openLocalWindow: (...args: any[]) => Promise<MediaStream | undefined>
+  onPrintCamera: (userId: ID, stream: MediaStream) => void
+  openLocalCamera: (userId: ID) => Promise<MediaStream | undefined>
 }
 const PeerConnectionSide = {
   a: 'A' /* 主动方 */,
@@ -104,8 +92,7 @@ const offerOptions: RTCOfferOptions = {
   offerToReceiveVideo: true
 }
 const localStreamCache = {
-  cameraStream: undefined as MediaStream | undefined,
-  windowStream: undefined as MediaStream | undefined
+  cameraStream: undefined as MediaStream | undefined
 }
 const peerConnections = new Map<SessionID, RTCPeerConnection>()
 const rtcConfiguration: RTCConfiguration = {
@@ -118,30 +105,32 @@ const rtcConfiguration: RTCConfiguration = {
  */
 export async function initAppWebsocket(events: RTCEvents) {
   const roomId = '91' // TODO：应该在UI上，由观众自己定
-  const userId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
+  const currentUserId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
   createWebsocket<Commands>({
-    url: `ws://47.101.188.77:8899/websocket/${roomId}/${userId}`,
+    url: `ws://47.101.188.77:8899/websocket/${roomId}/${currentUserId}`,
     async onBeforeOpen() {
-      const stream = await events.openLocalCamera()
+      const stream = await events.openLocalCamera(currentUserId)
       localStreamCache.cameraStream = stream
     },
     onOpen({ send }) {
-      send('JOIN', { roomId, userId })
-      initStreamCache({
-        onGetCameraStream(stream) {
-          events.onPrintRemoteCamera(stream)
-        },
-        onGetWindowStream() {}
-      })
+      send('JOIN', { roomId, userId: currentUserId })
     },
     onMessage({ message, send, addMessageListener }) {
       switch (message.command) {
         case 'IDENTITY': {
-          const peers = message.payload.members.filter(memberId => `${memberId}` !== `${userId}`)
+          const peers = message.payload.members.filter(
+            (memberId) => `${memberId}` !== `${currentUserId}`
+          )
           for (const peerId of peers) {
-            send('CREATE_CONNECT', { fromUserId: userId, toUserId: peerId, roomId: roomId })
+            initStreamCache({
+              userId: peerId,
+              onGetCameraStream(peerId, stream) {
+                events.onPrintCamera(peerId, stream)
+              }
+            })
+            send('CREATE_CONNECT', { fromUserId: currentUserId, toUserId: peerId, roomId: roomId })
             createConnection(events, {
-              selfId: userId,
+              selfId: currentUserId,
               peerId: peerId,
               roomId,
               websocketSend: send,
@@ -152,8 +141,14 @@ export async function initAppWebsocket(events: RTCEvents) {
           break
         }
         case 'CREATE_CONNECT': {
+          initStreamCache({
+            userId: message.payload.fromUserId,
+            onGetCameraStream(peerId, stream) {
+              events.onPrintCamera(peerId, stream)
+            }
+          })
           createConnection(events, {
-            selfId: userId,
+            selfId: currentUserId,
             peerId: message.payload.fromUserId,
             roomId,
             websocketSend: send,
@@ -187,26 +182,38 @@ export function createConnection(
   // 向peerconnection装载stream
   loadStream({
     peerConnection,
-    streams: [localStreamCache.cameraStream, localStreamCache.windowStream]
+    streams: [localStreamCache.cameraStream]
   })
   // 定义传来iceCandidate的行为
   acceptIceCandidate({ peerConnection })
+  // 定义如何接收通过dataChannel传来的track分别是什么的信息
+  acceptDataChannel({
+    peerConnection,
+    onMessage(ev) {
+      handleDataChannelMessage(ev, { TALK_IDS: cacheIdTarget }, info.peerId)
+    }
+  })
+  // 定义如果接收到track，就缓存进本地
+  peerConnection.addEventListener('track', (event) => {
+    const stream = event.streams[0]
+    const id = stream.id
+    cacheStream(info.peerId, { id, stream })
+  })
   if (info.side === PeerConnectionSide.a) {
-    // 创建dataChannel
+    // 创建dataChannel // FIXME: 问题在于DataChannel里只有caller端的视频信息
     createDataChannel({
       peerConnection,
       onOpen: (_dataChannel, { send }) => {
         send(
           'TALK_IDS',
           generateIdTargets({
-            cameraStream: localStreamCache.cameraStream,
-            windowStream: localStreamCache.windowStream
+            cameraStream: localStreamCache.cameraStream
           })
         )
       }
     })
     // 创建新offer并发送
-    createRTCOffer({ peerConnection, offerOptions }).then(offer => {
+    createRTCOffer({ peerConnection, offerOptions }).then((offer) => {
       console.info('【WebRTC】: send OFFER', offer)
       info.websocketSend('OFFER', {
         content: offer,
@@ -223,34 +230,18 @@ export function createConnection(
    */
   const handleWebsocketMessage = (
     message: WebsocketMessageRuntimeFormat<Commands>,
-    websocketSend: WebsocketSend<Commands>
+    websocketSend: WebsocketSend<Commands>,
+    peerId: ID
   ) => {
     switch (message.command) {
       case 'OFFER': {
         console.info('【WebRTC】: receive backend OFFER')
-        // 定义如何接收主播端iceCandidate
-        acceptIceCandidate({ peerConnection })
-        // 定义如何接收主播端通过dataChannel传来的track分别是什么的信息
-        acceptDataChannel({
-          peerConnection,
-          onMessage(ev) {
-            handleDataChannelMessage(ev, { TALK_IDS: cacheIdTarget })
-          }
-        })
-        // 定义如何接收主播端传来的track
-        peerConnection.addEventListener('track', event => {
-          console.log('event: ', event)
-          const stream = event.streams[0]
-          const id = stream.id
-          cacheStream({ id, stream })
-        })
         // 观众收到offer，后发送answer
         receiveRTCOffer({ peerConnection, content: message.payload.content }).then(() => {
-          events.onIdentityChange?.('AUDIENCE')
           createRTCAnswer({
             peerConnection,
             offerOptions
-          }).then(answer => {
+          }).then((answer) => {
             console.info('【WebRTC】: 观众开始发送ANSWER', answer)
             websocketSend('ANSWER', {
               content: answer,
@@ -264,15 +255,11 @@ export function createConnection(
       }
       case 'ANSWER': {
         console.info('【WebRTC】: receive backend ANSWER')
-
-        // 触发回调：连接状态改变（感知到对方，正在交换证书）
-        events.onStatusChange?.('pending')
-
         // 主播收到answer，后发送candidate
         receiveRTCAnswer({ peerConnection, content: message.payload.content }).then(() => {
           sendCandidates({
             peerConnection,
-            action: candidate =>
+            action: (candidate) =>
               websocketSend('CANDIDATE', {
                 content: candidate,
                 fromUserId: info.selfId,
@@ -280,8 +267,6 @@ export function createConnection(
                 roomId: info.roomId
               })
           })
-          // 触发回调：连接状态改变（所有处理已完毕）
-          events.onStatusChange?.('done')
         })
         break
       }
@@ -291,9 +276,8 @@ export function createConnection(
         // 收到对方的candidate，转而发出自身的candidate
         receiveIceCandidate({ peerConnection, content: message.payload.content }).then(() => {
           sendCandidates({
-            //实际上只有观众会触发
             peerConnection,
-            action: candidate =>
+            action: (candidate) =>
               websocketSend('CANDIDATE', {
                 content: candidate,
                 fromUserId: info.selfId,
@@ -301,8 +285,6 @@ export function createConnection(
                 roomId: info.roomId
               })
           })
-          // 触发回调：连接状态改变（所有处理已完毕（此时视频流已装载，但还没有流过实际内容））
-          events.onStatusChange?.('done')
         })
         break
       }
@@ -311,6 +293,6 @@ export function createConnection(
       }
     }
   }
-  info.addMessageListener(({ message, send }) => handleWebsocketMessage(message, send))
+  info.addMessageListener(({ message, send }) => handleWebsocketMessage(message, send, info.peerId))
   return peerConnection
 }

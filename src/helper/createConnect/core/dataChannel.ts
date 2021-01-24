@@ -4,6 +4,7 @@
  *
  ****************************************************************************/
 
+import { ID } from 'typings/constants'
 import { IdTarget } from './transmitStream'
 
 interface DataChannelMessage {
@@ -29,7 +30,7 @@ export function createDataChannel(info: {
   const methods = {
     send<T extends keyof DataChannelMessage>(command: T, payload: DataChannelMessage[T]) {
       newDataChannel.send(JSON.stringify({ command, payload }))
-    },
+    }
   }
   newDataChannel.addEventListener('open', () => {
     info.onOpen?.(newDataChannel, methods)
@@ -46,7 +47,7 @@ export function acceptDataChannel(info: {
   peerConnection: RTCPeerConnection
   onMessage?: (ev: MessageEvent) => void
 }) {
-  info.peerConnection.ondatachannel = (event) => {
+  info.peerConnection.ondatachannel = event => {
     console.info('(WebRTC)RPOCESS: audience receive datachannel event: ', event)
     if (info.peerConnection['dataChannels']) {
       info.peerConnection['dataChannels'].push(event.channel)
@@ -65,10 +66,11 @@ export function acceptDataChannel(info: {
 export function handleDataChannelMessage(
   event: MessageEvent,
   callbacks: {
-    TALK_IDS: (payload: any) => void
-  }
+    TALK_IDS: (userId: ID, payload: any) => void
+  },
+  userId: ID
 ) {
   console.info('get dataChannel message: ', event)
   const { command, payload } = JSON.parse(event.data || '{}')
-  callbacks[command]?.(payload)
+  callbacks[command]?.(userId, payload)
 }
