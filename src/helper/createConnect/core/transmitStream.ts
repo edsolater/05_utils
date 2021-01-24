@@ -32,22 +32,22 @@ export function initStreamCache(config: {
       Reflect.set(target, prop, value)
       const streamIds = streamCache.streams.map(({ id }) => id)
       const targetIds = streamCache.idTargets.map(({ id }) => id)
-      if (streamIds.every((id) => targetIds.includes(id))) {
+      if (streamIds.every(id => targetIds.includes(id))) {
         streamCache.idTargets.forEach(({ id, to }) => {
           if (to === 'camera') {
-            config.onGetCameraStream(streamCache.streams.find((stream) => stream.id === id)!.stream)
+            config.onGetCameraStream(streamCache.streams.find(stream => stream.id === id)!.stream)
           } else if (to === 'window') {
-            config.onGetWindowStream(streamCache.streams.find((stream) => stream.id === id)!.stream)
+            config.onGetWindowStream(streamCache.streams.find(stream => stream.id === id)!.stream)
           }
         })
         config.onFinished?.()
       }
       return true
-    },
+    }
   }
   streamCache = {
     streams: new Proxy<StreamPackage[]>([], streamProxyConfig),
-    idTargets: new Proxy<IdTarget[]>([], streamProxyConfig),
+    idTargets: new Proxy<IdTarget[]>([], streamProxyConfig)
   }
 }
 
@@ -61,9 +61,9 @@ export function loadStream(props: {
   peerConnection: RTCPeerConnection
   streams: (MediaStream | undefined)[]
 }) {
-  props.streams.forEach((stream) => {
+  props.streams.forEach(stream => {
     if (stream) {
-      stream.getTracks().forEach((track) => props.peerConnection.addTrack(track, stream))
+      stream.getTracks().forEach(track => props.peerConnection.addTrack(track, stream))
     }
   })
 }

@@ -25,6 +25,7 @@ export type AddWebsockMessageListener<Commands extends WebsocketMessageTypeForma
 
 // 初始化时websocket所能接收的listeners
 interface WebsocketListeners<Commands extends WebsocketMessageTypeFormat> {
+  onBeforeOpen?: () => Promise<void> | void
   onOpen?: (info: { send: WebsocketSend<Commands> }) => void
   onClose?: (info: { send: WebsocketSend<Commands> }) => void
   onError?: (info: { send: WebsocketSend<Commands> }) => void
@@ -39,10 +40,12 @@ interface WebsocketListeners<Commands extends WebsocketMessageTypeFormat> {
  * 脏函数
  * 创建一条websocket
  * @param url 建立此调websocket的地址
+ * @async
  */
-export function createWebsocket<Commands extends WebsocketMessageTypeFormat = {}>({
+export async function createWebsocket<Commands extends WebsocketMessageTypeFormat = {}>({
   url,
   label = '',
+  onBeforeOpen,
   onOpen,
   onClose,
   onError,
@@ -52,18 +55,19 @@ export function createWebsocket<Commands extends WebsocketMessageTypeFormat = {}
   url: URL
   /* 用于标识某条websocket */
   label?: string
-} & WebsocketListeners<Commands>): {
+} & WebsocketListeners<Commands>): Promise<{
   websocket: WebSocket
   websocketSend: WebsocketSend<Commands>
   addMessageListener: AddWebsockMessageListener<Commands>
-} {
-  console.info(`ACTION: 新建立一条websocket`)
+}> {
+  await onBeforeOpen?.()
   const websocket = new WebSocket(url)
   const currentWebsocketId: ID = String(websocketId++)
+  console.info(`✨【websocket(${label || currentWebsocketId})】新建`)
   const websocketSend: WebsocketSend<Commands> = (command, payload) => {
     // todo: 是否用JSON来传输，应该要能自定义成可用typedArray
     websocket.send(JSON.stringify({ command, payload }))
-    console.info(`ACTION: 通过websocket(${label || currentWebsocketId}发送消息：`, {
+    console.info(`📤【websocket(${label || currentWebsocketId})】发送消息：`, {
       command,
       payload
     })
@@ -75,20 +79,20 @@ export function createWebsocket<Commands extends WebsocketMessageTypeFormat = {}
     })
   }
   websocket.addEventListener('open', ev => {
-    console.info(`PROCESS: websocket连接成功`, ev)
+    console.info(`🥳【websocket(${label || currentWebsocketId})】连接成功`, ev)
     onOpen?.({ send: websocketSend })
   })
   websocket.addEventListener('close', ev => {
-    console.warn(`PROCESS: websocket连接关闭`, ev)
+    console.warn(`😨【websocket(${label || currentWebsocketId})】连接关闭`, ev)
     onClose?.({ send: websocketSend })
   })
   websocket.addEventListener('error', ev => {
-    console.warn(`PROCESS: websocket出错`, ev)
+    console.error(`🐛【websocket(${label || currentWebsocketId})】出错`, ev)
     onError?.({ send: websocketSend })
   })
   websocket.addEventListener('message', ev => {
     const message = deepJSONParse(ev.data)
-    console.info(`PROCESS: websocket收到信息`, message)
+    console.info(`📬【websocket(${label || currentWebsocketId})】收到信息`, message)
     onMessage?.({ message, send: websocketSend, addMessageListener })
   })
   return { websocket, addMessageListener, websocketSend }
