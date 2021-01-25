@@ -14,7 +14,6 @@ interface DataChannelMessage {
 }
 const ChannelName = 'from-talker'
 /**
- * 主播专用
  * 创建dataChannel
  * 并在dataChannel打通时，发送streamID
  */
@@ -51,7 +50,6 @@ export function createDataChannel(
 }
 
 /**
- * 观众专用
  * 接收dataChannel
  * 通过peerConnection上由主播创建的dataChannel，接收主播的命令
  */
@@ -77,7 +75,6 @@ export function acceptDataChannel(
 }
 
 /**
- * 观众专用
  * 由 acceptDataChannel 挂载
  * 通过peerConnection上由主播创建的dataChannel，接收主播的命令
  */

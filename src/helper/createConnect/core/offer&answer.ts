@@ -1,5 +1,4 @@
 /**
- * 主播专用
  * 创建offer后通知后端
  * （创建offer的会由浏览器自动创建candidate）
  * （创建offer的同时，创建dataChannel）
@@ -15,7 +14,6 @@ export async function createRTCOffer(info: {
 }
 
 /**
- * 观众专用
  * 接收后端传来的主播的Offer
  */
 export async function receiveRTCOffer(info: {
@@ -28,7 +26,6 @@ export async function receiveRTCOffer(info: {
 }
 
 /**
- * 观众专用
  * 创建answer
  */
 export async function createRTCAnswer(info: {
