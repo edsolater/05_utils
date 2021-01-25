@@ -192,9 +192,11 @@ export function createConnection(
     onMessage(ev) {
       handleDataChannelMessage(ev, { TALK_IDS: cacheIdTarget }, info.peerId)
     }
+    
   })
   // 定义如果接收到track，就缓存进本地
   peerConnection.addEventListener('track', (event) => {
+    console.log('track: ', event) // caller 也能接收到两个track
     const stream = event.streams[0]
     const id = stream.id
     cacheStream(info.peerId, { id, stream })

@@ -10,6 +10,7 @@ import { IdTarget } from './transmitStream'
 interface DataChannelMessage {
   TALK_IDS: IdTarget[]
 }
+const ChannelName = 'from-talker'
 /**
  * 主播专用
  * 创建dataChannel
@@ -24,8 +25,8 @@ export function createDataChannel(info: {
     }
   ) => void
 }) {
-  console.info('(WebRTC)RPOCESS: talker open dataChannel')
-  const newDataChannel = info.peerConnection.createDataChannel('from-talker')
+  console.info('【WebRTC】: caller open dataChannel')
+  const newDataChannel = info.peerConnection.createDataChannel(ChannelName)
   info.peerConnection['dataChannels'] = [newDataChannel]
   const methods = {
     send<T extends keyof DataChannelMessage>(command: T, payload: DataChannelMessage[T]) {
@@ -46,14 +47,9 @@ export function createDataChannel(info: {
 export function acceptDataChannel(info: {
   peerConnection: RTCPeerConnection
   onMessage?: (ev: MessageEvent) => void
+  connectionSide?: Peer
 }) {
   info.peerConnection.ondatachannel = event => {
-    console.info('(WebRTC)RPOCESS: audience receive datachannel event: ', event)
-    if (info.peerConnection['dataChannels']) {
-      info.peerConnection['dataChannels'].push(event.channel)
-    } else {
-      info.peerConnection['dataChannels'] = [event.channel]
-    }
     if (info.onMessage) event.channel.addEventListener('message', info.onMessage)
   }
 }

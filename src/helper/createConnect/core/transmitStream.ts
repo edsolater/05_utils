@@ -90,6 +90,7 @@ export function generateIdTargets(props: { cameraStream: MediaStream | undefined
  * @param stream
  */
 export function cacheIdTarget(userId: ID, idTargets: IdTarget[]) {
+  console.log('hello: ', 3) // 怎么只有接收端有？
   streamCache[userId].idTargets.push(...idTargets)
 }
 
