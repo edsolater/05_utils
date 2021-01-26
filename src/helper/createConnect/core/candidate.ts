@@ -9,7 +9,7 @@ export function sendCandidates(info: {
   action: (candidate: RTCIceCandidate) => void
 }) {
   iceCandidatesCache.forEach((candidate) => {
-    console.info('(WebRTC)RPOCESS: sending ice candidate', candidate)
+    console.info('【webRTC】 sending ice candidate')
     info.action(candidate)
   })
   iceCandidatesCache.splice(0, iceCandidatesCache.length)
@@ -35,8 +35,8 @@ export async function receiveIceCandidate(info: {
   peerConnection: RTCPeerConnection
   content: RTCIceCandidate
 }) {
-  console.info('(WebRTC)RPOCESS: 获得来自后端的candidate', info.content)
+  console.info('【webRTC】 获得来自后端的candidate')
   info.peerConnection
     .addIceCandidate(info.content)
-    .then(() => console.info('(WebRTC)RPOCESS: addIceCandidate 完毕'))
+    .then(() => console.info('【webRTC】 addIceCandidate 完毕'))
 }

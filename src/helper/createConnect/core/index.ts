@@ -237,21 +237,26 @@ export function createConnection(info: {
     })
   }
 
-  info.addMessageListener(({ message, send }) =>
-    handleWebsocketMessage({
-      peerConnection,
-      message,
-      websocketSend: send,
-      peerId: info.peerId,
-      selfId: info.selfId,
-      roomId: info.roomId
-    })
-  )
+  info.addMessageListener(({ message, send }) => {
+    if (
+      message.command === 'OFFER' ||
+      message.command === 'ANSWER' ||
+      message.command === 'CANDIDATE'
+    )
+      handleWebsocketMessage({
+        peerConnection,
+        message,
+        websocketSend: send,
+        peerId: info.peerId,
+        selfId: info.selfId,
+        roomId: info.roomId
+      })
+  })
   return peerConnection
 }
 
 /**
- * 处理后端传来的信息(也是调度中心)
+ * 处理后端传来的信息(如果peerID与fromUserId不匹配，就不处理)
  * @param event 带有后端传来的信息的事件
  */
 const handleWebsocketMessage = ({
@@ -263,12 +268,13 @@ const handleWebsocketMessage = ({
   roomId
 }: {
   peerConnection: RTCPeerConnection
-  message: WebsocketMessageRuntimeFormat<Commands>
+  message: WebsocketMessageRuntimeFormat<Pick<Commands, 'OFFER' | 'ANSWER' | 'CANDIDATE'>>
   websocketSend: WebsocketSend<Commands>
   peerId: ID
   selfId: ID
   roomId: ID
 }) => {
+  if (message.payload.fromUserId !== peerId) return
   switch (message.command) {
     case 'OFFER': {
       console.info('【WebRTC】: receive backend OFFER')
@@ -323,9 +329,6 @@ const handleWebsocketMessage = ({
         })
       })
       break
-    }
-    default: {
-      console.warn(`unknow command: ${message.command as string}`)
     }
   }
 }

@@ -22,7 +22,7 @@ export async function receiveRTCOffer(info: {
 }): Promise<void> {
   const offer = info.content
   await info.peerConnection.setRemoteDescription(offer)
-  console.log('(WebRTC)RPOCESS: setRemoteDescription 完毕')
+  console.log('【webRTC】 setRemoteDescription 完毕')
 }
 
 /**
@@ -35,7 +35,7 @@ export async function createRTCAnswer(info: {
   const answer = await info.peerConnection.createAnswer(info.offerOptions)
   await info.peerConnection
     .setLocalDescription(answer)
-    .then(() => console.info('(WebRTC)RPOCESS: setLocalDescription 完毕'))
+    .then(() => console.info('【webRTC】 setLocalDescription 完毕'))
   return answer
 }
 
@@ -47,7 +47,7 @@ export async function receiveRTCAnswer(info: {
   peerConnection: RTCPeerConnection
   content: RTCSessionDescriptionInit
 }) {
-  console.info('(WebRTC)RPOCESS: receive backend ANSWER')
+  console.info('【webRTC】 receive backend ANSWER')
   await info.peerConnection.setRemoteDescription(info.content)
-  console.info('(WebRTC)RPOCESS: setRemoteDescription 完毕')
+  console.info('【webRTC】 setRemoteDescription 完毕')
 }
