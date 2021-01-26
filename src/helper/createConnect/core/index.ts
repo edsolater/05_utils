@@ -168,7 +168,14 @@ export async function initAppWebsocket(events: RTCEvents) {
  * 此函数存放初始化的操作
  * @param events 建立webRTC所使用的配置项
  */
-export function createConnection(info: {
+export function createConnection({
+  roomId,
+  selfId,
+  peerId,
+  websocketSend,
+  addMessageListener,
+  side
+}: {
   roomId: ID
   selfId: ID
   peerId: ID
@@ -178,7 +185,7 @@ export function createConnection(info: {
 }) {
   // 我觉得可以拆成单独的函数：init，createOffer等等
   const peerConnection = new RTCPeerConnection(rtcConfiguration)
-  peerConnections.set(info.peerId, peerConnection)
+  peerConnections.set(peerId, peerConnection)
   // 向peerconnection装载stream
   loadStream({
     peerConnection,
@@ -191,9 +198,9 @@ export function createConnection(info: {
     console.log('track: ', event) // caller 也能接收到两个track
     const stream = event.streams[0]
     const id = stream.id
-    cacheStream(info.peerId, { id, stream })
+    cacheStream(peerId, { id, stream })
   })
-  if (info.side === peerConnectionSide.caller) {
+  if (side === peerConnectionSide.caller) {
     // 创建dataChannel // FIXME: 问题在于DataChannel里只有caller端的视频信息
     createDataChannel(peerConnection, {
       onOpen: ({ send }) => {
@@ -203,20 +210,20 @@ export function createConnection(info: {
         )
       },
       onMessage: ({ event }) =>
-        handleDataChannelMessage(event, { RECEIVER_STREAM_IDS: cacheIdTarget }, info.peerId)
+        handleDataChannelMessage(event, { RECEIVER_STREAM_IDS: cacheIdTarget }, peerId)
     })
     // 创建新offer并发送
     createRTCOffer({ peerConnection, offerOptions }).then((offer) => {
       console.info('【WebRTC】: send OFFER', offer)
-      info.websocketSend('OFFER', {
+      websocketSend('OFFER', {
         content: offer,
-        fromUserId: info.selfId,
-        toUserId: info.peerId,
-        roomId: info.roomId
+        fromUserId: selfId,
+        toUserId: peerId,
+        roomId: roomId
       })
     })
   }
-  if (info.side === peerConnectionSide.receiver) {
+  if (side === peerConnectionSide.receiver) {
     // 定义如何接收通过dataChannel传来的track分别是什么的信息
     acceptDataChannel(peerConnection, {
       onMessage({ event, send }) {
@@ -231,13 +238,13 @@ export function createConnection(info: {
               )
             }
           },
-          info.peerId
+          peerId
         )
       }
     })
   }
 
-  info.addMessageListener(({ message, send }) => {
+  addMessageListener(({ message, send }) => {
     if (
       message.command === 'OFFER' ||
       message.command === 'ANSWER' ||
@@ -247,9 +254,9 @@ export function createConnection(info: {
         peerConnection,
         message,
         websocketSend: send,
-        peerId: info.peerId,
-        selfId: info.selfId,
-        roomId: info.roomId
+        peerId: peerId,
+        selfId: selfId,
+        roomId: roomId
       })
   })
   return peerConnection
