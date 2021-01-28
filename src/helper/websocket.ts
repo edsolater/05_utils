@@ -4,7 +4,7 @@ let websocketId = 1
 // websocket message 的定义类型的格式
 type WebsocketMessageTypeFormat = { [command: string]: any }
 
-// websocket message 的格式
+// 获取 websocket message 的格式
 export type WebsocketMessageRuntimeFormat<Commands, T = keyof Commands> = T extends keyof Commands
   ? { command: T; payload: Commands[T] }
   : never

@@ -21,13 +21,30 @@ import {
   initStreamCache,
   loadStream
 } from './transmitStream'
+import { getNetworkSpeed, LoadSpeed } from './getNetworkSpeed'
+interface PeerConnectionIds {
+  peerId: ID
+  selfId: ID
+  roomId: ID
+}
+interface PeerConnectionInfo extends LoadSpeed, PeerConnectionIds {
+  peerConnection: RTCPeerConnection
+}
+interface RTCStreamInfo extends PeerConnectionIds {
+  stream: MediaStream
+  streamType: RTCStreamType
+}
+interface RTCRequestOptions extends Omit<PeerConnectionIds, 'peerId'> {}
 
 export type RTCEvents = {
   //TODO: 配置暂时写死在文件中，后得靠传进来
   onReady?: (...args: any[]) => void
-  onPrintCamera: (userId: ID, stream: MediaStream) => void
-  openLocalCamera: (userId: ID) => Promise<MediaStream | undefined>
+  //FIXME: 想想怎么把这个业务相关的逻辑踢出去
+  onGetRemoteStream?: (streamInfo: RTCStreamInfo) => void
+  requestLocalStream?: (requestOptions: RTCRequestOptions) => Promise<MediaStream | undefined>
+  onCreatePeerConnection?: (peerConnectionInfo: PeerConnectionInfo) => void
 }
+export type RTCStreamType = 'CAMERA' | 'WINDOW'
 export type PeerConnectionSide = 'CALLER' | 'RECEIVER'
 export const peerConnectionSide = {
   //TODO: 这里是不是用 enum 更可读一点
@@ -109,7 +126,7 @@ export async function initAppWebsocket(events: RTCEvents) {
   createWebsocket<Commands>({
     url: `ws://47.101.188.77:8899/websocket/${roomId}/${currentUserId}`,
     async onBeforeOpen() {
-      const stream = await events.openLocalCamera(currentUserId)
+      const stream = await events.requestLocalStream?.({ selfId: currentUserId, roomId })
       localStreamCache.cameraStream = stream
     },
     onOpen({ send }) {
@@ -125,11 +142,17 @@ export async function initAppWebsocket(events: RTCEvents) {
             initStreamCache({
               userId: peerId,
               onGetCameraStream(peerId, stream) {
-                events.onPrintCamera(peerId, stream)
+                events.onGetRemoteStream?.({
+                  selfId: currentUserId,
+                  roomId,
+                  peerId,
+                  stream,
+                  streamType: 'CAMERA'
+                })
               }
             })
             send('CREATE_CONNECT', { fromUserId: currentUserId, toUserId: peerId, roomId: roomId })
-            createConnection({
+            const peerConnectionInfo = createConnection({
               selfId: currentUserId,
               peerId: peerId,
               roomId,
@@ -137,6 +160,7 @@ export async function initAppWebsocket(events: RTCEvents) {
               addMessageListener,
               side: peerConnectionSide.receiver
             })
+            events.onCreatePeerConnection?.(peerConnectionInfo)
           }
           break
         }
@@ -144,10 +168,16 @@ export async function initAppWebsocket(events: RTCEvents) {
           initStreamCache({
             userId: message.payload.fromUserId,
             onGetCameraStream(peerId, stream) {
-              events.onPrintCamera(peerId, stream)
+              events.onGetRemoteStream?.({
+                selfId: currentUserId,
+                peerId,
+                roomId,
+                stream,
+                streamType: 'CAMERA'
+              })
             }
           })
-          createConnection({
+          const peerConnectionInfo = createConnection({
             selfId: currentUserId,
             peerId: message.payload.fromUserId,
             roomId,
@@ -155,6 +185,7 @@ export async function initAppWebsocket(events: RTCEvents) {
             addMessageListener,
             side: peerConnectionSide.caller
           })
+          events.onCreatePeerConnection?.(peerConnectionInfo)
         }
       }
     }
@@ -182,9 +213,10 @@ export function createConnection({
   websocketSend: WebsocketSend<Commands>
   addMessageListener: AddWebsockMessageListener<Commands>
   side: PeerConnectionSide
-}) {
+}): PeerConnectionInfo {
   // 我觉得可以拆成单独的函数：init，createOffer等等
   const peerConnection = new RTCPeerConnection(rtcConfiguration)
+  const speedInfo = getNetworkSpeed(peerConnection)
   peerConnections.set(peerId, peerConnection)
   // 向peerconnection装载stream
   loadStream({
@@ -254,12 +286,12 @@ export function createConnection({
         peerConnection,
         message,
         websocketSend: send,
-        peerId: peerId,
-        selfId: selfId,
-        roomId: roomId
+        peerId,
+        selfId,
+        roomId
       })
   })
-  return peerConnection
+  return { peerConnection, peerId, selfId, roomId, ...speedInfo }
 }
 
 /**

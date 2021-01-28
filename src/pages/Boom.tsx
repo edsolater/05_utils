@@ -14,15 +14,21 @@ const BoomHome = () => {
   function handleClickJoinBtn() {
     setisPlaying(true)
     initAppWebsocket({
-      onPrintCamera(userId, stream) {
-        console.log('remoteUserId: ', userId)
-        setcameraStream(cameraStream => new Map([...cameraStream, [userId, stream]]))
+      onGetRemoteStream({ peerId, stream }) {
+        setcameraStream((cameraStream) => new Map([...cameraStream, [peerId, stream]]))
       },
-      async openLocalCamera(userId) {
-        console.log('localUserId: ', userId)
+      async requestLocalStream({ selfId }) {
         const stream = await evokeCamera()
-        if (stream) setcameraStream(cameraStream => new Map([...cameraStream, [userId, stream]]))
+        if (stream) setcameraStream((cameraStream) => new Map([...cameraStream, [selfId, stream]]))
         return stream
+      },
+      onCreatePeerConnection({ getDownloadSpeed, getUploadSpeed, peerId }) {
+        setInterval(() => {
+          const downloadSpeed = getDownloadSpeed()
+          const uploadSpeed = getUploadSpeed()
+          console.log('downloadSpeed', downloadSpeed)
+          console.log('uploadSpeed', uploadSpeed)
+        }, 1000)
       }
     })
   }

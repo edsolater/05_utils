@@ -11,7 +11,13 @@ const config = {
   },
   // Enable sourcemaps for debugging webpack's output.
   devtool: 'inline-source-map',
-  devServer: { contentBase: ['./dist', './public'], inline: true },
+  devServer: {
+    contentBase: ['./dist', './public'],
+    inline: true,
+    https: true,
+    host: '192.168.31.101',
+    port: 3000
+  },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: ['.ts', '.tsx', '.js'],
@@ -42,10 +48,10 @@ const config = {
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
-            },
-          },
-        ],
+              sourceMap: true
+            }
+          }
+        ]
       },
       {
         test: /\.(png|svg|jpg|gif|webp|mp3|woff2)$/,
