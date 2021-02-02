@@ -56,23 +56,19 @@ type Commands = {
 
   // 当用户进入时，告知后端一声
   JOIN: {
-    userId: ID
-    roomId: ID // 如果传入空字符串，则后端生成一个，这个人必定是主播。传入指定roomId，则逻辑为“加入某个会议”，这个人必定是观众。
+    userId: ID // 辨识此设备（可以用它的互联网IP加局域网IP）
+    roomId: ID // 房间号
   }
-
-  // 后端紧接着敲定身份信息
+  // 后端告知有几个人
   IDENTITY: {
-    members: ID[] // FIXME: 后端问题：第二个用户加入时，只返回了一个
+    members: ID[]
   }
 
   /* ------------------------------ 后端无感，告知rtc的对方 ----------------------------- */
 
-  // 【观众发起】
-  //【主播接收】通知主播：可以发来OFFER了
-  CREATE_CONNECT: {
-    // TODO： 暂时使用userID代替sessionID
-    fromUserId: SessionID
-    toUserId: SessionID | 'all'
+  NEW_CONNECTION: {
+    fromUserId: ID
+    toUserId: ID | 'all'
     roomId: ID
   }
 
@@ -80,8 +76,8 @@ type Commands = {
   //【观众接收】观众从后端收到主播的offer信息
   OFFER: {
     content: RTCSessionDescriptionInit
-    fromUserId: SessionID
-    toUserId: SessionID | 'all'
+    fromUserId: ID
+    toUserId: ID | 'all'
     roomId: ID
   }
 
@@ -89,8 +85,8 @@ type Commands = {
   // 【主播接收】主播从后端收到观众的answer信息
   ANSWER: {
     content: RTCSessionDescriptionInit
-    fromUserId: SessionID
-    toUserId: SessionID | 'all'
+    fromUserId: ID
+    toUserId: ID | 'all'
     roomId: ID
   }
 
@@ -98,8 +94,8 @@ type Commands = {
   // 【主播/观众互相接收】
   CANDIDATE: {
     content: RTCIceCandidate
-    fromUserId: SessionID
-    toUserId: SessionID | 'all'
+    fromUserId: ID
+    toUserId: ID | 'all'
     roomId: ID
   }
 }
@@ -151,8 +147,8 @@ export async function initAppWebsocket(events: RTCEvents) {
                 })
               }
             })
-            send('CREATE_CONNECT', { fromUserId: currentUserId, toUserId: peerId, roomId: roomId })
-            const peerConnectionInfo = createConnection({
+            send('NEW_CONNECTION', { fromUserId: currentUserId, toUserId: peerId, roomId: roomId })
+            const peerConnectionInfo = createPeerConnectionion({
               selfId: currentUserId,
               peerId: peerId,
               roomId,
@@ -164,7 +160,7 @@ export async function initAppWebsocket(events: RTCEvents) {
           }
           break
         }
-        case 'CREATE_CONNECT': {
+        case 'NEW_CONNECTION': {
           initStreamCache({
             userId: message.payload.fromUserId,
             onGetCameraStream(peerId, stream) {
@@ -177,7 +173,7 @@ export async function initAppWebsocket(events: RTCEvents) {
               })
             }
           })
-          const peerConnectionInfo = createConnection({
+          const peerConnectionInfo = createPeerConnectionion({
             selfId: currentUserId,
             peerId: message.payload.fromUserId,
             roomId,
@@ -199,7 +195,7 @@ export async function initAppWebsocket(events: RTCEvents) {
  * 此函数存放初始化的操作
  * @param events 建立webRTC所使用的配置项
  */
-export function createConnection({
+export function createPeerConnectionion({
   roomId,
   selfId,
   peerId,

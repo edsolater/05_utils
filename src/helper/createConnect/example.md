@@ -18,7 +18,7 @@
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import LHVideo from '../baseUI/LHVideo.vue'
 import { evokeWindow, evokeCamera } from '../helper/evokeMedia'
-import { WebRTCIdentity, WebRTCStatus, createConnect } from '../helper/createConnect'
+import { WebRTCIdentity, WebRTCStatus, createPeerConnection } from '../helper/createPeerConnection'
 export default defineComponent({
   components: { LHVideo },
   setup() {
@@ -33,7 +33,7 @@ export default defineComponent({
     }
     function handleClickJoinBtn() {
       state.isPlaying = true
-      createConnect({
+      createPeerConnection({
         onPrintRemoteCamera(stream) {
           state.cameraStream = stream
         },

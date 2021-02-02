@@ -1,5 +1,5 @@
 // import { reactive, watch } from 'vue'
-// import { WebRTCIdentity, WebRTCStatus, createConnection } from './core'
+// import { WebRTCIdentity, WebRTCStatus, createPeerConnectionion } from './core'
 
 // export default function useWebRTC(configs: {
 //   onIdentityChange?: (curIdentity: WebRTCIdentity, prevIdentity: WebRTCIdentity) => void
@@ -13,7 +13,7 @@
 //     status: 'waiting' as WebRTCStatus,
 //     userIdentity: 'unknown' as WebRTCIdentity,
 //   })
-//   createConnection({
+//   createPeerConnectionion({
 //     ...configs,
 //     onIdentityChange(identity) {
 //       state.userIdentity = identity
