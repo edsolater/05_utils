@@ -68,7 +68,7 @@ type Commands = {
 
   NEW_CONNECTION: {
     fromUserId: ID
-    toUserId: ID | 'all'
+    toUserId: ID
     roomId: ID
   }
 
@@ -77,7 +77,7 @@ type Commands = {
   OFFER: {
     content: RTCSessionDescriptionInit
     fromUserId: ID
-    toUserId: ID | 'all'
+    toUserId: ID
     roomId: ID
   }
 
@@ -86,7 +86,7 @@ type Commands = {
   ANSWER: {
     content: RTCSessionDescriptionInit
     fromUserId: ID
-    toUserId: ID | 'all'
+    toUserId: ID
     roomId: ID
   }
 
@@ -95,7 +95,7 @@ type Commands = {
   CANDIDATE: {
     content: RTCIceCandidate
     fromUserId: ID
-    toUserId: ID | 'all'
+    toUserId: ID
     roomId: ID
   }
 }
@@ -117,10 +117,10 @@ const rtcConfiguration: RTCConfiguration = {
  * 一系列webRTC通讯中唯一websocket
  */
 export async function initAppWebsocket(events: RTCEvents) {
-  const roomId = '91' // TODO：应该在UI上，由观众自己定
+  const roomId = 'room91' // TODO：应该在UI上，由观众自己定
   const currentUserId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
   createWebsocket<Commands>({
-    url: `ws://47.101.188.77:8899/websocket/${roomId}/${currentUserId}`,
+    url: `ws://localhost:5000`,
     async onBeforeOpen() {
       const stream = await events.requestLocalStream?.({ selfId: currentUserId, roomId })
       localStreamCache.cameraStream = stream
