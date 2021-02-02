@@ -8,7 +8,7 @@ import React, { useState } from 'react'
 import { fullPer, toPer } from 'style/cssUnits'
 import { ID } from 'typings/constants'
 
-const BoomHome = () => {
+const Home = () => {
   const [cameraStream, setcameraStream] = useState<Map<ID, MediaStream>>(new Map())
   const [isPlaying, setisPlaying] = useState(false)
   function handleClickJoinBtn() {
@@ -71,10 +71,10 @@ const BoomHome = () => {
           }}
           onClick={handleClickJoinBtn}
         >
-          boom
+          RTC
         </StyledButton>
       )}
     </Div>
   )
 }
-export default BoomHome
+export default Home

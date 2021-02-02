@@ -14,9 +14,9 @@ const config = {
   devServer: {
     contentBase: ['./dist', './public'],
     inline: true,
-    https: true,
-    host: '192.168.31.101',
-    port: 3000
+    // https: true,
+    // host: '192.168.31.101',
+    // port: 3000
   },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
