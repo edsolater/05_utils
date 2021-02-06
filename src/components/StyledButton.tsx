@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Interpolation, keyframes } from '@emotion/core'
+import { jsx, Interpolation, keyframes } from '@emotion/react'
 import { IFC } from 'typings/reactType'
 import Div from 'baseUI/Div'
 

@@ -18,6 +18,7 @@ const TestGrounds = () => (
     <Div css={mix('testGridItem')}>
       <Div css={mix('gridItemTextLabel')}>整片翻页</Div>
       <GroupScroll
+        groupCount={4} 
         items={[
           'Dollie',
           'Timothy',
@@ -64,7 +65,9 @@ const TestGrounds = () => (
               color: 'white',
               display: 'grid',
               placeItems: 'center',
-              fontSize: 22
+              fontSize: 22,
+              width: 80,
+              height: 80
             }}
           >
             {n}

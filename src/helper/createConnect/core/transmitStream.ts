@@ -12,48 +12,49 @@ export interface StreamPackage {
 }
 
 /**
- * 观众专用
- * 缓存主播传来的视频信息
+ * 缓存传来的视频信息
  */
-let streamCache: {
-  streams: StreamPackage[]
-  idTargets: IdTarget[]
-}
+const streamCache: {
+  [userID in ID]: {
+    streams: StreamPackage[]
+    idTargets: IdTarget[]
+  }
+} = {}
 /**
- * 观众专用, 接收到足够的streamId后，输出视频到屏幕上
+ * 接收到足够的streamId后，输出视频到屏幕上
  */
-export function initStreamCache(config: {
-  onGetCameraStream: (stream: MediaStream) => void
-  onGetWindowStream: (stream: MediaStream) => void
-  onFinished?: () => void
+export function initStreamCache(options: {
+  userId: ID
+  onGetCameraStream: (userId: ID, stream: MediaStream) => void
+  onFinished?: (userId: ID) => void
 }) {
   const streamProxyConfig = {
-    set: (target: object, prop: string, value: unknown) => {
+    set: (target: StreamPackage[] | IdTarget[], prop: string, value: unknown) => {
       Reflect.set(target, prop, value)
-      const streamIds = streamCache.streams.map(({ id }) => id)
-      const targetIds = streamCache.idTargets.map(({ id }) => id)
+      const streamIds = streamCache[options.userId].streams.map(({ id }) => id)
+      const targetIds = streamCache[options.userId].idTargets.map(({ id }) => id)
       if (streamIds.every((id) => targetIds.includes(id))) {
-        streamCache.idTargets.forEach(({ id, to }) => {
+        streamCache[options.userId].idTargets.forEach(({ id, to }) => {
           if (to === 'camera') {
-            config.onGetCameraStream(streamCache.streams.find((stream) => stream.id === id)!.stream)
-          } else if (to === 'window') {
-            config.onGetWindowStream(streamCache.streams.find((stream) => stream.id === id)!.stream)
+            options.onGetCameraStream(
+              options.userId,
+              streamCache[options.userId].streams.find((stream) => stream.id === id)!.stream
+            )
           }
         })
-        config.onFinished?.()
+        options.onFinished?.(options.userId)
       }
       return true
-    },
+    }
   }
-  streamCache = {
+  streamCache[options.userId] = {
     streams: new Proxy<StreamPackage[]>([], streamProxyConfig),
-    idTargets: new Proxy<IdTarget[]>([], streamProxyConfig),
+    idTargets: new Proxy<IdTarget[]>([], streamProxyConfig)
   }
 }
 
 /**
  * 副作用函数
- * 主播专用
  * 向peerConnection装载流
  * @todo 需要做一个stream的缓存，add之前先确保pc中没有这个stream
  */
@@ -69,36 +70,29 @@ export function loadStream(props: {
 }
 
 /**
- * 主播专用
  * 通过主播端的stream，计算出idTargets信息包
  * @param props
  */
-export function getIdTargets(props: {
-  cameraStream: MediaStream | undefined
-  windowStream: MediaStream | undefined
-}) {
+export function generateIdTargets(props: { cameraStream: MediaStream | undefined }) {
   const idTargets: { id: ID; to: 'window' | 'camera' }[] = []
   if (props.cameraStream) idTargets.push({ id: props.cameraStream.id, to: 'camera' })
-  if (props.windowStream) idTargets.push({ id: props.windowStream.id, to: 'window' })
   return idTargets
 }
 
 /*
- * 观众专用
  * 当从 dataChannel 收到idTarget信息时时，先缓存下来， 待
  * @param id
  * @param stream
  */
-export function cacheIdTarget(idTargets: IdTarget[]) {
-  streamCache.idTargets.push(...idTargets)
+export function cacheIdTarget(userId: ID, idTargets: IdTarget[]) {
+  streamCache[userId].idTargets.push(...idTargets)
 }
 
 /**
- * 观众专用
  * 当从 peerConnection 收到stream时，先缓存下来， 待
  * @param id
  * @param stream
  */
-export function cacheStream(streamPackage: StreamPackage) {
-  streamCache.streams.push(streamPackage)
+export function cacheStream(userId: ID, streamPackage: StreamPackage) {
+  streamCache[userId].streams.push(streamPackage)
 }

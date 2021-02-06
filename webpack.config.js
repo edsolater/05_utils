@@ -10,12 +10,13 @@ const config = {
     main: './src/index.tsx'
   },
   // Enable sourcemaps for debugging webpack's output.
-  devtool: 'inline-source-map',
+  devtool: 'eval-cheap-module-source-map',
   devServer: {
     contentBase: ['./dist', './public'],
     inline: true,
-    host: '10.127.54.155', // TODO: 每次需要动态更改很烦 // powershell 里输ipconfig，局域网IPV4
-    port: '8080'
+    // https: true,
+    // host: '192.168.31.101',
+    // port: 3000
   },
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
@@ -38,19 +39,6 @@ const config = {
       { // 未来这个可以去除
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
-      },
-      { // 未来这个可以去除
-        test: /\.scss$/,
-        use: [
-          { loader: 'style-loader' },
-          { loader: 'css-loader', options: { sourceMap: true } },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
       },
       {
         test: /\.(png|svg|jpg|gif|webp|mp3|woff2)$/,

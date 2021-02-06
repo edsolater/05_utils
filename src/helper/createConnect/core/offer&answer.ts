@@ -1,44 +1,50 @@
 /**
- * 主播专用
  * 创建offer后通知后端
  * （创建offer的会由浏览器自动创建candidate）
  * （创建offer的同时，创建dataChannel）
  */
-export async function createRTCOffer(info: {
+export async function createRTCOffer({
+  peerConnection,
+  offerOptions
+}: {
   peerConnection: RTCPeerConnection
   offerOptions: RTCOfferOptions
 }) {
-  const offer = await info.peerConnection.createOffer(info.offerOptions)
-  await info.peerConnection.setLocalDescription(offer)
+  const offer = await peerConnection.createOffer(offerOptions)
+  await peerConnection.setLocalDescription(offer)
   console.info('setLocalDescription 完毕')
   return offer
 }
 
 /**
- * 观众专用
  * 接收后端传来的主播的Offer
  */
-export async function receiveRTCOffer(info: {
+export async function receiveRTCOffer({
+  peerConnection,
+  content
+}: {
   peerConnection: RTCPeerConnection
   content: RTCSessionDescriptionInit
 }): Promise<void> {
-  const offer = info.content
-  await info.peerConnection.setRemoteDescription(info.content)
-  console.log('(WebRTC)RPOCESS: setRemoteDescription 完毕')
+  const offer = content
+  await peerConnection.setRemoteDescription(offer)
+  console.log('【webRTC】 setRemoteDescription 完毕')
 }
 
 /**
- * 观众专用
  * 创建answer
  */
-export async function createRTCAnswer(info: {
+export async function createRTCAnswer({
+  peerConnection,
+  offerOptions
+}: {
   peerConnection: RTCPeerConnection
   offerOptions: RTCOfferOptions
 }) {
-  const answer = await info.peerConnection.createAnswer(info.offerOptions)
-  await info.peerConnection
+  const answer = await peerConnection.createAnswer(offerOptions)
+  await peerConnection
     .setLocalDescription(answer)
-    .then(() => console.info('(WebRTC)RPOCESS: setLocalDescription 完毕'))
+    .then(() => console.info('【webRTC】 setLocalDescription 完毕'))
   return answer
 }
 
@@ -46,11 +52,14 @@ export async function createRTCAnswer(info: {
  * 主播/观众通用
  * 接收由后端传来的观众的answer
  */
-export async function receiveRTCAnswer(info: {
+export async function receiveRTCAnswer({
+  peerConnection,
+  content
+}: {
   peerConnection: RTCPeerConnection
   content: RTCSessionDescriptionInit
 }) {
-  console.info('(WebRTC)RPOCESS: receive backend ANSWER')
-  await info.peerConnection.setRemoteDescription(info.content)
-  console.info('(WebRTC)RPOCESS: setRemoteDescription 完毕')
+  console.info('【webRTC】 receive backend ANSWER')
+  await peerConnection.setRemoteDescription(content)
+  console.info('【webRTC】 setRemoteDescription 完毕')
 }
