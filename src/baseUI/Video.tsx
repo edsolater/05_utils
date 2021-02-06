@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css as cssMerge, Interpolation } from '@emotion/core'
+import { jsx, css as cssMerge, Interpolation } from '@emotion/react'
 import { CSSProperties, FC, useEffect, useRef } from 'react'
 
 const Video: FC<{

@@ -1,6 +1,6 @@
 import Div from './Div'
 import React, { FC } from 'react'
-import { CSSObject, Interpolation } from '@emotion/core'
+import { CSSObject, Interpolation } from '@emotion/react'
 import parallelIf from 'utils/magic/parallelIf'
 
 type GridType =

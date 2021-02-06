@@ -1,4 +1,4 @@
-import { Interpolation } from '@emotion/core'
+import { Interpolation } from '@emotion/react'
 import isArray from 'utils/judgers/isArray'
 import isFunction from 'utils/judgers/isFunction'
 import isObjectLiteral from 'utils/judgers/isObjectLiteral'

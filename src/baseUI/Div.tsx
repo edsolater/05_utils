@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, css, Interpolation } from '@emotion/core'
+import { jsx, css, Interpolation } from '@emotion/react'
 import { CSSProperties } from 'react'
 import { IFC } from 'typings/reactType'
 import { mergeRefs } from '../helper/reactHelper/mergeRefs'

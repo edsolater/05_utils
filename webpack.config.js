@@ -10,7 +10,7 @@ const config = {
     main: './src/index.tsx'
   },
   // Enable sourcemaps for debugging webpack's output.
-  devtool: 'inline-source-map',
+  devtool: 'eval-cheap-module-source-map',
   devServer: {
     contentBase: ['./dist', './public'],
     inline: true,
@@ -39,19 +39,6 @@ const config = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          { loader: 'style-loader' },
-          { loader: 'css-loader', options: { sourceMap: true } },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
       },
       {
         test: /\.(png|svg|jpg|gif|webp|mp3|woff2)$/,

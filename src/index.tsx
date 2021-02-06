@@ -6,8 +6,8 @@ import TestGrounds from 'TestEggs'
 import Home from 'pages/Home'
 function App() {
   return (
-    // <TestGrounds /> // 测试一些功能
-    <Home /> // 视频通话
+    <TestGrounds /> // 测试一些功能
+    // <Home /> // 视频通话
   )
 }
 

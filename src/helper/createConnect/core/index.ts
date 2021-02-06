@@ -117,7 +117,7 @@ const rtcConfiguration: RTCConfiguration = {
  * 一系列webRTC通讯中唯一websocket
  */
 export async function initAppWebsocket(events: RTCEvents) {
-  const roomId = 'room91' // TODO：应该在UI上，由观众自己定
+  const roomId = 'room_91' // TODO：应该在UI上，由观众自己定
   const currentUserId = randomCreateId() //TEMP 暂时使用userID代替sessionID，且
   createWebsocket<Commands>({
     url: `ws://localhost:5000`,
@@ -367,3 +367,4 @@ const handleWebsocketMessage = ({
     }
   }
 }
+
