@@ -37,26 +37,17 @@ const Div: IFC<DivProps> = ({
   children,
   domRef,
   ...restProps
-}) => {
-  // // TODO: draggable droppable 都要支持
-  // const currentRef = useRef<HTMLDivElement>()
-  // useEffect(() => {
-  //   if (draggable) {
-  //     currentRef.current
-  //   }
-  // }, [])
-  return (
-    <div
-      ref={mergeRefs(domRef /* currentRef */)}
-      //@ts-expect-error 因为 css variable 势必造成不匹配的问题
-      style={style}
-      css={css(emotionCss)}
-      draggable={draggable}
-      {...restProps}
-    >
-      {children}
-    </div>
-  )
-}
+}) => (
+  <div
+    ref={mergeRefs(domRef /* currentRef */)}
+    //@ts-expect-error 因为有css variable 势必造成不匹配的问题
+    style={style}
+    css={css(emotionCss)}
+    draggable={draggable}
+    {...restProps}
+  >
+    {children}
+  </div>
+)
 
 export default Div
