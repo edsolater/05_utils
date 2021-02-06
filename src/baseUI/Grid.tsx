@@ -1,6 +1,6 @@
 import Div from './Div'
 import React, { FC } from 'react'
-import { CSSObject, Interpolation } from '@emotion/react'
+import { CSSObject } from '@emotion/react'
 import parallelIf from 'utils/magic/parallelIf'
 
 type GridType =
@@ -16,7 +16,7 @@ type GridType =
   | 'id-text-icon' // 横向2格布局（文字在前）
 
 const gridTemplates: {
-  [K in GridType]: Interpolation
+  [K in GridType]: CSSObject
 } = {
   'in-col': {
     gridAutoFlow: 'row dense'
@@ -113,7 +113,7 @@ const Grid: FC<{
   type?: GridType
   noCssGap?: boolean
   cssGap?: CSSObject['gap']
-  cssBlocks?: Interpolation
+  cssBlocks?: CSSObject
 }> = ({ type, noCssGap, cssGap = 8, cssBlocks, children }) => {
   return (
     <Div

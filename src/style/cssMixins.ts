@@ -1,4 +1,4 @@
-import { Interpolation } from '@emotion/react'
+import { ICSS } from 'baseUI/Div'
 import isArray from 'utils/judgers/isArray'
 import isFunction from 'utils/judgers/isFunction'
 import isObjectLiteral from 'utils/judgers/isObjectLiteral'
@@ -6,7 +6,7 @@ import isString from 'utils/judgers/isString'
 
 // TODO: 放预定义的各种CSS组合
 export const cssMixins = {
-  gridItemTextLabel: (): Interpolation => ({
+  gridItemTextLabel: (): ICSS => ({
     position: 'absolute',
     left: '50%',
     top: 0,
@@ -14,7 +14,7 @@ export const cssMixins = {
     fontSize: 34,
     color: 'gray'
   }),
-  testGridContainer: (): Interpolation => ({
+  testGridContainer: (): ICSS => ({
     display: 'grid',
     gridTemplate: '1fr 1fr / 1fr 1fr',
     gap: 8,
@@ -22,7 +22,7 @@ export const cssMixins = {
     background: 'lightgray',
     height: '100vh'
   }),
-  testGridItem: (): Interpolation => ({
+  testGridItem: (): ICSS => ({
     background: 'white',
     position: 'relative',
     overflow: 'hidden'
@@ -34,7 +34,7 @@ export type MixinItem =
   | { [mixinName in keyof AllMixins]?: Parameters<AllMixins[mixinName]> }
   | AllMixins[keyof AllMixins]
   | keyof AllMixins
-export function mix(...mixins: MixinItem[]): Interpolation {
+export function mix(...mixins: MixinItem[]): ICSS {
   const resultCssObject = {}
   for (const mixinItem of mixins) {
     if (isFunction(mixinItem)) {

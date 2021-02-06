@@ -1,8 +1,10 @@
-import { Interpolation } from '@emotion/react'
+import { CSSObject } from '@emotion/react'
 
-export type StyleNames<T extends string[]> = { [name in T[number]]: Interpolation }
+export type StyleNames<T extends string[]> = { [name in T[number]]: CSSObject }
 
 export type MayArray<T> = T | Array<T>
+
+export type MayDeepArray<T> = undefined | T | Array<MayDeepArray<T>>
 
 export type MayFunction<T> = T | (() => T)
 
@@ -19,13 +21,13 @@ export type GetKeysFromValues<
  *   type: 'cat'
  *   breeds: 'Abyssinian' | 'Shorthair' | 'Curl' | 'Bengal'
  * }
- * 
+ *
  * interface Dog {
  *   type: 'dog'
  *   breeds: 'Hound' | 'Brittany' | 'Bulldog' | 'Boxer'
  *   color: 'brown' | 'white' | 'black'
  * }
- * 
+ *
  * type MyDogType = LookUp<Cat | Dog, 'dog'> // expected to be `Dog`
  */
 export type LookUp<U, T extends string> = {

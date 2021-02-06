@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Interpolation, keyframes } from '@emotion/react'
+import { jsx, CSSObject, keyframes } from '@emotion/react'
 import { IFC } from 'typings/reactType'
 import Div from 'baseUI/Div'
 
@@ -13,7 +13,7 @@ const KeyframeRadarWave = keyframes`
     transform: scale(2);
   }
 `
-const cssButton: Interpolation = {
+const cssButton: CSSObject = {
   appearance: 'none',
   border: 'none',
   width: 150,
@@ -22,11 +22,11 @@ const cssButton: Interpolation = {
   fontSize: '1.3em',
   position: 'relative'
 }
-const cssPrimaryButton: Interpolation = {
+const cssPrimaryButton: CSSObject = {
   color: 'var(--primary-button-text-color, white)',
   background: 'var(--primary-bg-color, dodgerblue)'
 }
-const cssWave: Interpolation = {
+const cssWave: CSSObject = {
   pointerEvents: 'none',
   position: 'absolute',
   width: '100%',

@@ -1,4 +1,4 @@
-import Div from 'baseUI/Div'
+import Div, { ICSS } from 'baseUI/Div'
 import React, { ReactNode, useMemo } from 'react'
 /**
  * 以${groupSize}为一组，进行分割
@@ -21,6 +21,8 @@ function splitToGroups<T>(items: T[], groupSize: number) {
   return result
 }
 
+const elementCss_group: ICSS = { display: 'flex', outline: '3px solid crimson' }
+/**每次滚动一组 */
 const GroupScroll = <T extends any>({
   items,
   groupCount,
@@ -35,7 +37,7 @@ const GroupScroll = <T extends any>({
   return (
     <Div css={{ display: 'flex' }}>
       {splited.map((group, groupIndex) => (
-        <Div className='group' css={{ display: 'flex', gap: 2 }} key={groupIndex}>
+        <Div className='group' css={elementCss_group} key={groupIndex}>
           {group.map(renderItem)}
         </Div>
       ))}

@@ -1,12 +1,14 @@
 /** @jsx jsx */
-import { jsx, css, Interpolation } from '@emotion/react'
+import { jsx, CSSObject, css } from '@emotion/react'
 import { CSSProperties } from 'react'
 import { IFC } from 'typings/reactType'
+import { MayDeepArray } from 'typings/tools'
 import { mergeRefs } from '../helper/reactHelper/mergeRefs'
+export type ICSS = MayDeepArray<CSSObject> // 因为每次组件props传递可能是会导致更深层的传递
 export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css'> {
   // 这会开启typescript的缓存机制
   // 对interface，typescript有缓存
-  css?: Interpolation
+  css?: ICSS
   /**
    * 在原来style的基础上，增加了对css variable的type类型的支持
    * 其实就是元素的style
