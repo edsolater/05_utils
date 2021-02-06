@@ -35,7 +35,7 @@ const GroupScroll = <T extends any>({
   return (
     <Div css={{ display: 'flex' }}>
       {splited.map((group, groupIndex) => (
-        <Div className='group' css={{ display: 'flex', gap: 8 }} key={groupIndex}>
+        <Div className='group' css={{ display: 'flex', gap: 2 }} key={groupIndex}>
           {group.map(renderItem)}
         </Div>
       ))}

@@ -2,7 +2,7 @@ import Div from 'baseUI/Div'
 import React from 'react'
 import { mix } from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'
-import GroupScroll from './groupScroll'
+import GroupScroll from './GroupScroll'
 import SortableList from './SortableList'
 
 const TestGrounds = () => (
@@ -20,7 +20,7 @@ const TestGrounds = () => (
       <GroupScroll
         groupCount={4} 
         items={[
-          'Dollie',
+          'Dolslie',
           'Timothy',
           'Zachary',
           'Cory',
