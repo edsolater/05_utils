@@ -1,24 +1,24 @@
 import Div from 'baseUI/Div'
 import React from 'react'
-import { mix } from 'style/cssMixins'
+import { cssMixins} from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'
 import GroupScroll from './GroupScroll'
 import SortableList from './SortableList'
 
 const TestGrounds = () => (
-  <Div css={mix('testGridContainer')}>
-    <Div css={mix('testGridItem')}>
-      <Div css={mix('gridItemTextLabel')}>拖拽排序</Div>
+  <Div css={cssMixins.testGridContainer()}>
+    <Div css={cssMixins.testGridItem()}>
+      <Div css={cssMixins.gridItemTextLabel()}>拖拽排序</Div>
       <SortableList />
     </Div>
-    <Div css={mix('testGridItem')}>
-      <Div css={mix('gridItemTextLabel')}>多item碰撞检测</Div>
+    <Div css={cssMixins.testGridItem()}>
+      <Div css={cssMixins.gridItemTextLabel()}>多item碰撞检测</Div>
       <CollapseWatcher />
     </Div>
-    <Div css={mix('testGridItem')}>
-      <Div css={mix('gridItemTextLabel')}>整片翻页</Div>
+    <Div css={cssMixins.testGridItem()}>
+      <Div css={cssMixins.gridItemTextLabel()}>整片翻页</Div>
       <GroupScroll
-        groupCount={4} 
+        groupCount={4}
         items={[
           'Dolslie',
           'Timothy',
@@ -30,36 +30,10 @@ const TestGrounds = () => (
           'Mittie',
           'Mae',
           'Maria',
-          'Wesley',
-          'Harriet',
-          'Lora',
-          'Rodney',
-          'Marcus',
-          'Cody',
-          'Ruby',
-          'Nora',
-          'Marvin',
-          'Willie',
-          'Jane',
-          'Vera',
-          'Georgie',
-          'Brett',
-          'Georgie',
-          'Christopher',
-          'Estelle',
-          'Milton',
-          'Rena',
-          'Eleanor',
-          'Brent',
-          'Lettie',
-          'Lloyd',
-          'Leon',
-          'Jennie',
-          'Chris'
+          'Wesley'
         ]}
-        renderItem={(n, idx) => (
+        renderItem={(item) => (
           <Div
-            key={idx}
             css={{
               background: 'dodgerblue',
               color: 'white',
@@ -70,12 +44,12 @@ const TestGrounds = () => (
               height: 80
             }}
           >
-            {n}
+            {item}
           </Div>
         )}
       />
     </Div>
-    <Div css={mix('testGridItem')}></Div>
+    <Div css={cssMixins.testGridItem()}></Div>
   </Div>
 )
 export default TestGrounds

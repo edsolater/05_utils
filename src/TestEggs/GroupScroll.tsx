@@ -1,27 +1,15 @@
+import React, { Fragment, ReactNode, useMemo } from 'react'
 import Div, { ICSS } from 'baseUI/Div'
-import React, { ReactNode, useMemo } from 'react'
-/**
- * 以${groupSize}为一组，进行分割
- * @param items 原数组
- * @param groupSize 分割的块的容量
- * @example
- * const splited = splitToGroups(['aa', 'bb', 'cc'], 2) // [['aa','bb'], ['cc']]
- */
-function splitToGroups<T>(items: T[], groupSize: number) {
-  const result: T[][] = []
-  let group: T[] = []
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i]
-    group.push(item)
-    if (group.length === groupSize || i === items.length - 1) {
-      result.push(group)
-      group = []
-    }
-  }
-  return result
+import { splitToGroups } from 'utils/array/splitToGroups'
+import { toPer } from 'style/cssUnits'
+const cssOutter: ICSS = { display: 'flex', scrollSnapType: 'x mandatory', overflow: 'auto' }
+const cssGroup: ICSS = {
+  flex: '0 0 auto',
+  display: 'flex',
+  scrollSnapAlign: 'start',
+  width: toPer(100),
+  justifyContent:'space-around'
 }
-
-const elementCss_group: ICSS = { display: 'flex', outline: '3px solid crimson' }
 /**每次滚动一组 */
 const GroupScroll = <T extends any>({
   items,
@@ -35,10 +23,14 @@ const GroupScroll = <T extends any>({
 }) => {
   const splited = useMemo(() => splitToGroups(items, groupCount), [items, groupCount])
   return (
-    <Div css={{ display: 'flex' }}>
+    <Div className='scroll-outter' css={cssOutter}>
       {splited.map((group, groupIndex) => (
-        <Div className='group' css={elementCss_group} key={groupIndex}>
-          {group.map(renderItem)}
+        <Div className='group' css={cssGroup} key={groupIndex}>
+          {group.map((item, idx) => (
+            <Fragment key={(item as any).key ?? (item as any).id ?? idx}>
+              {renderItem(item, idx)}
+            </Fragment>
+          ))}
         </Div>
       ))}
     </Div>

@@ -1,17 +1,13 @@
 import { ICSS } from 'baseUI/Div'
-import isArray from 'utils/judgers/isArray'
-import isFunction from 'utils/judgers/isFunction'
-import isObjectLiteral from 'utils/judgers/isObjectLiteral'
-import isString from 'utils/judgers/isString'
 
 // TODO: 放预定义的各种CSS组合
 export const cssMixins = {
   gridItemTextLabel: (): ICSS => ({
-    position: 'absolute',
+    textAlign: 'center',
     left: '50%',
     top: 0,
-    transform: 'translateX(-50%)',
     fontSize: 34,
+    margin:8,
     color: 'gray'
   }),
   testGridContainer: (): ICSS => ({
@@ -28,29 +24,4 @@ export const cssMixins = {
     overflow: 'hidden'
   })
 }
-type AllMixins = typeof cssMixins
-
-export type MixinItem =
-  | { [mixinName in keyof AllMixins]?: Parameters<AllMixins[mixinName]> }
-  | AllMixins[keyof AllMixins]
-  | keyof AllMixins
-export function mix(...mixins: MixinItem[]): ICSS {
-  const resultCssObject = {}
-  for (const mixinItem of mixins) {
-    if (isFunction(mixinItem)) {
-      Object.assign(resultCssObject, mixinItem())
-    } else if (isArray(mixinItem)) {
-      Object.assign(resultCssObject, mix(mixinItem))
-    } else if (isObjectLiteral(mixinItem)) {
-      Object.assign(
-        resultCssObject,
-        Object.entries(mixinItem)
-          .map(([mixinName, mixinParams]) => cssMixins[mixinName](...(mixinParams ?? [])))
-          .reduce((acc, cssRules) => ({ ...acc, ...cssRules }), {})
-      )
-    } else if (isString(mixinItem)) {
-      Object.assign(resultCssObject, cssMixins[mixinItem]())
-    }
-  }
-  return resultCssObject
-}
+export type AllMixins = typeof cssMixins
