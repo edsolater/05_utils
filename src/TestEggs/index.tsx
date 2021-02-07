@@ -1,6 +1,6 @@
 import Div from 'baseUI/Div'
 import React from 'react'
-import { cssMixins} from 'style/cssMixins'
+import { cssMixins } from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'
 import GroupScroll from './GroupScroll'
 import SortableList from './SortableList'
@@ -18,6 +18,7 @@ const TestGrounds = () => (
     <Div css={cssMixins.testGridItem()}>
       <Div css={cssMixins.gridItemTextLabel()}>整片翻页</Div>
       <GroupScroll
+        hideScrollbar
         groupCount={4}
         items={[
           'Dolslie',

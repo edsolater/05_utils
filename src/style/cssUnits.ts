@@ -1,6 +1,7 @@
 import isArray from 'utils/judgers/isArray'
 import isNumber from 'utils/judgers/isNumber'
 import isString from 'utils/judgers/isString'
+export type CSSLength = number | string
 export type CSSValue = number | string
 export type CSSLongValue = CSSValue | CSSValue[]
 function changeUnit(val: number | string, unit: string) {
@@ -13,7 +14,7 @@ function changeUnit(val: number | string, unit: string) {
 }
 export const toCSSString = (n: CSSLongValue): string => {
   if (isArray(n)) {
-    return n.map(toCSSString).join(' ') 
+    return n.map(toCSSString).join(' ')
   } else if (isNumber(n)) {
     return n === 0 ? '0' : `${n}px`
   } else if (isString(n)) {
