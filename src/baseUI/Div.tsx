@@ -1,10 +1,10 @@
 /** @jsx jsx */
-import { jsx, CSSObject, css } from '@emotion/react'
+import { jsx } from '@emotion/react'
 import { CSSProperties } from 'react'
+import { toCss } from 'style/cssMixins'
+import { ICSS } from 'style/cssType'
 import { IFC } from 'typings/reactType'
-import { MayDeepArray } from 'typings/tools'
-import { mergeRefs } from '../helper/reactHelper/mergeRefs'
-export type ICSS = MayDeepArray<CSSObject> // 因为每次组件props传递可能是会导致更深层的传递
+import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css'> {
   // 这会开启typescript的缓存机制
   // 对interface，typescript有缓存
@@ -42,7 +42,7 @@ const Div: IFC<DivProps> = ({
     ref={mergeRefs(domRef /* currentRef */)}
     //@ts-expect-error 因为有css variable 势必造成不匹配的问题
     style={style}
-    css={css(emotionCss)}
+    css={toCss(emotionCss)}
     draggable={draggable}
     {...restProps}
   >

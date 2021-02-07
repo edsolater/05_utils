@@ -1,7 +1,8 @@
 import React, { Fragment, ReactNode, useMemo } from 'react'
-import Div, { ICSS } from 'baseUI/Div'
+import Div from 'baseUI/Div'
 import { splitToGroups } from 'utils/array/splitToGroups'
 import { toPer } from 'style/cssUnits'
+import { ICSS } from 'style/cssType'
 const cssOutter: ICSS = { display: 'flex', scrollSnapType: 'x mandatory', overflow: 'auto' }
 const cssGroup: ICSS = {
   flex: '0 0 auto',
@@ -21,10 +22,10 @@ const GroupScroll = <T extends any>({
   groupCount: number
   renderItem: (item: T, itemIndex: number) => ReactNode
 }) => {
-  const splited = useMemo(() => splitToGroups(items, groupCount), [items, groupCount])
+  const groupedItems = useMemo(() => splitToGroups(items, groupCount), [items, groupCount])
   return (
     <Div className='scroll-outter' css={cssOutter}>
-      {splited.map((group, groupIndex) => (
+      {groupedItems.map((group, groupIndex) => (
         <Div className='group' css={cssGroup} key={groupIndex}>
           {group.map((item, idx) => (
             <Fragment key={(item as any).key ?? (item as any).id ?? idx}>
