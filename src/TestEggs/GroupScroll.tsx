@@ -56,7 +56,7 @@ const GroupScroll = <T extends any>({
               behavior: 'smooth'
             })
           }}
-          css={{ cursor: 'pointer', userSelect: 'none' }}
+          css={mix(cssMixins.buttonStyle)}
         >
           {'◀'}
         </Div>
@@ -68,7 +68,7 @@ const GroupScroll = <T extends any>({
               behavior: 'smooth'
             })
           }}
-          css={{ cursor: 'pointer', userSelect: 'none' }}
+          css={mix(cssMixins.buttonStyle)}
         >
           {'▶'}
         </Div>

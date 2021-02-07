@@ -1,6 +1,8 @@
 import { css, CSSObject } from '@emotion/react'
+import { transform } from 'lodash'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
+import { cssBrightness, cssScale } from './cssFunctions'
 import { ICSS } from './cssType'
 
 export type AllMixinNames = keyof typeof cssMixins
@@ -37,10 +39,14 @@ export const cssMixins = {
       position: 'relative',
       overflow: 'hidden'
     }),
+
+  /**禁止 flexItem 伸缩 */
   solidFlexItem: () =>
     ICSS({
       flex: '0 0 auto'
     }),
+
+  /**组件禁用滚动条 */
   noScrollbar: () =>
     ICSS({
       scrollbarWidth: 'none',
@@ -48,6 +54,8 @@ export const cssMixins = {
         display: 'none'
       }
     }),
+
+  /**横向布局 */
   horizontalLayout: ({
     gap = 8,
     justifyContent = 'center'
@@ -59,6 +67,21 @@ export const cssMixins = {
       display: 'flex',
       justifyContent,
       gap
+    }),
+
+  /**表明此元素是个button */
+  buttonStyle: ({}: {} = {}) =>
+    ICSS({
+      cursor: 'pointer',
+      userSelect: 'none',
+      ':hover': {
+        filter: cssBrightness(0.9),
+        transform: cssScale(1.1)
+      },
+      ':active': {
+        filter: cssBrightness(0.8),
+        transform: cssScale(0.9)
+      }
     })
 }
 /**

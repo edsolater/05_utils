@@ -22,3 +22,7 @@ export const cssTransform = (options: {
   translate?: Parameters<typeof cssTranslate>
   scale?: Parameters<typeof cssScale>
 }) => [cssTranslate(...(options.translate ?? [])), cssScale(...(options.scale ?? []))].join(' ')
+
+/* ---------------------------- css filter 家族 ---------------------------- */
+
+export const cssBrightness = (v?: number | string) => (isExist(v) ? `brightness(${v})` : '')
