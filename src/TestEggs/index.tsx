@@ -19,7 +19,7 @@ const TestGrounds = () => (
       <Div css={cssMixins.gridItemTextLabel()}>整片翻页</Div>
       <GroupScroll
         hideScrollbar
-        groupCount={4}
+        groupCapacity={4}
         items={[
           'Dolslie',
           'Timothy',

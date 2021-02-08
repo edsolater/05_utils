@@ -5,7 +5,6 @@
  ****************************************************************************/
 
 import { ID } from 'typings/constants'
-import { PeerConnectionSide } from '.'
 import { IdTarget } from './transmitStream'
 
 interface DataChannelMessage {

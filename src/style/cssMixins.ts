@@ -1,5 +1,4 @@
 import { css, CSSObject } from '@emotion/react'
-import { transform } from 'lodash'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
 import { cssBrightness, cssScale } from './cssFunctions'
@@ -9,13 +8,13 @@ export type AllMixinNames = keyof typeof cssMixins
 type MixinFunction = (...any: any[]) => ICSS
 // TODO: 放预定义的各种CSS组合
 export const cssMixins = {
-  gridItemTextLabel: ({ fontSize = 34 }: { fontSize?: CSSObject['fontSize'] } = {}) =>
+  gridItemTextLabel: (opt: { fontSize?: CSSObject['fontSize'] } = {}) =>
     ICSS(
       {
         textAlign: 'center',
         left: '50%',
         top: 0,
-        fontSize,
+        fontSize: opt.fontSize ?? 34,
         margin: 8,
         color: 'gray'
       },
