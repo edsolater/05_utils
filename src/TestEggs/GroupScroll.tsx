@@ -92,7 +92,7 @@ const GroupScroll = <T extends any>({
         console.log('scrollX: ', scrollX)
         console.log('scrollY: ', scrollY)
 
-        // 怎么能够检测到元素的滚动呢？我觉得还需要个isScrolling
+        // 怎么能够检测到元素的滚动呢？我觉得还需要个isScrolling。哦哦哦，换个想法，就是看scrollTop多少以确定当前序号
         scrollX > 0 && plusCurrentIndex
         scrollX < 0 && minusCurrentIndex
       },
