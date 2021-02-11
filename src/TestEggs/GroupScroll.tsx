@@ -10,12 +10,13 @@ const cssOutter = (hideScrollbar?: boolean) =>
     scrollSnapType: 'x mandatory',
     overflow: 'auto'
   })
-const cssGroup = mix(cssMixins.solidFlexItem, {
-  display: 'flex',
-  scrollSnapAlign: 'start',
-  width: toPer(100),
-  justifyContent: 'space-around'
-})
+const cssGroup = () =>
+  mix(cssMixins.solidFlexItem, {
+    display: 'flex',
+    scrollSnapAlign: 'start',
+    width: toPer(100),
+    justifyContent: 'space-around'
+  })
 /**每次滚动一组 */
 const GroupScroll = <T extends any>({
   hideScrollbar,
@@ -30,38 +31,23 @@ const GroupScroll = <T extends any>({
   groupCapacity: number
   renderItem: (item: T, itemIndex: number) => ReactNode
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const prevCurrentIndex = useRef(0) // TODO: 我觉得这里能封装成一个hooks啊, useState与useEffect结合
-
   const groupedItems = useMemo(() => splitToGroups(items, groupCapacity), [items, groupCapacity])
+  const [currentIndex, setCurrentIndex] = useState(0)
   const outterRef = useRef<HTMLDivElement>()
 
   const plusCurrentIndex = () => {
     const canScrollRight = currentIndex !== groupedItems.length - 1
     if (canScrollRight) {
-      setCurrentIndex((n) => {
-        prevCurrentIndex.current = n
-        return n + 1
-      })
+      elementScrollRight(outterRef.current!)
     }
   }
   const minusCurrentIndex = () => {
     const canScrollLeft = currentIndex !== 0
     if (canScrollLeft) {
-      setCurrentIndex((n) => {
-        prevCurrentIndex.current = n
-        return n - 1
-      })
+      elementScrollLeft(outterRef.current!)
     }
   }
 
-  // 就是要记录scroll的位置数据，TODO：应该要抽成一个组件
-  const prevScrollTop = useRef(0)
-  const prevScrollLeft = useRef(0)
-  useEffect(() => {
-    prevScrollTop.current = outterRef.current?.scrollTop ?? 0
-    prevScrollLeft.current = outterRef.current?.scrollLeft ?? 0
-  }, [])
   /**
    * 元素向左滚动一屏
    * @param el 元素
@@ -75,26 +61,12 @@ const GroupScroll = <T extends any>({
   const elementScrollRight = (el: HTMLElement | undefined | null) =>
     el?.scrollBy({ left: el.clientWidth, behavior: 'smooth' })
 
-  useEffect(() => {
-    if (currentIndex > prevCurrentIndex.current) elementScrollRight(outterRef.current!)
-    if (currentIndex < prevCurrentIndex.current) elementScrollLeft(outterRef.current!)
-  }, [currentIndex])
-
   const attachGroupScroll = (el: HTMLElement | undefined | null) => {
     el?.addEventListener(
       'scroll',
-      (ev) => {
-        const scrollX = el.scrollLeft - prevScrollLeft.current
-        const scrollY = el.scrollTop - prevScrollTop.current
-        prevScrollTop.current = el.scrollTop
-        prevScrollLeft.current = el.scrollLeft
-
-        console.log('scrollX: ', scrollX)
-        console.log('scrollY: ', scrollY)
-
-        // 怎么能够检测到元素的滚动呢？我觉得还需要个isScrolling。哦哦哦，换个想法，就是看scrollTop多少以确定当前序号
-        scrollX > 0 && plusCurrentIndex
-        scrollX < 0 && minusCurrentIndex
+      () => {
+        const contentOrder = Math.round(el.scrollLeft / el.clientWidth)
+        if (contentOrder !== currentIndex) setCurrentIndex(contentOrder)
       },
       { passive: true }
     )
@@ -110,7 +82,7 @@ const GroupScroll = <T extends any>({
         css={cssOutter(hideScrollbar)}
       >
         {groupedItems.map((group, groupIndex) => (
-          <Div className='group-scroll-group' css={cssGroup} key={groupIndex}>
+          <Div className='group-scroll-group' css={cssGroup()} key={groupIndex}>
             {group.map((item, idx) => (
               <Fragment key={(item as any).key ?? (item as any).id ?? idx}>
                 {renderItem(item, idx)}
@@ -145,14 +117,3 @@ const GroupScroll = <T extends any>({
   )
 }
 export default GroupScroll
-
-/**禁止滚动 */
-function disableScrolling(el: HTMLElement | undefined | null) {
-  if (!el) return
-  el.style['overflow'] = 'hidden'
-}
-/**允许滚动 */
-function restoreScrolling(el: HTMLElement | undefined | null) {
-  if (!el) return
-  el.style['overflow'] = ''
-}
