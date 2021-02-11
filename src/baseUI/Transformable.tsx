@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import Div from './Div'
 
-import isHTMLElement from 'helper/domElement/isHTMLElement'
-import { Delta2d, Delta2dTranslate, Direction, Vector } from 'typings/constants'
+import { Delta2dTranslate, Direction, Vector } from 'typings/constants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import { IFC } from 'typings/reactType'
 import {
@@ -19,9 +18,8 @@ import inertialSlide from 'helper/manageStyle/inertialSlide'
 import attachGestureScale from 'helper/manageEvent/attachGestureScale'
 import attachPointer from 'helper/manageEvent/attachPointer'
 import { fullVw, halfPer, toPer } from 'style/cssUnits'
-import { cssScale, cssTransform, cssTranslate } from 'style/cssFunctions'
+import { cssTransform } from 'style/cssFunctions'
 import cssColor from 'style/cssColor'
-type RootElement = HTMLDivElement
 export type BoundingRect = {
   left: number
   top: number
@@ -40,48 +38,48 @@ type ResizeBy = 'wheel' | 'right-bottom dot'
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
  */
-const Transformable: IFC<
-  {
-    /* ----------------------------------- 拖动 ----------------------------------- */
+const Transformable: IFC<{
+  /* ----------------------------------- 拖动 ----------------------------------- */
 
-    movable?: boolean
-    moveDirection?: Direction | 'both'
-    /** 可拖动的区域 */
-    moveBoundary?: 'offsetParent' | 'none'
-    onMoveStart?: (el: RootElement) => void
-    onMoveEnd?: (el: RootElement, speedVector: Vector) => void
-    onMove?: (el: RootElement, delta: Delta2dTranslate) => void
-    onReachOffsetBoundary?: (el: RootElement, boundary: 'left' | 'top' | 'right' | 'bottom') => void
+  movable?: boolean
+  moveDirection?: Direction | 'both'
+  /** 可拖动的区域 */
+  moveBoundary?: 'offsetParent' | 'none'
+  onMoveStart?: (el: HTMLDivElement) => void
+  onMoveEnd?: (el: HTMLDivElement, speedVector: Vector) => void
+  onMove?: (el: HTMLDivElement, delta: Delta2dTranslate) => void
+  onReachOffsetBoundary?: (
+    el: HTMLDivElement,
+    boundary: 'left' | 'top' | 'right' | 'bottom'
+  ) => void
 
-    /* ---------------------------------- 惯性滑动 ---------------------------------- */
+  /* ---------------------------------- 惯性滑动 ---------------------------------- */
 
-    /** 开启惯性滑动 */
-    canInertialSlide?: boolean
-    /** （前提：已开启惯性滚动）惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
-    acc?: number
-    /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
-    maxInitSpeed?: number
-    onSlideEnd?: (el: RootElement) => void
+  /** 开启惯性滑动 */
+  canInertialSlide?: boolean
+  /** （前提：已开启惯性滚动）惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
+  acc?: number
+  /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
+  maxInitSpeed?: number
+  onSlideEnd?: (el: HTMLDivElement) => void
 
-    /* ---------------------------------- 大小变化 ---------------------------------- */
-    /**会放大缩小，但只是影响试图 */
-    scalable?: boolean
+  /* ---------------------------------- 大小变化 ---------------------------------- */
+  /**会放大缩小，但只是影响试图 */
+  scalable?: boolean
 
-    /**会放大缩小，会影响元素的大小 */
-    resizable?: boolean
-    /**放大缩小的触发器，有滚轮、鼠标拖拽点 */
-    resizeBy?: ResizeBy | ResizeBy[]
-    /**内部元素的形状，会影响鼠标拖拽点的位置 */
-    innerShape?: 'rect' | 'circle'
-    /**滚轮改变大小的速度 */
-    resizeWheelSpeed?: number
-    /**改变大小的下限 */
-    resizeMinRatio?: number
-    /**改变大小的上限 */
-    resizeMaxRatio?: number
-  },
-  RootElement
-> = ({
+  /**会放大缩小，会影响元素的大小 */
+  resizable?: boolean
+  /**放大缩小的触发器，有滚轮、鼠标拖拽点 */
+  resizeBy?: ResizeBy | ResizeBy[]
+  /**内部元素的形状，会影响鼠标拖拽点的位置 */
+  innerShape?: 'rect' | 'circle'
+  /**滚轮改变大小的速度 */
+  resizeWheelSpeed?: number
+  /**改变大小的下限 */
+  resizeMinRatio?: number
+  /**改变大小的上限 */
+  resizeMaxRatio?: number
+}> = ({
   movable = true,
   scalable = false,
   resizable = false,
@@ -106,7 +104,7 @@ const Transformable: IFC<
   css,
   ...restProps
 }) => {
-  const box = useRef<RootElement>(null)
+  const box = useRef<HTMLDivElement>(null)
   const rightBottomTrigger = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (movable) {

@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Fragment, ReactNode, useMemo, useRef, useState } from 'react'
 import Div from 'baseUI/Div'
 import { splitToGroups } from 'utils/array/splitToGroups'
 import { toPer } from 'style/cssUnits'
@@ -31,9 +31,9 @@ const GroupScroll = <T extends any>({
   groupCapacity: number
   renderItem: (item: T, itemIndex: number) => ReactNode
 }) => {
+  const outterRef = useRef<HTMLDivElement>()
   const groupedItems = useMemo(() => splitToGroups(items, groupCapacity), [items, groupCapacity])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const outterRef = useRef<HTMLDivElement>()
   const elementScrollLeft = () =>
     outterRef.current!.scrollBy({ left: -1 * outterRef.current!.clientWidth, behavior: 'smooth' })
   const elementScrollRight = () =>

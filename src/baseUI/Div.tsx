@@ -26,13 +26,11 @@ export interface DivProps extends Omit<JSX.IntrinsicElements['div'], 'style' | '
         '--y'?: number
         [variableName: string]: number | string | undefined
       } // TODO
-  draggable?: boolean
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
 
 const Div: IFC<DivProps> = ({
   css: emotionCss,
-  draggable,
   style,
   children,
   domRef,
@@ -43,7 +41,6 @@ const Div: IFC<DivProps> = ({
     //@ts-expect-error 因为有css variable 势必造成不匹配的问题
     style={style}
     css={toCss(emotionCss)}
-    draggable={draggable}
     {...restProps}
   >
     {children}
