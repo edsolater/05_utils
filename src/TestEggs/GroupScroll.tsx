@@ -34,37 +34,16 @@ const GroupScroll = <T extends any>({
   const groupedItems = useMemo(() => splitToGroups(items, groupCapacity), [items, groupCapacity])
   const [currentIndex, setCurrentIndex] = useState(0)
   const outterRef = useRef<HTMLDivElement>()
-
-  const plusCurrentIndex = () => {
-    const canScrollRight = currentIndex !== groupedItems.length - 1
-    if (canScrollRight) {
-      elementScrollRight(outterRef.current!)
-    }
-  }
-  const minusCurrentIndex = () => {
-    const canScrollLeft = currentIndex !== 0
-    if (canScrollLeft) {
-      elementScrollLeft(outterRef.current!)
-    }
-  }
-
-  /**
-   * 元素向左滚动一屏
-   * @param el 元素
-   */
-  const elementScrollLeft = (el: HTMLElement | undefined | null) =>
-    el?.scrollBy({ left: -1 * el.clientWidth, behavior: 'smooth' })
-  /**
-   * 元素向右滚动一屏
-   * @param el 元素
-   */
-  const elementScrollRight = (el: HTMLElement | undefined | null) =>
-    el?.scrollBy({ left: el.clientWidth, behavior: 'smooth' })
+  const elementScrollLeft = () =>
+    outterRef.current!.scrollBy({ left: -1 * outterRef.current!.clientWidth, behavior: 'smooth' })
+  const elementScrollRight = () =>
+    outterRef.current!.scrollBy({ left: outterRef.current!.clientWidth, behavior: 'smooth' })
 
   const attachGroupScroll = (el: HTMLElement | undefined | null) => {
     el?.addEventListener(
       'scroll',
       () => {
+        // 滚动时更新 currentIndex
         const contentOrder = Math.round(el.scrollLeft / el.clientWidth)
         if (contentOrder !== currentIndex) setCurrentIndex(contentOrder)
       },
@@ -99,7 +78,7 @@ const GroupScroll = <T extends any>({
       >
         <Div
           className='group-scroll-controller-left-arrow'
-          onClick={minusCurrentIndex}
+          onClick={elementScrollLeft}
           css={mix(cssMixins.buttonStyle)}
         >
           {'◀'}
@@ -107,7 +86,7 @@ const GroupScroll = <T extends any>({
         {currentIndex}
         <Div
           className='group-scroll-controller-right-arrow'
-          onClick={plusCurrentIndex}
+          onClick={elementScrollRight}
           css={mix(cssMixins.buttonStyle)}
         >
           {'▶'}
