@@ -1,5 +1,5 @@
 import React, { Fragment, ReactNode, useMemo, useRef, useState } from 'react'
-import Div from 'baseUI/Div'
+import Div, { DivProps } from 'baseUI/Div'
 import { splitToGroups } from 'utils/array/splitToGroups'
 import { toPer } from 'style/cssUnits'
 import { mix, cssMixins } from 'style/cssMixins'
@@ -17,20 +17,23 @@ const cssGroup = () =>
     width: toPer(100),
     justifyContent: 'space-around'
   })
+interface GroupScrollProps<T> extends DivProps {
+  /**隐藏scrollbar */
+  hideScrollbar?: boolean
+  items: ReadonlyArray<T>
+  /**单个grop中的item数量 */
+  groupCapacity: number
+  renderItem: (item: T, itemIndex: number) => ReactNode
+}
+
 /**每次滚动一组 */
 const GroupScroll = <T extends any>({
   hideScrollbar,
   items,
   groupCapacity,
-  renderItem
-}: {
-  /**隐藏scrollbar */
-  hideScrollbar?: boolean
-  items: T[]
-  /**单个grop中的item数量 */
-  groupCapacity: number
-  renderItem: (item: T, itemIndex: number) => ReactNode
-}) => {
+  renderItem,
+  ...restProps
+}: GroupScrollProps<T>) => {
   const outterRef = useRef<HTMLDivElement>()
   const groupedItems = useMemo(() => splitToGroups(items, groupCapacity), [items, groupCapacity])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -56,9 +59,10 @@ const GroupScroll = <T extends any>({
       {/* 展示 TODO: 页面滚轮要能直接整屏滚动 */}
       {/* 滚动检测元素 */}
       <Div
-        domRef={mergeRefs(outterRef, attachGroupScroll)}
         className='group-scroll-outter'
+        domRef={mergeRefs(outterRef, attachGroupScroll)}
         css={cssOutter(hideScrollbar)}
+        handoffProps={restProps}
       >
         {groupedItems.map((group, groupIndex) => (
           <Div className='group-scroll-group' css={cssGroup()} key={groupIndex}>

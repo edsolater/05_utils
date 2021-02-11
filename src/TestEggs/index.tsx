@@ -20,7 +20,7 @@ const TestGrounds = () => (
       <GroupScroll
         hideScrollbar
         groupCapacity={4}
-        items={[
+        items={([
           'Dolslie',
           'Timothy',
           'Zachary',
@@ -31,8 +31,8 @@ const TestGrounds = () => (
           'Mittie',
           'Mae',
           'Maria',
-          'Wesley'
-        ]}
+          'Wesley',
+        ] as const)}
         renderItem={(item) => (
           <Div
             css={{

@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import Div from './Div'
+import Div, { DivProps } from './Div'
 
 import { Delta2dTranslate, Direction, Vector } from 'typings/constants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
-import { IFC } from 'typings/reactType'
 import {
   DIRECTION_BOTTOM,
   DIRECTION_LEFT,
@@ -26,19 +25,7 @@ export type BoundingRect = {
   right: number
   bottom: number
 }
-function asyncInvoke<T extends Array<any>>(fn: ((...any: T) => any) | undefined, ...args: T): void {
-  if (fn) {
-    window.requestIdleCallback(() => {
-      fn(...args)
-    })
-  }
-}
-type ResizeBy = 'wheel' | 'right-bottom dot'
-/**
- * 包裹一层div，使该元素与其子元素能被随意拖动
- * 注意：不可与draggable混淆
- */
-const Transformable: IFC<{
+interface TransformableProps extends DivProps {
   /* ----------------------------------- 拖动 ----------------------------------- */
 
   movable?: boolean
@@ -79,7 +66,20 @@ const Transformable: IFC<{
   resizeMinRatio?: number
   /**改变大小的上限 */
   resizeMaxRatio?: number
-}> = ({
+}
+function asyncInvoke<T extends Array<any>>(fn: ((...any: T) => any) | undefined, ...args: T): void {
+  if (fn) {
+    window.requestIdleCallback(() => {
+      fn(...args)
+    })
+  }
+}
+type ResizeBy = 'wheel' | 'right-bottom dot'
+/**
+ * 包裹一层div，使该元素与其子元素能被随意拖动
+ * 注意：不可与draggable混淆
+ */
+const Transformable = ({
   movable = true,
   scalable = false,
   resizable = false,
@@ -103,7 +103,7 @@ const Transformable: IFC<{
   className,
   css,
   ...restProps
-}) => {
+}: TransformableProps) => {
   const box = useRef<HTMLDivElement>(null)
   const rightBottomTrigger = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -205,6 +205,7 @@ const Transformable: IFC<{
           position: 'relative',
           width: 'max-content',
           touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
+          userSelect: 'none', // 禁用掉文字的用户选择
           transform: `${
             movable ? 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))' : ''
           }${scalable ? ' scale(var(--scale, 1))' : ''}`, // TODO: 下面那个用var加px单位的也要放到函数中去
@@ -215,7 +216,7 @@ const Transformable: IFC<{
         },
         css
       ]}
-      {...restProps}
+      handoffProps={restProps}
     >
       {children}
       {resizable && (

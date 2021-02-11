@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, CSSObject, keyframes } from '@emotion/react'
-import { IFC } from 'typings/reactType'
 import Div from 'baseUI/Div'
+import Button, { ButtonProps } from 'baseUI/Button'
 
 const KeyframeRadarWave = keyframes`
   from {
@@ -43,19 +43,19 @@ const cssWave: CSSObject = {
   )`,
   animation: `${KeyframeRadarWave} 1s infinite`
 }
-const StyledButton: IFC<{ onClick?: (e: MouseEvent) => void }, HTMLButtonElement> = ({
-  className,
-  css,
-  onClick,
-  children
-}) => {
+
+const StyledButton = ({ className, css, onClick, children, ...restProps }: ButtonProps) => {
   return (
-    //@ts-expect-error interface extend 有问题
-    <button css={[cssButton, cssPrimaryButton, css]} className={className} onClick={onClick}>
+    <Button
+      handoffProps={restProps}
+      css={[cssButton, cssPrimaryButton, css]}
+      className={className}
+      onClick={onClick}
+    >
       {children}
       <Div className='wave1' css={cssWave}></Div>
       <Div className='wave2' css={[cssWave, { animationDelay: '.3s' }]}></Div>
-    </button>
+    </Button>
   )
 }
 

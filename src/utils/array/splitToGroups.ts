@@ -5,7 +5,7 @@
  * @example
  * const splited = splitToGroups(['aa', 'bb', 'cc'], 2) // [['aa','bb'], ['cc']]
  */
-export function splitToGroups<T>(items: T[], groupSize: number) {
+export function splitToGroups<T>(items: Readonly<T[]>, groupSize: number) {
   const result: T[][] = [];
   let group: T[] = [];
   for (let i = 0; i < items.length; i++) {
