@@ -1,9 +1,10 @@
 /**********************
- * 
+ *
  * 目的：暴露与scroll相关的API
+ * 需要能做到自定义滚动条、弹性滚动
  * 逻辑与样式相分离
- * 
+ *
  **********************/
- const Scroll  = () => {}
+const Scroll = () => {}
 
- export default Scroll
+export default Scroll
