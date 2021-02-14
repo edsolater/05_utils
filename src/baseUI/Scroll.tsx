@@ -13,11 +13,15 @@ import { IRef } from 'typings/reactType'
 import useWatch from 'TestEggs/useWatch'
 import notNullish from 'utils/judgers/notNullish'
 import useRecordedRef from 'TestEggs/useRecordedRef'
+// TODO 有个flex，还是与业务太绑定了
 const cssOutter = (hideScrollbar?: boolean) =>
   mix(hideScrollbar && cssMixins.noScrollbar, {
     display: 'flex',
     scrollSnapType: 'x mandatory',
-    overflow: 'auto'
+    overflow: 'auto',
+    '> *': {
+      scrollSnapAlign: 'start'
+    }
   })
 export interface ScrollHandles {
   toRightPage: () => void
@@ -112,7 +116,7 @@ const Scroll = ({
         className='scroll-outter'
         domRef={mergeRefs(outterRef, attachScroll)}
         css={cssOutter(hideScrollbar)}
-        _handoffProps={restProps}
+        _baseProps={restProps}
       >
         {children}
       </Div>

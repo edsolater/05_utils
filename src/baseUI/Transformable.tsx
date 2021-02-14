@@ -216,7 +216,7 @@ const Transformable = ({
         },
         css
       ]}
-      _handoffProps={restProps}
+      _baseProps={restProps}
     >
       {children}
       {resizable && (

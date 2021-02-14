@@ -1,17 +1,16 @@
 import React, { Fragment, ReactNode, useMemo, useRef, useState } from 'react'
-import Div, { DivProps } from 'baseUI/Div'
+import Div, { BaseProps } from 'baseUI/Div'
 import { splitToGroups } from 'utils/array/splitToGroups'
 import { toPer } from 'style/cssUnits'
 import { mix, cssMixins } from 'style/cssMixins'
 import Scroll, { ScrollHandles } from 'baseUI/Scroll'
 const cssGroup = () =>
   mix(cssMixins.solidFlexItem, {
-    display: 'flex',
-    scrollSnapAlign: 'start',
     width: toPer(100),
+    display: 'flex',
     justifyContent: 'space-around'
   })
-interface GroupScrollProps<T> extends DivProps {
+interface GroupScrollProps<T> extends BaseProps {
   /**隐藏scrollbar */
   hideScrollbar?: boolean
   items: ReadonlyArray<T>
@@ -34,16 +33,15 @@ const GroupScroll = <T extends any>({
 
   const toLeft = () => ScrollRef.current?.toLeftPage()
   const toRight = () => ScrollRef.current?.toRightPage()
-
   return (
-    <Div className='GroupScroll' _handoffProps={restProps}>
-      {/* 展示 TODO: 页面滚轮要能直接整屏滚动 */}
+    <Div className='GroupScroll' _baseProps={restProps}>
       {/* 滚动检测元素 */}
+      {/* TODO：是否需要整屏滚动应该是传入个props就好了的 */}
       <Scroll componentRef={ScrollRef} onScrollIndexChange={setCurrentIndex}>
         {groupedItems.map((group, groupIndex) => (
-          <Div className='group-scroll-group' css={cssGroup()} key={groupIndex}>
+          <Div className='GroupScroll__group' css={cssGroup()} key={groupIndex}>
             {group.map((item, idx) => (
-              <Fragment key={(item as any).key ?? (item as any).id ?? idx}>
+              <Fragment key={(item as any)?.key ?? (item as any)?.id ?? idx}>
                 {renderItem(item, idx)}
               </Fragment>
             ))}
@@ -53,11 +51,11 @@ const GroupScroll = <T extends any>({
 
       {/* 控制按钮（上一页/下一页） */}
       <Div
-        className='group-scroll-controller'
+        className='GroupScroll__controller'
         css={mix(cssMixins.horizontalLayout, { fontSize: '3em' })}
       >
         <Div
-          className='group-scroll-controller-left-arrow'
+          className='GroupScroll__controller-left-arrow'
           onClick={toLeft}
           css={mix(cssMixins.buttonStyle)}
         >
@@ -65,7 +63,7 @@ const GroupScroll = <T extends any>({
         </Div>
         {currentIndex}
         <Div
-          className='group-scroll-controller-right-arrow'
+          className='GroupScroll__controller-right-arrow'
           onClick={toRight}
           css={mix(cssMixins.buttonStyle)}
         >
@@ -77,6 +75,4 @@ const GroupScroll = <T extends any>({
 }
 export default GroupScroll
 
-function useElementRef<E = any>() {
-  const _innerRef = useRef<E>()
-}
+

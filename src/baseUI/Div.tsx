@@ -35,7 +35,7 @@ export interface DivProps
   extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css' | 'onClick' | 'className'>,
     BaseProps {
   // 就是个为了编写props方便而设立的，优先级比直接定义低
-  _handoffProps?: DivProps
+  _baseProps?: DivProps
   _tagName?: 'div' | 'button' | 'img' | (string & {}) //TODO Div 作为一个桥梁，应该能自定义tagName
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
@@ -45,7 +45,7 @@ const Div = ({
   style,
   children,
   domRef,
-  _handoffProps: handoffProps,
+  _baseProps: handoffProps,
   ...restProps
 }: DivProps) => (
   <div
