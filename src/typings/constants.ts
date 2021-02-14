@@ -74,3 +74,8 @@ export type Direction = 'x' | 'y'
  * 3个方向
  */
 export type Direction3D = 'x' | 'y' | 'z'
+
+/**
+ * 对应event都有的timeStamp
+ */
+export type Timestamp = number

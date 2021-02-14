@@ -21,7 +21,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <Div
-      handoffProps={restProps}
+      _handoffProps={restProps}
       css={[
         {
           width: size,

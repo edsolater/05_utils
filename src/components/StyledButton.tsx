@@ -47,7 +47,7 @@ const cssWave: CSSObject = {
 const StyledButton = ({ className, css, onClick, children, ...restProps }: ButtonProps) => {
   return (
     <Button
-      handoffProps={restProps}
+      _handoffProps={restProps}
       css={[cssButton, cssPrimaryButton, css]}
       className={className}
       onClick={onClick}

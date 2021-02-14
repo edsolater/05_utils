@@ -3,13 +3,7 @@ import Div, { DivProps } from 'baseUI/Div'
 import { splitToGroups } from 'utils/array/splitToGroups'
 import { toPer } from 'style/cssUnits'
 import { mix, cssMixins } from 'style/cssMixins'
-import { mergeRefs } from 'helper/reactHelper/mergeRefs'
-const cssOutter = (hideScrollbar?: boolean) =>
-  mix(hideScrollbar && cssMixins.noScrollbar, {
-    display: 'flex',
-    scrollSnapType: 'x mandatory',
-    overflow: 'auto'
-  })
+import Scroll, { ScrollHandles } from './Scroll'
 const cssGroup = () =>
   mix(cssMixins.solidFlexItem, {
     display: 'flex',
@@ -34,35 +28,20 @@ const GroupScroll = <T extends any>({
   renderItem,
   ...restProps
 }: GroupScrollProps<T>) => {
-  const outterRef = useRef<HTMLDivElement>()
   const groupedItems = useMemo(() => splitToGroups(items, groupCapacity), [items, groupCapacity])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const elementScrollLeft = () =>
-    outterRef.current!.scrollBy({ left: -1 * outterRef.current!.clientWidth, behavior: 'smooth' })
-  const elementScrollRight = () =>
-    outterRef.current!.scrollBy({ left: outterRef.current!.clientWidth, behavior: 'smooth' })
+  const ScrollRef = useRef<ScrollHandles>()
 
-  const attachGroupScroll = (el: HTMLElement | undefined | null) => {
-    el?.addEventListener(
-      'scroll',
-      () => {
-        // 滚动时更新 currentIndex
-        const contentOrder = Math.round(el.scrollLeft / el.clientWidth)
-        if (contentOrder !== currentIndex) setCurrentIndex(contentOrder)
-      },
-      { passive: true }
-    )
-  }
+  const toLeft = () => ScrollRef.current?.toLeftPage()
+  const toRight = () => ScrollRef.current?.toRightPage()
 
   return (
-    <>
+    <Div className='GroupScroll' _handoffProps={restProps}>
       {/* 展示 TODO: 页面滚轮要能直接整屏滚动 */}
       {/* 滚动检测元素 */}
-      <Div
-        className='group-scroll-outter'
-        domRef={mergeRefs(outterRef, attachGroupScroll)}
-        css={cssOutter(hideScrollbar)}
-        handoffProps={restProps}
+      <Scroll
+        componentRef={ScrollRef}
+        onPageIndexChange={setCurrentIndex}
       >
         {groupedItems.map((group, groupIndex) => (
           <Div className='group-scroll-group' css={cssGroup()} key={groupIndex}>
@@ -73,7 +52,7 @@ const GroupScroll = <T extends any>({
             ))}
           </Div>
         ))}
-      </Div>
+      </Scroll>
 
       {/* 控制按钮（上一页/下一页） */}
       <Div
@@ -82,7 +61,7 @@ const GroupScroll = <T extends any>({
       >
         <Div
           className='group-scroll-controller-left-arrow'
-          onClick={elementScrollLeft}
+          onClick={toLeft}
           css={mix(cssMixins.buttonStyle)}
         >
           {'◀'}
@@ -90,13 +69,13 @@ const GroupScroll = <T extends any>({
         {currentIndex}
         <Div
           className='group-scroll-controller-right-arrow'
-          onClick={elementScrollRight}
+          onClick={toRight}
           css={mix(cssMixins.buttonStyle)}
         >
           {'▶'}
         </Div>
       </Div>
-    </>
+    </Div>
   )
 }
 export default GroupScroll
