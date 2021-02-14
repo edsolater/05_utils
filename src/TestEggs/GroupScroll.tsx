@@ -3,7 +3,7 @@ import Div, { DivProps } from 'baseUI/Div'
 import { splitToGroups } from 'utils/array/splitToGroups'
 import { toPer } from 'style/cssUnits'
 import { mix, cssMixins } from 'style/cssMixins'
-import Scroll, { ScrollHandles } from './Scroll'
+import Scroll, { ScrollHandles } from 'baseUI/Scroll'
 const cssGroup = () =>
   mix(cssMixins.solidFlexItem, {
     display: 'flex',
@@ -39,10 +39,7 @@ const GroupScroll = <T extends any>({
     <Div className='GroupScroll' _handoffProps={restProps}>
       {/* 展示 TODO: 页面滚轮要能直接整屏滚动 */}
       {/* 滚动检测元素 */}
-      <Scroll
-        componentRef={ScrollRef}
-        onPageIndexChange={setCurrentIndex}
-      >
+      <Scroll componentRef={ScrollRef} onScrollIndexChange={setCurrentIndex}>
         {groupedItems.map((group, groupIndex) => (
           <Div className='group-scroll-group' css={cssGroup()} key={groupIndex}>
             {group.map((item, idx) => (
@@ -79,3 +76,7 @@ const GroupScroll = <T extends any>({
   )
 }
 export default GroupScroll
+
+function useElementRef<E = any>() {
+  const _innerRef = useRef<E>()
+}

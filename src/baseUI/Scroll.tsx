@@ -5,12 +5,14 @@
  * 逻辑与样式相分离
  *
  **********************/
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { useImperativeHandle, useMemo, useRef } from 'react'
 import Div, { BaseProps } from 'baseUI/Div'
 import { mix, cssMixins } from 'style/cssMixins'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
-import useWatchValue from './useWatch'
 import { IRef } from 'typings/reactType'
+import useWatch from 'TestEggs/useWatch'
+import notNullish from 'utils/judgers/notNullish'
+import useRecordedRef from 'TestEggs/useRecordedRef'
 const cssOutter = (hideScrollbar?: boolean) =>
   mix(hideScrollbar && cssMixins.noScrollbar, {
     display: 'flex',
@@ -20,22 +22,31 @@ const cssOutter = (hideScrollbar?: boolean) =>
 export interface ScrollHandles {
   toRightPage: () => void
   toLeftPage: () => void
+  toScrollPage: (offset: number) => void
 }
-interface OnScrollEvent {
+export interface OnScrollEvent {
   path: HTMLElement[]
   target: HTMLDivElement
   timestamp: Event['timeStamp']
+  currentScrollIndex: number
+  prevScrollIndex: undefined | number
 }
-interface ScrollProps extends BaseProps {
+export interface ScrollProps extends BaseProps {
   componentRef?: IRef<ScrollHandles>
   /**
    * 隐藏scrollbar
    * TODO: 我觉得这应该在未来强制为true
    */
   hideScrollbar?: boolean
-  currentPageIndex?: number
+  /**
+   * 设定是受控，不设定是非受控
+   */
+  scrollIndex?: number
   onScroll?: (event: OnScrollEvent) => void
-  onPageIndexChange?: (currentIndex: number, prevIndex: number) => void
+  /**
+   * 只有非受控时有效
+   */
+  onScrollIndexChange?: (currentIndex: number, prevIndex: number) => void
 }
 
 /**每次滚动一组 */
@@ -44,25 +55,34 @@ const Scroll = ({
   hideScrollbar = true,
   children,
   onScroll,
-  currentPageIndex,
-  onPageIndexChange,
+  scrollIndex: incomeScrollIndex,
+  onScrollIndexChange,
   ...restProps
 }: ScrollProps) => {
   const outterRef = useRef<HTMLDivElement>()
-  const elementScrollLeft = () =>
+  const scrollIndex = useRecordedRef(incomeScrollIndex ?? 0)
+  const isControlledComponent = useMemo(() => notNullish(incomeScrollIndex), [incomeScrollIndex])
+  const elementScroll = (offset: number) => {
     outterRef.current!.scrollBy({
-      left: -1 * outterRef.current!.clientWidth,
+      left: offset * outterRef.current!.clientWidth,
       behavior: 'smooth'
     })
-  const elementScrollRight = () =>
-    outterRef.current!.scrollBy({ left: outterRef.current!.clientWidth, behavior: 'smooth' })
-
-  const currentIndex = useRef(currentPageIndex ?? 0)
-
-  useImperativeHandle(componentRef, () => ({
-    toRightPage: elementScrollRight,
-    toLeftPage: elementScrollLeft
-  }))
+  }
+  useImperativeHandle(
+    componentRef,
+    () =>
+      ({
+        toLeftPage: () => elementScroll(-1),
+        toRightPage: () => elementScroll(1),
+        toScrollPage: elementScroll
+      } as ScrollHandles)
+  )
+  useWatch((val) => {
+    if (isControlledComponent) {
+      elementScroll(val - scrollIndex.current)
+      scrollIndex.current = val
+    }
+  }, incomeScrollIndex)
   const attachScroll = (el: HTMLElement | undefined | null) => {
     el?.addEventListener(
       'scroll',
@@ -70,15 +90,15 @@ const Scroll = ({
         onScroll?.({
           path: ((e as unknown) as { path: [] }).path,
           target: e.target as HTMLDivElement,
-          timestamp: e.timeStamp
+          timestamp: e.timeStamp,
+          currentScrollIndex: scrollIndex.current,
+          prevScrollIndex: scrollIndex.prev
         })
         // 滚动时更新 currentIndex
         const contentOrder = Math.round(el.scrollLeft / el.clientWidth)
-        if (contentOrder !== currentIndex.current) {
-          // currentPageIndex 触发时，onPageIndexChange应该始终输入1
-          onPageIndexChange?.(contentOrder, currentIndex.current)
-          currentIndex.current = contentOrder
-        }
+        const needToRecord = scrollIndex.current !== contentOrder
+        if (needToRecord) scrollIndex.current = contentOrder
+        if (!isControlledComponent) onScrollIndexChange?.(scrollIndex.current, scrollIndex.prev)
       },
       { passive: true }
     )
