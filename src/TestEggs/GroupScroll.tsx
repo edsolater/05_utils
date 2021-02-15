@@ -25,30 +25,22 @@ const GroupScroll = <T extends any>({
   items,
   groupCapacity,
   renderItem,
-  ...restProps
+  ...baseProps
 }: GroupScrollProps<T>) => {
-  const groupedItems = useMemo(() => splitToGroups(items, groupCapacity), [items, groupCapacity])
   const [currentIndex, setCurrentIndex] = useState(0)
   const ScrollRef = useRef<ScrollHandles>()
 
   const toLeft = () => ScrollRef.current?.toLeftPage()
   const toRight = () => ScrollRef.current?.toRightPage()
   return (
-    <Div className='GroupScroll' _baseProps={restProps}>
+    <Div className='GroupScroll' _baseProps={baseProps}>
       {/* 滚动检测元素 */}
-      {/* TODO：是否需要整屏滚动应该是传入个props就好了的 */}
-      {/* <Scroll scrollGrouply componentRef={ScrollRef} onScrollIndexChange={setCurrentIndex}>
-        {groupedItems.map((group, groupIndex) => (
-          <Div className='GroupScroll__group' css={cssGroup()} key={groupIndex}>
-            {group.map((item, idx) => (
-              <Fragment key={(item as any)?.key ?? (item as any)?.id ?? idx}>
-                {renderItem(item, idx)}
-              </Fragment>
-            ))}
-          </Div>
-        ))}
-      </Scroll> */}
-      <Scroll scrollGrouply componentRef={ScrollRef} onScrollIndexChange={setCurrentIndex}>
+      <Scroll
+        pageScroll
+        componentRef={ScrollRef}
+        onScrollIndexChange={setCurrentIndex}
+        css={{ gap: 8 }}
+      >
         {items.map((item, idx) => (
           <Fragment key={(item as any)?.key ?? (item as any)?.id ?? idx}>
             {renderItem(item, idx)}
@@ -58,11 +50,11 @@ const GroupScroll = <T extends any>({
 
       {/* 控制按钮（上一页/下一页） */}
       <Div
-        className='GroupScroll__controller'
+        className='GroupScroll-controller'
         css={mix(cssMixins.horizontalLayout, { fontSize: '3em' })}
       >
         <Div
-          className='GroupScroll__controller-left-arrow'
+          className='GroupScroll-controller__left-arrow'
           onClick={toLeft}
           css={mix(cssMixins.buttonStyle)}
         >
@@ -70,7 +62,7 @@ const GroupScroll = <T extends any>({
         </Div>
         {currentIndex}
         <Div
-          className='GroupScroll__controller-right-arrow'
+          className='GroupScroll-controller__right-arrow'
           onClick={toRight}
           css={mix(cssMixins.buttonStyle)}
         >

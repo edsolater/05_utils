@@ -7,7 +7,6 @@ import { IRef } from 'typings/reactType'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 export interface BaseProps {
   className?: string
-  onClick?: (e: MouseEvent) => void
   // 对interface，typescript有缓存
   css?: ICSS
   /**
@@ -28,15 +27,15 @@ export interface BaseProps {
         [variableName: string]: number | string | undefined
       } // TODO
   domRef?: IRef<HTMLDivElement>
-  children?: ReactNode
+  // 就是个为了编写props方便而设立的，优先级比直接定义的低
+  _baseProps?: BaseProps
 }
 // interface 会开启typescript的缓存机制
 export interface DivProps
-  extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css' | 'onClick' | 'className'>,
-    BaseProps {
-  // 就是个为了编写props方便而设立的，优先级比直接定义低
-  _baseProps?: DivProps
+extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css'  | 'className'>,
+BaseProps {
   _tagName?: 'div' | 'button' | 'img' | (string & {}) //TODO Div 作为一个桥梁，应该能自定义tagName
+  children?: ReactNode
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
 
@@ -45,17 +44,17 @@ const Div = ({
   style,
   children,
   domRef,
-  _baseProps: handoffProps,
+  _baseProps: baseProps,
   ...restProps
 }: DivProps) => (
   <div
-    {...{ ...handoffProps, ...restProps }}
-    ref={mergeRefs(handoffProps?.domRef, domRef /* currentRef */)}
+    {...{ ...baseProps, ...restProps }}
+    ref={mergeRefs(baseProps?.domRef, domRef /* currentRef */)}
     //@ts-expect-error 因为有css variable 势必造成不匹配的问题
-    style={{ ...handoffProps?.style, ...style }}
-    css={toCss([handoffProps?.css, emotionCss])}
+    style={{ ...baseProps?.style, ...style }}
+    css={toCss([baseProps?.css, emotionCss])}
   >
-    {children ?? handoffProps?.children}
+    {children}
   </div>
 )
 

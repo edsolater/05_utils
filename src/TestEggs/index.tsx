@@ -43,7 +43,9 @@ const TestGrounds = () => (
               display: 'grid',
               placeItems: 'center',
               fontSize: 22,
-              width: 80,
+              paddingLeft: 16,
+              paddingRight: 16,
+              width: 280,
               height: 80
             }}
           >
