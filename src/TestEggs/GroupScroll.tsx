@@ -37,7 +37,7 @@ const GroupScroll = <T extends any>({
     <Div className='GroupScroll' _baseProps={restProps}>
       {/* 滚动检测元素 */}
       {/* TODO：是否需要整屏滚动应该是传入个props就好了的 */}
-      <Scroll componentRef={ScrollRef} onScrollIndexChange={setCurrentIndex}>
+      {/* <Scroll scrollGrouply componentRef={ScrollRef} onScrollIndexChange={setCurrentIndex}>
         {groupedItems.map((group, groupIndex) => (
           <Div className='GroupScroll__group' css={cssGroup()} key={groupIndex}>
             {group.map((item, idx) => (
@@ -46,6 +46,13 @@ const GroupScroll = <T extends any>({
               </Fragment>
             ))}
           </Div>
+        ))}
+      </Scroll> */}
+      <Scroll scrollGrouply componentRef={ScrollRef} onScrollIndexChange={setCurrentIndex}>
+        {items.map((item, idx) => (
+          <Fragment key={(item as any)?.key ?? (item as any)?.id ?? idx}>
+            {renderItem(item, idx)}
+          </Fragment>
         ))}
       </Scroll>
 
@@ -74,5 +81,3 @@ const GroupScroll = <T extends any>({
   )
 }
 export default GroupScroll
-
-

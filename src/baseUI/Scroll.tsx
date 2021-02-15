@@ -14,15 +14,20 @@ import useWatch from 'TestEggs/useWatch'
 import notNullish from 'utils/judgers/notNullish'
 import useRecordedRef from 'TestEggs/useRecordedRef'
 // TODO 有个flex，还是与业务太绑定了
-const cssOutter = (hideScrollbar?: boolean) =>
-  mix(hideScrollbar && cssMixins.noScrollbar, {
-    display: 'flex',
-    scrollSnapType: 'x mandatory',
-    '> *': {
-      scrollSnapAlign: 'start'
+const cssOutter = (cssinfo: { hideScrollbar?: boolean; scrollGrouply?: boolean } = {}) =>
+  mix(
+    cssinfo.hideScrollbar && cssMixins.noScrollbar,
+    cssinfo.scrollGrouply && {
+      scrollSnapType: 'x mandatory',
+      '> *': {
+        scrollSnapAlign: 'start'
+      }
     },
-    overflow: 'auto',
-  })
+    {
+      display: 'flex',
+      overflow: 'auto'
+    }
+  )
 export interface ScrollHandles {
   toRightPage: () => void
   toLeftPage: () => void
@@ -43,7 +48,7 @@ export interface ScrollProps extends BaseProps {
    */
   hideScrollbar?: boolean
   /** TODO 还没做 是否一次滚动一屏（轮播器效果） */
-  hasGroup?:boolean
+  scrollGrouply?: boolean
   /**
    * 设定是受控，不设定是非受控
    */
@@ -57,6 +62,7 @@ export interface ScrollProps extends BaseProps {
 
 /**每次滚动一组 */
 const Scroll = ({
+  scrollGrouply,
   componentRef,
   hideScrollbar = true,
   children,
@@ -117,7 +123,7 @@ const Scroll = ({
       <Div
         className='scroll-outter'
         domRef={mergeRefs(outterRef, attachScroll)}
-        css={cssOutter(hideScrollbar)}
+        css={cssOutter({ hideScrollbar, scrollGrouply })}
         _baseProps={restProps}
       >
         {children}
