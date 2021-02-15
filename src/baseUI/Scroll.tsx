@@ -18,10 +18,10 @@ const cssOutter = (hideScrollbar?: boolean) =>
   mix(hideScrollbar && cssMixins.noScrollbar, {
     display: 'flex',
     scrollSnapType: 'x mandatory',
-    overflow: 'auto',
     '> *': {
       scrollSnapAlign: 'start'
-    }
+    },
+    overflow: 'auto',
   })
 export interface ScrollHandles {
   toRightPage: () => void
@@ -42,6 +42,8 @@ export interface ScrollProps extends BaseProps {
    * TODO: 我觉得这应该在未来强制为true
    */
   hideScrollbar?: boolean
+  /** TODO 还没做 是否一次滚动一屏（轮播器效果） */
+  hasGroup?:boolean
   /**
    * 设定是受控，不设定是非受控
    */
