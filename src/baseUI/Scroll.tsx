@@ -13,6 +13,9 @@ import { IRef } from 'typings/reactType'
 import useWatch from 'TestEggs/useWatch'
 import notNullish from 'utils/judgers/notNullish'
 import useRecordRef from 'TestEggs/useRecordedRef'
+import { isUndefined } from 'lodash'
+import timeout from './timeout'
+import { ID } from 'typings/constants'
 // TODO 有个flex，还是与业务太绑定了
 const cssOutter = (cssinfo: { hideScrollbar?: boolean; scrollGrouply?: boolean } = {}) =>
   mix(
@@ -33,13 +36,20 @@ export interface ScrollHandles {
   toLeftPage: () => void
   toScrollPage: (offset: number) => void
 }
-export interface OnScrollEvent {
+export interface IScrollEvent {
+  type: 'scrollstart' | 'scroll' | 'scrollend'
   path: HTMLElement[]
   target: HTMLDivElement
   timestamp: Event['timeStamp']
   /** 当前滚动到第几页 */
   currentScrollIndex: number
   prevScrollIndex: undefined | number
+  /**滚动起始时 */
+  scrollStartLeft: number
+  scrollStartTop: number
+  /**滚动结束时 */
+  scrollEndLeft: number
+  scrollEndTop: number
   /**在 X 方向上，距离上一次scrollEvent，滚动了多少？ */
   scrollX: number
   /**在 Y 方向上，距离上一次scrollEvent，滚动了多少？ */
@@ -59,9 +69,9 @@ export interface ScrollProps extends BaseProps {
    * 设定是受控，不设定是非受控
    */
   scrollIndex?: number
-  onScroll?: (event: OnScrollEvent) => void
-  onScrollStart?: (event: OnScrollEvent) => void
-  onScrollEnd?: (event: OnScrollEvent) => void
+  onScroll?: (event: IScrollEvent) => void
+  onScrollStart?: (event: IScrollEvent) => void
+  onScrollEnd?: (event: IScrollEvent) => void
   /**
    * 只有非受控时有效
    */
@@ -109,34 +119,50 @@ const Scroll = ({
   const scrollTimestamp = useRecordRef<number>()
   const scrollTop = useRecordRef(0) // 没有与incomeScrollIndex联系起来，不太好
   const scrollLeft = useRecordRef(0) // 没有与incomeScrollIndex联系起来，不太好
-  const scrollTimeoutId = useRecordRef(0)
+  const actionId = useRecordRef<ID>(0)
   const attachScroll = (el: HTMLElement | undefined | null) => {
     el?.addEventListener(
       'scroll',
       (e) => {
-        const scrollX = el.scrollLeft - scrollLeft.current
-        const scrollY = el.scrollTop - scrollTop.current
+        scrollLeft.current = el.scrollLeft
+        scrollTop.current = el.scrollTop
+        scrollTimestamp.current = e.timeStamp
         const scrollEvent = {
           path: ((e as unknown) as { path: [] }).path,
           target: e.target as HTMLDivElement,
           timestamp: e.timeStamp,
           currentScrollIndex: scrollIndex.current,
           prevScrollIndex: scrollIndex.prev,
-          scrollX,
-          scrollY
+          scrollStartLeft: scrollLeft.prev,
+          scrollStartTop: scrollLeft.prev,
+          scrollEndLeft: scrollLeft.current,
+          scrollEndTop: scrollLeft.current,
+          scrollX: scrollLeft.current - scrollLeft.prev,
+          scrollY: scrollTop.current - scrollTop.prev
         }
-        onScroll?.(scrollEvent)
-        scrollLeft.current = el.scrollLeft
-        scrollTop.current = el.scrollTop
-        scrollTimestamp.current = e.timeStamp
-        // const deltaTime = scrollTimestamp.prev
-        //   ? scrollTimestamp.current - scrollTimestamp.prev
-        //   : Infinity
-        // const isStartScroll = deltaTime === Infinity
-        // if (isStartScroll) {
-        //   onScrollStart?.(scrollEvent)
-        //   scrollTimeoutId.current = window.setTimeout(, 100) //如果100毫秒没发出scroll事件，就视为scrollEnd（且手指不在屏幕上）
-        // }
+
+        // 开始滚动
+        const deltaTime = scrollTimestamp.prev
+          ? scrollTimestamp.current - scrollTimestamp.prev
+          : undefined
+        const isStartScroll = isUndefined(deltaTime)
+        if (isStartScroll) onScrollStart?.({ ...scrollEvent, type: 'scrollstart' })
+
+        //结束滚动
+        const timeoutController = timeout(
+          () => {
+            const direction = 'LEFT' //TEMP
+            onScrollEnd?.({ ...scrollEvent, type: 'scrollend' })
+            scrollTimestamp.restart()
+          },
+          100,
+          { actionId: actionId.current }
+        ) //如果100毫秒没发出scroll事件，就视为scrollEnd（且手指不在屏幕上）
+        actionId.current = timeoutController.actionId
+
+        // 滚动中
+        onScroll?.({ ...scrollEvent, type: 'scroll' })
+
         // 滚动时更新 currentIndex
         const contentOrder = Math.round(el.scrollLeft / el.clientWidth)
         const needToRecord = scrollIndex.current !== contentOrder
@@ -152,7 +178,7 @@ const Scroll = ({
       {/* 展示 TODO: 页面滚轮要能直接整屏滚动 */}
       {/* 滚动检测元素 */}
       <Div
-        className='scroll-outter'
+        className='Scroll'
         domRef={mergeRefs(outterRef, attachScroll)}
         css={cssOutter({ hideScrollbar, scrollGrouply: pageScroll })}
         _baseProps={baseProps}

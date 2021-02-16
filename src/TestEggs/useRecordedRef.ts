@@ -2,7 +2,7 @@ import { useRef } from 'react'
 
 interface RecordRef<T> {
   current: T
-  readonly prev: T | undefined
+  readonly prev: T
   /**回到初始状态 */
   restart(): void
 }

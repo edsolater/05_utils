@@ -55,7 +55,7 @@ export type Delta2d = Delta2dTranslate & Delta2dScale
 /**
  * 就是常见的ID
  */
-export type ID = string
+export type ID = string | number
 /**
  * 就是常见的ID
  */

@@ -36,8 +36,8 @@ const GroupScroll = <T extends any>({
     <Div className='GroupScroll' _baseProps={baseProps}>
       {/* 滚动检测元素 */}
       <Scroll
-        pageScroll
         componentRef={ScrollRef}
+        onScrollEnd={toRight}
         onScrollIndexChange={setCurrentIndex}
         css={{ gap: 8 }}
       >
