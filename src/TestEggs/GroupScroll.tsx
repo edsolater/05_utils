@@ -2,7 +2,7 @@ import React, { Fragment, ReactNode, useRef, useState } from 'react'
 import Div, { BaseProps } from 'baseUI/Div'
 import { mix, cssMixins } from 'style/cssMixins'
 import Scroll from 'baseUI/Scroll'
-import { ScrollHandles, ScrollEvent } from 'baseUI/Scroll/i'
+import { ScrollHandles, ScrollEvent } from 'baseUI/Scroll/_interface'
 interface GroupScrollProps<T> extends BaseProps {
   /**隐藏scrollbar */
   hideScrollbar?: boolean
@@ -25,14 +25,14 @@ const GroupScroll = <T extends any>({
 
   const toLeft = () => scrollRef.current?.scrollTo((info) => -info.clientWidth)
   const toRight = () => scrollRef.current?.scrollTo((info) => info.clientWidth)
-  const onScroll = (e: ScrollEvent) => {
+  const handleScroll = (e: ScrollEvent) => {
     const contentOrder = Math.round(e.scrollLeft / e.scrollWidth)
     if (contentOrder !== currentIndex) setCurrentIndex(contentOrder)
   }
   return (
     <Div className='GroupScroll' _baseProps={baseProps}>
       {/* 滚动检测元素 */}
-      <Scroll componentRef={scrollRef} onScrollEnd={toRight} onScroll={onScroll} css={{ gap: 8 }}>
+      <Scroll componentRef={scrollRef} onScrollEnd={toRight} onScroll={handleScroll} css={{ gap: 8 }}>
         {items.map((item, idx) => (
           <Fragment key={(item as any)?.key ?? (item as any)?.id ?? idx}>
             {renderItem(item, idx)}

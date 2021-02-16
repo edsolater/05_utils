@@ -7,30 +7,22 @@
  **********************/
 import React, { useEffect, useRef } from 'react'
 import Div from 'baseUI/Div'
-import { mix, cssMixins } from 'style/cssMixins'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import useRecordRef from 'hooks/useRecordedRef'
 import { clone } from './clone'
 import { useIScrollEventAttacher } from './useIScrollEventAttacher'
 import { useHandler } from '../../hooks/useHandler'
 import makeElementScroll from './makeElementScroll'
-import { ScrollProps, ScrollHandles } from './i'
-// TODO 有个flex，还是与业务太绑定了
-const cssOutter = (cssinfo: { hideScrollbar?: boolean; scrollGrouply?: boolean } = {}) =>
-  mix(cssinfo.hideScrollbar && cssMixins.noScrollbar, {
-    display: 'flex',
-    overflow: 'auto'
-  })
+import { ScrollProps, ScrollHandles } from './_interface'
+import { scrollRoot } from './_css'
 /**每次滚动一组 */
 const Scroll = ({
   componentRef,
   children,
-  pageScroll,
   hideScrollbar = true,
   onScroll,
   onScrollStart,
   onScrollEnd,
-  scrollIndex: incomeScrollIndex,
   onScrollIndexChange,
   ...baseProps
 }: ScrollProps) => {
@@ -49,10 +41,7 @@ const Scroll = ({
   }, [])
   const attachScroll = useIScrollEventAttacher({
     onScrollStart,
-    onScroll: (event) => {
-      onScroll?.(event)
-      scrollInfo.current = clone(event)
-    },
+    onScroll: mergeFunction(onScroll, (event) => (scrollInfo.current = clone(event))),
     onScrollEnd
   })
   useHandler<ScrollHandles>(componentRef, {
@@ -66,7 +55,7 @@ const Scroll = ({
     <Div
       className='Scroll'
       domRef={mergeRefs(outterRef, attachScroll)}
-      css={cssOutter({ hideScrollbar, scrollGrouply: pageScroll })}
+      css={scrollRoot({ hideScrollbar })}
       _baseProps={baseProps}
     >
       {children}
@@ -74,3 +63,9 @@ const Scroll = ({
   )
 }
 export default Scroll
+function mergeFunction<F extends ((...args: any[]) => void) | undefined>(
+  ...fns: F[]
+): NonNullable<F> {
+  // @ts-expect-error
+  return (...args) => fns.forEach((fn) => fn?.(...args))
+}

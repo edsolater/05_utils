@@ -43,12 +43,6 @@ export interface ScrollProps extends BaseProps {
    * TODO: 我觉得这应该在未来强制为true
    */
   hideScrollbar?: boolean;
-  /** TODO 还没做 是否一次滚动一屏（轮播器效果） */
-  pageScroll?: boolean;
-  /**
-   * 设定是受控，不设定是非受控
-   */
-  scrollIndex?: number;
   onScroll?: (event: ScrollEvent) => void;
   onScrollStart?: (event: ScrollEvent) => void;
   onScrollEnd?: (event: ScrollEvent) => void;
