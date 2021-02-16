@@ -6,7 +6,7 @@ const center: TimeoutCenter = new Map()
 
 let idCache = 1
 
-/**用的还是setTimeout，但是返回的是控制器 */
+/**用的还是setTimeout，但是返回的是控制器、同actionId的timeout被覆盖 */
 export default function timeout(
   handler: TimeoutHandle,
   timeout?: number,

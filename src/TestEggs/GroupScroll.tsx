@@ -1,15 +1,8 @@
-import React, { Fragment, ReactNode, useMemo, useRef, useState } from 'react'
+import React, { Fragment, ReactNode, useRef, useState } from 'react'
 import Div, { BaseProps } from 'baseUI/Div'
-import { splitToGroups } from 'utils/array/splitToGroups'
-import { toPer } from 'style/cssUnits'
 import { mix, cssMixins } from 'style/cssMixins'
-import Scroll, { ScrollHandles } from 'baseUI/Scroll'
-const cssGroup = () =>
-  mix(cssMixins.solidFlexItem, {
-    width: toPer(100),
-    display: 'flex',
-    justifyContent: 'space-around'
-  })
+import Scroll from 'baseUI/Scroll'
+import { ScrollHandles, ScrollEvent } from 'baseUI/Scroll/i'
 interface GroupScrollProps<T> extends BaseProps {
   /**隐藏scrollbar */
   hideScrollbar?: boolean
@@ -28,19 +21,18 @@ const GroupScroll = <T extends any>({
   ...baseProps
 }: GroupScrollProps<T>) => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const ScrollRef = useRef<ScrollHandles>()
+  const scrollRef = useRef<ScrollHandles>()
 
-  const toLeft = () => ScrollRef.current?.toLeftPage()
-  const toRight = () => ScrollRef.current?.toRightPage()
+  const toLeft = () => scrollRef.current?.scrollTo((info) => -info.clientWidth)
+  const toRight = () => scrollRef.current?.scrollTo((info) => info.clientWidth)
+  const onScroll = (e: ScrollEvent) => {
+    const contentOrder = Math.round(e.scrollLeft / e.scrollWidth)
+    if (contentOrder !== currentIndex) setCurrentIndex(contentOrder)
+  }
   return (
     <Div className='GroupScroll' _baseProps={baseProps}>
       {/* 滚动检测元素 */}
-      <Scroll
-        componentRef={ScrollRef}
-        onScrollEnd={toRight}
-        onScrollIndexChange={setCurrentIndex}
-        css={{ gap: 8 }}
-      >
+      <Scroll componentRef={scrollRef} onScrollEnd={toRight} onScroll={onScroll} css={{ gap: 8 }}>
         {items.map((item, idx) => (
           <Fragment key={(item as any)?.key ?? (item as any)?.id ?? idx}>
             {renderItem(item, idx)}
