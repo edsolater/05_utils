@@ -45,12 +45,12 @@ const Scroll = ({
     onScrollEnd
   })
   useHandler<ScrollHandles>(componentRef, {
-    scrollTo: (dx) =>
+    scroll: (dx, mode) =>
       makeElementScroll(outterRef.current!, {
-        offset: typeof dx === 'number' ? dx : dx(scrollInfo.current)
+        offset: typeof dx === 'number' ? dx : dx(scrollInfo.current),
+        mode
       })
   })
-
   return (
     <Div
       className='Scroll'

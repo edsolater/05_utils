@@ -1,8 +1,8 @@
 import useRecordRef from 'hooks/useRecordedRef'
-import { isUndefined } from 'lodash'
-import timeout from '../../helper/timeout'
+import timeout from 'helper/timeout'
 import { ID } from 'typings/constants'
 import { ScrollEvent } from './_interface'
+import isUndefined from 'utils/judgers/isUndefined'
 
 /**TODO: 想办法换成纯JS版与hooks版本并存 */
 export function useIScrollEventAttacher(

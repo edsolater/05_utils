@@ -23,8 +23,8 @@ const GroupScroll = <T extends any>({
   const [currentIndex, setCurrentIndex] = useState(0)
   const scrollRef = useRef<ScrollHandles>()
 
-  const toLeft = () => scrollRef.current?.scrollTo((info) => -info.clientWidth)
-  const toRight = () => scrollRef.current?.scrollTo((info) => info.clientWidth)
+  const toLeft = () => scrollRef.current?.scroll((info) => -info.clientWidth)
+  const toRight = () => scrollRef.current?.scroll((info) => info.clientWidth)
   const handleScroll = (e: ScrollEvent) => {
     const contentOrder = Math.round(e.scrollLeft / e.scrollWidth)
     if (contentOrder !== currentIndex) setCurrentIndex(contentOrder)
@@ -32,7 +32,12 @@ const GroupScroll = <T extends any>({
   return (
     <Div className='GroupScroll' _baseProps={baseProps}>
       {/* 滚动检测元素 */}
-      <Scroll componentRef={scrollRef} onScrollEnd={toRight} onScroll={handleScroll} css={{ gap: 8 }}>
+      <Scroll
+        componentRef={scrollRef}
+        onScrollEnd={(event) => console.log(event)}
+        onScroll={handleScroll}
+        css={{ gap: 8 }}
+      >
         {items.map((item, idx) => (
           <Fragment key={(item as any)?.key ?? (item as any)?.id ?? idx}>
             {renderItem(item, idx)}
