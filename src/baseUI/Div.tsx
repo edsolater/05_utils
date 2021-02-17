@@ -26,7 +26,7 @@ export interface BaseProps {
         '--y'?: number
         [variableName: string]: number | string | undefined
       } // TODO
-  domRef?: IRef<HTMLDivElement>
+  domRef?: IRef<HTMLElement>
   // 就是个为了编写props方便而设立的，优先级比直接定义的低
   _baseProps?: BaseProps
 }

@@ -3,6 +3,7 @@ import React, { StrictMode } from 'react'
 import { cssMixins } from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'
 import GroupScroll from './GroupScroll'
+import SimulateMouseClick from './SimulateMouseClick'
 import SortableList from './SortableList'
 
 const TestGrounds = () => (
@@ -54,7 +55,10 @@ const TestGrounds = () => (
         )}
       />
     </Div>
-    <Div css={cssMixins.testGridItem()}></Div>
+    <Div css={cssMixins.testGridItem()}>
+      <Div css={cssMixins.gridItemTextLabel()}>点击模拟</Div>
+      <SimulateMouseClick />
+    </Div>
   </Div>
 )
 export default TestGrounds

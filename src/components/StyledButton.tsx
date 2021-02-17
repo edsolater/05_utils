@@ -14,11 +14,11 @@ const KeyframeRadarWave = keyframes`
   }
 `
 const cssButton: CSSObject = {
-  appearance: 'none',
   border: 'none',
   width: 150,
   height: 150,
   borderRadius: '50%',
+  padding:'',
   fontSize: '1.3em',
   position: 'relative'
 }
