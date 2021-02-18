@@ -17,7 +17,10 @@ const SimulateMouseClick = () => {
     )
   }
   return (
-    <Div css={{ borderWidth: 1, borderColor: 'green' }}>
+    <Div
+      className={['hello',1,true, undefined, { 'a': true, b: false }]}
+      css={{ borderWidth: 1, borderColor: 'green' }}
+    >
       被点击了{counter}次
       <Button
         domRef={targetButtonRef}
