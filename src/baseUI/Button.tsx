@@ -4,13 +4,16 @@ import { mix } from 'style/cssMixins'
 import { cssBrightness } from 'style/cssFunctions'
 const cssButton = () =>
   mix({
+    display: 'grid',
+    placeContent: 'center',
+    borderRadius: '100vw',
     appearance: 'none',
     cursor: 'pointer',
     userSelect: 'none',
     width: 'max-content',
     color: 'white',
     padding: '8px 16px',
-    backgroundColor: '#333',
+    backgroundColor: '#666',
     ':hover': {
       filter: cssBrightness(1.4)
     },
