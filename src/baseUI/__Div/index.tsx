@@ -5,9 +5,7 @@ import { toCss } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
 import { IRef } from 'typings/reactType'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
-import { MayDeepArray } from 'typings/tools'
-import isString from 'utils/judgers/isString'
-import isObject from 'utils/judgers/isObject'
+import { ClassName, classname } from './classname'
 
 export interface BaseProps {
   className?: ClassName
@@ -37,29 +35,16 @@ export interface BaseProps {
 }
 // interface 会开启typescript的缓存机制
 export interface DivProps<T extends keyof JSX.IntrinsicElements = 'div'>
-  extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css' | 'className'>,
+  extends Omit<JSX.IntrinsicElements['div'/* TODO */], 'style' | 'css' | 'className'>,
     BaseProps {
   _tagName?: T
   children?: ReactNode
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
 
-type ClassName = MayDeepArray<any | { [classname: string]: boolean }>
-function classname(classNameArray: ClassName) {
-  return [classNameArray]
-    .flat(Infinity)
-    .flatMap((classItem) =>
-      isObject(classItem)
-        ? Object.entries(classItem).map(([classString, condition]) => condition && classString)
-        : classItem
-    )
-    .filter(isString)
-    .join(' ')
-}
-
 const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   _tagName,
-  className,
+  className : incomeClassname,
   css: emotionCss,
   style,
   domRef,
@@ -69,7 +54,7 @@ const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   const allProps: JSX.IntrinsicElements[T] = {
     ...baseProps,
     ...restProps,
-    className: classname(className),
+    className: classname(incomeClassname),
     ref: mergeRefs(baseProps?.domRef, domRef),
     style: { ...baseProps?.style, ...style },
     // @ts-expect-error

@@ -1,4 +1,4 @@
-import Div, { allPropsName, DivProps } from '../baseUI/__Div'
+import Div, { allPropsName, DivProps } from 'baseUI/__Div'
 import React, { CSSProperties, FC, ImgHTMLAttributes } from 'react'
 import divideByPropertyNames from 'utils/object/divideByPropertyNames'
 import kickByPropertyNames from 'utils/object/kickByPropertyNames'
@@ -12,7 +12,8 @@ const Avatar: FC<
     src?: string
     size?: CSSProperties['width']
     color?: CSSProperties['backgroundColor']
-  } & ImgHTMLAttributes<HTMLImageElement> & DivProps
+  } & ImgHTMLAttributes<HTMLImageElement> &
+    DivProps
 > = ({ isPlaceholder = false, size = 40, color = placeholderColor, src, ...restProps }) => {
   const [restPropsForDiv, restPropsForImg] = divideByPropertyNames(restProps, allPropsName)
   return (
@@ -29,13 +30,15 @@ const Avatar: FC<
       {...kickByPropertyNames(restPropsForDiv, ['css'])}
     >
       {src && (
-        <img
+        <Div
+          _tagName='img'
           css={{
             width: '100%',
             height: '100%',
             borderRadius: '50%',
             objectFit: 'contain'
           }}
+          //@ts-expect-error
           src={src}
           {...restPropsForImg}
         />
