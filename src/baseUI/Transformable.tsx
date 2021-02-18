@@ -199,7 +199,7 @@ const Transformable = ({
   return (
     <Div
       domRef={mergeRefs(domRef, box)}
-      className={`movable-wrapper ${className}`} //这么写好像有点冗余
+      className={['movable-wrapper', className]} 
       css={[
         {
           position: 'relative',
