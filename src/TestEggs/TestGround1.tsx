@@ -1,12 +1,11 @@
 import React from 'react'
 import Avatar from '../rubbish/Avatar'
-import Div from '../baseUI/Div'
+import Div from '../baseUI/__Div'
 import Gallery from '../rubbish/Gallery'
 import Grid from '../baseUI/Grid'
 import Transformable from '../baseUI/Transformable'
-import Resizeable from '../baseUI/Resizeable'
 import RichEditor from '../rubbish/RichEditor'
-import VideoBlock from '../baseUI/Video'
+import VideoBlock from '../baseUI/__Video'
 // import SyncScroll from './SyncScroll'
 // TODO：浮动（可自动排布）面板
 function TestGround1() {

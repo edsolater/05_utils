@@ -1,4 +1,4 @@
-import Div from 'baseUI/Div'
+import Div from 'baseUI/__Div'
 import Transformable from 'baseUI/Transformable'
 import React, { useRef, useState } from 'react'
 interface ItemInfo {

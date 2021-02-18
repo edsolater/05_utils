@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import Div, { DivProps } from './Div'
+import Div, { DivProps } from './__Div'
 
 import { Delta2dTranslate, Direction, Vector } from 'typings/constants'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'

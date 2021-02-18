@@ -1,4 +1,4 @@
-import Div from './Div'
+import Div from './__Div'
 import React, { FC } from 'react'
 import { CSSObject } from '@emotion/react'
 import parallelIf from 'utils/magic/parallelIf'

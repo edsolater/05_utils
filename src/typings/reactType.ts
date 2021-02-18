@@ -1,4 +1,4 @@
-import { DivProps } from 'baseUI/Div'
+import { DivProps } from 'baseUI/__Div'
 import { FC, MutableRefObject } from 'react'
 
 export type IRef<T = undefined> = ((el: T) => void) | MutableRefObject<T | null | undefined> | null | undefined

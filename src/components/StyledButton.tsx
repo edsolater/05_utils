@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, CSSObject, keyframes } from '@emotion/react'
-import Div from 'baseUI/Div'
-import Button, { ButtonProps } from 'baseUI/Button'
+import Div from 'baseUI/__Div'
+import Button, { ButtonProps } from 'baseUI/__Button'
 
 const KeyframeRadarWave = keyframes`
   from {

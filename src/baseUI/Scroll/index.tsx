@@ -6,7 +6,7 @@
  *
  **********************/
 import React, { useEffect, useRef } from 'react'
-import Div from 'baseUI/Div'
+import Div from 'baseUI/__Div'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import useRecordRef from 'hooks/useRecordedRef'
 import { clone } from './clone'
