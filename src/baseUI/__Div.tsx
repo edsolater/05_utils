@@ -16,6 +16,7 @@ export interface BaseProps {
   style?:
     | CSSProperties
     | {
+        // TODO：好像不应该写在这里
         /**
          * 给translate的，表示在x轴偏移的方向
          */
@@ -31,31 +32,31 @@ export interface BaseProps {
   _baseProps?: BaseProps
 }
 // interface 会开启typescript的缓存机制
-export interface DivProps
-extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css'  | 'className'>,
-BaseProps {
-  _tagName?: 'div' | 'button' | 'img' | (string & {}) //TODO Div 作为一个桥梁，应该能自定义tagName
+export interface DivProps<T extends keyof JSX.IntrinsicElements = 'div'>
+  extends Omit<JSX.IntrinsicElements['div'], 'style' | 'css' | 'className'>,
+    BaseProps {
+  _tagName?: T
   children?: ReactNode
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
 
-const Div = ({
+const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
+  _tagName,
   css: emotionCss,
   style,
-  children,
   domRef,
   _baseProps: baseProps,
   ...restProps
-}: DivProps) => (
-  <div
-    {...{ ...baseProps, ...restProps }}
-    ref={mergeRefs(baseProps?.domRef, domRef /* currentRef */)}
-    //@ts-expect-error 因为有css variable 势必造成不匹配的问题
-    style={{ ...baseProps?.style, ...style }}
-    css={toCss([baseProps?.css, emotionCss])}
-  >
-    {children}
-  </div>
-)
+}: DivProps<T>) => {
+  const allProps: JSX.IntrinsicElements[T] = {
+    ...baseProps,
+    ...restProps,
+    ref: mergeRefs(baseProps?.domRef, domRef),
+    style: { ...baseProps?.style, ...style },
+    // @ts-expect-error
+    css: toCss([baseProps?.css, emotionCss])
+  }
+  return jsx(_tagName ?? 'div', allProps)
+}
 
 export default Div

@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import { jsx, css as cssMerge, CSSObject } from '@emotion/react'
 import { CSSProperties, FC, useEffect, useRef } from 'react'
+import { mix } from 'style/cssMixins'
+import Div from './__Div'
 
 const Video: FC<{
   shape?: 'rect' | 'circle'
@@ -25,10 +27,11 @@ const Video: FC<{
     }
   }, [srcObject])
   return (
-    <video
-      ref={videoRef}
+    <Div
+      _tagName='video'
+      domRef={videoRef}
       className={className}
-      css={cssMerge([
+      css={mix([
         {
           objectFit: fitMode,
           borderRadius: shape === 'circle' ? 10000 : undefined

@@ -8,31 +8,12 @@ export type MayDeepArray<T> = undefined | T | Array<MayDeepArray<T>>
 
 export type MayFunction<T> = T | (() => T)
 
-export type ObjectValues<O extends object, K = keyof O> = K extends keyof O ? O[K] : never
-
-export type GetKeysFromValues<
-  O extends object,
-  V extends ObjectValues<O>,
-  K = keyof O
-> = K extends keyof O ? (O[K] extends V ? K : never) : never
-
 /**
- * interface Cat {
- *   type: 'cat'
- *   breeds: 'Abyssinian' | 'Shorthair' | 'Curl' | 'Bengal'
- * }
- *
- * interface Dog {
- *   type: 'dog'
- *   breeds: 'Hound' | 'Brittany' | 'Bulldog' | 'Boxer'
- *   color: 'brown' | 'white' | 'black'
- * }
- *
- * type MyDogType = LookUp<Cat | Dog, 'dog'> // expected to be `Dog`
+ * 能有enum提示，同时，传入其他string也不报错
+ * @example
+ * const e = MayEnum<'hello'|'world'> // 'hello' | 'world' | (string & {})
  */
-export type LookUp<U, T extends string> = {
-  [K in T]: U extends { type: T } ? U : never
-}[T]
+export type MayEnum<T> = T | (string & {})
 
 /**
  * type I = GetRequired<{ foo: number, bar?: string }> // expected to be { foo: number }

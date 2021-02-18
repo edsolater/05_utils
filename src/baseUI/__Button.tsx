@@ -8,6 +8,7 @@ const cssButton = () =>
     placeContent: 'center',
     borderRadius: '100vw',
     appearance: 'none',
+    borderWidth:0,
     cursor: 'pointer',
     userSelect: 'none',
     width: 'max-content',
@@ -18,7 +19,7 @@ const cssButton = () =>
       filter: cssBrightness(1.4)
     },
     ':active': {
-      filter: cssBrightness(0.6)
+      filter: cssBrightness(0.8)
     }
   })
 
@@ -28,7 +29,7 @@ export interface ButtonProps extends DivProps {}
  * 普通Button，TODO
  */
 const Button = ({ ...restProps }: ButtonProps) => {
-  return <Div {...restProps} css={mix(cssButton, restProps.css)}></Div>
+  return <Div _tagName="button" {...restProps} css={mix(cssButton, restProps.css)}></Div>
 }
 
 export default Button
