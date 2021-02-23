@@ -17,7 +17,7 @@ export default function attachPointer<T extends HTMLElement | null>(
     ev.stopPropagation()
     if (!events.length) {
       events.push(ev)
-      el?.addEventListener('pointermove', pointerMove)
+      el?.addEventListener('pointermove', pointerMove, { passive: true })
       el?.setPointerCapture(ev.pointerId)
       eventHandlers.start?.({ el, curr: { x: ev.clientX, y: ev.clientY } })
     }
@@ -50,6 +50,6 @@ export default function attachPointer<T extends HTMLElement | null>(
       el?.removeEventListener('pointermove', pointerMove)
     }
   }
-  el?.addEventListener('pointerdown', pointerDown)
-  el?.addEventListener('pointerup', pointerUp)
+  el?.addEventListener('pointerdown', pointerDown, { passive: true })
+  el?.addEventListener('pointerup', pointerUp, { passive: true })
 }

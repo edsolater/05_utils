@@ -2,11 +2,18 @@
  * 实验 draggable list 的
  ******************************/
 import Transformable from 'baseUI/Transformable'
-import { isElement } from 'lodash'
 import React, { FC, Ref, useEffect, useRef } from 'react'
 import { Direction } from 'typings/constants'
 import Div from '../baseUI/__Div'
 
+// ASSUME：假定互相碰撞只有一组元素
+function findCollpase<T extends HTMLElement>(elementList: Iterable<T>, opts: { positive: T }): T[] {
+  const collapsePair: T[] = []
+  for (const element of elementList) {
+    collapsePair.push(element)
+  }
+  return collapsePair
+}
 const draggableItemCSS = {
   padding: 16,
   margin: 8,
@@ -16,32 +23,26 @@ const draggableItemCSS = {
 const SortableList: FC<{
   direction?: Direction
 }> = ({ direction = 'y' }) => {
-  const itemData = ['AAAA', 'BBBB', 'CCC', 'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD']
-  const itemEls = useRef<Map<number, HTMLElement>>(new Map())
+  const itemData = ['AAAA', 'BBBB', 'CCC', 'DDDD']
+  const itemEls = useRef<Set<HTMLElement>>(new Set())
   const sizeInfo = useRef<Map<number, DOMRect>>(new Map())
-  useEffect(() => {}, [])
-  function sortItems(currentIndex: number) {
-    console.log('触发了', currentIndex)
-  }
-
   return (
     <Div css={{ position: 'absolute', display: 'grid', gap: 8 }}>
-      
       {itemData.map((text, index) => (
         <Transformable
           key={index}
-          domRef={el => {
-            itemEls.current.set(index, el)
+          domRef={(el) => {
+            itemEls.current.add(el)
             sizeInfo.current.set(index, el.getBoundingClientRect())
           }}
           moveDirection={direction}
-          onMoveStart={el => {
-            // 用错了，不应该使用intersectionObserverAPI进行拖动重排，因为它只能检测父子级
+          onMoveStart={(el) => {
+            // 用错了，不应该使用intersectionObserverAPI进行拖动重排，因为它只能检测父子级, 而不能检测兄弟组件间的碰撞
             // el.style.setProperty('z-index', '99')
             // const observer = new IntersectionObserver(
             //   (entries, observer) => {
             //     // 为什么一动就触发了呢？ // 原来初次observe时是会触发的
-            //     observer.root?.style.border = '2px solid #44aa44' 
+            //     observer.root?.style.border = '2px solid #44aa44'
             //     sortItems(index)
             //     console.log('observer.thresholds: ', observer.thresholds)
             //   },
@@ -56,7 +57,11 @@ const SortableList: FC<{
             //   if (itemEl !== el) observer.observe(itemEl)
             // })
           }}
-          onMoveEnd={el => {
+          onMove={(el) => {
+            const collapseGroup = findCollpase(itemEls.current, { positive: el })
+            console.log('collapseGroup: ', collapseGroup)
+          }}
+          onMoveEnd={(el) => {
             // el.style.removeProperty('z-index')
           }}
         >

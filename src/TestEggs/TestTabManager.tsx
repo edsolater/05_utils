@@ -7,6 +7,7 @@ import SimulateMouseClick from './SimulateMouseClick'
 import SortableList from './SortableList'
 
 // TODO: 做一堆小界面
+// FIXME：现在这个文件还是废的
 const TestGrounds = () => (
   <Div css={cssMixins.testGridContainer()}>
     <Div css={cssMixins.testGridItem()}>

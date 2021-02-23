@@ -32,8 +32,11 @@ interface TransformableProps extends DivProps {
   moveDirection?: Direction | 'both'
   /** 可拖动的区域 */
   moveBoundary?: 'offsetParent' | 'none'
+  /**（并不会阻断界面渲染） */
   onMoveStart?: (el: HTMLDivElement) => void
+  /**（并不会阻断界面渲染） */
   onMoveEnd?: (el: HTMLDivElement, speedVector: Vector) => void
+  /**（并不会阻断界面渲染） */
   onMove?: (el: HTMLDivElement, delta: Delta2dTranslate) => void
   onReachOffsetBoundary?: (
     el: HTMLDivElement,
@@ -57,7 +60,7 @@ interface TransformableProps extends DivProps {
   /**会放大缩小，会影响元素的大小 */
   resizable?: boolean
   /**放大缩小的触发器，有滚轮、鼠标拖拽点 */
-  resizeBy?: ResizeBy | ResizeBy[]
+  resizeTrigger?: ResizeTrigger | ResizeTrigger[]
   /**内部元素的形状，会影响鼠标拖拽点的位置 */
   innerShape?: 'rect' | 'circle'
   /**滚轮改变大小的速度 */
@@ -74,7 +77,7 @@ function asyncInvoke<T extends Array<any>>(fn: ((...any: T) => any) | undefined,
     })
   }
 }
-type ResizeBy = 'wheel' | 'right-bottom dot'
+type ResizeTrigger = 'wheel' | 'right-bottom dot'
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
@@ -83,7 +86,7 @@ const Transformable = ({
   movable = true,
   scalable = false,
   resizable = false,
-  resizeBy = 'wheel',
+  resizeTrigger = 'wheel',
   resizeWheelSpeed = 0.5,
   resizeMaxRatio = 50,
   resizeMinRatio = 0.8,
