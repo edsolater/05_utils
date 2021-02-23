@@ -32,11 +32,11 @@ interface TransformableProps extends DivProps {
   moveDirection?: Direction | 'both'
   /** 可拖动的区域 */
   moveBoundary?: 'offsetParent' | 'none'
-  /**（并不会阻断界面渲染） */
+  /**（不会阻断界面渲染） */
   onMoveStart?: (el: HTMLDivElement) => void
-  /**（并不会阻断界面渲染） */
+  /**（不会阻断界面渲染） */
   onMoveEnd?: (el: HTMLDivElement, speedVector: Vector) => void
-  /**（并不会阻断界面渲染） */
+  /**（不会阻断界面渲染） */
   onMove?: (el: HTMLDivElement, delta: Delta2dTranslate) => void
   onReachOffsetBoundary?: (
     el: HTMLDivElement,
