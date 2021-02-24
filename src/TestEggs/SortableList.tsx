@@ -2,52 +2,53 @@
  * 实验 draggable list 的
  ******************************/
 import Transformable from 'baseUI/Transformable'
-import React, { FC, Ref, useEffect, useRef } from 'react'
+import React, { FC, useRef } from 'react'
 import { Direction } from 'typings/constants'
-import Div from '../baseUI/__Div'
+import Div from 'baseUI/__Div'
+import { createRect, IRect } from 'models/Rect'
 
 // ASSUME：假定互相碰撞只有一组元素
-function findOverlap<T extends DOMRect>(rectList: Iterable<T>): T[] {
-  const allRects = [...rectList]
-  const overlapPair: T[] = [allRects[allRects.length - 1]]
-  allRects.forEach((rect1, index1) => {
-    allRects.slice(index1 + 1).forEach((rect2, index2) => {
-      // if (areOverlapped(element1, element2))
-    })
-  })
-  return overlapPair
+function findCollision<T extends IRect>(rectList: Iterable<T>, positiveRect: T): T | undefined {
+  for (const [idx, rect] of [...rectList].entries()) {
+    if (rect !== positiveRect && areInCollision(rect, positiveRect)) {
+      return rect
+    }
+  }
+}
+/**基础方法 */
+function findByMapValue<K, V>(map: Map<K, V>, callbackfn: (value: V) => boolean): K | undefined {
+  for (const [key, value] of map.entries()) {
+    if (callbackfn(value)) return key
+  }
 }
 /**判断2个DOMRect是否有重叠 */
-function areOverlapped(rect1: DOMRect, rect2: DOMRect) {
+function areInCollision(rect1: IRect, rect2: IRect) {
   return (
-    rect1.x < rect2.x + rect2.width &&
-    rect1.x + rect1.width > rect2.x &&
-    rect1.y < rect2.y + rect2.height &&
-    rect1.height + rect1.y > rect2.y
+    rect1.left < rect2.right &&
+    rect2.left < rect1.right &&
+    rect1.top < rect2.bottom &&
+    rect2.top < rect1.bottom
   )
 }
-function getRect(el: HTMLElement): DOMRect {
+function getElementRect(el: HTMLElement): DOMRect {
   return el.getBoundingClientRect()
 }
 const draggableItemCSS = {
   padding: 16,
-  margin: 8,
   background: 'lightgray'
 } as const
 // SHUT 用错了，不应该使用dragAndDrop进行拖动重排
 const SortableList: FC<{
   direction?: Direction
 }> = ({ direction = 'y' }) => {
-  const itemData = ['AAAA', 'BBBB', 'CCC', 'DDDD']
-  const sizeInfo = useRef<Map<HTMLElement, DOMRect>>(new Map())
+  const itemData = ['AAA', 'BBB', 'CCC', 'DDD']
+  const sizeInfo = useRef<Map<HTMLElement, IRect>>(new Map())
   return (
     <Div css={{ position: 'absolute', display: 'grid', gap: 8 }}>
       {itemData.map((text, index) => (
         <Transformable
           key={index}
-          domRef={(el) => {
-            sizeInfo.current.set(el, getRect(el))
-          }}
+          domRef={(el) => sizeInfo.current.set(el, createRect(getElementRect(el)))}
           moveDirection={direction}
           onMoveStart={(el) => {
             // 用错了，不应该使用intersectionObserverAPI进行拖动重排，因为它只能检测父子级, 而不能检测兄弟组件间的碰撞
@@ -71,21 +72,17 @@ const SortableList: FC<{
             // })
           }}
           onMove={(el, delta) => {
+            //IDEA: 干嘛要反复写sizeInfo.current, 是不是原生Map的api太冗余了，得自定义
             if (sizeInfo.current.has(el)) {
-              const oldRect = sizeInfo.current.get(el)!
-              const { left, top, right, bottom, x, y } = oldRect
-              sizeInfo.current.set(el, {
-                ...sizeInfo.current.get(el)!,
-                left: left + delta.dx,
-                right: right + delta.dx,
-                x: x + delta.dx,
-                top: top + delta.dy,
-                bottom: bottom + delta.dy,
-                y: y + delta.dy
-              })
+              const rect = sizeInfo.current.get(el)!
+              sizeInfo.current.set(el, rect.changePosition(delta))
             }
-            const collapseGroup = findOverlap(sizeInfo.current.values())
-            console.log('collapseGroup: ', collapseGroup[0].y)
+            const collisionRect = findCollision(
+              sizeInfo.current.values(),
+              sizeInfo.current.get(el)!
+            )
+            const collisionElement = findByMapValue(sizeInfo.current, (v) => v === collisionRect)
+            console.log('conllisionElement: ', collisionElement)
           }}
           onMoveEnd={(el) => {
             // el.style.removeProperty('z-index')
