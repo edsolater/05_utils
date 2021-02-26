@@ -7,8 +7,10 @@ import setCSSVariable from './setCSSVariable'
  * @param delta 改变量
  */
 export default function changeTransform(el: HTMLElement, delta: { translate?: Delta2dTranslate }) {
-  if (delta.translate) {
-    setCSSVariable(el, '--x', original => Number(original) + delta.translate!.dx)
-    setCSSVariable(el, '--y', original => Number(original) + delta.translate!.dy)
+  if (delta.translate && delta.translate.dx) {
+    setCSSVariable(el, '--x', (original) => Number(original) + delta.translate!.dx!)
+  }
+  if (delta.translate && delta.translate.dy) {
+    setCSSVariable(el, '--y', (original) => Number(original) + delta.translate!.dy!)
   }
 }

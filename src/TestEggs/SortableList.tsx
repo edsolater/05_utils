@@ -7,6 +7,7 @@ import { Direction } from 'typings/constants'
 import Div from 'baseUI/__Div'
 import { createRect, IRect } from 'models/Rect'
 import { createMap, IMap } from 'models/Map'
+import changeTransform from 'helper/manageStyle/changeTransform'
 
 /**基础方法 */
 function findKeyByMapValue<K, V>(
@@ -44,7 +45,8 @@ function getCollisionArea(rect1: IRect, rect2: IRect) {
  * @param target
  */
 function isEqualTo(target): (value) => boolean {
-  return (value) => Object.is(target, value)
+  const _isEqualTo: (value: any) => boolean = (value) => Object.is(target, value)
+  return _isEqualTo
 }
 
 function getElementRect(el: HTMLElement): DOMRect {
@@ -58,18 +60,25 @@ const draggableItemCSS = {
 const SortableList: FC<{
   direction?: Direction
 }> = ({ direction = 'y' }) => {
-  const itemData = ['AAA', 'BBB', 'CCC', 'DDD']
-  const sizeInfo = useRef<IMap<number, { el: HTMLElement; rect: IRect }>>(createMap())
+  const itemData = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF']
+  type ItemInfo = {
+    el: HTMLElement
+    rect: IRect
+    // 因临时重排，而产生的位移（最终重排时根据这个属性来）(与重排方向强相关)
+    sortMove?: number
+  }
+
+  const sizeInfo = useRef<IMap<number, ItemInfo>>(createMap())
   return (
-    <Div css={{ position: 'absolute', display: 'grid', gap: 8 }}>
+    <Div css={{ position: 'absolute', display: 'grid' }}>
       {itemData.map((text, index) => (
         <Transformable
           key={index}
           domRef={(el) =>
-            (sizeInfo.current = sizeInfo.current.set(index, {
+            sizeInfo.current.set(index, {
               el: el,
               rect: createRect(getElementRect(el))
-            }))
+            })
           }
           moveDirection={direction}
           onMoveStart={(el) => {
@@ -93,8 +102,9 @@ const SortableList: FC<{
             //   if (itemEl !== el) observer.observe(itemEl)
             // })
           }}
-          onMove={(el, delta) => {
+          onMove={(movingElement, delta) => {
             let newRect: IRect
+            const movingElementCurrentIndex = index
             sizeInfo.current = sizeInfo.current.set(index, ({ el, rect: oldRect }) => {
               newRect = oldRect.changePosition(delta)
               return {
@@ -107,11 +117,51 @@ const SortableList: FC<{
             const collisionElementIndex = findKeyByMapValue(
               sizeInfo.current,
               ({ rect }) => rect !== newRect && areInCollision(rect, newRect)
-            )
-            console.log('collisionElementIndex: ', collisionElementIndex)
+            )!
+            // console.log('collisionElementIndex: ', collisionElementIndex)
+
+            //该index及以下全部重排
+            // sizeInfo.current.forEach(({ el, hasTranslated }, index, originalMap) => {
+            //   if (movingElement === el) return
+            //   if (index >= collisionElementIndex && !hasTranslated) {
+            //     changeTransform(el, { translate: { dy: movingElement.offsetHeight } }) //FIXME: 这只能纵向排列（不太好）
+            //     originalMap.set(index, ({ ...rest }) => ({ ...rest, hasTranslated: true }))
+            //   }
+            //   if (index < collisionElementIndex && hasTranslated) {
+            //     changeTransform(el, { translate: { dy: -movingElement.offsetHeight } }) //FIXME: 这只能纵向排列（不太好）
+            //     originalMap.set(index, ({ ...rest }) => ({ ...rest, hasTranslated: false }))
+            //   }
+            // })
+
+            // 计算当前element本应该所处的index
+            const movingElementShouldIndex = collisionElementIndex
+            const moveDirection = movingElementShouldIndex - movingElementCurrentIndex
+
+            sizeInfo.current.forEach((info, itemIndex) => {
+              const shouldFloat =
+                itemIndex !== movingElementCurrentIndex &&
+                itemIndex >= Math.min(movingElementShouldIndex, movingElementCurrentIndex) &&
+                itemIndex <= Math.max(movingElementShouldIndex, movingElementCurrentIndex)
+
+              // 复原未移动时的位置
+              if (info.sortMove) {
+                changeTransform(info.el, { translate: { dy: -info.sortMove } })
+                info.sortMove = 0
+              }
+
+              //需要重排的
+              if (shouldFloat) {
+                const sortMove = Math.sign(moveDirection * -1) * info.rect.height
+                changeTransform(info.el, {
+                  translate: { dy: sortMove }
+                })
+                info.sortMove = sortMove
+              }
+            })
           }}
           onMoveEnd={(el) => {
             // el.style.removeProperty('z-index')
+            //TODO : 重排（固定下来）
           }}
         >
           <Div className='temp-item' css={draggableItemCSS}>
