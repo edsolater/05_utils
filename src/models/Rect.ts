@@ -35,14 +35,14 @@ export function createRect(init?: Partial<IRect>): IRect {
     top: y ?? 0,
     right: (x ?? 0) + (width ?? 0),
     bottom: (y ?? 0) + (height ?? 0),
-    changePosition: (delta) =>
-      createRect({
+    changePosition(delta) {
+      return createRect({
         width: rect.width,
         height: rect.height,
         x: rect.x + (delta?.dx ?? 0),
         y: rect.y + (delta?.dy ?? 0)
       })
+    }
   }
   return rect
 }
-

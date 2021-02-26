@@ -190,7 +190,7 @@ const Transformable = ({
       })
       attachPointer(rightBottomTrigger.current!, {
         move: ({ delta }) => {
-          changeSizeByDeltaWidth(box.current!, delta.dx, {
+          changeSizeByDeltaWidth(box.current!, delta.dx ?? 0, {
             minRatio: resizeMinRatio,
             maxRatio: resizeMaxRatio
           })
@@ -202,7 +202,7 @@ const Transformable = ({
   return (
     <Div
       domRef={mergeRefs(domRef, box)}
-      className={['movable-wrapper', className]} 
+      className={['movable-wrapper', className]}
       css={[
         {
           position: 'relative',

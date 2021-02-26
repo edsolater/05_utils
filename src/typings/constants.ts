@@ -9,9 +9,9 @@
  */
 export type Delta2dTranslate = {
   // 水平移动距离
-  dx?: number
+  dx: number
   // 竖直移动距离
-  dy?: number
+  dy: number
 }
 
 /**
