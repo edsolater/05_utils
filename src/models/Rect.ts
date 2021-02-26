@@ -46,8 +46,3 @@ export function createRect(init?: Partial<IRect>): IRect {
   return rect
 }
 
-class A {
-  inner = 'hello'
-  foo = () => console.log(this.inner)
-}
-console.log(A instanceof Function)
