@@ -24,3 +24,10 @@ export type MayEnum<T> = T | (string & {})
  * type I = GetOptional<{ foo: number, bar?: string }> // expected to be { bar?: string }
  */
 // type GetOptional<T> = {[P in keyof T as T[P] extends Required<T>[P] ? never: P]: T[P]}
+
+// 获取对象的所有非方法的属性名
+export type Properties<O, T = keyof O> = T extends keyof O
+  ? O[T] extends () => void
+    ? never
+    : T
+  : never
