@@ -1,20 +1,24 @@
 import { Delta2dTranslate } from 'typings/constants'
+import { Methods, Properties } from 'typings/tools'
 import isNumber from 'utils/judgers/isNumber'
 
+export interface IRectProperties {}
 export interface IRect {
-  x: number
-  y: number
-  width: number
-  height: number
-  left: number
-  top: number
-  right: number
-  bottom: number
+  readonly _listeners: { [lintenTo: string]: (() => void)[] }
+  readonly x: number
+  readonly y: number
+  readonly width: number
+  readonly height: number
+  readonly left: number
+  readonly top: number
+  readonly right: number
+  readonly bottom: number
   changePosition(delta?: Partial<Delta2dTranslate>): IRect
+  on(listenTo: Methods<Omit<IRect, 'on'>>, callbackFn): void
 }
 
 /**创造一个rect对象，如果信息不全，属性即为0 */
-export function createRect(init?: Partial<IRect>): IRect {
+export function createRect(init?: Partial<Pick<IRect, Properties<IRect>>>): IRect {
   const x =
     init?.x ??
     init?.left ??
@@ -26,7 +30,9 @@ export function createRect(init?: Partial<IRect>): IRect {
   const width = init?.width ?? (isNumber(x) && isNumber(init?.right) ? init!.right - x : undefined)
   const height =
     init?.height ?? (isNumber(x) && isNumber(init?.bottom) ? init!.bottom - x : undefined)
+
   const rect: IRect = {
+    _listeners: init?._listeners ?? {},
     x: x ?? 0,
     y: y ?? 0,
     width: width ?? 0,
@@ -36,12 +42,21 @@ export function createRect(init?: Partial<IRect>): IRect {
     right: (x ?? 0) + (width ?? 0),
     bottom: (y ?? 0) + (height ?? 0),
     changePosition(delta) {
-      return createRect({
+      const newRect = createRect({
+        _listeners: rect._listeners,
         width: rect.width,
         height: rect.height,
         x: rect.x + (delta?.dx ?? 0),
         y: rect.y + (delta?.dy ?? 0)
       })
+      const callbacks = rect._listeners['changePosition']
+      if (callbacks) callbacks.forEach((cb) => cb())
+      return newRect
+    },
+    on: (listenTo, callbackFn) => {
+      /* TODO */
+      const newRect = createRect({...rect, _listeners:{}})
+      return newRect
     }
   }
   return rect

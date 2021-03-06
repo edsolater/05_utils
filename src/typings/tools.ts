@@ -31,3 +31,7 @@ export type Properties<O, T = keyof O> = T extends keyof O
     ? never
     : T
   : never
+
+// 获取对象的所有方法名
+export type Methods<O> = Exclude<keyof O, Properties<O>>
+
