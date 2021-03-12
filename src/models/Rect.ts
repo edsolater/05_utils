@@ -14,6 +14,7 @@ export interface IRect {
   readonly right: number
   readonly bottom: number
   changePosition(delta?: Partial<Delta2dTranslate>): IRect
+  /* 用On好像太没有指向性了，可能做成mutable的属性比较好 */
   on(listenTo: Methods<Omit<IRect, 'on'>>, callbackFn): void
 }
 
@@ -55,9 +56,10 @@ export function createRect(init?: Partial<Pick<IRect, Properties<IRect>>>): IRec
     },
     on: (listenTo, callbackFn) => {
       /* TODO */
-      const newRect = createRect({...rect, _listeners:{}})
+      const newRect = createRect({ ...rect, _listeners: {} })
       return newRect
     }
   }
   return rect
 }
+
