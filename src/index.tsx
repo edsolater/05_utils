@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'react-dom'
+import {unstable_createRoot as createRoot} from 'react-dom'
 import './style/initial.css'
 import './style/allCSSVariable.css'
 import TestGrounds from 'TestEggs'
@@ -10,5 +10,4 @@ function App() {
     // <Home /> // 视频通话
   )
 }
-
-render(<App />, document.getElementById('app'))
+createRoot(document.getElementById('app')).render(<App />)
