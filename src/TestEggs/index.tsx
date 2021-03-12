@@ -5,6 +5,7 @@ import CollapseWatcher from './CollapseWatcher'
 import GroupScroll from './GroupScroll'
 import SimulateMouseClick from './SimulateMouseClick'
 import SortableList from './SortableList'
+import TrafficLight from './TrafficLight'
 
 const TestGrounds = () => (
   <Div css={cssMixins.testGridContainer()}>
@@ -58,6 +59,10 @@ const TestGrounds = () => (
     <Div css={cssMixins.testGridItem()}>
       <Div css={cssMixins.gridItemTextLabel()}>点击模拟</Div>
       <SimulateMouseClick />
+    </Div>
+    <Div css={cssMixins.testGridItem()}>
+      <Div css={cssMixins.gridItemTextLabel()}>红绿灯</Div>
+      <TrafficLight />
     </Div>
   </Div>
 )

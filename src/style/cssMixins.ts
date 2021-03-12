@@ -24,7 +24,7 @@ export const cssMixins = {
     ICSS(
       {
         display: 'grid',
-        gridTemplate: '1fr 1fr / 1fr 1fr',
+        gridTemplate: '1fr 1fr / 1fr 1fr 1fr',
         gap: 8,
         overflow: 'hidden',
         background: 'lightgray',
