@@ -3,6 +3,7 @@ import React, { StrictMode } from 'react'
 import { cssMixins } from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'
 import GroupScroll from './GroupScroll'
+import HoverContainer from './HoverContainer'
 import SimulateMouseClick from './SimulateMouseClick'
 import SortableList from './SortableList'
 import TrafficLight from './TrafficLight'
@@ -63,6 +64,10 @@ const TestGrounds = () => (
     <Div css={cssMixins.testGridItem()}>
       <Div css={cssMixins.gridItemTextLabel()}>红绿灯</Div>
       <TrafficLight />
+    </Div>
+    <Div css={cssMixins.testGridItem()}>
+      <Div css={cssMixins.gridItemTextLabel()}>透明组件：hover容器</Div>
+      <HoverContainer />
     </Div>
   </Div>
 )
