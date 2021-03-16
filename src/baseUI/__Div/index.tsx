@@ -7,6 +7,7 @@ import { IRef } from 'typings/reactType'
 import { mergeRefs } from 'helper/reactHelper/mergeRefs'
 import { ClassName, classname } from './classname'
 
+// 设立BaseProps是为了给其他baseUI如Img用的
 export interface BaseProps {
   className?: ClassName
   // 对interface，typescript有缓存
@@ -30,14 +31,14 @@ export interface BaseProps {
         [variableName: string]: number | string | undefined
       } // TODO
   domRef?: IRef<HTMLElement>
-  // 就是个为了编写props方便而设立的，优先级比直接定义的低
+  // 就是个为了编写props方便而设立的，优先级比直接定义的低（只能由baseUI组件调用）
   _baseProps?: BaseProps
 }
 // interface 会开启typescript的缓存机制
 export interface DivProps<T extends keyof JSX.IntrinsicElements = 'div'>
   extends Omit<JSX.IntrinsicElements['div' /* TODO */], 'style' | 'css' | 'className'>,
     BaseProps {
-  _tagName?: T
+  _tagName?: T //只能由baseUI组件调用）
   children?: ReactNode
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
@@ -48,7 +49,7 @@ const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   css: emotionCss,
   style,
   domRef,
-  _baseProps: baseProps,
+  _baseProps: baseProps, 
   ...restProps
 }: DivProps<T>) => {
   const allProps: JSX.IntrinsicElements[T] = {
