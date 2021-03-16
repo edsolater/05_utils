@@ -35,7 +35,7 @@ export interface BaseProps {
 }
 // interface 会开启typescript的缓存机制
 export interface DivProps<T extends keyof JSX.IntrinsicElements = 'div'>
-  extends Omit<JSX.IntrinsicElements['div'/* TODO */], 'style' | 'css' | 'className'>,
+  extends Omit<JSX.IntrinsicElements['div' /* TODO */], 'style' | 'css' | 'className'>,
     BaseProps {
   _tagName?: T
   children?: ReactNode
@@ -44,7 +44,7 @@ export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
 
 const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   _tagName,
-  className : incomeClassname,
+  className: incomeClassname,
   css: emotionCss,
   style,
   domRef,
