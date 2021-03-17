@@ -20,3 +20,4 @@ export interface HoverProps {
   onHoverStart?: () => void
   onHoverEnd?: () => void
 }
+export const featurePropNames: Array<keyof HoverProps> = ['onHoverStart', 'onHoverEnd']

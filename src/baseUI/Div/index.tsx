@@ -5,10 +5,10 @@ import { toCss } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
 import { IRefs, mergeRefs } from 'baseUI/Div/mergeRefs'
 import { ClassName, classname } from './classname'
-import { attachHover, HoverProps } from './features/hoverable'
+import { attachFeatures, FeaturesProps } from './features'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
-export interface BaseProps<El = HTMLElement> extends HoverProps /* hoverable特性 */ {
+export interface BaseProps<El = HTMLElement> extends FeaturesProps {
   domRef?: IRefs<El>
   className?: ClassName
   // 对interface，typescript有缓存
@@ -47,19 +47,16 @@ const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   css,
   style,
   domRef,
-
-  onHoverStart, // hoverable特性
-  onHoverEnd, // hoverable特性
-
-  ...restProps //用于承载一些本来就会附加在<div>上的普通props
+  children,
+  onClick,
+  ...featureEvents
 }: DivProps<T>) => {
-  const attachFeature = useCallback((el: HTMLElement) => {
-    attachHover(el, { onHoverStart, onHoverEnd }) // hoverable特性
-  }, [])
+  const attachFeatureCallback = useCallback((el) => attachFeatures(el, featureEvents), [])
   const allProps: JSX.IntrinsicElements[T] = {
-    ...restProps,
+    children,
     className: classname(className),
-    ref: mergeRefs(domRef, attachFeature),
+    onClick,
+    ref: mergeRefs(domRef, attachFeatureCallback),
     style,
     // @ts-expect-error
     css: toCss(css)
