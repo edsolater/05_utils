@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import Div, { DivProps } from './__Div'
 
 import { Delta2dTranslate, Direction, Vector } from 'typings/constants'
-import { mergeRefs } from 'helper/reactHelper/mergeRefs'
+import { mergeRefs } from 'baseUI/__Div/mergeRefs'
 import {
   DIRECTION_BOTTOM,
   DIRECTION_LEFT,
@@ -201,6 +201,7 @@ const Transformable = ({
 
   return (
     <Div
+      {...restProps}
       domRef={mergeRefs(domRef, box)}
       className={['movable-wrapper', className]}
       css={[
@@ -219,7 +220,6 @@ const Transformable = ({
         },
         css
       ]}
-      _baseProps={restProps}
     >
       {children}
       {resizable && (

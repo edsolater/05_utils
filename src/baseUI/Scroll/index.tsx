@@ -7,7 +7,7 @@
  **********************/
 import React, { useEffect, useRef } from 'react'
 import Div from 'baseUI/__Div'
-import { mergeRefs } from 'helper/reactHelper/mergeRefs'
+import { mergeRefs } from 'baseUI/__Div/mergeRefs'
 import useRecordRef from 'hooks/useRecordedRef'
 import { clone } from './clone'
 import { useIScrollEventAttacher } from './useIScrollEventAttacher'
@@ -17,14 +17,15 @@ import { ScrollProps, ScrollHandles } from './_interface'
 import { scrollRoot } from './_css'
 /**每次滚动一组 */
 const Scroll = ({
+  className,
   componentRef,
-  children,
+  domRef,
   hideScrollbar = true,
   onScroll,
   onScrollStart,
   onScrollEnd,
   onScrollIndexChange,
-  ...baseProps
+  ...restProps
 }: ScrollProps) => {
   const outterRef = useRef<HTMLDivElement>()
   const scrollInfo = useRecordRef({
@@ -53,13 +54,11 @@ const Scroll = ({
   })
   return (
     <Div
-      className='Scroll'
-      domRef={mergeRefs(outterRef, attachScroll)}
+      {...restProps}
+      className={['Scroll', className]}
+      domRef={mergeRefs(outterRef, attachScroll, domRef)}
       css={scrollRoot({ hideScrollbar })}
-      _baseProps={baseProps}
-    >
-      {children}
-    </Div>
+    ></Div>
   )
 }
 export default Scroll

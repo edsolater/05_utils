@@ -36,7 +36,7 @@ const HoverDiv = ({ onHoverStateChange, ...restProps }: HoverDivProps) => {
       div.current!.addEventListener('pointerleave', () => {
         onHoverStateChange('out')
       })
-    }//只使用Pointer系列的是有问题的
+    } //只使用Pointer系列的是有问题的
   }, [])
   return <Div _baseProps={{ domRef: div }} {...restProps}></Div>
 }
@@ -49,6 +49,7 @@ const HoverContainer = () => {
       css={{
         width: 100,
         height: 100,
+        transition: '300ms',
         background: isHovered ? 'crimson' : 'dodgerblue' // 为什么这个可以？因为state改变直接重渲染了
       }}
       // IDEA: 可能在DIV上直接创造一个onHover事件更好

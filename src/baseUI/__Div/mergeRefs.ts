@@ -1,4 +1,5 @@
-import { RefCallback, useCallback } from 'react'
+import { MutableRefObject, RefCallback, useCallback } from 'react'
+import { MayArray } from 'typings/tools'
 
 export function mergeRefs<T = any>(
   ...refs: Array<React.MutableRefObject<T> | React.LegacyRef<T> | undefined>
@@ -15,3 +16,5 @@ export function mergeRefs<T = any>(
     }
   }, refs)
 }
+export type IRef<T = undefined> = ((el: T) => void) | MutableRefObject<T | null | undefined> | null | undefined
+export type IRefs = MayArray<IRef>

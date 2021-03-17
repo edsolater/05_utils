@@ -18,7 +18,7 @@ const cssButton: CSSObject = {
   width: 150,
   height: 150,
   borderRadius: '50%',
-  padding:'',
+  padding: '',
   fontSize: '1.3em',
   position: 'relative'
 }
@@ -44,14 +44,9 @@ const cssWave: CSSObject = {
   animation: `${KeyframeRadarWave} 1s infinite`
 }
 
-const StyledButton = ({ className, css, onClick, children, ...restProps }: ButtonProps) => {
+const StyledButton = ({ css, children, ...restProps }: ButtonProps) => {
   return (
-    <Button
-      _baseProps={restProps}
-      css={[cssButton, cssPrimaryButton, css]}
-      className={className}
-      onClick={onClick}
-    >
+    <Button {...restProps} css={[cssButton, cssPrimaryButton, css]}>
       {children}
       <Div className='wave1' css={cssWave}></Div>
       <Div className='wave2' css={[cssWave, { animationDelay: '.3s' }]}></Div>
