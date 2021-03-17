@@ -6,8 +6,8 @@
  *
  **********************/
 import React, { useEffect, useRef } from 'react'
-import Div from 'baseUI/__Div'
-import { mergeRefs } from 'baseUI/__Div/mergeRefs'
+import Div from 'baseUI/Div'
+import { mergeRefs } from 'baseUI/Div/mergeRefs'
 import useRecordRef from 'hooks/useRecordedRef'
 import { clone } from './clone'
 import { useIScrollEventAttacher } from './useIScrollEventAttacher'

@@ -2,7 +2,7 @@
 import { jsx, css as cssMerge, CSSObject } from '@emotion/react'
 import { CSSProperties, FC, useEffect, useRef } from 'react'
 import { mix } from 'style/cssMixins'
-import Div from './__Div'
+import Div from './Div'
 
 const Video: FC<{
   shape?: 'rect' | 'circle'

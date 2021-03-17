@@ -1,6 +1,6 @@
-import Div from 'baseUI/__Div'
+import Div from 'baseUI/Div'
 import Transformable from 'baseUI/Transformable'
-import Video from 'baseUI/__Video'
+import Video from 'baseUI/Video'
 import StyledButton from 'components/StyledButton'
 import { initAppWebsocket } from 'helper/createConnect/core'
 import { evokeCamera } from 'helper/evokeMedia'

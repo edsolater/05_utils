@@ -1,4 +1,4 @@
-import Div, { DivProps } from 'baseUI/__Div'
+import Div, { DivProps } from 'baseUI/Div'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 export interface _HoverProps {
   children?: ReactNode

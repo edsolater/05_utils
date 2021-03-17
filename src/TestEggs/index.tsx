@@ -1,4 +1,4 @@
-import Div from 'baseUI/__Div'
+import Div from 'baseUI/Div'
 import React, { StrictMode } from 'react'
 import { cssMixins } from 'style/cssMixins'
 import CollapseWatcher from './CollapseWatcher'

@@ -1,5 +1,5 @@
 import React, { Fragment, ReactNode, useRef, useState } from 'react'
-import Div, { BaseProps } from 'baseUI/__Div'
+import Div, { BaseProps } from 'baseUI/Div'
 import { mix, cssMixins } from 'style/cssMixins'
 import Scroll from 'baseUI/Scroll'
 import { ScrollHandles, ScrollEvent } from 'baseUI/Scroll/_interface'

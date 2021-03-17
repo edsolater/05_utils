@@ -4,7 +4,7 @@
 import Transformable from 'baseUI/Transformable'
 import React, { FC, useRef } from 'react'
 import { Direction } from 'typings/constants'
-import Div from 'baseUI/__Div'
+import Div from 'baseUI/Div'
 import { createRect, IRect } from 'models/Rect'
 import { createMap, IMap } from 'models/Map'
 import changeTransform from 'helper/manageStyle/changeTransform'

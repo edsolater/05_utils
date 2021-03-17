@@ -1,4 +1,4 @@
-import Div from 'baseUI/__Div'
+import Div from 'baseUI/Div'
 import React, { useEffect, useState } from 'react'
 import { toPer } from 'style/cssUnits'
 import { cssVar, cssVarName } from 'style/cssFunctions'

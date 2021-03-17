@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react'
-import Div, { DivProps } from './__Div'
+import Div, { DivProps } from './Div'
 
 import { Delta2dTranslate, Direction, Vector } from 'typings/constants'
-import { mergeRefs } from 'baseUI/__Div/mergeRefs'
+import { mergeRefs } from 'baseUI/Div/mergeRefs'
 import {
   DIRECTION_BOTTOM,
   DIRECTION_LEFT,

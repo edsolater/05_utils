@@ -3,7 +3,7 @@ import { jsx } from '@emotion/react'
 import { CSSProperties } from 'react'
 import { toCss } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
-import { IRefs, mergeRefs } from 'baseUI/__Div/mergeRefs'
+import { IRefs, mergeRefs } from 'baseUI/Div/mergeRefs'
 import { ClassName, classname } from './classname'
 
 // 设立BaseProps是为了给其他baseUI如Img用的

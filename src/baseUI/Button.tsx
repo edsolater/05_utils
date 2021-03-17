@@ -1,4 +1,4 @@
-import Div, { DivProps } from './__Div'
+import Div, { DivProps } from './Div'
 import React from 'react'
 import { mix } from 'style/cssMixins'
 import { cssBrightness } from 'style/cssFunctions'
