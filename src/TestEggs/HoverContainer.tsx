@@ -23,7 +23,7 @@ const _Hover = ({ children }: _HoverProps) => {
   )
 }
 
-export interface HoverDivProps extends DivProps {
+interface HoverDivProps extends DivProps {
   onHoverStateChange?: (toState: 'in' | 'out') => void
 }
 const HoverDiv = ({ domRef, onHoverStateChange, ...restProps }: HoverDivProps) => {
@@ -47,20 +47,18 @@ const HoverDiv = ({ domRef, onHoverStateChange, ...restProps }: HoverDivProps) =
 const HoverContainer = () => {
   const [isHovered, setIsHover] = useState(false)
   return (
-    <HoverDiv
+    <Div
       css={{
         width: 100,
         height: 100,
         transition: '300ms',
         background: isHovered ? 'crimson' : 'dodgerblue' // 为什么这个可以？因为state改变直接重渲染了
       }}
-      // IDEA: 可能在DIV上直接创造一个onHover事件更好
-      onHoverStateChange={(state) => {
-        setIsHover(state === 'in')
-      }}
+      onHoverStart={() => setIsHover(true)}
+      onHoverEnd={() => setIsHover(false)}
     >
       {isHovered ? '在内' : '在外'}
-    </HoverDiv>
+    </Div>
   )
 }
 export default HoverContainer

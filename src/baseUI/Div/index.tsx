@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
-import { CSSProperties } from 'react'
+import { CSSProperties, useEffect, useRef } from 'react'
 import { toCss } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
 import { IRefs, mergeRefs } from 'baseUI/Div/mergeRefs'
@@ -30,12 +30,15 @@ export interface BaseProps<El = HTMLElement> {
         '--y'?: number
         [variableName: string]: number | string | undefined
       } // TODO
+  onHoverStart?: () => void
+  onHoverEnd?: () => void
 }
 // interface 会开启typescript的缓存机制
 export interface DivProps<T extends keyof JSX.IntrinsicElements = 'div'>
   extends Omit<JSX.IntrinsicElements['div' /* TODO */], 'style' | 'css' | 'className'>,
     BaseProps {
-  _tagName?: T //只能由baseUI组件调用）
+  /* (只能由baseUI组件调用）*/
+  _tagName?: T
 }
 export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
 
@@ -45,12 +48,31 @@ const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   css,
   style,
   domRef,
+
+  onHoverStart,
+  onHoverEnd,
+
   ...restProps
 }: DivProps<T>) => {
+  const iRef = useRef<HTMLElement>()
+  if (onHoverStart || onHoverEnd) {
+    useEffect(() => {
+      //只使用Pointer系列的是有问题的
+      iRef.current!.addEventListener('pointerenter', () => {
+        onHoverStart?.()
+      })
+      iRef.current!.addEventListener('pointerleave', () => {
+        onHoverEnd?.()
+      })
+      iRef.current!.addEventListener('pointercancel', () => {
+        onHoverEnd?.()
+      })
+    }, [])
+  }
   const allProps: JSX.IntrinsicElements[T] = {
     ...restProps,
     className: classname(className),
-    ref: mergeRefs(domRef),
+    ref: mergeRefs(domRef, iRef),
     style,
     // @ts-expect-error
     css: toCss(css)
