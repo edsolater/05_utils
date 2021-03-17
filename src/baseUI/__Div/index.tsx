@@ -1,13 +1,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
-import { CSSProperties, ReactNode } from 'react'
+import { CSSProperties } from 'react'
 import { toCss } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
-import { IRef, mergeRefs } from 'baseUI/__Div/mergeRefs'
+import { IRefs, mergeRefs } from 'baseUI/__Div/mergeRefs'
 import { ClassName, classname } from './classname'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
-export interface BaseProps<Element = HTMLElement> {
+export interface BaseProps<El = HTMLElement> {
+  domRef?: IRefs<El>
   className?: ClassName
   // 对interface，typescript有缓存
   css?: ICSS
@@ -29,9 +30,6 @@ export interface BaseProps<Element = HTMLElement> {
         '--y'?: number
         [variableName: string]: number | string | undefined
       } // TODO
-  domRef?: IRef<Element>
-  // 就是个为了编写props方便而设立的，优先级比直接定义的低（只能由baseUI组件调用, 但是baseUI组件有嵌套关系诶？！）
-  _baseProps?: BaseProps
 }
 // interface 会开启typescript的缓存机制
 export interface DivProps<T extends keyof JSX.IntrinsicElements = 'div'>
@@ -43,21 +41,19 @@ export const allPropsName: ReadonlyArray<keyof DivProps> = ['css', 'style']
 
 const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   _tagName,
-  className: incomeClassname,
-  css: emotionCss,
+  className,
+  css,
   style,
   domRef,
-  _baseProps: baseProps, 
   ...restProps
 }: DivProps<T>) => {
   const allProps: JSX.IntrinsicElements[T] = {
-    ...baseProps,
     ...restProps,
-    className: classname(incomeClassname),
-    ref: mergeRefs(baseProps?.domRef, domRef),
-    style: { ...baseProps?.style, ...style },
+    className: classname(className),
+    ref: mergeRefs(domRef),
+    style,
     // @ts-expect-error
-    css: toCss([baseProps?.css, emotionCss])
+    css: toCss(css)
   }
   return jsx(_tagName ?? 'div', allProps)
 }

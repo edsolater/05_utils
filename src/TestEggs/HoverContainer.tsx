@@ -26,7 +26,7 @@ const _Hover = ({ children }: _HoverProps) => {
 export interface HoverDivProps extends DivProps {
   onHoverStateChange?: (toState: 'in' | 'out') => void
 }
-const HoverDiv = ({ onHoverStateChange, ...restProps }: HoverDivProps) => {
+const HoverDiv = ({ domRef, onHoverStateChange, ...restProps }: HoverDivProps) => {
   const div = useRef<HTMLDivElement>()
   useEffect(() => {
     if (onHoverStateChange) {
@@ -36,14 +36,16 @@ const HoverDiv = ({ onHoverStateChange, ...restProps }: HoverDivProps) => {
       div.current!.addEventListener('pointerleave', () => {
         onHoverStateChange('out')
       })
+      div.current!.addEventListener('pointercancel', () => {
+        onHoverStateChange('out')
+      })
     } //只使用Pointer系列的是有问题的
   }, [])
-  return <Div _baseProps={{ domRef: div }} {...restProps}></Div>
+  return <Div domRef={[domRef, div]} {...restProps}></Div>
 }
 
 const HoverContainer = () => {
   const [isHovered, setIsHover] = useState(false)
-
   return (
     <HoverDiv
       css={{

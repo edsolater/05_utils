@@ -17,8 +17,7 @@ const GroupScroll = <T extends any>({
   hideScrollbar,
   items,
   groupCapacity,
-  renderItem,
-  ...baseProps
+  renderItem
 }: GroupScrollProps<T>) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const scrollRef = useRef<ScrollHandles>()
@@ -30,7 +29,7 @@ const GroupScroll = <T extends any>({
     if (contentOrder !== currentIndex) setCurrentIndex(contentOrder)
   }
   return (
-    <Div className='GroupScroll' _baseProps={baseProps}>
+    <Div className='GroupScroll'>
       {/* 滚动检测元素 */}
       <Scroll
         componentRef={scrollRef}
