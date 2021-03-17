@@ -1,13 +1,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
-import { CSSProperties, useEffect, useRef } from 'react'
+import { CSSProperties, useCallback } from 'react'
 import { toCss } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
 import { IRefs, mergeRefs } from 'baseUI/Div/mergeRefs'
 import { ClassName, classname } from './classname'
+import { attachHover, HoverProps } from './features/hoverable'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
-export interface BaseProps<El = HTMLElement> {
+export interface BaseProps<El = HTMLElement> extends HoverProps /* hoverable特性 */ {
   domRef?: IRefs<El>
   className?: ClassName
   // 对interface，typescript有缓存
@@ -30,8 +31,6 @@ export interface BaseProps<El = HTMLElement> {
         '--y'?: number
         [variableName: string]: number | string | undefined
       } // TODO
-  onHoverStart?: () => void
-  onHoverEnd?: () => void
 }
 // interface 会开启typescript的缓存机制
 export interface DivProps<T extends keyof JSX.IntrinsicElements = 'div'>
@@ -49,30 +48,18 @@ const Div = <T extends keyof JSX.IntrinsicElements = 'div'>({
   style,
   domRef,
 
-  onHoverStart,
-  onHoverEnd,
+  onHoverStart, // hoverable特性
+  onHoverEnd, // hoverable特性
 
-  ...restProps
+  ...restProps //用于承载一些本来就会附加在<div>上的普通props
 }: DivProps<T>) => {
-  const iRef = useRef<HTMLElement>()
-  if (onHoverStart || onHoverEnd) {
-    useEffect(() => {
-      //只使用Pointer系列的是有问题的
-      iRef.current!.addEventListener('pointerenter', () => {
-        onHoverStart?.()
-      })
-      iRef.current!.addEventListener('pointerleave', () => {
-        onHoverEnd?.()
-      })
-      iRef.current!.addEventListener('pointercancel', () => {
-        onHoverEnd?.()
-      })
-    }, [])
-  }
+  const attachFeature = useCallback((el: HTMLElement) => {
+    attachHover(el, { onHoverStart, onHoverEnd }) // hoverable特性
+  }, [])
   const allProps: JSX.IntrinsicElements[T] = {
     ...restProps,
     className: classname(className),
-    ref: mergeRefs(domRef, iRef),
+    ref: mergeRefs(domRef, attachFeature),
     style,
     // @ts-expect-error
     css: toCss(css)
