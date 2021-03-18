@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { BaseProps } from 'baseUI/Div'
+import { DivProps } from 'baseUI/Div'
 import { IRef } from 'typings/reactType'
 
 export interface ScrollState {
@@ -36,7 +36,7 @@ export interface ScrollEvent {
   /**距离上次发出此事件的毫秒数，（如果是scrollstart，则为undefined） */
   deltaTime: number | undefined
 }
-export interface ScrollProps extends BaseProps {
+export interface ScrollProps extends DivProps {
   componentRef?: IRef<ScrollHandles>
   children?: ReactNode
   /**
