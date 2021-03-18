@@ -35,14 +35,15 @@ export interface DivProps extends FeaturesProps {
   originalReactProps?: JSX.IntrinsicElements['div']
 }
 
-const Div = ({ className, css, style, domRef, children, ...featureEvents }: DivProps) => {
-  const attachFeatureCallback = useCallback((el) => attachFeatures(el, featureEvents), [])
+const Div = (props: DivProps) => {
+  const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [])
   const allProps = {
-    children,
-    className: classname(className),
-    ref: mergeRefs(domRef, attachFeatureCallback),
-    style,
-    css: toCss(css)
+    ...props.originalReactProps,
+    children: props.children,
+    style: props.style,
+    className: classname(props.className),
+    ref: mergeRefs(props.domRef, attachFeatureCallback),
+    css: toCss(props.css)
   }
   return jsx('div', allProps)
 }
