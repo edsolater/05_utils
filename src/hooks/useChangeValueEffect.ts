@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
  * @param callback
  * @param value 单个元素
  */
-export default function useWatch<T>(callback: (cur: NonNullable<T>, prev: NonNullable<T>) => void, value: T) {
+export default function useChangeValueEffect<Value>(callback: (cur: NonNullable<Value>, prev: NonNullable<Value>) => void, value: Value) {
   const newValue = useRef(value)
   useEffect(() => {
     const prev = newValue.current

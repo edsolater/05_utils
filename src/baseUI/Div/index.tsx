@@ -8,8 +8,8 @@ import { ClassName, classname } from './classname'
 import { attachFeatures, FeaturesProps } from './features'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
-export interface DivProps<El = HTMLElement> extends FeaturesProps {
-  domRef?: IRefs<El>
+export interface DivProps extends FeaturesProps {
+  domRef?: IRefs<HTMLElement>
   className?: ClassName
   // 对interface，typescript有缓存
   css?: ICSS

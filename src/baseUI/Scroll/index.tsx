@@ -11,7 +11,7 @@ import { mergeRefs } from 'baseUI/Div/mergeRefs'
 import useRecordRef from 'hooks/useRecordedRef'
 import { clone } from './clone'
 import { useIScrollEventAttacher } from './useIScrollEventAttacher'
-import { useHandler } from '../../hooks/useHandler'
+import { useComponentRefHandler } from '../../hooks/useHandler'
 import makeElementScroll from './makeElementScroll'
 import { ScrollProps, ScrollHandles } from './_interface'
 import { scrollRoot } from './_css'
@@ -45,7 +45,7 @@ const Scroll = ({
     onScroll: mergeFunction(onScroll, (event) => (scrollInfo.current = clone(event))),
     onScrollEnd
   })
-  useHandler<ScrollHandles>(componentRef, {
+  useComponentRefHandler<ScrollHandles>(componentRef, {
     scroll: (dx, mode) =>
       makeElementScroll(outterRef.current!, {
         offset: typeof dx === 'number' ? dx : dx(scrollInfo.current),
