@@ -1,3 +1,4 @@
+import { MayDeepArray } from 'typings/tools'
 import isArray from 'utils/judgers/isArray'
 import isNumber from 'utils/judgers/isNumber'
 import isString from 'utils/judgers/isString'
@@ -24,10 +25,19 @@ export const toCSSString = (n: CSSLongValue): string => {
   }
 }
 export const fromPx = (rule: string): number => parseFloat(rule)
-export const toVw = (n: number | string) => changeUnit(n, 'vw')
-export const toVh = (n: number) => changeUnit(n, 'vh')
-export const toPx = (n: number | string) => changeUnit(n, 'px')
-export const toPer = (n: number) => changeUnit(n, '%')
+
+export const toVw = (...ns: MayDeepArray<number | string>[]) =>
+  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, 'vw') : ''), '')
+
+export const toVh = (...ns: MayDeepArray<number | string>[]) =>
+  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, 'vh') : ''), '')
+
+export const toPx = (...ns: MayDeepArray<number | string>[]) =>
+  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, 'px') : ''), '')
+
+export const toPer = (...ns: MayDeepArray<number | string>[]) =>
+  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, '%') : ''), '')
+  
 export const fullVw = '100vw'
 export const fullVh = '100vh'
 export const halfPer = '50%'

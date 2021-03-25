@@ -12,7 +12,7 @@ import { TagMap } from './TagMap'
 export interface DivProps<TagName extends keyof TagMap = 'div'> extends FeaturesProps {
   // 只能低层组件使用
   _tagName?: TagName
-  domRef?: IRefs<TagMap[TagName]>
+  domRef?: IRefs<TagMap[TagName] | undefined>
   className?: ClassName
   // 对interface，typescript有缓存
   css?: ICSS

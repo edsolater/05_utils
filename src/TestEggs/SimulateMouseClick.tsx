@@ -3,7 +3,7 @@ import Button from 'baseUI/Button'
 import React, { useRef, useState } from 'react'
 const SimulateMouseClick = () => {
   const [counter, setCounter] = useState(0)
-  const targetButtonRef = useRef<HTMLElement>()
+  const targetButtonRef = useRef<HTMLButtonElement>()
   const simulateClick = (to: HTMLElement) => {
     const rect = to.getBoundingClientRect()
     const x = (rect.left + rect.right) / 2
@@ -18,17 +18,11 @@ const SimulateMouseClick = () => {
   }
   return (
     <Div
-      className={['hello',1,true, undefined, { 'a': true, b: false }]}
+      className={['hello', 1, true, undefined, { 'a': true, b: false }]}
       css={{ borderWidth: 1, borderColor: 'green' }}
     >
       被点击了{counter}次
-      <Button
-        domRef={targetButtonRef}
-        onClick={(e) => {
-          console.log('e: ', e.nativeEvent)
-          setCounter((n) => n + 1)
-        }}
-      >
+      <Button domRef={targetButtonRef} onClick={() => setCounter((n) => n + 1)} type='primary'>
         点我增加点击次数
       </Button>
       <Button onClick={() => simulateClick(targetButtonRef.current!)}>点我模拟点击</Button>
