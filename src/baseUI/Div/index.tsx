@@ -32,13 +32,13 @@ export interface DivProps extends FeaturesProps {
         [variableName: string]: number | string | undefined
       } // TODO
   children?: ReactNode
-  originalReactProps?: JSX.IntrinsicElements['div']
+  htmlProps?: JSX.IntrinsicElements['div']
 }
 
 const Div = (props: DivProps) => {
   const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [])
   const allProps = {
-    ...props.originalReactProps,
+    ...props.htmlProps,
     children: props.children,
     style: props.style,
     className: classname(props.className),
@@ -49,3 +49,6 @@ const Div = (props: DivProps) => {
 }
 
 export default Div
+
+let a: unknown
+a = 1
