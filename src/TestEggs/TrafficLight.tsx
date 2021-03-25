@@ -5,7 +5,6 @@ import { cssVar, cssVarName } from 'style/cssFunctions'
 import { keyframes } from '@emotion/react'
 const status = ['showing', 'blinking'] as const
 const colors = ['red', 'yellow', 'blue'] as const
-type CSSVarName = 'light-color'
 const keyframeBlink = keyframes`
   from {}
   to {
@@ -41,12 +40,12 @@ const TrafficLight = () => {
         width: 50,
         height: 50,
         borderRadius: toPer(50),
-        background: cssVar<CSSVarName>('light-color'),
+        background: cssVar('--light-color'),
         [`&.${status[1]}`]: {
           animation: `${keyframeBlink} ${blinkingTime / 3}ms infinite`
         }
       }}
-      style={{ [cssVarName<CSSVarName>('light-color')]: colors[colorIndex] }}
+      style={{ '--light-color': colors[colorIndex] }}
     ></Div>
   )
 }
