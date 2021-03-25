@@ -6,10 +6,13 @@ import { ICSS } from 'style/cssType'
 import { IRefs, mergeRefs } from 'baseUI/Div/mergeRefs'
 import { ClassName, classname } from './classname'
 import { attachFeatures, FeaturesProps } from './features'
+import { TagMap } from './TagMap'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
-export interface DivProps extends FeaturesProps {
-  domRef?: IRefs<HTMLElement>
+export interface DivProps<TagName extends keyof TagMap = 'div'> extends FeaturesProps {
+  // 只能低层组件使用
+  _tagName?: TagName
+  domRef?: IRefs<TagMap[TagName]>
   className?: ClassName
   // 对interface，typescript有缓存
   css?: ICSS
@@ -32,10 +35,10 @@ export interface DivProps extends FeaturesProps {
         [variableName: string]: number | string | undefined
       } // TODO
   children?: ReactNode
-  htmlProps?: JSX.IntrinsicElements['div']
+  htmlProps?: JSX.IntrinsicElements[TagName]
 }
 
-const Div = (props: DivProps) => {
+const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [])
   const allProps = {
     ...props.htmlProps,
@@ -45,10 +48,7 @@ const Div = (props: DivProps) => {
     ref: mergeRefs(props.domRef, attachFeatureCallback),
     css: toCss(props.css)
   }
-  return jsx('div', allProps)
+  return jsx(props._tagName ?? 'div', allProps)
 }
 
 export default Div
-
-let a: unknown
-a = 1

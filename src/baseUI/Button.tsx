@@ -8,7 +8,7 @@ const cssButton = () =>
     placeContent: 'center',
     borderRadius: '100vw',
     appearance: 'none',
-    borderWidth:0,
+    borderWidth: 0,
     cursor: 'pointer',
     userSelect: 'none',
     width: 'max-content',
@@ -23,13 +23,13 @@ const cssButton = () =>
     }
   })
 
-export interface ButtonProps extends DivProps {}
+export interface ButtonProps extends DivProps<'button'> {}
 
 /**
  * 普通Button，TODO
  */
 const Button = ({ ...restProps }: ButtonProps) => {
-  return <Div _tagName="button" {...restProps} css={mix(cssButton, restProps.css)}></Div>
+  return <Div _tagName='button' {...restProps} css={mix(cssButton, restProps.css)} ></Div>
 }
 
 export default Button
