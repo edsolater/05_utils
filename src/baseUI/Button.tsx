@@ -4,7 +4,7 @@ import { mix } from 'style/cssMixins'
 import { cssBrightness } from 'style/cssFunctions'
 import { toPx } from 'helper/manageStyle/withPx'
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-const cssButtonBaseStyle = (type: ButtonProps['type']) =>
+const cssButtonBaseStyle = ({ type }: ButtonProps) =>
   mix(
     {
       appearance: 'none', // 好像并没有实际效果
@@ -42,7 +42,11 @@ export interface ButtonProps extends DivProps<'button'> {
  * 普通Button，TODO
  */
 const Button = ({ type = 'border', ...restProps }: ButtonProps) => (
-  <Div {...restProps} _tagName='button' css={mix(cssButtonBaseStyle(type), restProps.css)}></Div>
+  <Div
+    {...restProps}
+    _tagName='button'
+    css={mix(cssButtonBaseStyle({ type }), restProps.css)}
+  ></Div>
 )
 
 export default Button
