@@ -1,19 +1,40 @@
-import { mix } from 'style/cssMixins'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
+import { mix } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
 import { toPx } from 'style/cssUnits'
-import { ButtonProps } from './Button'
 
-export interface ButtonCSSPart {
-  primary?: ICSS
-  bordered?: ICSS
-  text?: ICSS
-  small?: ICSS
-  middle?: ICSS
-  large?: ICSS
+// 声明组件有哪些props是服务于样式的
+export interface ButtonStyleProps {
+  /**对组件的每一个part或虚拟part定义样式 */
+  cssPart?: {
+    primary?: ICSS
+    bordered?: ICSS
+    text?: ICSS
+    small?: ICSS
+    middle?: ICSS
+    large?: ICSS
+  }
+  /**
+   * 按钮元素的权重
+   * 默认：bordered（空心按钮）
+   */
+  type?: 'primary' | 'bordered' | 'text'
+  /**
+   * 按钮的大小
+   */
+  size?: 'small' | 'middle' | 'large'
 }
+
+// 表明具体有哪些props是服务于样式的（JS代码声明，也便于提取相关属性）
+export const buttonStylePropNames: (keyof ButtonStyleProps)[] = ['cssPart', 'type', 'size']
+
+// 样式的具体css-in-js实现
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const cssButtonBaseStyle = ({ size, type, cssPart, css }: ButtonProps) =>
+export const cssButtonBaseStyle = ({
+  size = 'middle',
+  type = 'bordered',
+  cssPart
+}: ButtonStyleProps) =>
   mix(
     {
       appearance: 'none',
@@ -57,6 +78,5 @@ export const cssButtonBaseStyle = ({ size, type, cssPart, css }: ButtonProps) =>
     size === 'large' && cssPart?.large,
     type === 'primary' && cssPart?.primary,
     type === 'bordered' && cssPart?.bordered,
-    type === 'text' && cssPart?.text,
-    css
+    type === 'text' && cssPart?.text
   )

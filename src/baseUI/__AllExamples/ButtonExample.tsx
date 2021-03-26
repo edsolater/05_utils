@@ -1,6 +1,6 @@
+import Button from 'baseUI/Button'
 import RowBox from 'baseUI/RowBox'
 import React from 'react'
-import Button from '../Button'
 
 /**
  * 普通Button，TODO
