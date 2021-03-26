@@ -6,11 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
-  background-color: rgb(22, 22, 22);
   overflow: hidden;
-}
-video {
-  display: block;
 }
 * {
   box-sizing: border-box;

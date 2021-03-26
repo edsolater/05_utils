@@ -27,17 +27,28 @@ export const toCSSString = (n: CSSLongValue): string => {
 export const fromPx = (rule: string): number => parseFloat(rule)
 
 export const toVw = (...ns: MayDeepArray<number | string>[]) =>
-  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, 'vw') : ''), '')
+  ns
+    .flat(Infinity)
+    .map((n) => changeUnit(n, 'vw'))
+    .join(' ')
 
 export const toVh = (...ns: MayDeepArray<number | string>[]) =>
-  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, 'vh') : ''), '')
+  ns
+    .flat(Infinity)
+    .map((n) => changeUnit(n, 'vh'))
+    .join(' ')
 
 export const toPx = (...ns: MayDeepArray<number | string>[]) =>
-  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, 'px') : ''), '')
+  ns
+    .flat(Infinity)
+    .map((n) => changeUnit(n, 'px'))
+    .join(' ')
 
 export const toPer = (...ns: MayDeepArray<number | string>[]) =>
-  ns.flat(Infinity).reduce((acc, n) => (acc + isNumber(n) ? changeUnit(n, '%') : ''), '')
-  
+  ns
+    .flat(Infinity)
+    .map((n) => changeUnit(n, '%'))
+    .join(' ')
 export const fullVw = '100vw'
 export const fullVh = '100vh'
 export const halfPer = '50%'

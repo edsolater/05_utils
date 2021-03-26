@@ -1,4 +1,4 @@
-import Div, { DivProps } from './Div'
+import Div, { DivProps } from 'baseUI/Div'
 import React from 'react'
 import { mix } from 'style/cssMixins'
 import { ButtonCSSPart, cssButtonBaseStyle } from './ButtonStyle'

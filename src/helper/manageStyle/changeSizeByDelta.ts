@@ -1,4 +1,4 @@
-import { fromPx, toPx } from './withPx'
+import { fromPx, toPx } from 'style/cssUnits'
 
 export default function changeSizeByDelta(
   el: HTMLElement | null,

@@ -1,6 +1,5 @@
-import { toPx } from 'helper/manageStyle/withPx'
 import isExist from 'utils/judgers/isExist'
-import { CSSValue } from './cssUnits'
+import { CSSValue, toPx } from './cssUnits'
 const toCSS = (v: CSSValue) => (typeof v === 'number' ? toPx(v) : v)
 
 /* ---------------------------------- css变量 --------------------------------- */
