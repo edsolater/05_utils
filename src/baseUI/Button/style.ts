@@ -3,7 +3,7 @@ import { mix } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
 import { toPx } from 'style/cssUnits'
 
-// 声明组件有哪些props是服务于样式的
+// 声明组件有哪些props是纯粹服务于样式的
 export interface ButtonStyleProps {
   /**对组件的每一个part或虚拟part定义样式 */
   cssPart?: {
@@ -25,7 +25,7 @@ export interface ButtonStyleProps {
   size?: 'small' | 'middle' | 'large'
 }
 
-// 表明具体有哪些props是服务于样式的（JS代码声明，也便于提取相关属性）
+// 表明具体有哪些props是纯粹服务于样式的（JS代码声明，也便于提取相关属性）
 export const buttonStylePropNames: (keyof ButtonStyleProps)[] = ['cssPart', 'type', 'size']
 
 // 样式的具体css-in-js实现

@@ -5,12 +5,12 @@ import './style/initial.css'
 import './style/allCSSVariable.css'
 import TestGrounds from 'TestEggs'
 import Home from 'pages/Home'
-import __AllExamples from 'baseUI/__AllExamples'
+import AllExamples from 'pages/AllExamples'
 function App() {
   return (
     // <TestGrounds /> // 测试一些功能
     // <Home /> // 视频通话
-    <__AllExamples />
+    <AllExamples />
   )
 }
 createRoot(document.getElementById('app')).render(<App />)

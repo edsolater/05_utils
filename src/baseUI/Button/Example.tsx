@@ -3,7 +3,7 @@ import RowBox from 'baseUI/RowBox'
 import React from 'react'
 
 /**
- * 普通Button，TODO
+ * Button 的使用示例
  */
 const ButtonExample = () => (
   <>
