@@ -1,6 +1,6 @@
 import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mix } from 'style/cssMixins'
-import { ICSS } from 'style/cssType'
+import { ICSS } from 'style/ICSS'
 import { toPx } from 'style/cssUnits'
 
 // 声明组件有哪些props是纯粹改变外观的

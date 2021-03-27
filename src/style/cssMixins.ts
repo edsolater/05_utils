@@ -2,7 +2,7 @@ import { css, CSSObject } from '@emotion/react'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
 import { cssBrightness, cssScale } from './cssFunctions'
-import { ICSS } from './cssType'
+import { ICSS } from './ICSS'
 
 export type AllMixinNames = keyof typeof cssMixins
 type MixinFunction = (...any: any[]) => ICSS
