@@ -7,7 +7,7 @@ import { toPx } from 'style/cssUnits'
 
 interface ExampleCardCSSPart {
   primary?: ICSS
-  bordered?: ICSS
+  border?: ICSS
   text?: ICSS
 }
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
@@ -29,7 +29,7 @@ const cssExampleCardBaseStyle = ({ type, cssPart, css }: ExampleCardProps) =>
       ':hover': { filter: cssBrightness(1.4) },
       ':active': { filter: cssBrightness(0.8) }
     },
-    type === 'bordered' && {
+    type === 'border' && {
       position: 'relative',
       backgroundColor: 'transparent',
       color: cssVar('--exampleCard-text-color'),
@@ -50,7 +50,7 @@ const cssExampleCardBaseStyle = ({ type, cssPart, css }: ExampleCardProps) =>
     },
 
     type === 'primary' && cssPart?.primary,
-    type === 'bordered' && cssPart?.bordered,
+    type === 'border' && cssPart?.border,
     type === 'text' && cssPart?.text,
     css
   )
@@ -60,15 +60,15 @@ export interface ExampleCardProps extends DivProps {
   cssPart?: ExampleCardCSSPart
   /**
    * 按钮元素的权重
-   * 默认：bordered（空心按钮）
+   * 默认：border（空心按钮）
    */
-  type?: 'primary' | 'bordered' | 'text'
+  type?: 'primary' | 'border' | 'text'
 }
 
 /**
  * 普通ExampleCard，TODO
  */
-const ExampleCard = ({ type = 'bordered', cssPart, css, ...restProps }: ExampleCardProps) => (
+const ExampleCard = ({ type = 'border', cssPart, css, ...restProps }: ExampleCardProps) => (
   <Div {...restProps} css={mix(cssExampleCardBaseStyle({ type, cssPart, css }))}></Div>
 )
 

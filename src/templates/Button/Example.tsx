@@ -8,11 +8,11 @@ import React from 'react'
 const ButtonExample = () => (
   <>
     <RowBox noStratch>
-      <Button type='primary' size='large'>
+      <Button type='fill' size='large'>
         Large
       </Button>
-      <Button type='primary'>middle</Button>
-      <Button type='primary' size='small'>
+      <Button type='fill'>middle</Button>
+      <Button type='fill' size='small'>
         small
       </Button>
     </RowBox>

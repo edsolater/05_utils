@@ -8,7 +8,7 @@ export interface ButtonStyleProps {
   /**对组件的每一个part或虚拟part定义样式 */
   cssPart?: {
     primary?: ICSS
-    bordered?: ICSS
+    border?: ICSS
     text?: ICSS
     small?: ICSS
     middle?: ICSS
@@ -16,9 +16,9 @@ export interface ButtonStyleProps {
   }
   /**
    * 按钮元素的权重
-   * 默认：bordered（空心按钮）
+   * 默认：border（空心按钮）
    */
-  type?: 'primary' | 'bordered' | 'text'
+  type?: 'primary' | 'border' | 'text'
   /**
    * 按钮的大小
    */
@@ -32,7 +32,7 @@ export const buttonStylePropNames: (keyof ButtonStyleProps)[] = ['cssPart', 'typ
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
 export const cssButtonBaseStyle = ({
   size = 'middle',
-  type = 'bordered',
+  type = 'border',
   cssPart
 }: ButtonStyleProps) =>
   mix(
@@ -54,7 +54,7 @@ export const cssButtonBaseStyle = ({
       ':hover': { filter: cssBrightness(1.4) },
       ':active': { filter: cssBrightness(0.8) }
     },
-    type === 'bordered' && {
+    type === 'border' && {
       position: 'relative',
       backgroundColor: 'transparent',
       color: cssVar('--button-text-color'),
@@ -77,6 +77,6 @@ export const cssButtonBaseStyle = ({
     size === 'middle' && cssPart?.middle,
     size === 'large' && cssPart?.large,
     type === 'primary' && cssPart?.primary,
-    type === 'bordered' && cssPart?.bordered,
+    type === 'border' && cssPart?.border,
     type === 'text' && cssPart?.text
   )

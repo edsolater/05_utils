@@ -22,7 +22,7 @@ const SimulateMouseClick = () => {
       css={{ borderWidth: 1, borderColor: 'green' }}
     >
       被点击了{counter}次
-      <Button domRef={targetButtonRef} onClick={() => setCounter((n) => n + 1)} type='primary'>
+      <Button domRef={targetButtonRef} onClick={() => setCounter((n) => n + 1)} type='fill'>
         点我增加点击次数
       </Button>
       <Button onClick={() => simulateClick(targetButtonRef.current!)}>点我模拟点击</Button>

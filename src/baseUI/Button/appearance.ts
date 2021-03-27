@@ -1,24 +1,14 @@
 import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mix } from 'style/cssMixins'
-import { ICSS } from 'style/cssType'
 import { toPx } from 'style/cssUnits'
 
 // 声明组件有哪些props是纯粹改变外观的
 export interface ButtonStyleProps {
-  /**对组件的每一个part或虚拟part定义样式 */
-  cssPart?: {
-    primary?: ICSS
-    bordered?: ICSS
-    text?: ICSS
-    small?: ICSS
-    middle?: ICSS
-    large?: ICSS
-  }
   /**
    * 按钮元素的权重
-   * 默认：bordered（空心按钮）
+   * 默认：border（空心按钮）
    */
-  type?: 'primary' | 'bordered' | 'text'
+  type?: 'fill' | 'border' | 'text'
   /**
    * 按钮的大小
    */
@@ -26,15 +16,11 @@ export interface ButtonStyleProps {
 }
 
 // 表明具体有哪些props是纯粹改变外观的（JS代码声明，也便于提取相关属性）
-export const buttonStylePropNames: (keyof ButtonStyleProps)[] = ['cssPart', 'type', 'size']
+export const buttonStylePropNames: (keyof ButtonStyleProps)[] = ['type', 'size']
 
 // 样式的具体css-in-js实现
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const cssButtonBaseStyle = ({
-  size = 'middle',
-  type = 'bordered',
-  cssPart
-}: ButtonStyleProps) =>
+export const cssButtonBaseStyle = ({ size = 'middle', type = 'border' }: ButtonStyleProps) =>
   mix(
     {
       appearance: 'none',
@@ -48,13 +34,13 @@ export const cssButtonBaseStyle = ({
     size === 'small' && { padding: toPx(2, 8), fontSize: 14 },
     size === 'middle' && { padding: toPx(6, 14), fontSize: 14 },
     size === 'large' && { padding: toPx(12, 16), fontSize: 16 },
-    type === 'primary' && {
+    type === 'fill' && {
       color: cssVar('--button-text-color', 'white'),
       backgroundColor: cssVar('--button-background-color', '#666'),
       ':hover': { filter: cssBrightness(1.4) },
       ':active': { filter: cssBrightness(0.8) }
     },
-    type === 'bordered' && {
+    type === 'border' && {
       position: 'relative',
       backgroundColor: 'transparent',
       color: cssVar('--button-text-color'),
@@ -71,12 +57,7 @@ export const cssButtonBaseStyle = ({
       }
     },
     type === 'text' && {
-      color: cssVar('--button-text-color')
-    },
-    size === 'small' && cssPart?.small,
-    size === 'middle' && cssPart?.middle,
-    size === 'large' && cssPart?.large,
-    type === 'primary' && cssPart?.primary,
-    type === 'bordered' && cssPart?.bordered,
-    type === 'text' && cssPart?.text
+      color: cssVar('--button-text-color'),
+      backgroundColor: 'transparent'
+    }
   )
