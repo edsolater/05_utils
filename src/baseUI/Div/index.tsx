@@ -4,7 +4,7 @@ import { CSSProperties, ReactNode, useCallback } from 'react'
 import { toCss } from 'style/cssMixins'
 import { ICSS } from 'style/cssType'
 import { ClassName, classname } from './util/classname'
-import { attachFeatures, FeaturesProps } from './features'
+import { attachFeatures, FeaturesProps } from './interaction'
 import { TagMap } from './TagMap'
 import { IRefs, mergeRefs } from './util/mergeRefs'
 

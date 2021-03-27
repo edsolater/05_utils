@@ -1,7 +1,7 @@
 import React from 'react'
 import Div, { DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssMixins'
-import { cssButtonBaseStyle, buttonStylePropNames, ButtonStyleProps } from './style'
+import { cssButtonBaseStyle, buttonStylePropNames, ButtonStyleProps } from './appearance'
 import omit from 'utils/object/omit'
 
 export interface ButtonProps extends DivProps<'button'>, ButtonStyleProps {}

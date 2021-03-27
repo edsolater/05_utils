@@ -1,5 +1,5 @@
 import Button from 'baseUI/Button'
-import RowBox from 'baseUI/RowBox'
+import RowBox from 'baseUI/Row'
 import React from 'react'
 
 /**
