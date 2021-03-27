@@ -5,7 +5,7 @@ import parallelIf from 'utils/magic/parallelIf'
 
 type GridType =
   | 'in-col' //全纵向排列
-  | 'in-row' //横向排列
+  | 'in-rowBox' //横向排列
   | '2d-4-equal-slot' // 田字格
   | '2d-user-profile' // 经典图片在左，文字在右的布局
   | '2d-nav-space-content-space' // 经典APP布局：导航条在上，内容在正中，两边有留白
@@ -19,9 +19,9 @@ const gridTemplates: {
   [K in GridType]: CSSObject
 } = {
   'in-col': {
-    gridAutoFlow: 'row dense'
+    gridAutoFlow: 'rowBox dense'
   },
-  'in-row': {
+  'in-rowBox': {
     gridAutoFlow: 'column dense'
   },
   '2d-4-equal-slot': {
@@ -132,7 +132,7 @@ const Grid: FC<{
         { background: 'dodgerblue' },
         parallelIf(
           [type === 'in-col', gridTemplates['in-col']],
-          [type === 'in-row', gridTemplates['in-row']],
+          [type === 'in-rowBox', gridTemplates['in-rowBox']],
           [type === '2d-4-equal-slot', gridTemplates['2d-4-equal-slot']],
           [type === '2d-user-profile', gridTemplates['2d-user-profile']],
           [type === '2d-nav-space-content-space', gridTemplates['2d-nav-space-content-space']],
