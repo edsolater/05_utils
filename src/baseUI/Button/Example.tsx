@@ -1,4 +1,5 @@
 import Button from 'baseUI/Button'
+import Caption from 'baseUI/Caption'
 import RowBox from 'baseUI/RowBox'
 import React from 'react'
 
@@ -7,6 +8,7 @@ import React from 'react'
  */
 const ButtonExample = () => (
   <>
+    <Caption>填充按钮（主）</Caption>
     <RowBox noStratch>
       <Button type='primary' size='large'>
         Large
