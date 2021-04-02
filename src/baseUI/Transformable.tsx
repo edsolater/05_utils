@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import Div, { DivProps } from './Div'
 
 import { Delta2dTranslate, Direction, Vector } from 'typings/constants'
-import { mergeRefs } from 'baseUI/Div/mergeRefs'
 import {
   DIRECTION_BOTTOM,
   DIRECTION_LEFT,
@@ -19,6 +18,7 @@ import attachPointer from 'helper/manageEvent/attachPointer'
 import { fullVw, halfPer, toPer } from 'style/cssUnits'
 import { cssTransform } from 'style/cssFunctions'
 import cssColor from 'style/cssColor'
+import { mergeRefs } from './Div/util/mergeRefs'
 export type BoundingRect = {
   left: number
   top: number

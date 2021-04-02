@@ -8,9 +8,9 @@ import Home from 'pages/Home'
 import AllExamples from 'pages/AllExamples'
 function App() {
   return (
-    // <TestGrounds /> // 测试一些功能
+    <TestGrounds /> // 测试一些功能
     // <Home /> // 视频通话
-    <AllExamples />
+    // <AllExamples />
   )
 }
 createRoot(document.getElementById('app')).render(<App />)
