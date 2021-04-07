@@ -33,6 +33,7 @@ const CollapseWatcher = () => {
           domRef={el => itemOrderRef.current[index]}
           onMove={reportMove}
           key={index}
+          scalable
           canInertialSlide
         >
           <Div css={item} />
