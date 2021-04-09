@@ -3,7 +3,7 @@ import React from 'react'
 import {unstable_createRoot as createRoot} from 'react-dom'
 import './style/initial.css'
 import './style/allCSSVariable.css'
-import TestGrounds from 'TestEggs'
+import TestGrounds from 'pages/TestEggs'
 import Home from 'pages/Home'
 import AllExamples from 'pages/AllExamples'
 function App() {
