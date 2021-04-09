@@ -8,7 +8,6 @@ import cssColor from 'style/cssColor'
 import { cssTransform } from 'style/cssFunctions'
 import { toPer, halfPer } from 'style/cssUnits'
 
-type ResizeTrigger = 'wheel' | 'right-bottom dot'
 /**
  * props定义声明
  */
@@ -17,7 +16,7 @@ export interface ResizeFeatureProps {
   /**会放大缩小，会影响元素的大小 */
   resizable?: boolean
   /**放大缩小的触发器，有滚轮、鼠标拖拽点 */
-  resizeTrigger?: ResizeTrigger | ResizeTrigger[]
+  resizeTrigger?: 'wheel' | 'right-bottom-dot' | 'both'
   /**内部元素的形状，会影响鼠标拖拽点的位置 */
   innerShape?: 'rect' | 'circle'
   /**滚轮改变大小的速度 */
@@ -47,7 +46,7 @@ export function useFeatureResize(
   {
     resizable = true,
     innerShape = 'rect',
-    resizeTrigger = 'wheel',
+    resizeTrigger = 'both',
     resizeWheelSpeed = 0.5,
     resizeMaxRatio = 50,
     resizeMinRatio = 0.8
@@ -56,24 +55,28 @@ export function useFeatureResize(
   const rightBottomTrigger = useRef()
   useEffect(() => {
     if (resizable) {
-      attachWheel(component.current!, (ev, deltaY) => {
-        changeSizeByDeltaWidth(component.current!, deltaY * resizeWheelSpeed, {
-          minRatio: resizeMinRatio,
-          maxRatio: resizeMaxRatio
-        })
-      })
-      attachPointer(rightBottomTrigger.current!, {
-        move: ({ delta }) => {
-          changeSizeByDeltaWidth(component.current!, delta.dx ?? 0, {
+      if (resizeTrigger === 'wheel' || resizeTrigger === 'both') {
+        attachWheel(component.current!, (ev, deltaY) => {
+          changeSizeByDeltaWidth(component.current!, deltaY * resizeWheelSpeed, {
             minRatio: resizeMinRatio,
             maxRatio: resizeMaxRatio
           })
-        }
-      })
+        })
+      }
+      if (resizeTrigger === 'right-bottom-dot' || resizeTrigger === 'both') {
+        attachPointer(rightBottomTrigger.current!, {
+          move: ({ delta }) => {
+            changeSizeByDeltaWidth(component.current!, delta.dx ?? 0, {
+              minRatio: resizeMinRatio,
+              maxRatio: resizeMaxRatio
+            })
+          }
+        })
+      }
     }
   }, [])
-  return (
-    resizable && (
+  return {
+    vdom: resizable && (
       <Div
         domRef={rightBottomTrigger}
         className='resize-trigger'
@@ -101,7 +104,7 @@ export function useFeatureResize(
         }}
       />
     )
-  )
+  }
 }
 
 /**

@@ -36,7 +36,7 @@ interface TransformableProps extends DivProps, FeaturesProps {}
 const Transformable = (props: TransformableProps) => {
   const box = useRef<HTMLDivElement>()
   const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [props])
-  const resizeDom = useFeatureResize(box, props)
+  const { vdom: resizeDom } = useFeatureResize(box, props)
   return (
     <Div
       {...omit(props, featureProps)}
