@@ -1,5 +1,5 @@
 import { cssBrightness, cssVar } from 'style/cssFunctions'
-import { mix } from 'style/cssMixins'
+import { mix } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 import { toPx } from 'style/cssUnits'
 

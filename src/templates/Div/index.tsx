@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
 import { CSSProperties, ReactNode, useCallback } from 'react'
-import { toCss } from 'style/cssMixins'
+import { divParseCSS } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 import { ClassName, classname } from './util/classname'
 import { attachFeatures, FeaturesProps } from './interaction'
@@ -46,7 +46,7 @@ const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => 
     style: props.style,
     className: classname(props.className),
     ref: mergeRefs(props.domRef, attachFeatureCallback),
-    css: toCss(props.css)
+    css: divParseCSS(props.css)
   }
   return jsx(props._tagName ?? 'div', allProps)
 }

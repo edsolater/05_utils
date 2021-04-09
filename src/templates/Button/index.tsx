@@ -1,6 +1,6 @@
 import React from 'react'
 import Div, { DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssMixins'
+import { mix } from 'style/cssParser'
 import { cssButtonBaseStyle, buttonStylePropNames, ButtonStyleProps } from './appearance'
 import omit from 'utils/object/omit'
 

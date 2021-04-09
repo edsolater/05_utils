@@ -1,6 +1,7 @@
 import { css, CSSObject } from '@emotion/react'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
+import pick from 'utils/object/pick'
 import { cssBrightness, cssScale } from './cssFunctions'
 import { ICSS } from './ICSS'
 
@@ -95,6 +96,15 @@ export function mix(...icsses: (ICSS | MixinFunction | undefined | {})[]): ICSS 
  * 用在最终的<Div>, 把css-in-js转换给emotion处理
  * @param icss
  */
-export function toCss(icss: ICSS) {
-  return css(icss)
+export function divParseCSS(icss: ICSS) {
+  const newIcss: CSSObject[] = [icss].flat(Infinity).filter(Boolean)
+  const parsedIcss: ICSS = [newIcss, getTransform(newIcss)]
+  return css(parsedIcss)
+}
+function getTransform(cssArr: CSSObject[]): ICSS {
+  const transformRelatedCssArr = cssArr.map((cssObject) =>
+    pick(cssObject, ['translate', 'scale', 'rotate', 'skew', 'transfrom'])
+  )
+  return undefined
+  // FIXME: 做好这个转换就可以直接使用translate属性了
 }

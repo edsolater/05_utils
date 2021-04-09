@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
 import { CSSProperties, ReactNode, useCallback } from 'react'
-import { toCss } from 'style/cssMixins'
+import { divParseCSS } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 import { ClassName, classname } from './util/classname'
-import { attachFeatures, FeaturesProps } from './interaction'
+import { attachFeatures, FeaturesProps } from './feature'
 import { TagMap } from './TagMap'
 import { IRefs, mergeRefs } from './util/mergeRefs'
 
@@ -39,14 +39,14 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> extends Features
 }
 
 const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
-  const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [])
+  const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [props])
   const allProps = {
     ...props.htmlProps,
     children: props.children,
     style: props.style,
     className: classname(props.className),
     ref: mergeRefs(props.domRef, attachFeatureCallback),
-    css: toCss(props.css)
+    css: divParseCSS(props.css)
   }
   return jsx(props._tagName ?? 'div', allProps)
 }

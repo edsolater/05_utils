@@ -1,6 +1,6 @@
 import React from 'react'
 import Div, { DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssMixins'
+import { mix } from 'style/cssParser'
 import { cssCaptionAppearance, captionStylePropNames, CaptionAppearanceProps } from './appearance'
 import omit from 'utils/object/omit'
 
