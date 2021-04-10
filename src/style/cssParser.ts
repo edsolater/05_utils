@@ -99,13 +99,11 @@ export function mix(...icsses: (ICSS | MixinFunction | undefined | {})[]): ICSS 
  * @param icss
  */
 export function divParseCSS(icss: ICSS) {
-  const newIcss: CSSObject[] = [icss].flat(Infinity).filter(Boolean)
-  const parsedIcss: ICSS = [newIcss, getTransform(newIcss)]
-  return css(parsedIcss)
+  return css([icss, getTransform(icss)])
 }
-function getTransform(cssArr: CSSObject[]): ICSS {
-  const transformValue = cssArr
-    .map((cssObject) => pick(cssObject, ['translate', 'scale', 'rotate', 'skew']))
+function getTransform(cssArr: ICSS): ICSS {
+  const transformValue = flat(cssArr)
+    .map((cssObject) => pick(cssObject ?? {}, ['translate', 'scale', 'rotate', 'skew']))
     .map((obj) =>
       Object.entries(obj).reduce(
         //@ts-ignore

@@ -4,7 +4,7 @@ export type StyleNames<T extends string[]> = { [name in T[number]]: CSSObject }
 
 export type MayArray<T> = T | Array<T>
 
-export type MayDeepArray<T> = undefined | T | Array<MayDeepArray<T>>
+export type MayDeepArray<T> = T | Array<MayDeepArray<T>>
 
 export type MayFunction<T> = T | (() => T)
 
@@ -34,4 +34,3 @@ export type Properties<O, T = keyof O> = T extends keyof O
 
 // 获取对象的所有方法名
 export type Methods<O> = Exclude<keyof O, Properties<O>>
-
