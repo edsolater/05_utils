@@ -85,7 +85,6 @@ export function useFeatureMove(
         moveBoundary === 'offsetParent' ? el.offsetParent?.getBoundingClientRect() : undefined
       attachPointer(el, {
         start() {
-          console.log(4)
           onMoveStart?.(el)
           // TODO:此时应该更新offsetRect的, 或者用resizeObserver监控更新
         },
@@ -125,7 +124,6 @@ export function useFeatureMove(
             dx: computedDx,
             dy: computedDy
           }
-          console.log(computedDelta)
           onMove?.(el, computedDelta)
           changeTransform(el, { translate: computedDelta })
         },
