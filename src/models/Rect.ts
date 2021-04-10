@@ -43,16 +43,14 @@ export function createRect(init?: Partial<Pick<IRect, Properties<IRect>>>): IRec
     right: (x ?? 0) + (width ?? 0),
     bottom: (y ?? 0) + (height ?? 0),
     changePosition(delta) {
-      const newRect = createRect({
+      rect._listeners['changePosition']?.forEach((cb) => cb())
+      return createRect({
         _listeners: rect._listeners,
         width: rect.width,
         height: rect.height,
         x: rect.x + (delta?.dx ?? 0),
         y: rect.y + (delta?.dy ?? 0)
       })
-      const callbacks = rect._listeners['changePosition']
-      if (callbacks) callbacks.forEach((cb) => cb())
-      return newRect
     },
     on: (listenTo, callbackFn) => {
       /* TODO */
