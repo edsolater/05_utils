@@ -91,16 +91,14 @@ export function useFeatureResize(
             borderRadius: halfPer,
             cursor: 'nw-resize',
             opacity: 0,
-            transform: cssTransform({ translate: [halfPer, halfPer] }),
+            translate: [halfPer, halfPer],
             transition: '200ms',
             '*:hover > &': {
               opacity: 1
             },
             '&:hover': {
-              transform: cssTransform({
-                translate: [halfPer, halfPer],
-                scale: [2]
-              })
+              translate: [halfPer, halfPer],
+              scale: 2
             }
           }}
         />
@@ -109,4 +107,3 @@ export function useFeatureResize(
   )
   return { vdom }
 }
-

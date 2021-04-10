@@ -1,6 +1,7 @@
 import { CSSObject } from '@emotion/react'
 import { MayDeepArray } from 'typings/tools'
 import isObject from 'utils/judgers/isObject'
+// export interface ICSSObject
 export type ICSS = MayDeepArray<CSSObject | undefined>
 export function ICSS(cssObject: string | number | ICSS, description?: string): ICSS {
   if (isObject(cssObject)) {

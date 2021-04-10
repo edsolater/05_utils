@@ -101,6 +101,8 @@ export function mix(...icsses: (ICSS | MixinFunction | undefined | {})[]): ICSS 
 export function divParseCSS(icss: ICSS) {
   return css([icss, getTransform(icss)])
 }
+
+//IDEA: 这应该是像中间件一样的东西
 function getTransform(cssArr: ICSS): ICSS {
   const transformValue = flat(cssArr)
     .map((cssObject) => pick(cssObject ?? {}, ['translate', 'scale', 'rotate', 'skew']))
@@ -110,13 +112,13 @@ function getTransform(cssArr: ICSS): ICSS {
         (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
           acc +
           (property === 'translate'
-            ? `translate(${flat(value).map(toCSS).join(', ')})`
+            ? `translate(${flat(value).map(toCSS).join(', ') || 0})`
             : property === 'scale'
-            ? `scale(${flat(value).join(', ')})`
+            ? `scale(${flat(value).join(', ') || 1})`
             : property === 'rotate'
-            ? `rotate(${flat(value).join(', ')})`
+            ? `rotate(${flat(value).join(', ') || 0})`
             : property === 'skew'
-            ? `skew(${flat(value).join(', ')})`
+            ? `skew(${flat(value).join(', ') || 0})`
             : ''),
         ''
       )

@@ -24,7 +24,7 @@ function changeUnit(val: number | string, unit: string) {
 }
 
 /**
- * 使数值变成css值
+ * 使数值或字符串值变成css字符串值
  * @param n css值
  * @returns css字符串值
  * @example
@@ -34,15 +34,15 @@ function changeUnit(val: number | string, unit: string) {
  * toCSS('2px') // '2px'
  * toCSS('2vw') // '2vw'
  * toCSS('Inherit') // 'Inherit'
- * toCSS([0, 1, '2vw']) // '0 1px 2vw' 
+ * toCSS([0, 1, '2vw']) // '0 1px 2vw'
  */
 export const toCSS = (n: CSSLongValue): string => {
   if (isArray(n)) {
     return n.map(toCSS).join(' ') // TODO: 这是不是过度设计了
   } else if (isNumber(n)) {
-    return n === 0 ? '0' : `${n}px`
+    return toPx(n)
   } else if (isString(n)) {
-    return /^\d+$/.test(n) ? `${n}px` : n
+    return /^\d+$/.test(n) ? toPx(n) : n
   } else {
     return ''
   }

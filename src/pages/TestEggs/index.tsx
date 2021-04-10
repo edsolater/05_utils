@@ -1,7 +1,7 @@
 import Div from 'baseUI/Div'
 import React, { StrictMode } from 'react'
 import { cssMixins } from 'style/cssParser'
-import CollapseWatcher from './CollapseWatcher'
+import CollapseWatcher from './Transform'
 import GroupScroll from './GroupScroll'
 import HoverContainer from './HoverContainer'
 import SimulateMouseClick from './SimulateMouseClick'
@@ -15,7 +15,7 @@ const TestGrounds = () => (
       <SortableList />
     </Div>
     <Div css={cssMixins.testGridItem()}>
-      <Div css={cssMixins.gridItemTextLabel()}>多item碰撞检测</Div>
+      <Div css={cssMixins.gridItemTextLabel()}>触摸移动、缩放</Div>
       <CollapseWatcher />
     </Div>
     <Div css={cssMixins.testGridItem()}>
