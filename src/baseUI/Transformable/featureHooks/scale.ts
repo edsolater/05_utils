@@ -51,5 +51,5 @@ export function scaleFeatureCallback(
  */
 export const scaleFeatureStyle = ({ scalable = false }: ScaleFeatureProps) =>
   mix({
-    transform: `${scalable ? ' scale(var(--scale, 1))' : ''}`
+    scale: `${scalable ? 'var(--scale, 1)' : ''}`
   })

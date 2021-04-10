@@ -1,8 +1,10 @@
 import { css, CSSObject } from '@emotion/react'
+import flat from 'utils/array/flat'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
 import pick from 'utils/object/pick'
 import { cssBrightness, cssScale } from './cssFunctions'
+import { toCSS } from './cssUnits'
 import { ICSS } from './ICSS'
 
 export type AllMixinNames = keyof typeof cssMixins
@@ -102,9 +104,25 @@ export function divParseCSS(icss: ICSS) {
   return css(parsedIcss)
 }
 function getTransform(cssArr: CSSObject[]): ICSS {
-  const transformRelatedCssArr = cssArr.map((cssObject) =>
-    pick(cssObject, ['translate', 'scale', 'rotate', 'skew', 'transfrom'])
-  )
-  return undefined
-  // FIXME: 做好这个转换就可以直接使用translate属性了
+  const transformValue = cssArr
+    .map((cssObject) => pick(cssObject, ['translate', 'scale', 'rotate', 'skew']))
+    .map((obj) =>
+      Object.entries(obj).reduce(
+        //@ts-ignore
+        (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
+          acc +
+          (property === 'translate'
+            ? `translate(${flat(value).map(toCSS).join(', ')})`
+            : property === 'scale'
+            ? `scale(${flat(value).join(', ')})`
+            : property === 'rotate'
+            ? `rotate(${flat(value).join(', ')})`
+            : property === 'skew'
+            ? `skew(${flat(value).join(', ')})`
+            : ''),
+        ''
+      )
+    )
+    .join(' ')
+  return { transform: transformValue }
 }

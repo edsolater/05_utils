@@ -153,5 +153,5 @@ export const moveFeatureStyle = ({ movable = true }: MoveFeatureProps) =>
   mix({
     touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
     userSelect: 'none', // 禁用掉文字的用户选择
-    transform: `${movable ? 'translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px))' : ''}`, // TODO: 下面那个用var加px单位的也要放到函数中去
+    translate: `${movable ? ['calc(var(--x, 0) * 1px)', 'calc(var(--y, 0) * 1px)'] : []}`
   })

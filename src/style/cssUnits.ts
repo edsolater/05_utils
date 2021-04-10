@@ -5,6 +5,15 @@ import isString from 'utils/judgers/isString'
 export type CSSLength = number | string
 export type CSSValue = number | string
 export type CSSLongValue = CSSValue | CSSValue[]
+/**
+ * 更新css数值的单位
+ * @param val css值
+ * @param unit css单位
+ * @returns 更新过单位的css字符串值
+ * @example
+ * changeUnit(400, 'px') // '40px'
+ * changeUnit('40px', 'vw') // '40vw'
+ */
 function changeUnit(val: number | string, unit: string) {
   if (typeof val === 'number') {
     if (val === 0) return '0'
@@ -13,9 +22,23 @@ function changeUnit(val: number | string, unit: string) {
     return `${Number.parseFloat(val)}${unit}`
   }
 }
-export const toCSSString = (n: CSSLongValue): string => {
+
+/**
+ * 使数值变成css值
+ * @param n css值
+ * @returns css字符串值
+ * @example
+ * toCSS(0) // '0'
+ * toCSS(1) // '1px'
+ * toCSS('2') // '2px'
+ * toCSS('2px') // '2px'
+ * toCSS('2vw') // '2vw'
+ * toCSS('Inherit') // 'Inherit'
+ * toCSS([0, 1, '2vw']) // '0 1px 2vw' 
+ */
+export const toCSS = (n: CSSLongValue): string => {
   if (isArray(n)) {
-    return n.map(toCSSString).join(' ')
+    return n.map(toCSS).join(' ') // TODO: 这是不是过度设计了
   } else if (isNumber(n)) {
     return n === 0 ? '0' : `${n}px`
   } else if (isString(n)) {
