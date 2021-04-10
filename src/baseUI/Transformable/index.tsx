@@ -1,25 +1,19 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import Div, { DivProps } from '../Div'
 
-import { Delta2dTranslate, Direction, Vector } from 'typings/constants'
-import {
-  DIRECTION_BOTTOM,
-  DIRECTION_LEFT,
-  DIRECTION_RIGHT,
-  DIRECTION_TOP
-} from 'constants/constants'
-import { attachWheel } from 'helper/attachEventHandler'
-import changeTransform from 'helper/manageStyle/changeTransform'
-import inertialSlide from 'helper/manageStyle/inertialSlide'
-import attachGestureScale from 'helper/manageEvent/attachGestureScale'
-import attachPointer from 'helper/manageEvent/attachPointer'
-import { fullVw, halfPer, toPer } from 'style/cssUnits'
-import { cssTransform } from 'style/cssFunctions'
-import cssColor from 'style/cssColor'
-import { mergeRefs } from '../Div/util/mergeRefs'
+import { fullVw } from 'style/cssUnits'
 import { attachFeatures, featureCss, featureProps, FeaturesProps } from './featureHooks'
 import omit from 'utils/object/omit'
-import { useFeatureResize } from './featureHooks/useFeatureResize'
+import {
+  FeatureProps as FeatureResizeProps,
+  featureProps as featureResizeProps,
+  useFeatureResize
+} from './featureHooks/useFeatureResize'
+import {
+  FeatureProps as FeatureMoveProps,
+  featureProps as featureMoveProps,
+  useFeatureMove
+} from './featureHooks/useFeatureMove'
 export type BoundingRect = {
   left: number
   top: number
@@ -27,7 +21,11 @@ export type BoundingRect = {
   bottom: number
 }
 // TODO: 可以把manageEvent提取到组件内部的文件夹
-interface TransformableProps extends DivProps, FeaturesProps {}
+interface TransformableProps
+  extends DivProps,
+    FeatureResizeProps,
+    FeatureMoveProps,
+    FeaturesProps {}
 
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
@@ -36,10 +34,12 @@ interface TransformableProps extends DivProps, FeaturesProps {}
 const Transformable = (props: TransformableProps) => {
   const box = useRef<HTMLDivElement>()
   const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [props])
-  const { vdom: resizeDom } = useFeatureResize(box, props)
+  const restProps = omit(props, [...featureResizeProps, ...featureMoveProps])
+  const { vdom: featureResizeDom } = useFeatureResize(box, props)
+  const { css: featureMoveCss } = useFeatureMove(box, props)
   return (
     <Div
-      {...omit(props, featureProps)}
+      {...restProps}
       domRef={[props.domRef, box, attachFeatureCallback]}
       className={['movable-wrapper', props.className]}
       css={[
@@ -52,11 +52,12 @@ const Transformable = (props: TransformableProps) => {
             boxShadow: '0px 0px 0px 2px rgba(30, 143, 255, 0.219)'
           }
         },
+        featureMoveCss,
         props.css
       ]}
     >
       {props.children}
-      {resizeDom}
+      {featureResizeDom}
     </Div>
   )
 }

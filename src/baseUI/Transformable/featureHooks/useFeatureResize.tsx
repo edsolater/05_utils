@@ -44,7 +44,7 @@ export const featureProps: (keyof FeatureProps)[] = [
 export function useFeatureResize(
   component: RefObject<HTMLDivElement | undefined>,
   {
-    resizable = true,
+    resizable = false,
     innerShape = 'rect',
     resizeTrigger = 'both',
     resizeWheelSpeed = 0.5,
