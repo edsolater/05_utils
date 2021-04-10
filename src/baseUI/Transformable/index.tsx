@@ -1,9 +1,13 @@
-import React, { useCallback, useRef } from 'react'
-import Div, { DivProps } from '../Div'
-
+import React, { useRef } from 'react'
+import Div, { DivProps } from 'baseUI/Div'
 import { fullVw } from 'style/cssUnits'
-import { attachFeatures, featureCss, featureProps, FeaturesProps } from './featureHooks'
 import omit from 'utils/object/omit'
+
+import {
+  FeatureProps as FeatureScaleProps,
+  featureProps as featureScaleProps,
+  useFeatureScale
+} from './featureHooks/useFeatureScale'
 import {
   FeatureProps as FeatureResizeProps,
   featureProps as featureResizeProps,
@@ -14,6 +18,7 @@ import {
   featureProps as featureMoveProps,
   useFeatureMove
 } from './featureHooks/useFeatureMove'
+
 export type BoundingRect = {
   left: number
   top: number
@@ -25,7 +30,7 @@ interface TransformableProps
   extends DivProps,
     FeatureResizeProps,
     FeatureMoveProps,
-    FeaturesProps {}
+    FeatureScaleProps {}
 
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
@@ -33,17 +38,16 @@ interface TransformableProps
  */
 const Transformable = (props: TransformableProps) => {
   const box = useRef<HTMLDivElement>()
-  const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [props])
-  const restProps = omit(props, [...featureResizeProps, ...featureMoveProps])
+  const restProps = omit(props, [...featureResizeProps, ...featureMoveProps, ...featureScaleProps])
   const { vdom: featureResizeDom } = useFeatureResize(box, props)
   const { css: featureMoveCss } = useFeatureMove(box, props)
+  const { css: featureScaleCss } = useFeatureScale(box, props)
   return (
     <Div
       {...restProps}
-      domRef={[props.domRef, box, attachFeatureCallback]}
+      domRef={[props.domRef, box]}
       className={['movable-wrapper', props.className]}
       css={[
-        featureCss(props),
         {
           position: 'relative',
           width: 'max-content',
@@ -53,6 +57,7 @@ const Transformable = (props: TransformableProps) => {
           }
         },
         featureMoveCss,
+        featureScaleCss,
         props.css
       ]}
     >
