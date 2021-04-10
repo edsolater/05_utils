@@ -17,9 +17,9 @@ import { fullVw, halfPer, toPer } from 'style/cssUnits'
 import { cssTransform } from 'style/cssFunctions'
 import cssColor from 'style/cssColor'
 import { mergeRefs } from '../Div/util/mergeRefs'
-import { attachFeatures, featureCss, featureProps, FeaturesProps } from './feature'
+import { attachFeatures, featureCss, featureProps, FeaturesProps } from './featureHooks'
 import omit from 'utils/object/omit'
-import { useFeatureResize } from './feature/resize'
+import { useFeatureResize } from './featureHooks/useFeatureResize'
 export type BoundingRect = {
   left: number
   top: number

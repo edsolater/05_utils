@@ -1,7 +1,7 @@
 import { attachWheel } from 'helper/attachEventHandler'
 import changeSizeByDeltaWidth from 'helper/manageStyle/changeSizeByDeltaWidth'
 import attachPointer from 'helper/manageEvent/attachPointer'
-import { RefObject, useEffect, useRef } from 'react'
+import { RefObject, useEffect, useMemo, useRef } from 'react'
 import React from 'react'
 import Div from 'baseUI/Div'
 import cssColor from 'style/cssColor'
@@ -11,7 +11,7 @@ import { toPer, halfPer } from 'style/cssUnits'
 /**
  * props定义声明
  */
-export interface ResizeFeatureProps {
+export interface FeatureProps {
   /* ---------------------------------- 大小变化（会重排） ---------------------------------- */
   /**会放大缩小，会影响元素的大小 */
   resizable?: boolean
@@ -30,7 +30,7 @@ export interface ResizeFeatureProps {
 /**
  * props的字符串们
  */
-export const resizeFeatureProps: (keyof ResizeFeatureProps)[] = [
+export const featureProps: (keyof FeatureProps)[] = [
   'resizable',
   'resizeTrigger',
   'innerShape',
@@ -50,7 +50,7 @@ export function useFeatureResize(
     resizeWheelSpeed = 0.5,
     resizeMaxRatio = 50,
     resizeMinRatio = 0.8
-  }: ResizeFeatureProps
+  }: FeatureProps
 ) {
   const rightBottomTrigger = useRef()
   useEffect(() => {
@@ -75,39 +75,38 @@ export function useFeatureResize(
       }
     }
   }, [])
-  return {
-    vdom: resizable && (
-      <Div
-        domRef={rightBottomTrigger}
-        className='resize-trigger'
-        css={{
-          position: 'absolute',
-          right: innerShape === 'circle' ? toPer(14.625) : 0,
-          bottom: innerShape === 'circle' ? toPer(14.625) : 0,
-          width: 8,
-          height: 8,
-          background: cssColor.dodgerblue,
-          borderRadius: halfPer,
-          cursor: 'nw-resize',
-          opacity: 0,
-          transform: cssTransform({ translate: [halfPer, halfPer] }),
-          transition: '200ms',
-          '*:hover > &': {
-            opacity: 1
-          },
-          '&:hover': {
-            transform: cssTransform({
-              translate: [halfPer, halfPer],
-              scale: [2]
-            })
-          }
-        }}
-      />
-    )
-  }
+  const vdom = useMemo(
+    () =>
+      resizable && (
+        <Div
+          domRef={rightBottomTrigger}
+          className='resize-trigger'
+          css={{
+            position: 'absolute',
+            right: innerShape === 'circle' ? toPer(14.625) : 0,
+            bottom: innerShape === 'circle' ? toPer(14.625) : 0,
+            width: 8,
+            height: 8,
+            background: cssColor.dodgerblue,
+            borderRadius: halfPer,
+            cursor: 'nw-resize',
+            opacity: 0,
+            transform: cssTransform({ translate: [halfPer, halfPer] }),
+            transition: '200ms',
+            '*:hover > &': {
+              opacity: 1
+            },
+            '&:hover': {
+              transform: cssTransform({
+                translate: [halfPer, halfPer],
+                scale: [2]
+              })
+            }
+          }}
+        />
+      ),
+    [innerShape, resizable]
+  )
+  return { vdom }
 }
 
-/**
- * style实现
- */
-export const resizeFeatureStyle = (props: ResizeFeatureProps) => undefined

@@ -6,13 +6,11 @@ import {
   scaleFeatureStyle
 } from './scale'
 import {
-  ResizeFeatureProps,
-  useFeatureResize,
-  resizeFeatureProps,
-  resizeFeatureStyle
-} from './resize'
+  FeatureProps,
+  featureProps as resizeFeatureProps,
+} from './useFeatureResize'
 
-export interface FeaturesProps extends MoveFeatureProps, ScaleFeatureProps, ResizeFeatureProps {}
+export interface FeaturesProps extends MoveFeatureProps, ScaleFeatureProps, FeatureProps {}
 export const attachFeatures = (el, props) => {
   moveFeatureCallback(el, props) // 拖拽元素块
   scaleFeatureCallback(el, props) // 缩放（不会重排）元素块
@@ -21,8 +19,4 @@ export const featureProps = [...moveFeatureProps, ...scaleFeatureProps, ...resiz
 export const featureCss = (props) => [
   moveFeatureStyle(props),
   scaleFeatureStyle(props),
-  resizeFeatureStyle(props)
 ]
-export const useFeature = (el, props) => {
-  return [useFeatureResize(el, props)]
-}
