@@ -25,6 +25,7 @@ export type BoundingRect = {
   right: number
   bottom: number
 }
+// TODO: 可以把manageEvent提取到组件内部的文件夹
 interface TransformableProps
   extends DivProps,
     FeatureResizeProps,

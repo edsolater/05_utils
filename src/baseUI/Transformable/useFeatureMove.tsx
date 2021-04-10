@@ -10,7 +10,7 @@ import inertialSlide from 'helper/manageStyle/inertialSlide'
 import { RefObject, useEffect, useMemo } from 'react'
 import { mix } from 'style/cssParser'
 import { Vector, Delta2dTranslate } from 'typings/constants'
-import asyncInvoke from '../helper/asyncInvoke'
+import asyncInvoke from './helper/asyncInvoke'
 
 /**
  * props定义声明
