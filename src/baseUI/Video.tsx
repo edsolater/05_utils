@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css as cssMerge, CSSObject } from '@emotion/react'
 import { CSSProperties, FC, useEffect, useRef } from 'react'
-import { mix } from 'style/cssMixins'
+import { mix } from 'style/cssParser'
 import Div from './Div'
 
 const Video: FC<{

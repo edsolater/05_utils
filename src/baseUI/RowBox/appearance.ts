@@ -1,4 +1,4 @@
-import { mix } from 'style/cssMixins'
+import { mix } from 'style/cssParser'
 
 // 声明组件有哪些props是纯粹改变外观的
 export interface RowBoxAppearanceProps {
