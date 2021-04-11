@@ -10,6 +10,7 @@ import inertialSlide from 'helper/manageStyle/inertialSlide'
 import { RefObject, useEffect, useMemo } from 'react'
 import { mix } from 'style/cssParser'
 import { Vector, Delta2dTranslate } from 'typings/constants'
+import { attachCSSVariableUnit } from 'style/cssUnits'
 import asyncInvoke from './helper/asyncInvoke'
 
 /**
@@ -149,7 +150,9 @@ export function useFeatureMove(
       mix({
         touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
         userSelect: 'none', // 禁用掉文字的用户选择
-        translate: `${movable ? ['calc(var(--x, 0) * 1px)', 'calc(var(--y, 0) * 1px)'] : []}`
+        translate: movable
+          ? [attachCSSVariableUnit('--x', 'px'), attachCSSVariableUnit('--y', 'px')]
+          : []
       }),
     [movable]
   )
