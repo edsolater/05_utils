@@ -10,8 +10,8 @@
  */
 export default function omit<T extends object, U extends keyof T>(
   obj: T,
-  keys: U[]
-): { [P in Exclude<keyof T, U>]: T[P] } {
+  keys: ReadonlyArray<U>
+): Omit<T, U> {
   const newObj = { ...obj }
   keys.forEach((key) => {
     delete newObj[key]

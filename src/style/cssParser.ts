@@ -1,129 +1,69 @@
-import { css, CSSObject } from '@emotion/react'
+import { css, CSSObject, SerializedStyles } from '@emotion/react'
 import flat from 'utils/array/flat'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
+import isObjectLiteral from 'utils/judgers/isObjectLiteral'
 import pick from 'utils/object/pick'
-import { cssBrightness, cssScale } from './cssFunctions'
+import separate from 'utils/object/separate'
 import { toCSS } from './cssUnits'
-import { ICSS } from './ICSS'
+import { ICSS, ICSSObject } from './ICSS'
+import { mergeDeep } from './mergeDeep'
 
-export type AllMixinNames = keyof typeof cssMixins
-type MixinFunction = (...any: any[]) => ICSS
-// TODO: 放预定义的各种CSS组合
-export const cssMixins = {
-  gridItemTextLabel: (opt: { fontSize?: CSSObject['fontSize'] } = {}) =>
-    ICSS(
-      {
-        textAlign: 'center',
-        left: '50%',
-        top: 0,
-        fontSize: opt.fontSize ?? 34,
-        margin: 8,
-        color: 'gray'
-      },
-      '业务样式：测试的文字'
-    ),
-  testGridContainer: () =>
-    ICSS(
-      {
-        display: 'grid',
-        gridTemplate: '1fr 1fr / 1fr 1fr 1fr',
-        gap: 8,
-        overflow: 'hidden',
-        background: 'lightgray',
-        height: '100vh'
-      },
-      '业务样式： 网格的父盒子'
-    ),
-  testGridItem: () =>
-    ICSS({
-      background: 'white',
-      position: 'relative',
-      overflow: 'hidden'
-    }),
-
-  /**禁止 flexItem 伸缩 */
-  solidFlexItem: () =>
-    ICSS({
-      flex: '0 0 auto'
-    }),
-
-  /**组件禁用滚动条 */
-  noScrollbar: () =>
-    ICSS({
-      scrollbarWidth: 'none',
-      '::-webkit-scrollbar': {
-        display: 'none'
-      }
-    }),
-
-  /**横向布局 */
-  horizontalLayout: ({
-    gap = 8,
-    justifyContent = 'center'
-  }: {
-    gap?: CSSObject['gap']
-    justifyContent?: CSSObject['justifyContent']
-  } = {}) =>
-    ICSS({
-      display: 'flex',
-      justifyContent,
-      gap
-    }),
-
-  /**表明此元素是个button */
-  buttonStyle: ({}: {} = {}) =>
-    ICSS({
-      cursor: 'pointer',
-      userSelect: 'none',
-      ':hover': {
-        filter: cssBrightness(0.9),
-        transform: cssScale(1.1)
-      },
-      ':active': {
-        filter: cssBrightness(0.8),
-        transform: cssScale(0.9)
-      }
-    })
-}
 /**
  * 用在非<Div>的组件上，与toCss目的相反
  * 组合cssMixin
  */
-export function mix(...icsses: (ICSS | MixinFunction | undefined | {})[]): ICSS {
+export function mix(...icsses: (ICSS | ((...any: any[]) => ICSS) | undefined | {})[]): ICSS {
   //@ts-expect-error
   return icsses.map((icss) => (isFunction(icss) ? icss() : icss)).filter(isObject)
 }
+
+/**在最终解析CSS时，中间件队列 */
+const middlewareList = [middlewareCSSTransform]
+
 /**
  * 用在最终的<Div>, 把css-in-js转换给emotion处理
  * @param icss
  */
-export function divParseCSS(icss: ICSS) {
-  // TODO: 要把这里改成类似pipeline可中间件模式
-  return css([icss, getTransform(icss)])
+export function parseCSS(icss: ICSS): SerializedStyles {
+  const composed = mergeDeep(icss)
+  const middleware = (cssobj: ICSSObject) =>
+    middlewareList.reduce((acc, modal) => modal(acc), cssobj)
+  const nestedMiddleware = (cssobj: ICSSObject) => {
+    const obj = Object.entries(cssobj).reduce((acc, [key, value]) => {
+      const computedValue = isObjectLiteral(value) ? nestedMiddleware(value as ICSSObject) : value
+      acc[key] = computedValue
+      return acc
+    }, {})
+    return middleware(obj)
+  }
+  const parsedCSS = composed ? nestedMiddleware(composed) : undefined
+  return css(parsedCSS)
 }
+export type OnlyObject<T> = T extends object ? never : T
 
-//IDEA: 这应该是像中间件一样的东西
-function getTransform(cssArr: ICSS): ICSS {
-  const transformValue = flat(cssArr)
-    .map((cssObject) => pick(cssObject ?? {}, ['translate', 'scale', 'rotate', 'skew']))
-    .map((obj) =>
-      Object.entries(obj).reduce(
-        //@ts-ignore
-        (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
-          acc +
-          (property === 'translate'
-            ? `translate(${flat(value).map(toCSS).join(', ') || 0})`
-            : property === 'scale'
-            ? `scale(${flat(value).join(', ') || 1})`
-            : property === 'rotate'
-            ? `rotate(${flat(value).join(', ') || 0})`
-            : property === 'skew'
-            ? `skew(${flat(value).join(', ') || 0})`
-            : ''),
-        ''
-      )
-    )
-    .join(' ')
-  return { transform: transformValue }
+/**
+ * 处理Transform相关的单独属性
+ * @param cssObj 未处理时的cssobject
+ * @returns 处理后的cssobject
+ */
+function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
+  const [rest, toParse] = separate(cssObj, ['translate', 'scale', 'rotate', 'skew'])
+  //@ts-expect-error
+  const composedValue: string = Object.entries(toParse).reduce(
+    //@ts-expect-error
+    (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
+      acc +
+      (property === 'translate'
+        ? `translate(${flat(value).map(toCSS).join(', ') || 0})`
+        : property === 'scale'
+        ? `scale(${flat(value).join(', ') || 1})`
+        : property === 'rotate'
+        ? `rotate(${flat(value).join(', ') || 0})`
+        : property === 'skew'
+        ? `skew(${flat(value).join(', ') || 0})`
+        : ''),
+    ''
+  )
+  return { ...rest, ...(composedValue !== '' ? { transform: composedValue } : {}) }
 }

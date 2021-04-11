@@ -5,9 +5,9 @@ import objectFilter from './objectFilter'
  * @param obj 目标对象
  * @param propNameList 属性列表
  * @example
- * pickByPropertyName({ a: 1, b: 2 }, ['a']) // { a: 1 }
+ * pick({ a: 1, b: 2 }, ['a']) // { a: 1 }
  */
-export default function pick<T extends object, U extends keyof T>(
+export default function pick<T extends object, U extends keyof T >(
   obj: T,
   propNameList: ReadonlyArray<U>
 ): Pick<T, U> {

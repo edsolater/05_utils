@@ -1,6 +1,7 @@
 import React, { Fragment, ReactNode, useRef, useState } from 'react'
 import Div, { DivProps } from 'baseUI/Div'
-import { mix, cssMixins } from 'style/cssParser'
+import { mix } from 'style/cssParser'
+import { cssMixins } from "style/cssMixins"
 import Scroll from 'baseUI/Scroll'
 import { ScrollHandles, ScrollEvent } from 'baseUI/Scroll/_interface'
 interface GroupScrollProps<T> extends DivProps {

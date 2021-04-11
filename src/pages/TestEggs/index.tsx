@@ -1,6 +1,6 @@
 import Div from 'baseUI/Div'
 import React, { StrictMode } from 'react'
-import { cssMixins } from 'style/cssParser'
+import { cssMixins } from "style/cssMixins"
 import CollapseWatcher from './Transform'
 import GroupScroll from './GroupScroll'
 import HoverContainer from './HoverContainer'
