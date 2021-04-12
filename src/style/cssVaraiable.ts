@@ -1,7 +1,6 @@
-import isHTMLElement from 'helper/domElement/isHTMLElement'
-import { ReactNode } from 'react'
+import isNumberString from 'utils/judgers/isNumberString'
 
-export const cssVariables = {
+export const rootVariables = {
   '--bg-color': 1,
   '--primary-color': 'hsl(199, 97%, 42%)',
   '--color-gray-100': 'hsl(0, 0%, 96%)',
@@ -9,16 +8,32 @@ export const cssVariables = {
   '--color-gray-300': 'hsl(0, 0%, 46%)',
   '--window-video-background-color': '#222'
 }
-export type AllCSSVariableName = keyof typeof cssVariables
+export type AllCSSVariableName = keyof typeof rootVariables
 
-export default cssVariables
+export interface AvailableCSSVariable {
+  /**
+   * 给translate的，表示在x轴偏移的方向
+   */
+  '--x'?: number
+  /**
+   * 给translate的，表示在y轴偏移的方向
+   */
+  '--y'?: number
+}
+export const toCSSVariable = (
+  variableName: keyof AvailableCSSVariable | keyof typeof rootVariables,
+  fallback?: any
+) => `var(${variableName}${fallback ? `, ${fallback}` : ''})`
 
-// TODO: 我觉得el也应该可以传ReactElement，就是把style附加在根节点上
 /**
- * 附加上CSS属性
- * @param el 目标元素
- * @param propertyName 属性名（可能是css variable属性）
- * @param value 属性值
+ * 用JS获取某个节点上的CSS变量
+ * @param variableName css变量名
+ * @param from 某个节点 [默认为:root 节点]
  */
-export const setCss = (el: HTMLElement | ReactNode, propertyName: string, value: number | string) =>
-  isHTMLElement(el) ? el.style.setProperty(propertyName, value.toString()) : console.log('el: ', el)
+export const getAttachedCSSVariable = (
+  variableName: keyof AvailableCSSVariable | keyof typeof rootVariables | (string & {}),
+  from: HTMLElement = document.documentElement
+): string | number => {
+  const value = from.style.getPropertyValue(variableName)
+  return isNumberString(value) ? Number(value) : value
+}

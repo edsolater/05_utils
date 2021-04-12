@@ -22,18 +22,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> extends Features
    */
   style?:
     | CSSProperties
-    | {
-        // TODO：好像不应该写在这里
-        /**
-         * 给translate的，表示在x轴偏移的方向
-         */
-        '--x'?: number
-        /**
-         * 给translate的，表示在y轴偏移的方向
-         */
-        '--y'?: number
-        [variableName: string]: number | string | undefined
-      } // TODO
+    | {[cssVariableName: string]: number | string | undefined}
   children?: ReactNode
   htmlProps?: JSX.IntrinsicElements[TagName]
 }
