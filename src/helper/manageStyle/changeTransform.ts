@@ -1,6 +1,6 @@
+import { setCSSVariable } from 'style/cssVaraiable'
 import { Delta2dTranslate } from 'typings/constants'
 import { deleteElementStyle, setElementStyle } from './elementStyle'
-import setCSSVariable from './setCSSVariable'
 
 /**
  * 根据偏移量，重新设定元素样式的--x与--y

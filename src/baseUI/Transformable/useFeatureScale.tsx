@@ -1,8 +1,8 @@
 import attachGestureScale from 'helper/manageEvent/attachGestureScale'
 import { mix } from 'style/cssParser'
-import setCSSVariable from 'helper/manageStyle/setCSSVariable'
 import { attachWheel } from 'helper/attachEventHandler'
 import { RefObject, useEffect, useMemo } from 'react'
+import { setCSSVariable } from 'style/cssVaraiable'
 
 /**
  * props定义声明

@@ -1,3 +1,4 @@
+import isFunction from 'utils/judgers/isFunction'
 import isNumberString from 'utils/judgers/isNumberString'
 
 export const rootVariables = {
@@ -8,7 +9,10 @@ export const rootVariables = {
   '--color-gray-300': 'hsl(0, 0%, 46%)',
   '--window-video-background-color': '#222'
 }
-export type AllCSSVariableName = keyof typeof rootVariables
+export type CSSVariableName =
+  | keyof AvailableCSSVariable
+  | keyof typeof rootVariables
+  | (string & {})
 
 export interface AvailableCSSVariable {
   /**
@@ -20,20 +24,30 @@ export interface AvailableCSSVariable {
    */
   '--y'?: number
 }
-export const toCSSVariable = (
-  variableName: keyof AvailableCSSVariable | keyof typeof rootVariables,
-  fallback?: any
-) => `var(${variableName}${fallback ? `, ${fallback}` : ''})`
+export const toCSSVariable = (variableName: CSSVariableName, fallback?: any) =>
+  `var(${variableName}${fallback ? `, ${fallback}` : ''})`
 
 /**
- * 用JS获取某个节点上的CSS变量
- * @param variableName css变量名
- * @param from 某个节点 [默认为:root 节点]
+ * 设定CSS Variable
  */
-export const getAttachedCSSVariable = (
-  variableName: keyof AvailableCSSVariable | keyof typeof rootVariables | (string & {}),
-  from: HTMLElement = document.documentElement
-): string | number => {
-  const value = from.style.getPropertyValue(variableName)
-  return isNumberString(value) ? Number(value) : value
+export function setCSSVariable(
+  el: HTMLElement | null,
+  variableName: string,
+  value: number | string | ((original: string) => string | number)
+) {
+  const willSetValue = isFunction(value) ? value(getCSSVariable(el, variableName)) : value
+  el?.style.setProperty(variableName, `${willSetValue}`)
+}
+
+/**
+ * 获取CSS Variable
+ */
+export function getCSSVariable<T>(
+  el: HTMLElement | null,
+  variableName: string,
+  parser?: (value: string) => T
+): T extends Object ? T : string {
+  const gettedValue = el?.style.getPropertyValue(variableName) ?? ''
+  //@ts-ignore
+  return parser ? parser(gettedValue) : gettedValue
 }
