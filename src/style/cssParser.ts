@@ -7,7 +7,7 @@ import pick from 'utils/object/pick'
 import separate from 'utils/object/separate'
 import { toCSS } from './cssUnits'
 import { ICSS, ICSSObject } from './ICSS'
-import { mergeDeep } from './mergeDeep'
+import { mergeDeep } from '../utils/merge'
 
 /**
  * 用在非<Div>的组件上，与toCss目的相反

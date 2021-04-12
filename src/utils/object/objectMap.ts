@@ -1,5 +1,6 @@
 /**
  * (纯函数)
+ * ！！！尽量使用语义更简洁、类型提示更友好的 mapValue 方法替代
  *
  * 基于对象的每一个value，映射， 返回新的对象
  * 该对象有相同的属性数量
@@ -15,7 +16,6 @@ export default function objectMap<T extends object, U>(
   mapperFn: (
     entry: [key: keyof T, value: T[keyof T]],
     index: number,
-    obj: T
   ) => [key: string, value: U]
 ) {
   //@ts-ignore
