@@ -3,6 +3,7 @@
  */
 function isNumberString(val: any): boolean {
   if (typeof val !== 'string') return false
-  return !Number.isNaN(val)
+  //@ts-expect-error
+  return !isNaN(val) // 不能用Number.isNaN，他们在数字字符串上的表现并不一致
 }
 export default isNumberString
