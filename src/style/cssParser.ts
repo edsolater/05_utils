@@ -1,13 +1,13 @@
-import { css, CSSObject, SerializedStyles } from '@emotion/react'
+import { css, SerializedStyles } from '@emotion/react'
 import flat from 'utils/array/flat'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
 import isObjectLiteral from 'utils/judgers/isObjectLiteral'
-import pick from 'utils/object/pick'
 import separate from 'utils/object/separate'
 import { toCSS } from './cssUnits'
 import { ICSS, ICSSObject } from './ICSS'
 import { mergeDeep } from '../utils/merge'
+import mapValues from 'utils/object/mapValues'
 
 /**
  * 用在非<Div>的组件上，与toCss目的相反
@@ -29,14 +29,12 @@ export function parseCSS(icss: ICSS): SerializedStyles {
   const composed = mergeDeep(icss)
   const middleware = (cssobj: ICSSObject) =>
     middlewareList.reduce((acc, modal) => modal(acc), cssobj)
-  const nestedMiddleware = (cssobj: ICSSObject) => {
-    const obj = Object.entries(cssobj).reduce((acc, [key, value]) => {
-      const computedValue = isObjectLiteral(value) ? nestedMiddleware(value as ICSSObject) : value
-      acc[key] = computedValue
-      return acc
-    }, {})
-    return middleware(obj)
-  }
+  const nestedMiddleware = (cssobj: ICSSObject) =>
+    middleware(
+      mapValues(cssobj, (value) =>
+        isObjectLiteral(value) ? nestedMiddleware(value as ICSSObject) : value
+      )
+    )
   const parsedCSS = composed ? nestedMiddleware(composed) : undefined
   return css(parsedCSS)
 }
@@ -48,22 +46,30 @@ export type OnlyObject<T> = T extends object ? never : T
  * @returns 处理后的cssobject
  */
 function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
-  const [rest, toParse] = separate(cssObj, ['translate', 'scale', 'rotate', 'skew'])
-  //@ts-expect-error
-  const composedValue: string = Object.entries(toParse).reduce(
+  const targetProperties = ['translate', 'scale', 'rotate', 'skew']
+  const cssKeys = Object.keys(cssObj)
+  if (cssKeys.some((key) => targetProperties.includes(key))) {
+    // 需要做解析处理
+    const [rest, toParse] = separate(cssObj, ['translate', 'scale', 'rotate', 'skew'])
     //@ts-expect-error
-    (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
-      acc +
-      (property === 'translate'
-        ? `translate(${flat(value).map(toCSS).join(', ') || 0})`
-        : property === 'scale'
-        ? `scale(${flat(value).join(', ') || 1})`
-        : property === 'rotate'
-        ? `rotate(${flat(value).join(', ') || 0})`
-        : property === 'skew'
-        ? `skew(${flat(value).join(', ') || 0})`
-        : ''),
-    ''
-  )
-  return { ...rest, ...(composedValue !== '' ? { transform: composedValue } : {}) }
+    const composedValue: string = Object.entries(toParse).reduce(
+      //@ts-expect-error
+      (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
+        acc +
+        (property === 'translate'
+          ? `translate(${flat(value).map(toCSS).join(', ') || 0})`
+          : property === 'scale'
+          ? `scale(${flat(value).join(', ') || 1})`
+          : property === 'rotate'
+          ? `rotate(${flat(value).join(', ') || 0})`
+          : property === 'skew'
+          ? `skew(${flat(value).join(', ') || 0})`
+          : ''),
+      ''
+    )
+    return { ...rest, ...(composedValue !== '' ? { transform: composedValue } : {}) }
+  } else {
+    // 无需再做解析处理
+    return cssObj
+  }
 }
