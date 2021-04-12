@@ -10,9 +10,9 @@ import { rootVariables } from './style/cssVaraiable'
 setLotCss(document.documentElement, Object.entries(rootVariables))
 function App() {
   return (
-    <TestGrounds /> // 测试一些功能
+    // <TestGrounds /> // 测试田
     // <Home /> // 视频通话
-    // <AllExamples />
+    <AllExamples />
   )
 }
 createRoot(document.getElementById('app')).render(<App />)

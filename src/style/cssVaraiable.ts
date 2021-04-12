@@ -1,5 +1,4 @@
 import isFunction from 'utils/judgers/isFunction'
-import isNumberString from 'utils/judgers/isNumberString'
 
 export const rootVariables = {
   '--bg-color': 1,
@@ -35,14 +34,14 @@ export function setCSSVariable(
   variableName: string,
   value: number | string | ((original: string) => string | number)
 ) {
-  const willSetValue = isFunction(value) ? value(getCSSVariable(el, variableName)) : value
+  const willSetValue = isFunction(value) ? value(fromCSSVariable(el, variableName)) : value
   el?.style.setProperty(variableName, `${willSetValue}`)
 }
 
 /**
  * 获取CSS Variable
  */
-export function getCSSVariable<T>(
+export function fromCSSVariable<T>(
   el: HTMLElement | null,
   variableName: string,
   parser?: (value: string) => T
