@@ -23,8 +23,6 @@ export interface AvailableCSSVariable {
    */
   '--y'?: number
 }
-export const toCSSVariable = (variableName: CSSVariableName, fallback?: any) =>
-  `var(${variableName}${fallback ? `, ${fallback}` : ''})`
 
 /**
  * 设定CSS Variable

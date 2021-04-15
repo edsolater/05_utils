@@ -2,7 +2,8 @@ import attachGestureScale from 'helper/manageEvent/attachGestureScale'
 import { mix } from 'style/cssParser'
 import { attachWheel } from 'helper/attachEventHandler'
 import { RefObject, useEffect, useMemo } from 'react'
-import { setCSSVariable, toCSSVariable } from 'style/cssVaraiable'
+import { setCSSVariable } from 'style/cssVaraiable'
+import { cssVar } from 'style/cssFunctions'
 
 /**
  * props定义声明
@@ -48,7 +49,7 @@ export function useFeatureScale(
       }
     }
   }, [])
-  const css = useMemo(() => mix({ scale: `${scalable ? toCSSVariable('--scale', 1) : ''}` }), [
+  const css = useMemo(() => mix({ scale: `${scalable ? cssVar('--scale', 1) : ''}` }), [
     scalable
   ])
   return { css }

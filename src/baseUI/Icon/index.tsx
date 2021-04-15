@@ -8,15 +8,15 @@ import {
 } from './appearance.feature'
 import omit from 'utils/object/omit'
 
-export interface ButtonProps extends DivProps<'button'>, FeatureAppearanceProps {}
+export interface IconProps extends DivProps, FeatureAppearanceProps {}
 
 /**
  * 将子元素显示在一行，相当于flexbox
  */
-const Button = (props: ButtonProps) => {
+const Icon = (props: IconProps) => {
   const restProps = omit(props, featureAppearanceProps)
   const { css: appearanceCss } = useFeatureAppearance(props)
-  return <Div _tagName='button' {...restProps} css={mix(appearanceCss, props.css)}></Div>
+  return <Div {...restProps} css={mix(appearanceCss, props.css)}></Div>
 }
 
-export default Button
+export default Icon

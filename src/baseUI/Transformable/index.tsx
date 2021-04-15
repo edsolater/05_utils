@@ -7,17 +7,17 @@ import {
   FeatureProps as FeatureScaleProps,
   featureProps as featureScaleProps,
   useFeatureScale
-} from './useFeatureScale'
+} from './scale.feature'
 import {
   FeatureProps as FeatureResizeProps,
   featureProps as featureResizeProps,
   useFeatureResize
-} from './useFeatureResize'
+} from './resize.feature'
 import {
   FeatureProps as FeatureMoveProps,
   featureProps as featureMoveProps,
   useFeatureMove
-} from './useFeatureMove'
+} from './move.feature'
 
 export type BoundingRect = {
   left: number
@@ -38,7 +38,7 @@ interface TransformableProps
 const Transformable = (props: TransformableProps) => {
   const box = useRef<HTMLDivElement>()
   const restProps = omit(props, [...featureResizeProps, ...featureMoveProps, ...featureScaleProps])
-  const { vdom: featureResizeDom } = useFeatureResize(box, props)
+  const { resizeDot } = useFeatureResize(box, props)
   const { css: featureMoveCss } = useFeatureMove(box, props)
   const { css: featureScaleCss } = useFeatureScale(box, props)
   return (
@@ -61,7 +61,7 @@ const Transformable = (props: TransformableProps) => {
       ]}
     >
       {props.children}
-      {featureResizeDom}
+      {resizeDot}
     </Div>
   )
 }

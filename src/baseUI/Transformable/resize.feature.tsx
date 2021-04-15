@@ -75,7 +75,7 @@ export function useFeatureResize(
       }
     }
   }, [])
-  const vdom = useMemo(
+  const resizeDot = useMemo(
     () =>
       resizable && (
         <Div
@@ -105,5 +105,5 @@ export function useFeatureResize(
       ),
     [innerShape, resizable]
   )
-  return { vdom }
+  return { resizeDot }
 }
