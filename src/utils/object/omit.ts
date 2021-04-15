@@ -10,7 +10,7 @@
  */
 export default function omit<T extends object, U extends keyof T>(
   obj: T,
-  keys: ReadonlyArray<U>
+  keys: ReadonlyArray<U> //IDEA: maydeep
 ): Omit<T, U> {
   const newObj = { ...obj }
   keys.forEach((key) => {

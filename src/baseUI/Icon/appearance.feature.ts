@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mix } from 'style/cssParser'
 import { toPx } from 'style/cssUnits'
@@ -5,61 +6,46 @@ import { toPx } from 'style/cssUnits'
 // 声明组件有哪些props是纯粹改变外观的
 export interface FeatureProps {
   /**
-   * 按钮元素的权重
-   * 默认：border（空心按钮）
+   * 代表颜色的CSS色值（只要是background属性能接受的值）
+   * 不设定，使用图标原本的颜色
    */
-  type?: 'fill' | 'border' | 'text'
+  color?: string
   /**
-   * 按钮的大小
+   * 代表颜色的CSS色值（只要是background属性能接受的值）
    */
-  size?: 'small' | 'middle' | 'large'
+  hoverColor?: string
+  /**图标可点击 */
+  clickable?: boolean
 }
 
 // 表明具体有哪些props是纯粹改变外观的（JS代码声明，也便于提取相关属性）
-export const featureProps: (keyof FeatureProps)[] = ['type', 'size']
+export const featureProps: (keyof FeatureProps)[] = ['color', 'hoverColor', 'clickable']
 
 // 样式的具体css-in-js实现
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const useFeature = ({ size = 'middle', type = 'border' }: FeatureProps) =>{
-  const css = mix(
-    {
-      appearance: 'none',
-      borderWidth: 0,
-      cursor: 'pointer',
-      userSelect: 'none',
-      width: 'max-content',
-      boxSizing: 'border-box'
-    },
-    size === 'small' && { padding: toPx(2, 8), fontSize: 14, borderRadius: 2 },
-    size === 'middle' && { padding: toPx(6, 14), fontSize: 14, borderRadius: 4 },
-    size === 'large' && { padding: toPx(10, 16), fontSize: 16, borderRadius: 6 },
-    type === 'fill' && {
-      color: cssVar('--icon-text-color', 'white'),
-      backgroundColor: cssVar('--icon-background-color', '#666'),
-      ':hover': { filter: cssBrightness(1.4) },
-      ':active': { filter: cssBrightness(0.8) }
-    },
-    type === 'border' && {
-      position: 'relative',
-      backgroundColor: 'transparent',
-      color: cssVar('--icon-text-color'),
-      '::before': {
-        content: "''",
-        position: 'absolute',
-        inset: 0,
-        borderRadius: 'inherit',
-        borderWidth: cssVar('--icon-border-width', '1px'),
-        borderStyle: 'solid',
-        borderColor: cssVar('--icon-border-color', 'currentcolor'),
-        opacity: 0.3,
-        color: 'inherit'
+export const useFeature = (
+  { color, hoverColor, clickable }: FeatureProps,
+  { src }: { src: string }
+) => {
+  const css = () =>
+    mix({
+      width: cssVar('--icon-width', '1.5rem'),
+      height: cssVar('--icon-width', '1.5rem'),
+      display: 'inline-grid',
+      placeItems: 'center',
+      cursor: clickable && 'pointer',
+      mask: color ?? hoverColor ? `url(${src})  0% 0% / contain no-repeat` : '',
+      background: cssVar('--icon-color', color),
+      transition: 'background 200ms',
+      '&:hover': {
+        background: cssVar('--icon-hover-color', hoverColor ?? color)
+      },
+      '& > .__icon-img': {
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain'
       }
-    },
-    type === 'text' && {
-      color: cssVar('--icon-text-color'),
-      backgroundColor: 'transparent'
-    }
-  )
-  return {css}
+    })
+
+  return { css, sholdUseRaw: !color }
 }
-  
