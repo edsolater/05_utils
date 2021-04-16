@@ -34,16 +34,15 @@ export const iconCoreProps: (keyof IconCoreProp)[] = ['name']
 
 const Icon = (props: IconProps) => {
   const restProps = omit(props, [...iconCoreProps, ...featureAppearanceProps])
-  const { css: appearanceCss, sholdUseRaw } = useFeatureAppearance(props, {
-    src: `${iconFileBasePath}/${props.name}.${iconFileType}`
-  })
+  const src = `${iconFileBasePath}/${props.name}.${iconFileType}`
+  const { css: appearanceCss, sholdUseRaw } = useFeatureAppearance(props, { src })
   return (
     <Div {...restProps} css={mix(appearanceCss, props.css)}>
-      {sholdUseRaw && (
-        <Img src={`${iconFileBasePath}/${props.name}.${iconFileType}`} alt={props.name} />
-      )}
+      {sholdUseRaw && <Img src={src} alt={props.name} />}
     </Div>
   )
 }
 
 export default Icon
+
+// IDEA: css-in-js 骚操作 用 @property 做有过渡的 gridiant
