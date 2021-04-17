@@ -16,7 +16,7 @@ import Img from 'baseUI/Img'
 
 export interface IconProps extends DivProps, FeatureCoreProps, FeatureAppearanceProps {}
 const Icon = (props: IconProps) => {
-  const restProps = omit(props, [...featureCoreProps, ...featureAppearanceProps])
+  const restProps = omit(props, featureCoreProps, featureAppearanceProps)
 
   const { src, name } = useFeatureCore(props)
   const { css: appearanceCss, sholdUseRaw } = useFeatureAppearance(props, { src })

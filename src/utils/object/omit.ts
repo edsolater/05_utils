@@ -1,3 +1,6 @@
+import { MayDeepArray } from "typings/tools"
+import flat from "utils/array/flat"
+
 /**
  * 几乎是Typescript的Omit的翻版
  * @param targetObj 需要浅复制的对象
@@ -10,10 +13,10 @@
  */
 export default function omit<T extends object, U extends keyof T>(
   obj: T,
-  keys: ReadonlyArray<U> //IDEA: maydeep
+  ...keys:Array<MayDeepArray<U>> //IDEA: maydeep
 ): Omit<T, U> {
   const newObj = { ...obj }
-  keys.forEach((key) => {
+  flat(keys).forEach((key) => {
     delete newObj[key]
   })
   return newObj
