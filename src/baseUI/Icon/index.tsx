@@ -6,39 +6,24 @@ import {
   featureProps as featureAppearanceProps,
   FeatureProps as FeatureAppearanceProps
 } from './appearance.feature'
+import {
+  useFeature as useFeatureCore,
+  featureProps as featureCoreProps,
+  FeatureProps as FeatureCoreProps
+} from './core.feature'
 import omit from 'utils/object/omit'
 import Img from 'baseUI/Img'
 
-//
-/* ----------------------------- CONFIG 配置项 --------------------------------------------- */
-//
-
-const iconFileBasePath = '/icons' //CONFIG 配置项
-const iconFileType = 'svg' //CONFIG 配置项
-type AllIconNames = '' //CONFIG 配置项
-
-//
-/* ----------------------------- PROPS props类型声明 --------------------------------------------- */
-//
-
-export interface IconProps extends DivProps, IconCoreProp, FeatureAppearanceProps {}
-export interface IconCoreProp {
-  /**icon名字 */
-  name?: AllIconNames | (string & {})
-}
-export const iconCoreProps: (keyof IconCoreProp)[] = ['name']
-
-//
-/* ----------------------------- 具体实现 --------------------------------------------- */
-//
-
+export interface IconProps extends DivProps, FeatureCoreProps, FeatureAppearanceProps {}
 const Icon = (props: IconProps) => {
-  const restProps = omit(props, [...iconCoreProps, ...featureAppearanceProps])
-  const src = `${iconFileBasePath}/${props.name}.${iconFileType}`
+  const restProps = omit(props, [...featureCoreProps, ...featureAppearanceProps])
+
+  const { src, name } = useFeatureCore(props)
   const { css: appearanceCss, sholdUseRaw } = useFeatureAppearance(props, { src })
+
   return (
     <Div {...restProps} css={mix(appearanceCss, props.css)}>
-      {sholdUseRaw && <Img src={src} alt={props.name} />}
+      {sholdUseRaw && <Img src={src} alt={name} />}
     </Div>
   )
 }
