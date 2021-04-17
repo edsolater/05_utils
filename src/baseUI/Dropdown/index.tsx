@@ -50,3 +50,5 @@ const Dropdown = (props: DropdownProps) => {
 export default Dropdown
 
 // TODO：怎么插入组件的skin呢？（要把skin做成可配置化的）（为了不同项目的组件可配置性，不然就用cssVariable吧，做到组件穿透？）（不行，CSS Variable只能传递CSS， 还要传递Props）
+// 每个项目分别做二次封装就好了
+// 二次封装还是绕了点， 感觉用Context API自然些
