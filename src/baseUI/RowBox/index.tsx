@@ -1,17 +1,17 @@
 import React from 'react'
 import Div, { DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
-import { cssRowBoxAppearance, rowBoxStylePropNames, RowBoxAppearanceProps } from './appearance'
+import { cssRowBoxStyle, rowBoxStylePropNames, RowBoxStyleProps } from './style'
 import omit from 'utils/object/omit'
 
-export interface RowBoxProps extends DivProps, RowBoxAppearanceProps {}
+export interface RowBoxProps extends DivProps, RowBoxStyleProps {}
 
 /**
  * 将子元素显示在一行，相当于flexbox
  */
 const RowBox = (props: RowBoxProps) => {
   const restProps = omit(props, rowBoxStylePropNames)
-  return <Div {...restProps} css={mix(cssRowBoxAppearance(props), props.css)}></Div>
+  return <Div {...restProps} css={mix(cssRowBoxStyle(props), props.css)}></Div>
 }
 
 export default RowBox

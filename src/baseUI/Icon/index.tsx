@@ -2,10 +2,10 @@ import React from 'react'
 import Div, { DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
 import {
-  useFeature as useFeatureAppearance,
-  featureProps as featureAppearanceProps,
-  FeatureProps as FeatureAppearanceProps
-} from './appearance.feature'
+  useFeature as useFeatureStyle,
+  featureProps as featureStyleProps,
+  FeatureProps as FeatureStyleProps
+} from './style.feature'
 import {
   useFeature as useFeatureCore,
   featureProps as featureCoreProps,
@@ -14,15 +14,15 @@ import {
 import omit from 'utils/object/omit'
 import Img from 'baseUI/Img'
 
-export interface IconProps extends DivProps, FeatureCoreProps, FeatureAppearanceProps {}
+export interface IconProps extends DivProps, FeatureCoreProps, FeatureStyleProps {}
 const Icon = (props: IconProps) => {
-  const restProps = omit(props, featureCoreProps, featureAppearanceProps)
+  const restProps = omit(props, featureCoreProps, featureStyleProps)
 
   const { src, name } = useFeatureCore(props)
-  const { css: appearanceCss, sholdUseRaw } = useFeatureAppearance(props, { src })
+  const { css: styleCss, sholdUseRaw } = useFeatureStyle(props, { src })
 
   return (
-    <Div {...restProps} css={mix(appearanceCss, props.css)}>
+    <Div {...restProps} css={mix(styleCss, props.css)}>
       {sholdUseRaw && <Img src={src} alt={name} />}
     </Div>
   )

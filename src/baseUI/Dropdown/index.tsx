@@ -6,10 +6,10 @@ import React from 'react'
 import Div, { DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
 import {
-  useFeature as useFeatureAppearance,
-  featureProps as featureAppearanceProps,
-  FeatureProps as FeatureAppearanceProps
-} from './appearance.feature'
+  useFeature as useFeatureStyle,
+  featureProps as featureStyleProps,
+  FeatureProps as FeatureStyleProps
+} from './style.feature'
 import omit from 'utils/object/omit'
 import Img from 'baseUI/Img'
 
@@ -25,7 +25,7 @@ type AllDropdownNames = '' //CONFIG 配置项
 /* ----------------------------- PROPS props类型声明 --------------------------------------------- */
 //
 
-export interface DropdownProps extends DivProps, DropdownCoreProp, FeatureAppearanceProps {}
+export interface DropdownProps extends DivProps, DropdownCoreProp, FeatureStyleProps {}
 export interface DropdownCoreProp {
   /**dropdown名字 */
   name?: AllDropdownNames | (string & {})
@@ -37,11 +37,11 @@ export const dropdownCoreProps: (keyof DropdownCoreProp)[] = ['name']
 //
 
 const Dropdown = (props: DropdownProps) => {
-  const restProps = omit(props, [...dropdownCoreProps, ...featureAppearanceProps])
+  const restProps = omit(props, [...dropdownCoreProps, ...featureStyleProps])
   const src = `${dropdownFileBasePath}/${props.name}.${dropdownFileType}`
-  const { css: appearanceCss, sholdUseRaw } = useFeatureAppearance(props, { src })
+  const { css: styleCss, sholdUseRaw } = useFeatureStyle(props, { src })
   return (
-    <Div {...restProps} css={mix(appearanceCss, props.css)}>
+    <Div {...restProps} css={mix(styleCss, props.css)}>
       {sholdUseRaw && <Img src={src} alt={props.name} />}
     </Div>
   )

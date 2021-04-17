@@ -24,7 +24,7 @@ export const featureProps: (keyof FeatureProps)[] = ['type', 'size']
 export const useFeature = ({ size = 'middle', type = 'border' }: FeatureProps) =>{
   const css = mix(
     {
-      appearance: 'none',
+      style: 'none',
       borderWidth: 0,
       cursor: 'pointer',
       userSelect: 'none',
