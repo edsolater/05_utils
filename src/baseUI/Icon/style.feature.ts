@@ -6,15 +6,17 @@ import { toPx } from 'style/cssUnits'
 // 声明组件有哪些props是纯粹改变外观的
 export interface FeatureProps {
   /**
-   * 代表颜色的CSS色值（只要是background属性能接受的值）
+   * CSS: 代表颜色的CSS色值（只要是background属性能接受的值）
    * 不设定，使用图标原本的颜色
    */
   color?: string
   /**
-   * 代表颜色的CSS色值（只要是background属性能接受的值）
+   * CSS: 代表颜色的CSS色值（只要是background属性能接受的值）
    */
   hoverColor?: string
-  /**图标可点击 */
+  /**
+   * CSS: 图标可点击
+   */
   clickable?: boolean
 }
 // TODO:是否有必要？
@@ -53,5 +55,5 @@ export const useFeature = (
       }
     })
 
-  return { css, sholdUseRaw: !color }
+  return { css }
 }

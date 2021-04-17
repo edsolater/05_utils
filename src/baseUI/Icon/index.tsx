@@ -18,8 +18,8 @@ export interface IconProps extends DivProps, FeatureCoreProps, FeatureStyleProps
 const Icon = (props: IconProps) => {
   const restProps = omit(props, featureCoreProps, featureStyleProps)
 
-  const { src, name } = useFeatureCore(props)
-  const { css: styleCss, sholdUseRaw } = useFeatureStyle(props, { src })
+  const { src, name, sholdUseRaw } = useFeatureCore(props)
+  const { css: styleCss } = useFeatureStyle(props, { src })
 
   return (
     <Div {...restProps} css={mix(styleCss, props.css)}>
