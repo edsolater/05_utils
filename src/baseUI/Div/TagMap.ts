@@ -6,4 +6,5 @@ export interface TagMap {
   div: HTMLDivElement
   button: HTMLButtonElement
   img: HTMLImageElement
+  input: HTMLInputElement
 }

@@ -1,5 +1,6 @@
 export default {
   red: 'red',
   crimson: 'crimson',
-  dodgerblue: 'dodgerblue'
+  dodgerblue: 'dodgerblue',
+  whitesmoke: '#e0e0e0'
 }

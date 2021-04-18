@@ -1,5 +1,5 @@
-import { MayDeepArray } from "typings/tools"
-import flat from "utils/array/flat"
+import { MayDeepReadOnlyArray } from 'typings/tools'
+import flat from 'utils/array/flat'
 
 /**
  * 几乎是Typescript的Omit的翻版
@@ -13,7 +13,7 @@ import flat from "utils/array/flat"
  */
 export default function omit<T extends object, U extends keyof T>(
   obj: T,
-  ...keys:Array<MayDeepArray<U>> //IDEA: maydeep
+  ...keys: ReadonlyArray<MayDeepReadOnlyArray<U>> //IDEA: maydeep
 ): Omit<T, U> {
   const newObj = { ...obj }
   flat(keys).forEach((key) => {
