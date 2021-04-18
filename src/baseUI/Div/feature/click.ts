@@ -9,3 +9,4 @@ export function attachClick(el: HTMLDivElement, events: ClickProps) {
 export interface ClickProps {
   onClick?: (el: HTMLDivElement) => void
 }
+export const clickProps = ['onClick'] as const

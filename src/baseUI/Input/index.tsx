@@ -1,14 +1,12 @@
 import React, { ReactNode, useState } from 'react'
-import Div, { DivProps } from 'baseUI/Div'
+import Div, { divProps, DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
 import {
   useFeature as useFeatureStyle,
-  featureProps as featureStyleProps,
   FeatureProps as FeatureStyleProps
 } from './style.feature'
-import omit from 'utils/object/omit'
-import Img from 'baseUI/Img'
 import Icon, { IconProps } from 'baseUI/Icon'
+import pick from 'utils/object/pick'
 
 export interface InputProps extends DivProps, FeatureStyleProps {
   /**
@@ -28,18 +26,13 @@ export interface InputProps extends DivProps, FeatureStyleProps {
   prefixNode?: ReactNode
   iconProps?: IconProps
 }
-const featureCoreProps = ['row'] as const
 const Input = (props: InputProps) => {
   const { style } = useFeatureStyle(props)
   const [value, setValue] = useState('')
 
   return (
     <Div
-      {...omit(
-        props,
-        featureCoreProps,
-        featureStyleProps
-      )} /* TODO：好像只要Div可接收的props就够了 */
+      {...pick(props, divProps)}
       className={['__input-box', props.className]}
       css={mix(style, props.css)}
     >

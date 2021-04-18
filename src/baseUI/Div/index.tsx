@@ -4,9 +4,10 @@ import { CSSProperties, ReactNode, useCallback } from 'react'
 import { parseCSS } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 import { ClassName, classname } from './util/classname'
-import { attachFeatures, FeaturesProps } from './feature'
+import { attachFeatures, featureProps, FeaturesProps } from './feature'
 import { TagMap } from './TagMap'
 import { IRefs, mergeRefs } from './util/mergeRefs'
+import merge from 'utils/array/merge'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
 export interface DivProps<TagName extends keyof TagMap = 'div'> extends FeaturesProps {
@@ -20,13 +21,19 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> extends Features
    * 在原来style的基础上，增加了对css variable的type类型的支持
    * 其实就是元素的style
    */
-  style?:
-    | CSSProperties
-    | {[cssVariableName: string]: number | string | undefined}
+  style?: CSSProperties | { [cssVariableName: string]: number | string | undefined }
   children?: ReactNode
   htmlProps?: JSX.IntrinsicElements[TagName]
 }
-
+export const divProps: ReadonlyArray<keyof DivProps> = merge([
+  '_tagName',
+  'domRef',
+  'className',
+  'css',
+  'style',
+  'children',
+  'htmlProps'
+], featureProps)
 const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const attachFeatureCallback = useCallback((el) => attachFeatures(el, props), [props])
   const allProps = {

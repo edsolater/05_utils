@@ -20,3 +20,5 @@ export interface HoverProps {
   onHoverStart?: () => void
   onHoverEnd?: () => void
 }
+
+export const hoverProps = ['onHoverStart', 'onHoverEnd'] as const
