@@ -1,5 +1,6 @@
 import Input from 'baseUI/Input'
 import React from 'react'
+import cssColor from 'style/cssColor'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
@@ -8,8 +9,8 @@ import ExampleGroup from './ExampleGroup'
  */
 const InputExample = () => (
   <ExampleCard>
-    <ExampleGroup caption='填充按钮（主色）'>
-      <Input iconProps={{ name: 'smile', color: '#1e90ff' }}>Large</Input>
+    <ExampleGroup caption='输入框（待完善）'>
+      <Input iconProps={{ name: 'smile', color: '#333' }} inputFocusColor={cssColor.dodgerblue}>Large</Input>
     </ExampleGroup>
   </ExampleCard>
 )

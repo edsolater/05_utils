@@ -37,7 +37,7 @@ const Input = (props: InputProps) => {
       css={mix(style, props.css)}
     >
       {props.prefixNode}
-      {props.iconProps && <Icon {...props.iconProps} />}
+      {props.iconProps && <Icon className='__input-icon' {...props.iconProps} />}
       <Div
         _tagName='input'
         className='__input-body'
