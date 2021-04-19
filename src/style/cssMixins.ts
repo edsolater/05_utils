@@ -39,7 +39,7 @@ export const cssMixins = {
   /**组件禁用滚动条 */
   noScrollbar: () => ICSS({
     scrollbarWidth: 'none',
-    '::-webkit-scrollbar': {
+    '&::-webkit-scrollbar': {
       display: 'none'
     }
   }),

@@ -6,8 +6,8 @@ import isHTMLElement from 'helper/domElement/isHTMLElement'
  * @param propertyName 属性名（可能是css variable属性）
  * @param value 属性值
  */
-export const setCss = (el: HTMLElement, propertyName: string, value: number | string) =>
-  el.style.setProperty(propertyName, value.toString())
+export const setInlineStyle = (el: HTMLElement, propertyName: string, value: number | string) =>
+  el.style.setProperty(propertyName, String(value))
 
 /**
  * 批量附加上CSS属性
@@ -18,4 +18,5 @@ export const setCss = (el: HTMLElement, propertyName: string, value: number | st
 export const setLotCss = (
   el: HTMLElement,
   propertySet: [propertyName: string, value: number | string][]
-) => propertySet.forEach(([propertyName, value]) => setCss(el, propertyName, value))
+) => propertySet.forEach(([propertyName, value]) => setInlineStyle(el, propertyName, value))
+// TODO: 后一个需要用overload合并

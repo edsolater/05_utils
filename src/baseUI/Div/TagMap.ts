@@ -7,4 +7,5 @@ export interface TagMap {
   button: HTMLButtonElement
   img: HTMLImageElement
   input: HTMLInputElement
+  textarea: HTMLTextAreaElement
 }
