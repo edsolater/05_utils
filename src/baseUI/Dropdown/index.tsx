@@ -17,7 +17,7 @@ export default function Dropdown(props: DropdownProps) {
     <Div
       {...pick(props, divProps)}
       className={[props.className, '__dropdown-wrapper']}
-      css={coreCss}
+      css={[props.css, coreCss]}
       onHoverStart={() => props.toggleBy === 'hover' && setopened(true)}
       onHoverEnd={() => props.toggleBy === 'hover' && setopened(false)}
       onClick={() => setopened((b) => !b)}
