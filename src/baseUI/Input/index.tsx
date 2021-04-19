@@ -54,7 +54,7 @@ const Input = (props: InputProps) => {
         css={inputBodyCss}
         className='__input-body'
         htmlProps={{
-          rows: typeof props.row === 'number' ? props.row : undefined,
+          rows: typeof props.row === 'number' ? props.row : 1,
           placeholder: props.placeholder,
           disabled: props.disabled,
           value,
