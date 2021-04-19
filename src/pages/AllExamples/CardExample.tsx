@@ -7,7 +7,7 @@ import ExampleGroup from './ExampleGroup'
  * Button 的使用示例
  */
 const CardExample = () => (
-  <ExampleCard>
+  <ExampleCard title="Card（Div变种）">
     <ExampleGroup caption='卡片'>
       <Card width={200} height={300} color='#1e1c35' />
       <Card width={200} height={300} bgImg='/images/仲裁人.jpg' />

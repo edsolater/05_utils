@@ -1,9 +1,12 @@
-import Div from 'baseUI/Div'
+import Div, { DivProps } from 'baseUI/Div'
 import React from 'react'
 import { toPx } from 'style/cssUnits'
 import { cssValues } from 'style/cssValue'
-
-const ExampleCard = (props) => (
+import { ExampleGroupProps } from './ExampleGroup'
+export interface ExampleCardProps extends DivProps {
+  title?: string
+}
+const ExampleCard = (props: ExampleCardProps) => (
   <Div
     {...props}
     css={{
@@ -15,6 +18,9 @@ const ExampleCard = (props) => (
       borderRadius: 8,
       padding: toPx(8, 16)
     }}
-  />
+  >
+    <h1>{props.title}</h1>
+    {props.children}
+  </Div>
 )
 export default ExampleCard

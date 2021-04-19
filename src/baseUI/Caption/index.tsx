@@ -16,7 +16,7 @@ export interface CaptionProps extends DivProps, FeatureStyleProps {}
 const Caption = (props: CaptionProps) => {
   const restProps = omit(props, featureStyleProps)
   const { css: styleCss } = useFeatureStyle(props)
-  return <Div {...restProps} css={mix(styleCss, props.css)}></Div>
+  return <Div {...restProps} css={mix(props.css, styleCss)}></Div>
 }
 
 export default Caption

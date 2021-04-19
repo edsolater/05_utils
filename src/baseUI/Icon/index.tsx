@@ -22,7 +22,7 @@ const Icon = (props: IconProps) => {
   const { css: styleCss } = useFeatureStyle(props, { src })
 
   return (
-    <Div {...restProps} css={mix(styleCss, props.css)}>
+    <Div {...restProps} css={mix(props.css, styleCss)}>
       {sholdUseRaw && <Img src={src} alt={name} />}
     </Div>
   )

@@ -1,54 +1,35 @@
-/**
- * Dropdown并不需要Portal，因为需要“长”在内容里
- * 而 <Modal/> 组件是必须脱离有限制的节点，必须用Protal
- */
-import React from 'react'
-import Div, { DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssParser'
-import {
-  useFeature as useFeatureStyle,
-  featureProps as featureStyleProps,
-  FeatureProps as FeatureStyleProps
-} from './style.feature'
-import omit from 'utils/object/omit'
-import Img from 'baseUI/Img'
+import React, { useState } from 'react'
+import Div, { divProps, DivProps } from 'baseUI/Div'
+import { useFeature as useFeatureStyle, FeatureProps as FeatureStyleProps } from './style.feature'
+import pick from 'utils/object/pick'
+import Card, { CardProps } from 'baseUI/Card'
 
-//
-/* ----------------------------- CONFIG 配置项 --------------------------------------------- */
-//
-
-const dropdownFileBasePath = '/dropdowns' //CONFIG 配置项
-const dropdownFileType = 'svg' //CONFIG 配置项
-type AllDropdownNames = '' //CONFIG 配置项
-
-//
-/* ----------------------------- PROPS props类型声明 --------------------------------------------- */
-//
-
-export interface DropdownProps extends DivProps, DropdownCoreProp, FeatureStyleProps {}
-export interface DropdownCoreProp {
-  /**dropdown名字 */
-  name?: AllDropdownNames | (string & {})
+// 应该就是一种 Card 的特殊呈现形式
+export interface DropdownProps extends DivProps, FeatureStyleProps {
+  toggleBy?: 'click' | 'hover'
+  cardProps?: CardProps
 }
-export const dropdownCoreProps: (keyof DropdownCoreProp)[] = ['name']
+export default function Dropdown(props: DropdownProps) {
+  const [opened, setopened] = useState(false)
 
-//
-/* ----------------------------- 具体实现 --------------------------------------------- */
-//
-
-const Dropdown = (props: DropdownProps) => {
-  const restProps = omit(props, [...dropdownCoreProps, ...featureStyleProps])
-  const src = `${dropdownFileBasePath}/${props.name}.${dropdownFileType}`
-  const { css: styleCss, sholdUseRaw } = useFeatureStyle(props, { src })
+  const { coreCss, dropdownCardCss } = useFeatureStyle(props)
   return (
-    <Div {...restProps} css={mix(styleCss, props.css)}>
-      {sholdUseRaw && <Img src={src} alt={props.name} />}
+    <Div
+      {...pick(props, divProps)}
+      className={[props.className, '__dropdown-wrapper']}
+      css={coreCss}
+      onHoverStart={() => props.toggleBy === 'hover' && setopened(true)}
+      onHoverEnd={() => props.toggleBy === 'hover' && setopened(false)}
+      onClick={() => setopened((b) => !b)}
+    >
+      {props.children}
+      {opened && (
+        <Card
+          {...props.cardProps}
+          className='__dropdown-card'
+          css={[props.cardProps?.css, dropdownCardCss]}
+        />
+      )}
     </Div>
   )
 }
-
-export default Dropdown
-
-// TODO：怎么插入组件的skin呢？（要把skin做成可配置化的）（为了不同项目的组件可配置性，不然就用cssVariable吧，做到组件穿透？）（不行，CSS Variable只能传递CSS， 还要传递Props）
-// 每个项目分别做二次封装就好了
-// 二次封装还是绕了点， 感觉用Context API自然些

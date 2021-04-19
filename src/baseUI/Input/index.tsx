@@ -70,4 +70,3 @@ const Input = (props: InputProps) => {
 
 export default Input
 
-// IDEA: 要做Dropdown的话，需用 Card + Scroll

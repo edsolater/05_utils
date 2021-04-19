@@ -26,7 +26,7 @@ const Img = (props: ImageProps) => {
       _tagName='img'
       {...restProps}
       htmlProps={{ src: props.src, alt: props.alt, ...restProps.htmlProps }}
-      css={mix(styleCss, props.css)}
+      css={mix(props.css, styleCss)}
     ></Div>
   )
 }

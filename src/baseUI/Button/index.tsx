@@ -16,7 +16,7 @@ export interface ButtonProps extends DivProps<'button'>, FeatureStyleProps {}
 const Button = (props: ButtonProps) => {
   const restProps = omit(props, featureStyleProps)
   const { css: styleCss } = useFeatureStyle(props)
-  return <Div _tagName='button' {...restProps} css={mix(styleCss, props.css)}></Div>
+  return <Div _tagName='button' {...restProps} css={mix(props.css, styleCss)}></Div>
 }
 
 export default Button

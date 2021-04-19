@@ -1,19 +1,17 @@
 import React from 'react'
-import Div, { DivProps } from 'baseUI/Div'
+import Div, { divProps, DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
 import {
   useFeature as useFeatureStyle,
-  featureProps as featureStyleProps,
   FeatureProps as FeatureStyleProps
 } from './style.feature'
-import omit from 'utils/object/omit'
+import pick from 'utils/object/pick'
 
 export interface CardProps extends DivProps, FeatureStyleProps {}
 
 const Card = (props: CardProps) => {
-  const restProps = omit(props, featureStyleProps)
   const { css: styleCss } = useFeatureStyle(props)
-  return <Div {...restProps} css={mix(styleCss, props.css)} />
+  return <Div {...pick(props, divProps)} css={mix(props.css, styleCss)} />
 }
 export default Card
 
