@@ -1,5 +1,5 @@
 import Div from 'baseUI/Div'
-import Transformable from 'baseUI/Transformable'
+import Tramsform from 'baseUI/Transform'
 import Video from 'baseUI/Video'
 import StyledButton from 'pages/StyledButton'
 import { initAppWebsocket } from 'helper/createConnect/core'
@@ -35,7 +35,7 @@ const Home = () => {
   return (
     <Div css={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
       {[...cameraStream.entries()].map(([userId, stream], idx) => (
-        <Transformable
+        <Tramsform
           key={userId}
           className='camera-view'
           innerShape='circle'
@@ -56,7 +56,7 @@ const Home = () => {
             srcObject={stream}
             shape='circle'
           />
-        </Transformable>
+        </Tramsform>
       ))}
       {!isPlaying && (
         <StyledButton

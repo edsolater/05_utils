@@ -2,7 +2,7 @@ import { SpeedVector } from 'typings/constants'
 import calcHypotenuse from 'utils/math/calcHypotenuse'
 import staySameSign from '../../utils/math/staySameSign'
 import changeTransformTranslate from './changeTransform'
-import { BoundingRect } from 'baseUI/Transformable'
+import { BoundingRect } from 'baseUI/Transform'
 
 /**
  * （用于惯性滑动）

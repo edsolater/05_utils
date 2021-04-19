@@ -25,7 +25,7 @@ export type BoundingRect = {
   right: number
   bottom: number
 }
-interface TransformableProps
+interface TramsformProps
   extends DivProps,
     FeatureResizeProps,
     FeatureMoveProps,
@@ -35,7 +35,7 @@ interface TransformableProps
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
  */
-const Transformable = (props: TransformableProps) => {
+const Tramsform = (props: TramsformProps) => {
   const box = useRef<HTMLDivElement>()
   const restProps = omit(props, [...featureResizeProps, ...featureMoveProps, ...featureScaleProps])
   const { resizeDot } = useFeatureResize(box, props)
@@ -65,4 +65,4 @@ const Transformable = (props: TransformableProps) => {
     </Div>
   )
 }
-export default Transformable
+export default Tramsform
