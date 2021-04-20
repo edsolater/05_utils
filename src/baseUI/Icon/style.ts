@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { cssVar } from 'style/cssFunctions'
+import cssColor from 'style/cssColor'
+import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mix } from 'style/cssParser'
 
 // 声明组件有哪些props是纯粹改变外观的
@@ -30,29 +31,46 @@ export const iconProps: (keyof IconStyleProps)[] = Object.keys(iconPropsDefault)
 
 // 样式的具体css-in-js实现
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const useIconStyle = ({ color, hoverColor, clickable }: IconStyleProps, { src }: { src: string }) => {
+export const useIconStyle = (
+  { color, hoverColor, clickable }: IconStyleProps,
+  { src }: { src: string }
+) => {
   const coreCss = useMemo(
     () =>
       mix({
         // TODO 常见的图标尺寸要查询： 24*24 48*48 等等
         width: cssVar('--icon-width', '1.5rem'),
         height: cssVar('--icon-width', '1.5rem'),
-        display: 'inline-grid',
-        placeItems: 'center',
         cursor: clickable && 'pointer',
-        mask: color ?? hoverColor ? `url(${src})  0% 0% / contain no-repeat` : '',
-        background: cssVar('--icon-color', color),
+        position: 'relative',
+        borderRadius: '2px',
         transition: 'background 200ms',
-        '&:hover': {
-          background: cssVar('--icon-hover-color', hoverColor ?? color)
+        ':hover': {
+          background:cssColor.darkMaskLighter,
+          filter: `brightness(0.4) grayscale(0.5)`
         },
-        '& > .__icon-img': {
-          width: '100%',
-          height: '100%',
-          objectFit: 'contain'
+        '::before': {
+          content: "''",
+          position: 'absolute',
+          inset: '0',
+          mask: color ?? hoverColor ? `url(${src})  0% 0% / contain no-repeat` : '',
+          background: cssVar('--icon-color', color),
+          transition: 'background 200ms',
+          ':hover': {
+            background: cssVar('--icon-hover-color', hoverColor ?? color)
+          }
         }
       }),
     [color, hoverColor, clickable]
   )
-  return { coreCss }
+  const iconImageCss = useMemo(
+    () =>
+      mix({
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain'
+      }),
+    []
+  )
+  return { coreCss, iconImageCss }
 }
