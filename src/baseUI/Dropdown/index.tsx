@@ -23,7 +23,7 @@ export default function Dropdown(props: DropdownProps) {
       onClick={() => setopened((b) => !b)}
     >
       {props.children}
-      {opened && (
+      {opened && ( //TODO：这个if逻辑导致每次都要重新加载整个卡片内容，就第一次是整体加载，然后都是显示/隐藏 //IDEA: 把这个显示的逻辑单独提取成一个组件
         <Card
           {...props.cardProps}
           className='__dropdown-card'
