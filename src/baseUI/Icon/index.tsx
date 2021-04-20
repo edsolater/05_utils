@@ -1,29 +1,25 @@
 import React from 'react'
-import Div, { DivProps } from 'baseUI/Div'
+import Div, { divProps, DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
 import {
-  useFeature as useFeatureStyle,
-  featureProps as featureStyleProps,
-  FeatureProps as FeatureStyleProps
-} from './style.feature'
+  useIconStyle,
+  IconStyleProps
+} from './style'
 import {
   useFeature as useFeatureCore,
-  featureProps as featureCoreProps,
   FeatureProps as FeatureCoreProps
 } from './core.feature'
-import omit from 'utils/object/omit'
-import Img from 'baseUI/Img'
+import Image from 'baseUI/Image'
+import pick from 'utils/object/pick'
 
-export interface IconProps extends DivProps, FeatureCoreProps, FeatureStyleProps {}
+export interface IconProps extends DivProps, FeatureCoreProps, IconStyleProps {}
 const Icon = (props: IconProps) => {
-  const restProps = omit(props, featureCoreProps, featureStyleProps)
-
   const { src, name, sholdUseRaw } = useFeatureCore(props)
-  const { css: styleCss } = useFeatureStyle(props, { src })
+  const { coreCss } = useIconStyle(props, { src })
 
   return (
-    <Div {...restProps} css={mix(props.css, styleCss)}>
-      {sholdUseRaw && <Img src={src} alt={name} />}
+    <Div {...pick(props, divProps)} css={mix(props.css, coreCss)}>
+      {sholdUseRaw && <Image src={src} alt={name} />}
     </Div>
   )
 }

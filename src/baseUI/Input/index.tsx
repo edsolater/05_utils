@@ -1,13 +1,13 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
-import { useFeature as useFeatureStyle, FeatureProps as FeatureStyleProps } from './style.feature'
+import { useInputStyle, InputStyleProps } from './style'
 import Icon, { IconProps } from 'baseUI/Icon'
 import pick from 'utils/object/pick'
 import { setInlineStyle } from 'style/setCSS'
 import { toPx } from 'style/cssUnits'
 
-export interface InputProps extends DivProps, FeatureStyleProps {
+export interface InputProps extends DivProps, InputStyleProps {
   //TODO: 需要加入min-height之类，得有个最小高度
   /**
    * 输入框有多少行？
@@ -43,7 +43,7 @@ const Input = (props: InputProps) => {
     }
   }
 
-  const { coreCss, inputBodyCss, inputIconCss } = useFeatureStyle(props, { isTextarea })
+  const { coreCss, inputBodyCss, inputIconCss } = useInputStyle(props, { isTextarea })
   return (
     <Div {...pick(props, divProps)} className={['__input-box', props.className]} css={coreCss}>
       {props.prefixNode}

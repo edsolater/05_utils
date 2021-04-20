@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { useFeature as useFeatureStyle, FeatureProps as FeatureStyleProps } from './style.feature'
+import { useDropdownStyle, DropdownStyleProps } from './style'
 import pick from 'utils/object/pick'
 import Card, { CardProps } from 'baseUI/Card'
 
 // 应该就是一种 Card 的特殊呈现形式
-export interface DropdownProps extends DivProps, FeatureStyleProps {
+export interface DropdownProps extends DivProps, DropdownStyleProps {
   toggleBy?: 'click' | 'hover'
   cardProps?: CardProps
 }
 export default function Dropdown(props: DropdownProps) {
   const [opened, setopened] = useState(false)
 
-  const { coreCss, dropdownCardCss } = useFeatureStyle(props)
+  const { coreCss, dropdownCardCss } = useDropdownStyle(props)
   return (
     <Div
       {...pick(props, divProps)}

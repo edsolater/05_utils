@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { useTagStyle, TagStyleProps } from './style'
+import { useFeature as useFeatureStyle, FeatureProps as FeatureStyleProps } from './style.feature'
 import pick from 'utils/object/pick'
+import Card, { CardProps } from 'baseUI/Card'
 import Icon, { IconProps } from 'baseUI/Icon'
+import cssColor from 'style/cssColor'
 
 // 应该就是一种 Card 的特殊呈现形式
-export interface TagProps extends DivProps, TagStyleProps {
+export interface TagProps extends DivProps, FeatureStyleProps {
   /**
    * 一旦设置这项，就是有开关控件的
    */
@@ -14,7 +16,7 @@ export interface TagProps extends DivProps, TagStyleProps {
   closeIconProp?: IconProps
 }
 export default function Tag(props: TagProps) {
-  const { coreCss, tagCloseIconCss, tagCloseIconColor } = useTagStyle(props)
+  const { coreCss, tagCloseIconCss, tagCloseIconColor } = useFeatureStyle(props)
   return (
     <Div
       {...pick(props, divProps)}

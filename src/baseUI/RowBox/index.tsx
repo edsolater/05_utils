@@ -1,8 +1,8 @@
 import React from 'react'
-import Div, { DivProps } from 'baseUI/Div'
+import Div, { divProps, DivProps } from 'baseUI/Div'
 import { mix } from 'style/cssParser'
-import { cssRowBoxStyle, rowBoxStylePropNames, RowBoxStyleProps } from './style'
-import omit from 'utils/object/omit'
+import { RowBoxStyleProps, useRowBoxStyle } from './style'
+import pick from 'utils/object/pick'
 
 export interface RowBoxProps extends DivProps, RowBoxStyleProps {}
 
@@ -10,8 +10,8 @@ export interface RowBoxProps extends DivProps, RowBoxStyleProps {}
  * 将子元素显示在一行，相当于flexbox
  */
 const RowBox = (props: RowBoxProps) => {
-  const restProps = omit(props, rowBoxStylePropNames)
-  return <Div {...restProps} css={mix(cssRowBoxStyle(props), props.css)}></Div>
+  const { coreCss } = useRowBoxStyle(props)
+  return <Div {...pick(props, divProps)} css={mix(props.css, coreCss)}></Div>
 }
 
 export default RowBox

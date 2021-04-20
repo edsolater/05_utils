@@ -1,54 +1,37 @@
 import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mix } from 'style/cssParser'
-import { ICSS } from 'style/ICSS'
 import { toPx } from 'style/cssUnits'
 
 // 声明组件有哪些props是纯粹改变外观的
 export interface ButtonStyleProps {
-  /**对组件的每一个part或虚拟part定义样式 */
-  cssPart?: {
-    primary?: ICSS
-    border?: ICSS
-    text?: ICSS
-    small?: ICSS
-    middle?: ICSS
-    large?: ICSS
-  }
   /**
    * 按钮元素的权重
    * 默认：border（空心按钮）
    */
-  type?: 'primary' | 'border' | 'text'
+  type?: 'fill' | 'border' | 'text'
   /**
    * 按钮的大小
    */
   size?: 'small' | 'middle' | 'large'
 }
 
-// 表明具体有哪些props是纯粹改变外观的（JS代码声明，也便于提取相关属性）
-export const buttonStylePropNames: (keyof ButtonStyleProps)[] = ['cssPart', 'type', 'size']
-
+//IDEA: 可能类似于Vue2的固定名称的对象是个好办法
 // 样式的具体css-in-js实现
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const cssButtonBaseStyle = ({
-  size = 'middle',
-  type = 'border',
-  cssPart
-}: ButtonStyleProps) =>
-  mix(
+export const useButtonStyle = ({ size = 'middle', type = 'border' }: ButtonStyleProps) => {
+  const coreCss = mix(
     {
-      appearance: 'none',
-      borderRadius: 2,
+      style: 'none',
       borderWidth: 0,
       cursor: 'pointer',
       userSelect: 'none',
       width: 'max-content',
       boxSizing: 'border-box'
     },
-    size === 'small' && { padding: toPx(2, 8), fontSize: 14 },
-    size === 'middle' && { padding: toPx(6, 14), fontSize: 14 },
-    size === 'large' && { padding: toPx(12, 16), fontSize: 16 },
-    type === 'primary' && {
+    size === 'small' && { padding: toPx(2, 8), fontSize: 14, borderRadius: 2 },
+    size === 'middle' && { padding: toPx(6, 14), fontSize: 14, borderRadius: 4 },
+    size === 'large' && { padding: toPx(10, 16), fontSize: 16, borderRadius: 6 },
+    type === 'fill' && {
       color: cssVar('--button-text-color', 'white'),
       backgroundColor: cssVar('--button-background-color', '#666'),
       ':hover': { filter: cssBrightness(1.4) },
@@ -71,12 +54,9 @@ export const cssButtonBaseStyle = ({
       }
     },
     type === 'text' && {
-      color: cssVar('--button-text-color')
-    },
-    size === 'small' && cssPart?.small,
-    size === 'middle' && cssPart?.middle,
-    size === 'large' && cssPart?.large,
-    type === 'primary' && cssPart?.primary,
-    type === 'border' && cssPart?.border,
-    type === 'text' && cssPart?.text
+      color: cssVar('--button-text-color'),
+      backgroundColor: 'transparent'
+    }
   )
+  return { coreCss }
+}

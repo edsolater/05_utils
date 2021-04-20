@@ -5,7 +5,7 @@ import { cssMixins } from 'style/cssMixins'
 import { mix } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 
-export interface FeatureProps {
+export interface InputStyleProps {
   /**
    * CSS：根节点
    */
@@ -44,7 +44,7 @@ export interface FeatureProps {
 
 // 样式的具体css-in-js实现
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const useFeature = (
+export const useInputStyle = (
   {
     css,
     cssInputIcon,
@@ -52,7 +52,7 @@ export const useFeature = (
     inputFocusColor,
     inputCaretColor = inputFocusColor,
     inputBoxWidth
-  }: FeatureProps,
+  }: InputStyleProps,
   {
     isTextarea
   }: {

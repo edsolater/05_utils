@@ -8,10 +8,10 @@ import TagExample from './TagExample'
 
 const AllExamples = () => (
   <>
-    {/* <ButtonExample />
+    <ButtonExample />
     <IconExample />
     <CardExample />
-    <InputExample /> */}
+    <InputExample />
     <DropdownExample />
     <TagExample />
   </>
