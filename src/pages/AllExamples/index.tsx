@@ -4,6 +4,7 @@ import CardExample from './CardExample'
 import DropdownExample from './DropdownExample'
 import IconExample from './IconExample'
 import InputExample from './InputExample'
+import TagExample from './TagExample'
 
 const AllExamples = () => (
   <>
@@ -12,6 +13,7 @@ const AllExamples = () => (
     <CardExample />
     <InputExample /> */}
     <DropdownExample />
+    <TagExample />
   </>
 )
 export default AllExamples
