@@ -5,7 +5,7 @@ const toCSS = (v: CSSValue) => (typeof v === 'number' ? toPx(v) : v)
 /* ---------------------------------- css变量 --------------------------------- */
 
 export const cssVar = <T>(cssVariableName: T, fallback?: CSSValue) =>
-  `var(${cssVariableName}${fallback ? ', ' + toCSS(fallback) : ''})`
+  `var(${cssVariableName}${fallback ? ', ' + fallback : ''})`
 export const cssVarName = <T extends string>(name: T) => '--' + name
 /* --------------------------------- 传统css函数 -------------------------------- */
 
@@ -25,5 +25,3 @@ export const cssTransform = (options: {
 /* ---------------------------- css filter 家族 ---------------------------- */
 
 export const cssBrightness = (v?: number | string) => (isExist(v) ? `brightness(${v})` : '')
-
-

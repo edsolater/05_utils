@@ -5,9 +5,11 @@ import DropdownExample from './DropdownExample'
 import IconExample from './IconExample'
 import InputExample from './InputExample'
 import TagExample from './TagExample'
+import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <>
+    <TransformExample />
     <ButtonExample />
     <IconExample />
     <CardExample />

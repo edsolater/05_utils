@@ -2,7 +2,6 @@ import Div, { DivProps } from 'baseUI/Div'
 import React from 'react'
 import { toPx } from 'style/cssUnits'
 import { cssValues } from 'style/cssValue'
-import { ExampleGroupProps } from './ExampleGroup'
 export interface ExampleCardProps extends DivProps {
   title?: string
 }
@@ -11,6 +10,7 @@ const ExampleCard = (props: ExampleCardProps) => (
     {...props}
     css={{
       display: 'grid',
+      position: 'relative',
       gap: 32,
       boxShadow: cssValues.smoothShadow,
       width: 'clamp(400px, 80vw, 1200px)',
