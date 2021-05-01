@@ -1,3 +1,4 @@
+import DefaultPropsProvider from 'baseUI/DefaultPropsProvider'
 import React from 'react'
 import ButtonExample from './ButtonExample'
 import CardExample from './CardExample'
@@ -8,7 +9,7 @@ import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 
 const AllExamples = () => (
-  <>
+  <DefaultPropsProvider defaultProps={{ ButtonProps: { htmlProps: { title: 'defaultProps' } } }}>
     <TransformExample />
     <ButtonExample />
     <IconExample />
@@ -16,6 +17,6 @@ const AllExamples = () => (
     <InputExample />
     <DropdownExample />
     <TagExample />
-  </>
+  </DefaultPropsProvider>
 )
 export default AllExamples
