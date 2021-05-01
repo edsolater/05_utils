@@ -35,7 +35,7 @@ export interface TransformProps
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
  */
-const Tramsform = (props: TransformProps) => {
+const Transform = (props: TransformProps) => {
   const box = useRef<HTMLDivElement>()
   const restProps = omit(props, [...featureResizeProps, ...featureMoveProps, ...featureScaleProps])
   const { resizeDot } = useFeatureResize(box, props)
@@ -65,4 +65,4 @@ const Tramsform = (props: TransformProps) => {
     </Div>
   )
 }
-export default Tramsform
+export default Transform

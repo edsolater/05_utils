@@ -1,7 +1,7 @@
 /*******************************
  * 实验 draggable list 的
  ******************************/
-import Tramsform from 'baseUI/Transform'
+import Transform from 'baseUI/Transform'
 import React, { FC, useRef } from 'react'
 import { Direction } from 'typings/constants'
 import Div from 'baseUI/Div'
@@ -90,7 +90,7 @@ const SortableList: FC<{
   return (
     <Div css={{ position: 'absolute', display: 'grid' }}>
       {itemData.map((text, index) => (
-        <Tramsform
+        <Transform
           key={index}
           domRef={(el) =>
             sizeInfo.current.set(index, {
@@ -148,7 +148,7 @@ const SortableList: FC<{
           <Div className='temp-item' css={draggableItemCSS}>
             {text}
           </Div>
-        </Tramsform>
+        </Transform>
       ))}
     </Div>
   )
