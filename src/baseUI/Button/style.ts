@@ -46,7 +46,7 @@ const buttonDefaultCSS = {
   }
 }
 
-// FIXME: 因为是hooks，需要计算多次，这是没有必要的。
+// FIXME: 因为是hooks，不同的<Button>组件需要都需要计算，这是没有必要的。
 export function useButtonStyle({ size = 'middle', type = 'border' }: ButtonStyleProps) {
   const { button: buttonCustomCSS = {} } = useContext(CSSConfigContext)
   const buttonCSS = merge(buttonDefaultCSS, buttonCustomCSS)
