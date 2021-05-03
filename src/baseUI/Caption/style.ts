@@ -1,3 +1,4 @@
+import cssColor from 'style/cssColor'
 import { cssVar } from 'style/cssFunctions'
 import { mix } from 'style/cssParser'
 
@@ -14,7 +15,7 @@ export const useCaptionStyle = ({ align = 'left' }: CaptionStyleProps) => {
       fontSize: '0.8em',
       color: cssVar(
         '--caption-text-color',
-        'hsl(0deg 0% 20% / 70%)' /* TODO: 在model目录下，自己写个颜色生成器以便管理 */
+        cssColor.grayText
       )
     },
     align === 'left' && { textAlign: 'left' },
