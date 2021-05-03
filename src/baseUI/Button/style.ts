@@ -1,6 +1,10 @@
+import { CSSConfigContext } from '../CSSConfigProvider'
+import { useContext, useMemo } from 'react'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mix } from 'style/cssParser'
-import { toPx } from 'style/cssUnits'
+import merge from 'utils/object/merge'
+
+//IDEA: 正常情况下，需要更改的只有颜色，因为能过渡处理
 
 // 声明组件有哪些props是纯粹改变外观的
 export interface ButtonStyleProps {
@@ -14,49 +18,92 @@ export interface ButtonStyleProps {
    */
   size?: 'small' | 'middle' | 'large'
 }
+export type ButtonCSSVariableNames =
+  | '--button-background-color'
+  | '--button-text-color'
+  | '--button-border-color'
+/**
+ * 只配置尺寸信息等频繁自定义的项目
+ */
+export type ButtonDefaultCSS = Partial<typeof buttonDefaultCSS>
+const buttonDefaultCSS = {
+  borderWidth: '1px',
+  borderLineOpacity: 0.3,
+  small: {
+    padding: '2px 8px',
+    fontSize: '14px',
+    borderRadius: '2px'
+  },
+  middle: {
+    padding: '6px 14px',
+    fontSize: '14px',
+    borderRadius: '4px'
+  },
+  large: {
+    padding: '10px 16px',
+    fontSize: '16px',
+    borderRadius: '6px'
+  }
+}
 
-//IDEA: 可能类似于Vue2的固定名称的对象是个好办法
-// 样式的具体css-in-js实现
-// BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const useButtonStyle = ({ size = 'middle', type = 'border' }: ButtonStyleProps) => {
-  const coreCss = mix(
-    {
-      style: 'none',
-      borderWidth: 0,
-      cursor: 'pointer',
-      userSelect: 'none',
-      width: 'max-content',
-      boxSizing: 'border-box'
-    },
-    size === 'small' && { padding: toPx(2, 8), fontSize: 14, borderRadius: 2 },
-    size === 'middle' && { padding: toPx(6, 14), fontSize: 14, borderRadius: 4 },
-    size === 'large' && { padding: toPx(10, 16), fontSize: 16, borderRadius: 6 },
-    type === 'fill' && {
-      color: cssVar('--button-text-color', 'white'),
-      backgroundColor: cssVar('--button-background-color', '#666'),
-      ':hover': { filter: cssBrightness(1.4) },
-      ':active': { filter: cssBrightness(0.8) }
-    },
-    type === 'border' && {
-      position: 'relative',
-      backgroundColor: 'transparent',
-      color: cssVar('--button-text-color'),
-      '::before': {
-        content: "''",
-        position: 'absolute',
-        inset: 0,
-        borderRadius: 'inherit',
-        borderWidth: cssVar('--button-border-width', '1px'),
-        borderStyle: 'solid',
-        borderColor: cssVar('--button-border-color', 'currentcolor'),
-        opacity: 0.3,
-        color: 'inherit'
-      }
-    },
-    type === 'text' && {
-      color: cssVar('--button-text-color'),
-      backgroundColor: 'transparent'
-    }
+// FIXME: 因为是hooks，需要计算多次，这是没有必要的。
+export function useButtonStyle({ size = 'middle', type = 'border' }: ButtonStyleProps) {
+  const { button: buttonCustomCSS = {} } = useContext(CSSConfigContext)
+  const buttonCSS = merge(buttonDefaultCSS, buttonCustomCSS)
+  const coreCss = useMemo(
+    () =>
+      mix(
+        {
+          style: 'none',
+          borderWidth: 0,
+          cursor: 'pointer',
+          userSelect: 'none',
+          width: 'max-content',
+          boxSizing: 'border-box'
+        },
+        size === 'small' && {
+          padding: buttonCSS.small.padding,
+          fontSize: buttonCSS.small.fontSize,
+          borderRadius: buttonCSS.small.borderRadius
+        },
+        size === 'middle' && {
+          padding: buttonCSS.middle.padding,
+          fontSize: buttonCSS.middle.fontSize,
+          borderRadius: buttonCSS.middle.borderRadius
+        },
+        size === 'large' && {
+          padding: buttonCSS.large.padding,
+          fontSize: buttonCSS.large.fontSize,
+          borderRadius: buttonCSS.large.borderRadius
+        },
+        type === 'fill' && {
+          color: cssVar('--button-text-color', 'white'),
+          backgroundColor: cssVar('--button-background-color', '#666'),
+          ':hover': { filter: cssBrightness(1.4) },
+          ':active': { filter: cssBrightness(0.8) }
+        },
+        type === 'border' && {
+          position: 'relative',
+          backgroundColor: 'transparent',
+          color: cssVar('--button-text-color'),
+          '::before': {
+            content: "''",
+            position: 'absolute',
+            inset: '0',
+            borderRadius: 'inherit',
+            borderWidth: buttonCSS.borderWidth,
+            borderStyle: 'solid',
+            borderColor: cssVar('--button-border-color', 'currentcolor'),
+            opacity: buttonCSS.borderLineOpacity,
+            color: 'inherit'
+          }
+        },
+        type === 'text' && {
+          color: cssVar('--button-text-color'),
+          backgroundColor: 'transparent'
+        }
+      ),
+    [buttonCustomCSS]
   )
   return { coreCss }
 }

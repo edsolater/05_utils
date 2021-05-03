@@ -9,5 +9,6 @@ export default {
   darkMask:'hsl(0deg 0% 0% / 17%)',
   darkMaskLighter:'hsl(0deg 0% 0% / 8%)',
 } as const
+export type CSSColorString = string
 
 // IDEA: 根据UX相关设计软件，也需要管理字体，也就是说，还需要个cssFont对象

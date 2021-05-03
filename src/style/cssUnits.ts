@@ -1,10 +1,13 @@
 import { MayDeepArray } from 'typings/tools'
-import isArray from 'utils/judgers/isArray'
-import isNumber from 'utils/judgers/isNumber'
-import isString from 'utils/judgers/isString'
 export type CSSLength = number | string
 export type CSSValue = number | string
-export type CSSLongValue = CSSValue | CSSValue[]
+/**
+ * 表示倍率，常用于line-height、brightness()
+ */
+export type CSSNumber = string
+/**
+ * TODO css能用数字表示，过于灵活了，不妥。这里有太多的过度设计了。
+ */
 /**
  * 更新css数值的单位
  * @param val css值
@@ -23,30 +26,6 @@ function changeUnit(val: number | string, unit: string) {
   }
 }
 
-/**
- * 使数值或字符串值变成css字符串值
- * @param n css值
- * @returns css字符串值
- * @example
- * toCSS(0) // '0'
- * toCSS(1) // '1px'
- * toCSS('2') // '2px'
- * toCSS('2px') // '2px'
- * toCSS('2vw') // '2vw'
- * toCSS('Inherit') // 'Inherit'
- * toCSS([0, 1, '2vw']) // '0 1px 2vw'
- */
-export const toCSS = (n: CSSLongValue): string => {
-  if (isArray(n)) {
-    return n.map(toCSS).join(' ') // TODO: 这是不是过度设计了
-  } else if (isNumber(n)) {
-    return toPx(n)
-  } else if (isString(n)) {
-    return /^\d+$/.test(n) ? toPx(n) : n
-  } else {
-    return ''
-  }
-}
 
 /**
  * 给css变量加上单位（使用css数值的clac+var转换模式，改变数值后无需再通过JS重新固定单位）
@@ -59,20 +38,7 @@ export const toCSS = (n: CSSLongValue): string => {
 export const attachCSSVariableUnit = (variableName: string, unit: 'px' | 'deg' | (string & {})) =>
   `calc(var(${variableName}, 0) * 1${unit})`
 
-
 export const fromPx = (rule: string): number => parseFloat(rule)
-
-export const toVw = (...ns: MayDeepArray<number | string>[]) =>
-  ns
-    .flat(Infinity)
-    .map((n) => changeUnit(n, 'vw'))
-    .join(' ')
-
-export const toVh = (...ns: MayDeepArray<number | string>[]) =>
-  ns
-    .flat(Infinity)
-    .map((n) => changeUnit(n, 'vh'))
-    .join(' ')
 
 export const toPx = (...ns: MayDeepArray<number | string>[]) =>
   ns

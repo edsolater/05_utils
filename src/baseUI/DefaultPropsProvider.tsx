@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode } from 'react'
-import { TagProps } from 'templates/Tag0.5'
+import { TagProps } from './Tag'
 import { ButtonProps } from './Button'
 import { CaptionProps } from './Caption'
 import { CardProps } from './Card'
@@ -12,12 +12,7 @@ import { RowBoxProps } from './RowBox'
 import { ScrollProps } from './Scroll/_interface'
 import { TransformProps } from './Transform'
 //#region ------------------- 非props类型声明 -------------------
-type ColorString = string
 interface DefaultPropsObject {
-  // TODO 这里应有另一个GlobalTheme组件
-  global?: {
-    primaryColor?: ColorString
-  }
   ButtonProps?: ButtonProps
   CaptionProps?: CaptionProps
   CardProps?: CardProps

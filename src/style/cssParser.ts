@@ -4,7 +4,6 @@ import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
 import isObjectLiteral from 'utils/judgers/isObjectLiteral'
 import separate from 'utils/object/separate'
-import { toCSS } from './cssUnits'
 import { ICSS, ICSSObject } from './ICSS'
 import { mergeDeep } from '../utils/merge'
 import mapValues from 'utils/object/mapValues'
@@ -57,7 +56,7 @@ function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
       (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
         acc +
         (property === 'translate'
-          ? `translate(${flat(value).map(toCSS).join(', ') || 0})`
+          ? `translate(${flat(value).join(', ') || 0})`
           : property === 'scale'
           ? `scale(${flat(value).join(', ') || 1})`
           : property === 'rotate'
