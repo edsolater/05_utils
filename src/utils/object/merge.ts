@@ -2,6 +2,7 @@ import isArray from '../judgers/isArray'
 import isObject from '../judgers/isObject'
 import concatArrays from '../array/concat'
 import mergeObjects from './mergeObjects'
+import cache from 'utils/functionFactory/cache'
 
 /**
  * 合并多个对象/数组【对象会浅复制成新对象，数组会链接成更长的新数组】
@@ -18,3 +19,6 @@ function merge(...targets: any[]) {
   }
 }
 export default merge
+
+/**merge函数的cache版本， TODO但要想想，这cache的结构会不会导致内存泄漏啊 */
+export const cacheMerge = cache(merge)
