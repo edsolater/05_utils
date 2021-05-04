@@ -1,7 +1,7 @@
 import { CSSConfigContext } from '../CSSConfigProvider'
 import { useContext, useMemo } from 'react'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import merge from 'utils/object/merge'
 
 
@@ -48,13 +48,13 @@ const buttonDefaultCSS = {
 }
 
 // FIXME: 因为是hooks，不同的<Button>组件需要都需要计算，这是没有必要的。
-// TODO: 需要在这个文件中，做一个 Cache
+// TODO: 需要在这个文件中，做一个 Cache， 做一个 cachedMerge 与 cachedMix
 export function useButtonStyle({ size = 'middle', type = 'border' }: ButtonStyleProps) {
   const { button: buttonCustomCSS = {} } = useContext(CSSConfigContext)
   const buttonCSS = merge(buttonDefaultCSS, buttonCustomCSS)
   const coreCss = useMemo(
     () =>
-      mix(
+      mixCSSObjects(
         {
           style: 'none',
           borderWidth: 0,

@@ -1,6 +1,6 @@
 import React from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { useCardStyle, CardStyleProps } from './style'
 import pick from 'utils/object/pick'
 
@@ -8,7 +8,7 @@ export interface CardProps extends DivProps, CardStyleProps {}
 
 const Card = (props: CardProps) => {
   const { coreCss } = useCardStyle(props)
-  return <Div {...pick(props, divProps)} css={mix(props.css, coreCss)} />
+  return <Div {...pick(props, divProps)} css={mixCSSObjects(props.css, coreCss)} />
 }
 export default Card
 

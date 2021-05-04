@@ -1,6 +1,6 @@
 import React, { Fragment, ReactNode, useRef, useState } from 'react'
 import Div, { DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { cssMixins } from "style/cssMixins"
 import Scroll from 'baseUI/Scroll'
 import { ScrollHandles, ScrollEvent } from 'baseUI/Scroll/_interface'
@@ -48,12 +48,12 @@ const GroupScroll = <T extends any>({
       {/* 控制按钮（上一页/下一页） */}
       <Div
         className='GroupScroll-controller'
-        css={mix(cssMixins.horizontalLayout, { fontSize: '3em' })}
+        css={mixCSSObjects(cssMixins.horizontalLayout, { fontSize: '3em' })}
       >
         <Div
           className='GroupScroll-controller__left-arrow'
           onClick={toLeft}
-          css={mix(cssMixins.buttonStyle)}
+          css={mixCSSObjects(cssMixins.buttonStyle)}
         >
           {'◀'}
         </Div>
@@ -61,7 +61,7 @@ const GroupScroll = <T extends any>({
         <Div
           className='GroupScroll-controller__right-arrow'
           onClick={toRight}
-          css={mix(cssMixins.buttonStyle)}
+          css={mixCSSObjects(cssMixins.buttonStyle)}
         >
           {'▶'}
         </Div>

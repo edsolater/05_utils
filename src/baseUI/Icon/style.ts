@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import cssColor from 'style/cssColor'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 
 // 声明组件有哪些props是纯粹改变外观的
 export interface IconStyleProps {
@@ -37,7 +37,7 @@ export const useIconStyle = (
 ) => {
   const coreCss = useMemo(
     () =>
-      mix({
+      mixCSSObjects({
         // TODO 常见的图标尺寸要查询： 24*24 48*48 等等
         width: cssVar('--icon-width', '1.5rem'),
         height: cssVar('--icon-width', '1.5rem'),
@@ -65,7 +65,7 @@ export const useIconStyle = (
   )
   const iconImageCss = useMemo(
     () =>
-      mix({
+      mixCSSObjects({
         width: '100%',
         height: '100%',
         objectFit: 'contain'

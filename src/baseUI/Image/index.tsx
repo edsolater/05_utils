@@ -1,6 +1,6 @@
 import React from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { useImageStyle, ImageStyleProps } from './style'
 import pick from 'utils/object/pick'
 
@@ -21,7 +21,7 @@ const Image = (props: ImageProps) => {
       _tagName='img'
       {...pick(props, divProps)}
       htmlProps={{ src: props.src, alt: props.alt, ...props.htmlProps }}
-      css={mix(props.css, coreCss)}
+      css={mixCSSObjects(props.css, coreCss)}
     ></Div>
   )
 }

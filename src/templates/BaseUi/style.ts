@@ -1,7 +1,7 @@
 import { CSSConfigContext } from 'baseUI/CSSConfigProvider'
 import { useContext, useMemo } from 'react'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import merge from 'utils/object/merge'
 
 //IDEA: 正常情况下，需要更改的只有颜色，因为能过渡处理
@@ -53,7 +53,7 @@ export function useBaseUiStyle({ size = 'middle', type = 'border' }: BaseUiStyle
   const baseUiCSS = merge(baseUiDefaultCSS, baseUiCustomCSS)
   const coreCss = useMemo(
     () =>
-      mix(
+      mixCSSObjects(
         {
           style: 'none',
           borderWidth: 0,

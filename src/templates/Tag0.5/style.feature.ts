@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import cssColor from 'style/cssColor'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 
 export interface FeatureProps {
@@ -19,7 +19,7 @@ export interface FeatureProps {
 export const useFeature = ({ cssTagCloseIcon }: FeatureProps) => {
   const coreCss = useMemo(
     () =>
-      mix({
+      mixCSSObjects({
         paddingLeft: '8px',
         paddingRight: '8px',
         display: 'inline-flex',
@@ -30,7 +30,7 @@ export const useFeature = ({ cssTagCloseIcon }: FeatureProps) => {
     []
   )
 
-  const tagCloseIconCss = useMemo(() => mix(cssTagCloseIcon, {}), [cssTagCloseIcon])
+  const tagCloseIconCss = useMemo(() => mixCSSObjects(cssTagCloseIcon, {}), [cssTagCloseIcon])
   const tagCloseIconColor = cssColor.darkText
   return { coreCss, tagCloseIconCss, tagCloseIconColor }
 }

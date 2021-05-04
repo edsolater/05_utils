@@ -1,6 +1,6 @@
 import React from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { useIconStyle, IconStyleProps } from './style'
 import { useFeature as useFeatureCore, FeatureProps as FeatureCoreProps } from './core.feature'
 import Image, { ImageProps } from 'baseUI/Image'
@@ -14,7 +14,7 @@ const Icon = (props: IconProps) => {
   const { coreCss, iconImageCss } = useIconStyle(props, { src })
 
   return (
-    <Div {...pick(props, divProps)} css={mix(props.css, coreCss)}>
+    <Div {...pick(props, divProps)} css={mixCSSObjects(props.css, coreCss)}>
       {sholdUseRaw && (
         <Image
           src={src}

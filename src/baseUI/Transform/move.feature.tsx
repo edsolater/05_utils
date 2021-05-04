@@ -8,7 +8,7 @@ import attachPointer from 'helper/manageEvent/attachPointer'
 import changeTransform from 'helper/manageStyle/changeTransform'
 import inertialSlide from 'helper/manageStyle/inertialSlide'
 import { RefObject, useEffect, useMemo } from 'react'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { Vector, Delta2dTranslate } from 'typings/constants'
 import { attachCSSVariableUnit } from 'style/cssUnits'
 import asyncInvoke from './helper/asyncInvoke'
@@ -147,7 +147,7 @@ export function useFeatureMove(
   }, [])
   const css = useMemo(
     () =>
-      mix({
+      mixCSSObjects({
         touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
         userSelect: 'none', // 禁用掉文字的用户选择
         translate: movable

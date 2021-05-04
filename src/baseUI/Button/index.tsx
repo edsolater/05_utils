@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { useButtonStyle, ButtonStyleProps } from './style'
 import pick from 'utils/object/pick'
 import { DefaultPropsContext } from 'baseUI/DefaultPropsProvider'
@@ -15,7 +15,7 @@ const Button = (props: ButtonProps) => {
   const defaultProps = useContext(DefaultPropsContext)
   const mprops = merge(defaultProps.ButtonProps, props)
   const { coreCss } = useButtonStyle(mprops)
-  return <Div _tagName='button' {...pick(mprops, divProps)} css={mix(mprops.css, coreCss)}></Div>
+  return <Div _tagName='button' {...pick(mprops, divProps)} css={mixCSSObjects(mprops.css, coreCss)}></Div>
 }
 
 export default Button

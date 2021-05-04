@@ -16,7 +16,7 @@ import {
 } from './hover.feature'
 import { TagMap } from './TagMap'
 import { IRefs, mergeRefs } from './util/mergeRefs'
-import merge from 'utils/array/merge'
+import concat from 'utils/array/concat'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
 export interface DivProps<TagName extends keyof TagMap = 'div'>
@@ -36,7 +36,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'>
   children?: ReactNode
   htmlProps?: JSX.IntrinsicElements[TagName]
 }
-export const divProps: ReadonlyArray<keyof DivProps> = merge(
+export const divProps: ReadonlyArray<keyof DivProps> = concat(
   ['_tagName', 'domRef', 'className', 'css', 'style', 'children', 'htmlProps'],
   featureClickProps,
   featureHoverProps

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 
 export interface DropdownStyleProps {
@@ -14,7 +14,7 @@ export interface DropdownStyleProps {
 export const useDropdownStyle = ({ cssDropdownCard }: DropdownStyleProps) => {
   const coreCss = useMemo(
     () =>
-      mix({
+      mixCSSObjects({
         position: 'relative'
       }),
     []
@@ -22,7 +22,7 @@ export const useDropdownStyle = ({ cssDropdownCard }: DropdownStyleProps) => {
 
   const dropdownCardCss = useMemo(
     () =>
-      mix(cssDropdownCard, {
+      mixCSSObjects(cssDropdownCard, {
         position: 'absolute',
         top: 'calc(100% + 8px)'
       }),

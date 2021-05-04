@@ -7,14 +7,19 @@ import separate from 'utils/object/separate'
 import { ICSS, ICSSObject } from './ICSS'
 import { mergeDeep } from '../utils/merge'
 import mapValues from 'utils/object/mapValues'
+import { MayDeepArray } from 'typings/tools'
 
 /**
  * 用在非<Div>的组件上，与toCss目的相反
  * 组合cssMixin
  */
-export function mix(...icsses: (ICSS | ((...any: any[]) => ICSS) | undefined | {})[]): ICSS {
+export function mixCSSObjects(
+  ...icsses: MayDeepArray<ICSS | ((...any: any[]) => ICSS) | undefined | {}>[]
+): ICSS {
   //@ts-expect-error
-  return icsses.map((icss) => (isFunction(icss) ? icss() : icss)).filter(isObject)
+  return flat(icsses)
+    .map((icss) => (isFunction(icss) ? icss() : icss))
+    .filter(isObject)
 }
 
 /**在最终解析CSS时，中间件队列 */

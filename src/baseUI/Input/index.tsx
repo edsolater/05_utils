@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { useInputStyle, InputStyleProps } from './style'
 import Icon, { IconProps } from 'baseUI/Icon'
 import pick from 'utils/object/pick'

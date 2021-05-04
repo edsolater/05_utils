@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css as cssMerge, CSSObject } from '@emotion/react'
 import { CSSProperties, FC, useEffect, useRef } from 'react'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import Div from './Div'
 
 const Video: FC<{
@@ -31,7 +31,7 @@ const Video: FC<{
       _tagName='video'
       domRef={videoRef}
       className={className}
-      css={mix([
+      css={mixCSSObjects([
         {
           objectFit: fitMode,
           borderRadius: shape === 'circle' ? 10000 : undefined

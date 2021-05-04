@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import cssColor from 'style/cssColor'
 import { cssVar } from 'style/cssFunctions'
 import { cssMixins } from 'style/cssMixins'
-import { mix } from 'style/cssParser'
+import { mixCSSObjects } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 
 export interface InputStyleProps {
@@ -64,7 +64,7 @@ export const useInputStyle = (
 ) => {
   const coreCss = useMemo(
     () =>
-      mix(
+      mixCSSObjects(
         {
           cursor: 'text',
           border: `1px solid ${cssColor.whitesmoke}`,
@@ -84,7 +84,7 @@ export const useInputStyle = (
 
   const inputIconCss = useMemo(
     () =>
-      mix(
+      mixCSSObjects(
         {
           flex: 'none'
         },
@@ -95,7 +95,7 @@ export const useInputStyle = (
 
   const inputBodyCss = useMemo(
     () =>
-      mix(
+      mixCSSObjects(
         {
           cursor: 'inherit',
           flex: '1 0 auto',
@@ -105,13 +105,13 @@ export const useInputStyle = (
           border: 'none'
         },
         isTextarea &&
-          mix(cssMixins.noScrollbar, {
+          mixCSSObjects(cssMixins.noScrollbar, {
             resize: 'none'
           }),
         cssInputBody
       ),
     [cssInputBody]
   )
-  const textareaModeCss = useMemo(() => mix(inputBodyCss, {}), [cssInputBody])
+  const textareaModeCss = useMemo(() => mixCSSObjects(inputBodyCss, {}), [cssInputBody])
   return { coreCss, inputIconCss, inputBodyCss, textareaModeCss }
 }
