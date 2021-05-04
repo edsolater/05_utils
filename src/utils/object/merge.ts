@@ -6,6 +6,7 @@ import cache from 'utils/functionFactory/cache'
 
 /**
  * 合并多个对象/数组【对象会浅复制成新对象，数组会链接成更长的新数组】
+ * FIXME: 这个类型推断不对，并没有concat功效
  */
 function merge<T, U>(target1: T, target2: U): T & U
 function merge<T, U, V>(target1: T, target2: U, target3: V): T & U & V
