@@ -3,7 +3,7 @@ import Div, { divProps, DivProps } from 'baseUI/Div'
 import { mixCSSObjects } from 'style/cssParser'
 import { useBaseUiStyle, BaseUiStyleProps } from './style'
 import pick from 'utils/object/pick'
-import { DefaultPropsContext } from 'baseUI/DefaultPropsProvider'
+import { DefaultPropsContext } from 'baseUI/GlobalSettings'
 import merge from 'utils/object/merge'
 
 export interface BaseUiProps extends DivProps<'baseUi'>, BaseUiStyleProps {}

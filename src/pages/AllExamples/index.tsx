@@ -1,6 +1,5 @@
-import DefaultPropsProvider from 'baseUI/DefaultPropsProvider'
+import GlobalSettings from 'baseUI/GlobalSettings'
 import React from 'react'
-import CSSConfigProvider from '../../baseUI/CSSConfigProvider'
 import ButtonExample from './ButtonExample'
 import CardExample from './CardExample'
 import DropdownExample from './DropdownExample'
@@ -10,8 +9,7 @@ import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 
 const AllExamples = () => (
-  <DefaultPropsProvider defaultProps={{ ButtonProps: { htmlProps: { title: 'defaultProps' } } }}>
-    <CSSConfigProvider cssConfig={{}}>
+  <GlobalSettings defaultProps={{ ButtonProps: { htmlProps: { title: 'defaultProps' } } }}>
       <TransformExample />
       <ButtonExample />
       <IconExample />
@@ -19,7 +17,6 @@ const AllExamples = () => (
       <InputExample />
       <DropdownExample />
       <TagExample />
-    </CSSConfigProvider>
-  </DefaultPropsProvider>
+  </GlobalSettings>
 )
 export default AllExamples

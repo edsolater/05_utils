@@ -11,33 +11,30 @@ import { InputProps } from './Input'
 import { RowBoxProps } from './RowBox'
 import { ScrollProps } from './Scroll/_interface'
 import { TransformProps } from './Transform'
-//#region ------------------- 非props类型声明 -------------------
-interface DefaultPropsObject {
-  ButtonProps?: ButtonProps
-  CaptionProps?: CaptionProps
-  CardProps?: CardProps
-  DivProps?: DivProps
-  DropdownProps?: DropdownProps
-  IconProps?: IconProps
-  ImageProps?: ImageProps
-  InputProps?: InputProps
-  RowBoxProps?: RowBoxProps
-  ScrollProps?: ScrollProps
-  TagProps?: TagProps
-  TransformProps?: TransformProps
-}
-//#endregion
 
 //#region ------------------- props声明 -------------------
-export interface DefaultPropsProps {
+export interface DefaultBaseUIProps {
   children?: ReactNode
-  defaultProps?: DefaultPropsObject
+  defaultProps?: {
+    ButtonProps?: ButtonProps
+    CaptionProps?: CaptionProps
+    CardProps?: CardProps
+    DivProps?: DivProps
+    DropdownProps?: DropdownProps
+    IconProps?: IconProps
+    ImageProps?: ImageProps
+    InputProps?: InputProps
+    RowBoxProps?: RowBoxProps
+    ScrollProps?: ScrollProps
+    TagProps?: TagProps
+    TransformProps?: TransformProps
+  }
 }
 //#endregion
 
 //#region ------------------- 实现 -------------------
-export const DefaultPropsContext = createContext<DefaultPropsObject>({})
-export default function DefaultPropsProvider(props: DefaultPropsProps) {
+export const DefaultPropsContext = createContext<DefaultBaseUIProps['defaultProps']>({})
+export default function DefaultPropsProvider(props: DefaultBaseUIProps) {
   return (
     <DefaultPropsContext.Provider value={props.defaultProps ?? {}}>
       {props.children}

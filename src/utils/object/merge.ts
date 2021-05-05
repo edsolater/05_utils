@@ -20,6 +20,3 @@ function merge(...targets: any[]) {
   }
 }
 export default merge
-
-/**merge函数的cache版本， TODO但要想想，这cache的结构会不会导致内存泄漏啊 */
-export const cacheMerge = cache(merge)
