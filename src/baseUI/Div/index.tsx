@@ -23,7 +23,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'>
   extends FeatureClickProps,
     FeatureHoverProps {
   // 只能低层组件使用
-  _tagName?: TagName
+  as?: TagName
   domRef?: IRefs<TagMap[TagName]>
   className?: ClassName
   // 对interface，typescript有缓存
@@ -37,7 +37,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'>
   htmlProps?: JSX.IntrinsicElements[TagName]
 }
 export const divProps: ReadonlyArray<keyof DivProps> = concat(
-  ['_tagName', 'domRef', 'className', 'css', 'style', 'children', 'htmlProps'],
+  ['as', 'domRef', 'className', 'css', 'style', 'children', 'htmlProps'],
   featureClickProps,
   featureHoverProps
 )
@@ -53,7 +53,7 @@ const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => 
     ref: mergeRefs(props.domRef, divRef),
     css: parseCSS(props.css)
   }
-  return jsx(props._tagName ?? 'div', allProps)
+  return jsx(props.as ?? 'div', allProps)
 }
 
 export default Div

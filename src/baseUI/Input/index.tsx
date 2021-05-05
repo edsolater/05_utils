@@ -50,7 +50,7 @@ const Input = (props: InputProps) => {
       {props.iconProps && <Icon className='__input-icon' {...props.iconProps} css={inputIconCss} />}
       <Div
         domRef={inputBodyRef}
-        _tagName={isTextarea ? 'textarea' : 'input'}
+        as={isTextarea ? 'textarea' : 'input'}
         css={inputBodyCss}
         className='__input-body'
         htmlProps={{

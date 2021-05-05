@@ -31,7 +31,7 @@ const Avatar: FC<
     >
       {src && (
         <Div
-          _tagName='img'
+          as='img'
           css={{
             width: '100%',
             height: '100%',

@@ -18,7 +18,7 @@ const Image = (props: ImageProps) => {
   const { coreCss } = useImageStyle(props)
   return (
     <Div
-      _tagName='img'
+      as='img'
       {...pick(props, divProps)}
       htmlProps={{ src: props.src, alt: props.alt, ...props.htmlProps }}
       css={mixCSSObjects(props.css, coreCss)}

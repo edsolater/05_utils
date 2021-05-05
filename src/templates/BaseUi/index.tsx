@@ -15,7 +15,7 @@ const BaseUi = (props: BaseUiProps) => {
   const defaultProps = useContext(DefaultPropsContext)
   const mprops = merge(defaultProps.BaseUiProps, props)
   const { coreCss } = useBaseUiStyle(mprops)
-  return <Div _tagName='baseUi' {...pick(mprops, divProps)} css={mixCSSObjects(mprops.css, coreCss)}></Div>
+  return <Div as='baseUi' {...pick(mprops, divProps)} css={mixCSSObjects(mprops.css, coreCss)}></Div>
 }
 
 export default BaseUi

@@ -10,13 +10,13 @@ import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings defaultProps={{ ButtonProps: { htmlProps: { title: 'defaultProps' } } }}>
-      <TransformExample />
-      <ButtonExample />
-      <IconExample />
-      <CardExample />
-      <InputExample />
-      <DropdownExample />
-      <TagExample />
+    <TransformExample />
+    <ButtonExample />
+    <IconExample />
+    <CardExample />
+    <InputExample />
+    <DropdownExample />
+    <TagExample />
   </GlobalSettings>
 )
 export default AllExamples

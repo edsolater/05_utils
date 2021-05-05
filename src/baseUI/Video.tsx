@@ -28,7 +28,7 @@ const Video: FC<{
   }, [srcObject])
   return (
     <Div
-      _tagName='video'
+      as='video'
       domRef={videoRef}
       className={className}
       css={mixCSSObjects([

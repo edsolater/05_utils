@@ -15,7 +15,7 @@ export interface ButtonStyleProps {
   size?: 'small' | 'middle' | 'large'
 }
 
-//IDEA: 正常情况下，需要更改的只有颜色和尺寸信息，因为能过渡处理
+//IDEA: 正常情况下，需要更改的只有颜色和尺寸信息（程度信息），因为能过渡处理
 export type ButtonCSSVariableNames =
   | '--button-background-color'
   | '--button-text-color'
