@@ -3,7 +3,7 @@ import flat from 'utils/array/flat'
 import isFunction from 'utils/judgers/isFunction'
 import isObject from 'utils/judgers/isObject'
 import isObjectLiteral from 'utils/judgers/isObjectLiteral'
-import separate from 'utils/object/separate'
+import divide from 'utils/object/divide'
 import { ICSS, ICSSObject } from './ICSS'
 import { mergeDeep } from '../utils/merge'
 import mapValues from 'utils/object/mapValues'
@@ -54,7 +54,7 @@ function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
   const cssKeys = Object.keys(cssObj)
   if (cssKeys.some((key) => targetProperties.includes(key))) {
     // 需要做解析处理
-    const [rest, toParse] = separate(cssObj, ['translate', 'scale', 'rotate', 'skew'])
+    const [rest, toParse] = divide(cssObj, ['translate', 'scale', 'rotate', 'skew'])
     //@ts-expect-error
     const composedValue: string = Object.entries(toParse).reduce(
       //@ts-expect-error
