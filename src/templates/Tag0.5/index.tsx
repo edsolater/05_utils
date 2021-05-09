@@ -4,7 +4,7 @@ import { useFeature as useFeatureStyle, FeatureProps as FeatureStyleProps } from
 import pick from 'utils/object/pick'
 import Card, { CardProps } from 'baseUI/Card'
 import Icon, { IconProps } from 'baseUI/Icon'
-import cssColor from 'style/cssColor'
+import cssColor from 'baseUI/__config/cssColor'
 
 // 应该就是一种 Card 的特殊呈现形式
 export interface TagProps extends DivProps, FeatureStyleProps {

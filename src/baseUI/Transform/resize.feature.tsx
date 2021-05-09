@@ -4,7 +4,7 @@ import attachPointer from 'helper/manageEvent/attachPointer'
 import { RefObject, useEffect, useMemo, useRef } from 'react'
 import React from 'react'
 import Div from 'baseUI/Div'
-import cssColor from 'style/cssColor'
+import cssColor from 'baseUI/__config/cssColor'
 import { cssTransform } from 'style/cssFunctions'
 import { toPer, halfPer } from 'style/cssUnits'
 

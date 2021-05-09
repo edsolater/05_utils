@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import cssColor from 'style/cssColor'
+import cssColor from 'baseUI/__config/cssColor'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mixCSSObjects } from 'style/cssParser'
 

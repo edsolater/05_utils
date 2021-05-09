@@ -1,4 +1,6 @@
-import { useMemo } from 'react'
+import cssFont from 'baseUI/__config/cssFont'
+import cssSize from 'baseUI/__config/cssSize'
+import cssColor from 'baseUI/__config/cssColor'
 import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mixCSSObjects } from 'style/cssParser'
 import cache from 'utils/functionFactory/cache'
@@ -45,29 +47,29 @@ export function _getButtonCSS({ size = 'middle', type = 'border' }: ButtonProps)
       boxSizing: 'border-box'
     },
     size === 'small' && {
-      padding: cssVar('--button-padding_small', '2px 8px'),
-      fontSize: cssVar('--button-font-size_small', '14px'),
-      borderRadius: cssVar('--button-border-radius_small', '2px')
+      padding: cssVar('--button-padding_small', `${cssSize.mini} ${cssSize.large}`),
+      fontSize: cssVar('--button-font-size_small', cssFont.medium),
+      borderRadius: cssVar('--button-border-radius_small', cssSize.mini)
     },
     size === 'middle' && {
       padding: cssVar('--button-padding_middle', '2px 8px'),
-      fontSize: cssVar('--button-font-size_middle', '14px'),
-      borderRadius: cssVar('--button-border-radius_middle', '2px')
+      fontSize: cssVar('--button-font-size_middle', cssFont.medium),
+      borderRadius: cssVar('--button-border-radius_middle', cssSize.mini)
     },
     size === 'large' && {
       padding: cssVar('--button-padding_large', '2px 8px'),
-      fontSize: cssVar('--button-font-size_large', '14px'),
-      borderRadius: cssVar('--button-border-radius_large', '2px')
+      fontSize: cssVar('--button-font-size_large', cssFont.medium),
+      borderRadius: cssVar('--button-border-radius_large', cssSize.mini)
     },
     type === 'fill' && {
       color: cssVar('--button-text-color', 'white'),
-      backgroundColor: cssVar('--button-background-color', '#666'),
+      backgroundColor: cssVar('--button-background-color', cssColor.defaultBackgroundGray),
       ':hover': { filter: cssBrightness(1.4) },
       ':active': { filter: cssBrightness(0.8) }
     },
     type === 'border' && {
       position: 'relative',
-      backgroundColor: 'transparent',
+      backgroundColor: cssColor.transparent,
       color: cssVar('--button-text-color'),
       '::before': {
         content: "''",
