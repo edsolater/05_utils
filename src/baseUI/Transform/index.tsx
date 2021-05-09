@@ -34,6 +34,9 @@ export interface TransformProps
 /**
  * 包裹一层div，使该元素与其子元素能被随意拖动
  * 注意：不可与draggable混淆
+ * 
+ * 
+ * @todo handoff {boolean} 把结果附加在其子children节点上
  */
 const Transform = (props: TransformProps) => {
   const box = useRef<HTMLDivElement>()
