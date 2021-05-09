@@ -28,7 +28,7 @@ export interface CardStyleProps {
   /**
    * CSS
    */
-  borderRadius?: 'small' | 'middle' | 'large'
+  borderRadius?: 'small' | 'medium' | 'large'
 }
 
 // 样式的具体css-in-js实现

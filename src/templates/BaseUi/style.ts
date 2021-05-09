@@ -16,7 +16,7 @@ export interface BaseUiStyleProps {
   /**
    * 按钮的大小
    */
-  size?: 'small' | 'middle' | 'large'
+  size?: 'small' | 'medium' | 'large'
 }
 export type BaseUiCSSVariableNames =
   | '--baseUi-background-color'
@@ -34,7 +34,7 @@ const baseUiDefaultCSS = {
     fontSize: '14px',
     borderRadius: '2px'
   },
-  middle: {
+  medium: {
     padding: '6px 14px',
     fontSize: '14px',
     borderRadius: '4px'
@@ -48,7 +48,7 @@ const baseUiDefaultCSS = {
 
 // FIXME: 因为是hooks，不同的<BaseUi>组件需要都需要计算，这是没有必要的。
 // IDEA: 需要在这个文件中，做一个Cache
-export function useBaseUiStyle({ size = 'middle', type = 'border' }: BaseUiStyleProps) {
+export function useBaseUiStyle({ size = 'medium', type = 'border' }: BaseUiStyleProps) {
   const { baseUi: baseUiCustomCSS = {} } = useContext(CSSConfigContext)
   const baseUiCSS = merge(baseUiDefaultCSS, baseUiCustomCSS)
   const coreCss = useMemo(
@@ -67,10 +67,10 @@ export function useBaseUiStyle({ size = 'middle', type = 'border' }: BaseUiStyle
           fontSize: baseUiCSS.small.fontSize,
           borderRadius: baseUiCSS.small.borderRadius
         },
-        size === 'middle' && {
-          padding: baseUiCSS.middle.padding,
-          fontSize: baseUiCSS.middle.fontSize,
-          borderRadius: baseUiCSS.middle.borderRadius
+        size === 'medium' && {
+          padding: baseUiCSS.medium.padding,
+          fontSize: baseUiCSS.medium.fontSize,
+          borderRadius: baseUiCSS.medium.borderRadius
         },
         size === 'large' && {
           padding: baseUiCSS.large.padding,

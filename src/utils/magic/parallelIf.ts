@@ -13,8 +13,8 @@ import isFunction from '../judgers/isFunction'
  *   [insertStart === 0, 'start'],
  *   [getFirstChar(innerHTML.slice(insertEnd).replace(/<.*?>/g, '')) === '\n', 'end'], // TODO:要封一个clearInnerTag的工具函数
  *   [getLastChar(innerHTML.slice(0, insertStart).replace(/<.*?>/g, '')) === '\n', 'start'],
- *   'middle'
- * ) // 'start' | 'middle' | 'end'
+ *   'medium'
+ * ) // 'start' | 'medium' | 'end'
  *
  * parallelIf(
  *   [type === 'all-in-column', gridTypeAllInColumn],

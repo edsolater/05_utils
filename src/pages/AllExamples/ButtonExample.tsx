@@ -18,7 +18,7 @@ const ButtonExample = () => (
       <Button type='fill' size='large'>
         Large
       </Button>
-      <Button type='fill'>middle</Button>
+      <Button type='fill'>medium</Button>
       <Button type='fill' size='small'>
         small
       </Button>
@@ -26,7 +26,7 @@ const ButtonExample = () => (
 
     <ExampleGroup caption='外框按钮（主色）（默认）'>
       <Button size='large'>Large</Button>
-      <Button>middle</Button>
+      <Button>medium</Button>
       <Button size='small'>small</Button>
     </ExampleGroup>
 
@@ -34,7 +34,7 @@ const ButtonExample = () => (
       <Button type='text' size='large'>
         Large
       </Button>
-      <Button type='text'>middle</Button>
+      <Button type='text'>medium</Button>
       <Button type='text' size='small'>
         small
       </Button>

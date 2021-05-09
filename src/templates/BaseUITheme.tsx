@@ -32,7 +32,7 @@ interface BaseUIThemeStyleProps {
   /**
    * CSS
    */
-  borderRadius?: 'small' | 'middle' | 'large'
+  borderRadius?: 'small' | 'medium' | 'large'
 }
 //#endregion
 

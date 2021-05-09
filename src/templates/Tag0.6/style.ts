@@ -7,7 +7,7 @@ export interface TagStyleProps {
   /**
    * CSS: 尺寸大小
    */
-  cssSize?:'small' | 'middle' | 'large'
+  cssSize?:'small' | 'medium' | 'large'
   /**
    * CSS：TagIcon节点
    */
