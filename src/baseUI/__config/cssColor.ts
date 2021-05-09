@@ -1,3 +1,6 @@
+/**
+ * 有一部分要放到style文件夹下，一部分直接 _config
+ */
  const cssColor = {
   red: 'red',
   crimson: 'crimson',
