@@ -5,8 +5,10 @@ import { cssBrightness, cssVar } from 'style/cssFunctions'
 import { mixCSSObjects } from 'style/cssParser'
 import cache from 'utils/functionFactory/cache'
 import { ButtonProps } from '.'
-
-// 声明组件有哪些props是纯粹改变外观的
+import merge from 'utils/object/merge'
+/**
+ * 声明组件有哪些props是纯粹改变外观的
+ */
 export interface ButtonStyleProps {
   /**
    * 按钮元素的权重
@@ -16,7 +18,36 @@ export interface ButtonStyleProps {
   /**
    * 按钮的大小
    */
-  size?: 'small' | 'middle' | 'large'
+  size?: 'small' | 'medium' | 'large'
+}
+const defaultStyleProps: ButtonStyleProps = {
+  type: 'fill',
+  size: 'medium'
+}
+
+export interface ButtonDetailCSS {
+  padding_small?: string
+  fontSize_small?: string
+  borderRadius_small?: string
+
+  padding_medium?: string
+  fontSize_medium?: string
+  borderRadius_medium?: string
+
+  padding_large?: string
+  fontSize_large?: string
+  borderRadius_large?: string
+}
+const defaultCSSDetail: ButtonDetailCSS = {
+  padding_small: `${cssSize.mini} ${cssSize.large}`,
+  fontSize_small: cssFont.medium,
+  borderRadius_small: cssSize.mini,
+  padding_medium: `${cssSize.mini} ${cssSize.large}`,
+  fontSize_medium: cssFont.medium,
+  borderRadius_medium: cssSize.mini,
+  padding_large: `${cssSize.mini} ${cssSize.large}`,
+  fontSize_large: cssFont.medium,
+  borderRadius_large: cssSize.mini
 }
 
 //IDEA: 正常情况下，需要更改的只有颜色和尺寸信息（程度信息），因为能过渡处理
@@ -36,59 +67,61 @@ export type ButtonCSSVariableNames =
   | '--button-font-size_large'
   | '--button-border-radius_large'
 
-export function _getButtonCSS({ size = 'middle', type = 'border' }: ButtonProps) {
-  const defaultCSS = mixCSSObjects(
-    {
-      style: 'none',
-      borderWidth: 0,
-      cursor: 'pointer',
-      userSelect: 'none',
-      width: 'max-content',
-      boxSizing: 'border-box'
-    },
-    size === 'small' && {
-      padding: cssVar('--button-padding_small', `${cssSize.mini} ${cssSize.large}`),
-      fontSize: cssVar('--button-font-size_small', cssFont.medium),
-      borderRadius: cssVar('--button-border-radius_small', cssSize.mini)
-    },
-    size === 'middle' && {
-      padding: cssVar('--button-padding_middle', '2px 8px'),
-      fontSize: cssVar('--button-font-size_middle', cssFont.medium),
-      borderRadius: cssVar('--button-border-radius_middle', cssSize.mini)
-    },
-    size === 'large' && {
-      padding: cssVar('--button-padding_large', '2px 8px'),
-      fontSize: cssVar('--button-font-size_large', cssFont.medium),
-      borderRadius: cssVar('--button-border-radius_large', cssSize.mini)
-    },
-    type === 'fill' && {
-      color: cssVar('--button-text-color', 'white'),
-      backgroundColor: cssVar('--button-background-color', cssColor.defaultBackgroundGray),
-      ':hover': { filter: cssBrightness(1.4) },
-      ':active': { filter: cssBrightness(0.8) }
-    },
-    type === 'border' && {
-      position: 'relative',
-      backgroundColor: cssColor.transparent,
-      color: cssVar('--button-text-color'),
-      '::before': {
-        content: "''",
-        position: 'absolute',
-        inset: '0',
-        borderRadius: 'inherit',
-        borderWidth: cssVar('--button-border-line-width', '1px'),
-        borderStyle: 'solid',
-        borderColor: cssVar('--button-border-color', 'currentcolor'),
-        opacity: cssVar('--button-border-line-opacity', '0.3'),
-        color: 'inherit'
+export const getButtonCSS = cache(
+  (cssDetailFromSetting: ButtonDetailCSS, bareProps: ButtonProps) => {
+    const props = merge(defaultStyleProps, bareProps)
+    const cssDetail = merge(defaultCSSDetail, cssDetailFromSetting)
+    return mixCSSObjects(
+      props.css,
+      {
+        style: 'none',
+        borderWidth: 0,
+        cursor: 'pointer',
+        userSelect: 'none',
+        width: 'max-content',
+        boxSizing: 'border-box'
+      },
+      props.size === 'small' && {
+        padding: cssVar('--button-padding_small', cssDetail.padding_small),
+        fontSize: cssVar('--button-font-size_small', cssDetail.fontSize_small),
+        borderRadius: cssVar('--button-border-radius_small', cssDetail.borderRadius_small)
+      },
+      props.size === 'medium' && {
+        padding: cssVar('--button-padding_medium', cssDetail.padding_medium),
+        fontSize: cssVar('--button-font-size_medium', cssDetail.fontSize_medium),
+        borderRadius: cssVar('--button-border-radius_medium', cssDetail.borderRadius_medium)
+      },
+      props.size === 'large' && {
+        padding: cssVar('--button-padding_large', cssDetail.padding_large),
+        fontSize: cssVar('--button-font-size_large', cssDetail.fontSize_large),
+        borderRadius: cssVar('--button-border-radius_large', cssDetail.borderRadius_large)
+      },
+      props.type === 'fill' && {
+        color: cssVar('--button-text-color', 'white'),
+        backgroundColor: cssVar('--button-background-color', cssColor.defaultBackgroundGray),
+        ':hover': { filter: cssBrightness(1.4) },
+        ':active': { filter: cssBrightness(0.8) }
+      },
+      props.type === 'border' && {
+        position: 'relative',
+        backgroundColor: cssColor.transparent,
+        color: cssVar('--button-text-color'),
+        '::before': {
+          content: "''",
+          position: 'absolute',
+          inset: '0',
+          borderRadius: 'inherit',
+          borderWidth: cssVar('--button-border-line-width', '1px'),
+          borderStyle: 'solid',
+          borderColor: cssVar('--button-border-color', 'currentcolor'),
+          opacity: cssVar('--button-border-line-opacity', '0.3'),
+          color: 'inherit'
+        }
+      },
+      props.type === 'text' && {
+        color: cssVar('--button-text-color'),
+        backgroundColor: 'transparent'
       }
-    },
-    type === 'text' && {
-      color: cssVar('--button-text-color'),
-      backgroundColor: 'transparent'
-    }
-  )
-  const projectCSS = {} //TODO: 需要有个地方能直接更改组件的CSS基本定义
-  return mixCSSObjects(defaultCSS, projectCSS)
-}
-export const getButtonCSS = cache(_getButtonCSS)
+    )
+  }
+)

@@ -1,4 +1,4 @@
-import GlobalSettings from 'baseUI/GlobalSettings'
+import GlobalSettings from 'baseUI/AppSettingsProvider'
 import React from 'react'
 import ButtonExample from './ButtonExample'
 import CardExample from './CardExample'
@@ -9,7 +9,7 @@ import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 
 const AllExamples = () => (
-  <GlobalSettings defaultProps={{ ButtonProps: { htmlProps: { title: 'defaultProps' } } }}>
+  <GlobalSettings>
     <TransformExample />
     <ButtonExample />
     <IconExample />

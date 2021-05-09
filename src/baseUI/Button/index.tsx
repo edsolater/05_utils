@@ -1,9 +1,8 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext } from 'react'
 import Div, { divProps, DivProps } from 'baseUI/Div'
-import { mixCSSObjects } from 'style/cssParser'
 import { getButtonCSS, ButtonStyleProps } from './defaultStyle'
 import pick from 'utils/object/pick'
-import { DefaultPropsContext } from 'baseUI/GlobalSettings'
+import { AppSettings } from 'baseUI/AppSettingsProvider'
 import merge from 'utils/object/merge'
 
 export interface ButtonProps extends DivProps<'button'>, ButtonStyleProps {}
@@ -11,11 +10,17 @@ export interface ButtonProps extends DivProps<'button'>, ButtonStyleProps {}
 /**
  * 将子元素显示在一行，相当于flexbox
  */
-const Button = (props: ButtonProps) => {
-  const defaultProps = useContext(DefaultPropsContext)
-  const mprops = merge(defaultProps?.ButtonProps, props)
-  const mixedCSS = mixCSSObjects(mprops.css, getButtonCSS(mprops))
-  return <Div as='button' {...pick(mprops, divProps)} css={mixedCSS}></Div>
+const Button = (bareProps: ButtonProps) => {
+  const { props: propsSetting, css: cssSettings } = useContext(AppSettings)
+  const mixedProps = merge(propsSetting?.Button, bareProps)
+
+  return (
+    <Div
+      as='button'
+      {...pick(merge(propsSetting?.Button, bareProps), divProps)}
+      css={getButtonCSS(cssSettings?.Button ?? {}, mixedProps)}
+    ></Div>
+  )
 }
 
 export default Button
