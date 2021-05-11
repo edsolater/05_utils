@@ -1,27 +1,29 @@
-import { RefObject, useEffect } from 'react'
+import { useEffect } from 'react'
+import { DivProps } from '.'
+import { TagMap } from './TagMap'
 export interface FeatureProps {
-  onHoverStart?: ({ el: HTMLElement }) => void
-  onHoverEnd?: ({ el: HTMLElement }) => void
+  onHoverStart?: ({ el, nativeEvent }: { el: HTMLElement; nativeEvent: PointerEvent }) => void
+  onHoverEnd?: ({ el, nativeEvent }: { el: HTMLElement; nativeEvent: PointerEvent }) => void
 }
 export const featureProps = ['onHoverStart', 'onHoverEnd'] as const
-export function useFeature(
-  { onHoverStart, onHoverEnd }: FeatureProps,
-  { component }: { component: RefObject<HTMLElement | undefined> }
+export function useFeature<TagName extends keyof TagMap = 'div'>(
+  props: DivProps<TagName>,
+  { domRef }: { domRef: React.MutableRefObject<TagMap[TagName] | undefined> }
 ) {
-  if (onHoverStart) {
+  if (props.onHoverStart) {
     useEffect(() => {
-      component.current!.addEventListener('pointerenter', (e) =>
-        onHoverStart?.({ el: component.current! })
+      domRef.current!.addEventListener('pointerenter', (e) =>
+        props.onHoverStart?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
       )
     }, [])
   }
-  if (onHoverEnd) {
+  if (props.onHoverEnd) {
     useEffect(() => {
-      component.current!.addEventListener('pointerleave', (e) =>
-        onHoverEnd?.({ el: component.current! })
+      domRef.current!.addEventListener('pointerleave', (e) =>
+        props.onHoverEnd?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
       )
-      component.current!.addEventListener('pointercancel', (e) =>
-        onHoverEnd?.({ el: component.current! })
+      domRef.current!.addEventListener('pointercancel', (e) =>
+        props.onHoverEnd?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
       )
     }, [])
   }

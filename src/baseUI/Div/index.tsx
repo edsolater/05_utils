@@ -43,8 +43,8 @@ export const divProps: ReadonlyArray<keyof DivProps> = concat(
 )
 const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>()
-  useFeatureClick(props, { component: divRef })
-  useFeatureHover(props, { component: divRef })
+  useFeatureClick<TagName>(props, { domRef: divRef })
+  useFeatureHover<TagName>(props, { domRef: divRef })
   const allProps = {
     ...props.htmlProps,
     children: props.children,

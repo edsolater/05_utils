@@ -12,7 +12,19 @@ const DivExample = () => {
   return (
     <ExampleCard title='Div'>
       <ExampleGroup caption='onClickOutside'>
-        <Div onClick={()=>{setIsFocused(true)}} onClickOutside={()=>{setIsFocused(false)}} css={{ width: '100px', height: '100px', background: isFocused ? cssColor.crimson :  cssColor.dodgerblue }} />
+        <Div
+          onClick={() => {
+            setIsFocused(true)
+          }}
+          onClickOutside={() => {
+            setIsFocused(false)
+          }}
+          css={{
+            width: '100px',
+            height: '100px',
+            background: isFocused ? cssColor.crimson : cssColor.dodgerblue
+          }}
+        />
       </ExampleGroup>
     </ExampleCard>
   )
