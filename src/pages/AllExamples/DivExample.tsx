@@ -1,3 +1,4 @@
+import CSS from 'baseUI/CSS'
 import Div from 'baseUI/Div'
 import cssColor from 'baseUI/__config/cssColor'
 import React, { useState } from 'react'
@@ -12,19 +13,20 @@ const DivExample = () => {
   return (
     <ExampleCard title='Div'>
       <ExampleGroup caption='onClickOutside'>
-        <Div
-          onClick={() => {
-            setIsFocused(true)
-          }}
-          onClickOutside={() => {
-            setIsFocused(false)
-          }}
-          css={{
-            width: '100px',
-            height: '100px',
-            background: isFocused ? cssColor.crimson : cssColor.dodgerblue
-          }}
-        />
+        <CSS
+          width='100px'
+          height='100px'
+          background={isFocused ? cssColor.crimson : cssColor.dodgerblue}
+        >
+          <Div
+            onClick={() => {
+              setIsFocused(true)
+            }}
+            onClickOutside={() => {
+              setIsFocused(false)
+            }}
+          />
+        </CSS>
       </ExampleGroup>
     </ExampleCard>
   )
