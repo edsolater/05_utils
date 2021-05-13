@@ -28,6 +28,22 @@ const DivExample = () => {
           />
         </CSS>
       </ExampleGroup>
+
+      <ExampleGroup caption='onResize（使用ResizeObserver）'>
+        <CSS
+          width='100px'
+          height='100px'
+          background={cssColor.crimson}
+          resize='both'
+          overflow='auto'
+        >
+          <Div
+            onResize={() => {
+              console.log(3)
+            }}
+          />
+        </CSS>
+      </ExampleGroup>
     </ExampleCard>
   )
 }

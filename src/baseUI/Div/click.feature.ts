@@ -5,9 +5,15 @@ import { TagMap } from './TagMap'
 /**
  * props定义声明
  */
-export interface FeatureProps {
-  onClick?: ({ el, nativeEvent }: { el: HTMLElement; nativeEvent: MouseEvent }) => void
-  onClickOutside?: ({ el, nativeEvent }: { el: HTMLElement; nativeEvent: MouseEvent }) => void
+export interface FeatureProps<TagName extends keyof TagMap = 'div'> {
+  /**
+   * 就是普通的onClick
+   */
+  onClick?: ({ el, nativeEvent }: { el: TagMap[TagName]; nativeEvent: MouseEvent }) => void
+  /**
+   * 点击了元素区域外（此事件必须冒泡到document）
+   */
+  onClickOutside?: ({ el, nativeEvent }: { el: TagMap[TagName]; nativeEvent: MouseEvent }) => void
 }
 export const featureProps = ['onClick', 'onClickOutside'] as const
 

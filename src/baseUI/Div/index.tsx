@@ -14,14 +14,20 @@ import {
   FeatureProps as FeatureHoverProps,
   featureProps as featureHoverProps
 } from './hover.feature'
+import {
+  useFeature as useFeatureResize,
+  FeatureProps as FeatureResizeProps,
+  featureProps as featureResizeProps
+} from './resize.feature'
 import { TagMap } from './TagMap'
 import { IRefs, mergeRefs } from './util/mergeRefs'
 import concat from 'utils/array/concat'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
 export interface DivProps<TagName extends keyof TagMap = 'div'>
-  extends FeatureClickProps,
-    FeatureHoverProps {
+  extends FeatureClickProps<TagName>,
+    FeatureHoverProps<TagName>,
+    FeatureResizeProps<TagName> {
   // 只能低层组件使用
   as?: TagName
   domRef?: IRefs<TagMap[TagName]>
@@ -39,12 +45,14 @@ export interface DivProps<TagName extends keyof TagMap = 'div'>
 export const divProps: ReadonlyArray<keyof DivProps> = concat(
   ['as', 'domRef', 'className', 'css', 'style', 'children', 'htmlProps'],
   featureClickProps,
-  featureHoverProps
+  featureHoverProps,
+  featureResizeProps
 )
 const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>()
   useFeatureClick<TagName>(props, { domRef: divRef })
   useFeatureHover<TagName>(props, { domRef: divRef })
+  useFeatureResize<TagName>(props, { domRef: divRef })
   const allProps = {
     ...props.htmlProps,
     children: props.children,
