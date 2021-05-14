@@ -22,6 +22,7 @@ export default function useMouseWheel(
     //TODO: 间隔时间功能函数。 intervalTime: 300
   }
 ): CallbackInfo {
+  // TODO: 感觉这种混合模式可以提取出来啊
   const [_, setForceScrollDistance] = options?.noReturn ? [] : useState(0) // 为了纯粹使用hooks时能触发重渲
   const scrollDistance = useRef(0)
 
