@@ -14,16 +14,14 @@ export default function useMouseWheel(
   ref: RefObject<HTMLElement>,
   options?: {
     /**
-     * 如此hooks无需返回，则使用Ref保存状态，而不是会触发重渲染的State
-     * 此属性不可变动
+     * 只要设定，即为：hooks无需返回，则使用Ref保存状态，而不是会触发重渲染的State
      */
-    noReturn?: boolean
     cb?: (info: CallbackInfo | { eventObject: WheelEvent }) => void
     //TODO: 间隔时间功能函数。 intervalTime: 300
   }
 ): CallbackInfo {
   // TODO: 感觉这种混合模式可以提取出来啊
-  const [_, setForceScrollDistance] = options?.noReturn ? [] : useState(0) // 为了纯粹使用hooks时能触发重渲
+  const [_, setForceScrollDistance] = options?.cb ? [] : useState(0) // 为了纯粹使用hooks时能触发重渲
   const scrollDistance = useRef(0)
 
   useEffect(() => {
