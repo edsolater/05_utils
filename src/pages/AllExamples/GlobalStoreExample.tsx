@@ -1,21 +1,35 @@
+import React from 'react'
 import Button from 'baseUI/Button'
 import createStoreContext from 'baseUI/__hooksFactory/createStoreContext'
-import React, { useContext } from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
+const { WrappedProvider, useStore } = createStoreContext({
+  count: 1
+})
 const GlobalStoreExample = () => {
-  const { Provider, Context: GlobalStoreContext } = createStoreContext({ count: 1 })
-  const { count } = useContext(GlobalStoreContext)
   return (
     <ExampleCard title='GlobalStore' category='hooks'>
-      <Provider>
+      <WrappedProvider>
         <ExampleGroup caption='onClickOutside'>
-          you have clicked {count} times
-          <Button></Button>
+          <Inner />
         </ExampleGroup>
-      </Provider>
+      </WrappedProvider>
     </ExampleCard>
+  )
+}
+const Inner = () => {
+  const store = useStore()
+  const { count, set } = store
+  return (
+    <>
+      you have clicked {count} times
+      <Button
+        onClick={() => {
+          set({ count: 2 })
+        }}
+      ></Button>
+    </>
   )
 }
 
