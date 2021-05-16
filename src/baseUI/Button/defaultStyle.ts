@@ -98,13 +98,22 @@ export const getButtonCSS = cache(
       },
       props.type === 'fill' && {
         color: cssVar('--button-text-color', 'white'),
-        backgroundColor: cssVar('--button-background-color', cssColor.defaultBackgroundGray),
-        ':hover': { filter: cssBrightness(1.4)/* 不妥，会使得内容文字变得怪异 */ },
-        ':active': { filter: cssBrightness(0.8) }
+        position: 'relative',
+        background: 'none',
+        '::before': {
+          content: "''",
+          position: 'absolute',
+          inset: '0',
+          borderRadius: 'inherit',
+          zIndex: '-1',
+          background: cssVar('--button-background', cssColor.defaultBackgroundGray)
+        },
+        ':hover::before': { filter: cssBrightness(1.4) },
+        ':active::before': { filter: cssBrightness(0.8) }
       },
       props.type === 'border' && {
         position: 'relative',
-        backgroundColor: cssColor.transparent,
+        background: cssColor.transparent,
         color: cssVar('--button-text-color'),
         '::before': {
           content: "''",
@@ -120,7 +129,7 @@ export const getButtonCSS = cache(
       },
       props.type === 'text' && {
         color: cssVar('--button-text-color'),
-        backgroundColor: 'transparent'
+        background: 'transparent'
       }
     )
   }
