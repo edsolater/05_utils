@@ -1,32 +1,57 @@
+import isObject from "../judgers/isObject"
+
 // COUNT：使用次数 1
 type Key = string
-type KeyNumber = number
-function ArrayKeyMap<ArrayKey extends Array<unknown>, ReturnedValue>() {
-  let keyCount = 0
-  const keyMap = new Map<ArrayKey[number], KeyNumber>()
-  const calcKey = (arr: ArrayKey) =>
-    arr
-      .map((item) => {
-        if (!keyMap.has(item)) {
-          keyMap.set(item, ++keyCount)
-        }
-        return keyMap.get(item)
-      })
-      .join(' ')
+type ArrayHash = `__map_value_hash__${number}`
 
-  const ValueMap = new Map<Key, ReturnedValue>()
+/**
+ * like JavaScript Map , but use shallow compare
+ * @todo the shallow compare is 2 level, not elegant
+ */
+function ShallowMap<InputKey extends object | { [key: string]: unknown }, ReturnedValue>(
+  options: {
+    shallowCompare?: boolean
+  } = {}
+) {
+  Object.assign(options, { shallowCompare: true } as Parameters<typeof ShallowMap>[0], options)
+
+  let hashNumberStamp = 0
+
+  const objectHashMap = new Map<object, ArrayHash>()
+
+  // this will be used only if use shallow compare (this can be set in options)
+  const objectHashMap__inner = new Map<object, ArrayHash>()
+
+  // compute idle key for parameters in an invoke.
+  const calcKey = (input: unknown, valueMap = objectHashMap, canShallow = true): Key =>
+    isObject(input)
+      ? Object.entries(input)
+          .map(([key, val]) => {
+            if (typeof val !== 'object' || val === null) return `${key}${val}`
+            if (valueMap.has(val)) return valueMap.get(val)
+            if (options.shallowCompare && canShallow) {
+              const innerKey = calcKey(val, objectHashMap__inner, false)
+              return `${key}${innerKey}`
+            }
+            valueMap.set(val, `__map_value_hash__${++hashNumberStamp}` as const)
+          })
+          .join(' ')
+      : String(input)
+
+  const returnedValueMap = new Map<Key, ReturnedValue>()
+
   return {
-    set(arrayKey: ArrayKey, value: ReturnedValue) {
+    set(arrayKey: InputKey, value: ReturnedValue) {
       const keyString = calcKey(arrayKey)
-      return ValueMap.set(keyString, value)
+      return returnedValueMap.set(keyString, value)
     },
-    get(arrayKey: ArrayKey) {
+    get(arrayKey: InputKey) {
       const keyString = calcKey(arrayKey)
-      return ValueMap.get(keyString)
+      return returnedValueMap.get(keyString)
     },
-    has(arrayKey: ArrayKey) {
+    has(arrayKey: InputKey) {
       const keyString = calcKey(arrayKey)
-      return ValueMap.has(keyString)
+      return returnedValueMap.has(keyString)
     }
   }
 }
@@ -36,27 +61,34 @@ function ArrayKeyMap<ArrayKey extends Array<unknown>, ReturnedValue>() {
  */
 type AnyFunction = (...args: any[]) => void
 type CachedFunction<F extends AnyFunction> = F
-export default function cache<T extends AnyFunction>(originalFn: T): CachedFunction<T> {
-  const cache = ArrayKeyMap<Parameters<T>, ReturnType<T>>()
+
+export default function cache<F extends AnyFunction>(originalFn: F): CachedFunction<F> {
+  const cache = ShallowMap<Parameters<F>, ReturnType<F>>()
   //@ts-expect-error
-  return (...args: Parameters<T>) => {
+  return (...args: Parameters<F>) => {
     if (cache.has(args)) return cache.get(args)
     else {
       //@ts-expect-error
-      const returnedValue: ReturnType<T> = originalFn(...args)
+      const returnedValue: ReturnType<F> = originalFn(...args)
       cache.set(args, returnedValue)
       return returnedValue
     }
   }
 }
 //#region ------------------- 测试 -------------------
-// const add = (a, b) => {
+// const cachedAdd = cache((a: number, b: number) => {
 //   console.log(a, b)
 //   return a + b
-// }
-// const cachedAdd = cache(add)
-// cachedAdd(5,6)
-// cachedAdd(5,6)
-// cachedAdd(5,6)
-// cachedAdd(5,6)
+// })
+// console.log(cachedAdd(3, 4))
+// console.log(cachedAdd(3, 4))
+// console.log(cachedAdd(3, 4))
+// console.log(cachedAdd(3, 4))
+// console.log(cachedAdd(3, 4))
+// console.log(cachedAdd(3, 4))
+// console.log(cachedAdd({ a: 3, b: { a: 1 } }, 4))
+// console.log(cachedAdd({ a: 3, b: { a: 1 } }, 4))
+// console.log(cachedAdd({ a: 3 }, 4))
+// console.log(cachedAdd({ a: 3 }, 4))
+// console.log(cachedAdd({ a: 3 }, 4))
 //#endregion
