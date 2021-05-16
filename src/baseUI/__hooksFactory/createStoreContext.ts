@@ -27,12 +27,12 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
       inputStore: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any>
     ) => void
   }
-  type ContextInitValue = {
+  type ContextValue = {
     storeState: T
     setters: Setters
   }
 
-  const Context = createContext<ContextInitValue>({
+  const Context = createContext<ContextValue>({
     storeState: initStore,
     setters: {} as any // DANGEROUS: use any force Object type
   })
@@ -55,7 +55,7 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
             setToInit() {
               setEntireStoreState(initStore)
             },
-            ...Object.keys(storeState).reduce((acc, name) => {
+            ...Object.keys(initStore).reduce((acc, name) => {
               acc[`set${capitalize(name)}`] = function (inputState: unknown) {
                 setEntireStoreState((old) => ({
                   ...old,
@@ -71,11 +71,18 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
       return React.createElement(Context.Provider, { value: contextValue }, props.children)
     },
     /**
-     * use this store. Every xxx will has a corresponding setXxx.(All setter properties must start with 'set')
+     * use this store. Every xxx will has a corresponding setXxx.(All setter properties will always start with 'set')
      */
     useStore(): T & Setters {
       const store = useContext(Context)
       return { ...store.storeState, ...store.setters }
+    },
+    /**
+     * all states and setters are separate
+     */
+    useStoreRaw(): ContextValue {
+      const store = useContext(Context)
+      return store
     }
   }
 }
