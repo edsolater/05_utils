@@ -19,7 +19,7 @@ const Button = (bareProps: ButtonProps) => {
       as='button'
       {...pick(merge(propsSetting?.Button, bareProps), divProps)}
       css={getButtonCSS(cssSettings?.Button ?? {}, mixedProps)}
-    ></Div>
+    >{mixedProps.children ?? '🤨'}</Div>
   )
 }
 

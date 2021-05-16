@@ -9,7 +9,7 @@ import Div from 'baseUI/Div'
  * Transform 的使用示例
  */
 const TransformExample = () => (
-  <ExampleCard title='Transform（依赖于Card）'>
+  <ExampleCard category='baseUI' title='Transform（依赖于Card）'>
     <ExampleGroup caption='基本'>
       <Transform css={{ width: '100px', height: '100px' }} scalable canInertialSlide>
         <Div css={{ width: '100%', height: '100%', background: cssColor.dodgerblue }} />{' '}

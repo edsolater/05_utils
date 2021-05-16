@@ -7,7 +7,7 @@ import ExampleGroup from './ExampleGroup'
  * Button 的使用示例
  */
 const ButtonExample = () => (
-  <ExampleCard title="Button">
+  <ExampleCard title="Button" category='baseUI'>
     <ExampleGroup caption='不同按钮类型对比'>
       <Button type='fill'>fill</Button>
       <Button type='border'>border</Button>

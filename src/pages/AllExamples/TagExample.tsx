@@ -10,7 +10,7 @@ import ExampleGroup from './ExampleGroup'
 const TagExample = () => {
   const controller = useBooleanController(true)
   return (
-    <ExampleCard title='Tag'>
+    <ExampleCard category='baseUI' title='Tag'>
       <ExampleGroup caption='基本'>
         <Tag open={controller.state} onClose={() => controller.turnOff()}>
           edsolater

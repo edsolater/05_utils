@@ -99,7 +99,7 @@ export const getButtonCSS = cache(
       props.type === 'fill' && {
         color: cssVar('--button-text-color', 'white'),
         backgroundColor: cssVar('--button-background-color', cssColor.defaultBackgroundGray),
-        ':hover': { filter: cssBrightness(1.4) },
+        ':hover': { filter: cssBrightness(1.4)/* 不妥，会使得内容文字变得怪异 */ },
         ':active': { filter: cssBrightness(0.8) }
       },
       props.type === 'border' && {
