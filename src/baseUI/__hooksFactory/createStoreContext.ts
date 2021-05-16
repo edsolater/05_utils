@@ -34,7 +34,7 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
 
   const Context = createContext<ContextInitValue>({
     storeState: initStore,
-    setters: {} as any // DANGEROUS: use any force Object type 
+    setters: {} as any // DANGEROUS: use any force Object type
   })
 
   return {
@@ -68,8 +68,7 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
         []
       )
       const contextValue = useMemo(() => ({ storeState, setters }), [storeState, setters])
-
-      return <Context.Provider value={contextValue}>{props.children}</Context.Provider>
+      return React.createElement(Context.Provider, { value: contextValue }, props.children)
     },
     /**
      * use this store. Every xxx will has a corresponding setXxx.(All setter properties must start with 'set')
