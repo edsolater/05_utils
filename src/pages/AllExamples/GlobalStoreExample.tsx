@@ -32,4 +32,3 @@ const Inner = () => {
 }
 
 export default GlobalStoreExample
-

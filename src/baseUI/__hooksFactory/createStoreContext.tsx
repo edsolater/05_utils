@@ -3,9 +3,9 @@ import React, { createContext, useContext, useMemo, useState } from 'react'
 type MayStateFn<T> = T | ((old: T) => T)
 
 /**
- * 首字母大写
- * @param str camlCase的string
- * @returns PascalCase的String
+ * make first letter of word uppercase
+ * @param str string(camlCase)
+ * @returns  string(PascalCase)
  */
 function capitalize(str: string): string {
   if (!str) return ''
@@ -15,13 +15,13 @@ function capitalize(str: string): string {
 const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
   type Setters = {
     /**
-     * 设定局部State（会自动合并）
+     * inputState will be merged to the store
      */
     set(inputStore: MayStateFn<Partial<T>>): void
     /**
-     * 将store恢复成初始状态
+     * set store to it's default value
      */
-    resetAll(): void
+    setToInit(): void
   } & {
     [K in `set${Capitalize<Extract<keyof T, string>>}`]: (
       inputStore: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any>
@@ -34,12 +34,12 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
 
   const Context = createContext<ContextInitValue>({
     storeState: initStore,
-    setters: {} as any // TODO
+    setters: {} as any // DANGEROUS: use any force Object type 
   })
 
   return {
     /**
-     * 直接安装在父节点上的Provider（无需也不应该用props）
+     * It should be add to component tree root(without any props)
      */
     WrappedProvider: (props: { children?: React.ReactNode }): JSX.Element => {
       const [storeState, setEntireStoreState] = useState(initStore)
@@ -52,11 +52,11 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
                 ...(typeof inputStore === 'function' ? inputStore(old) : inputStore)
               }))
             },
-            resetAll() {
+            setToInit() {
               setEntireStoreState(initStore)
             },
             ...Object.keys(storeState).reduce((acc, name) => {
-              acc[`set${capitalize(name)}`] = function (inputState) {
+              acc[`set${capitalize(name)}`] = function (inputState: unknown) {
                 setEntireStoreState((old) => ({
                   ...old,
                   [name]: typeof inputState === 'function' ? inputState(old[name]) : inputState
@@ -72,17 +72,11 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
       return <Context.Provider value={contextValue}>{props.children}</Context.Provider>
     },
     /**
-     * 特定于此 Provider 的 Context
+     * use this store. Every xxx will has a corresponding setXxx.(All setter properties must start with 'set')
      */
-    useStore<B>(options?: {
-      /**
-       * 设置则返回不经过自动合并的 `{storeState: T; setters: Setters}` 对象
-       */
-      twoParts?: B
-    }): B extends true ? ContextInitValue : T & Setters {
+    useStore(): T & Setters {
       const store = useContext(Context)
-      // @ts-expect-error typescript 的类型推断在这里还不够智能
-      return options?.twoParts ? store : { ...store.storeState, ...store.setters }
+      return { ...store.storeState, ...store.setters }
     }
   }
 }
