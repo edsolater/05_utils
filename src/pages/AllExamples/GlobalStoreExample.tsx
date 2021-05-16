@@ -4,7 +4,7 @@ import createStoreContext from 'baseUI/__hooksFactory/createStoreContext'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
-const { WrappedProvider, useStore } = createStoreContext({ count: 1, init: false })
+const { Provider: WrappedProvider, useStore } = createStoreContext({ count: 1, init: false })
 const GlobalStoreExample = () => {
   return (
     <ExampleCard title='GlobalStore' category='hooks'>

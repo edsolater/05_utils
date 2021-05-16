@@ -12,6 +12,24 @@ function capitalize(str: string): string {
   return str[0].toUpperCase() + str.slice(1)
 }
 
+/**
+ * Creact a store use react context.
+ * No need useContext from now on.
+ * 
+ * @param initStore pass init states here
+ * @returns 
+ * 1. Provider(just wrapped in Root level.no props need)
+ * 2. useStore -- a hook to exact state and setters in Provider.(state and setters will merge into a big object)
+ * 3. useStoreRaw -- a hook to exact state and setters in Provider.(state and setters will NOT merge)
+ * @example
+ * // in parent component
+ * const { Provider, useStore } = createStoreContext({ count: 1, init: false })
+ * return <Provider>{props.children}</Provider>
+ * 
+ * // in child component
+ * cosnt { count, setCount } = useStore()
+ * 
+ */
 const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
   type Setters = {
     /**
@@ -41,7 +59,7 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
     /**
      * It should be add to component tree root(without any props)
      */
-    WrappedProvider: (props: { children?: React.ReactNode }): JSX.Element => {
+    Provider: (props: { children?: React.ReactNode }): JSX.Element => {
       const [storeState, setEntireStoreState] = useState(initStore)
       const setters = useMemo<Setters>(
         () =>
