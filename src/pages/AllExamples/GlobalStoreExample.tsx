@@ -4,9 +4,7 @@ import createStoreContext from 'baseUI/__hooksFactory/createStoreContext'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
-const { WrappedProvider, useStore } = createStoreContext({
-  count: 1
-})
+const { WrappedProvider, useStore } = createStoreContext({ count: 1, init: false })
 const GlobalStoreExample = () => {
   return (
     <ExampleCard title='GlobalStore' category='hooks'>
@@ -20,13 +18,13 @@ const GlobalStoreExample = () => {
 }
 const Inner = () => {
   const store = useStore()
-  const { count, set } = store
+  const { count, set, setCount, setInit } = store
   return (
     <>
       you have clicked {count} times
       <Button
         onClick={() => {
-          set({ count: 2 })
+          setCount((n) => n + 1)
         }}
       ></Button>
     </>
@@ -34,3 +32,4 @@ const Inner = () => {
 }
 
 export default GlobalStoreExample
+

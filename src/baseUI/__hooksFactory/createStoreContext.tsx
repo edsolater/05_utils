@@ -1,15 +1,31 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 
+type MayStateFn<T> = T | ((old: T) => T)
+
+/**
+ * 首字母大写
+ * @param str camlCase的string
+ * @returns PascalCase的String
+ */
+function capitalize(str: string): string {
+  if (!str) return ''
+  return str[0].toUpperCase() + str.slice(1)
+}
+
 const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
   type Setters = {
     /**
      * 设定局部State（会自动合并）
      */
-    set(inputStore: Partial<T> | ((store: T) => Partial<T>)): void
+    set(inputStore: MayStateFn<Partial<T>>): void
     /**
      * 将store恢复成初始状态
      */
     resetAll(): void
+  } & {
+    [K in `set${Capitalize<Extract<keyof T, string>>}`]: (
+      inputStore: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any>
+    ) => void
   }
   type ContextInitValue = {
     storeState: T
@@ -28,24 +44,35 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
     WrappedProvider: (props: { children?: React.ReactNode }): JSX.Element => {
       const [storeState, setEntireStoreState] = useState(initStore)
       const setters = useMemo<Setters>(
-        () => ({
-          set(inputStore) {
-            const store = typeof inputStore === 'function' ? inputStore(storeState) : inputStore
-            console.log('store__input: ', store)
-            setEntireStoreState((old) => ({ ...old, ...store }))
-          },
-          resetAll() {
-            setEntireStoreState(initStore)
-          }
-        }),
-        [storeState]
+        () =>
+          ({
+            set(inputStore) {
+              setEntireStoreState((old) => ({
+                ...old,
+                ...(typeof inputStore === 'function' ? inputStore(old) : inputStore)
+              }))
+            },
+            resetAll() {
+              setEntireStoreState(initStore)
+            },
+            ...Object.keys(storeState).reduce((acc, name) => {
+              acc[`set${capitalize(name)}`] = function (inputState) {
+                setEntireStoreState((old) => ({
+                  ...old,
+                  [name]: typeof inputState === 'function' ? inputState(old[name]) : inputState
+                }))
+              }
+              return acc
+            }, {})
+          } as Setters),
+        []
       )
       const contextValue = useMemo(() => ({ storeState, setters }), [storeState, setters])
 
       return <Context.Provider value={contextValue}>{props.children}</Context.Provider>
     },
     /**
-     * 特供于此Context，
+     * 特定于此 Provider 的 Context
      */
     useStore<B>(options?: {
       /**
