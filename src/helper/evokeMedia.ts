@@ -6,12 +6,12 @@ import addDefault from 'utils/object/addDefault'
  * @param constraints 捕获的参数
  */
 export async function evokeWindow(
-  constraints?: MediaStreamConstraints
+  constraints: MediaStreamConstraints = {}
 ): Promise<MediaStream | undefined> {
-  const mergedConstraints = addDefault(constraints, { video: true, audio: true })
+  addDefault(constraints, { video: true, audio: true })
   try {
     //@ts-ignore
-    return window.navigator.mediaDevices.getDisplayMedia(mergedConstraints)
+    return window.navigator.mediaDevices.getDisplayMedia(constraints)
   } catch (e) {
     return undefined
   }
@@ -22,11 +22,11 @@ export async function evokeWindow(
  * @param constraints 捕获的参数
  */
 export async function evokeCamera(
-  constraints?: MediaStreamConstraints
+  constraints: MediaStreamConstraints = {}
 ): Promise<MediaStream | undefined> {
-  const mergedConstraints = addDefault(constraints, { video: true, audio: true })
+  addDefault(constraints, { video: true, audio: true })
   try {
-    return window.navigator.mediaDevices.getUserMedia(mergedConstraints)
+    return window.navigator.mediaDevices.getUserMedia(constraints)
   } catch (e) {
     return undefined
   }
@@ -39,9 +39,9 @@ export async function evokeCamera(
 export async function evokeMicrophone(
   constraints: Pick<MediaStreamConstraints, 'audio'> = { audio: true }
 ): Promise<MediaStream | undefined> {
-  const mergedConstraints = addDefault(constraints, { audio: true })
+  addDefault(constraints, { audio: true })
   try {
-    return window.navigator.mediaDevices.getUserMedia({ ...mergedConstraints })
+    return window.navigator.mediaDevices.getUserMedia(constraints)
   } catch (e) {
     return undefined
   }

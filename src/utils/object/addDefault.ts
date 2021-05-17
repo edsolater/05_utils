@@ -1,15 +1,13 @@
-/** 给配置对象添加默认值 */
-export default function addDefault<T extends object | undefined>(
+/**
+ * @mutable
+ *
+ * 给配置对象添加默认值（改变原对象）
+ */
+export default function addDefault<T extends object>(
   initConfig: T,
-  defaultConfig: Partial<NonNullable<T>>
-): NonNullable<T> {
-  return { ...defaultConfig, ...initConfig } as NonNullable<T>
-}
-/** 给配置对象添加默认值（改变原对象） */
-export function addDefaultMutably<T extends object | undefined>(
-  initConfig: T,
-  defaultConfig: Partial<NonNullable<T>>
-): void {
+  defaultConfig: Required<T>
+): Required<T> {
   const storedInitConfig = { ...(initConfig ?? {}) }
-  Object.assign(initConfig, defaultConfig, storedInitConfig)
+  const result = Object.assign(initConfig, defaultConfig, storedInitConfig)
+  return result
 }
