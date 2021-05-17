@@ -1,6 +1,25 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 
 type MayStateFn<T> = T | ((old: T) => T)
+type StoreInitState = { [key: string]: any }
+type StoreSetters<T extends StoreInitState> = {
+  /**
+   * inputState will be merged to the store
+   */
+  set(inputStore: MayStateFn<Partial<T>>): void
+  /**
+   * set store to it's default value
+   */
+  setToInit(): void
+} & {
+  [K in `set${Capitalize<Extract<keyof T, string>>}`]: (
+    inputStore: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any>
+  ) => void
+}
+type StoreContext<T extends StoreInitState> = {
+  storeState: T
+  setters: StoreSetters<T>
+}
 
 /**
  * make first letter of word uppercase
@@ -15,9 +34,9 @@ function capitalize(str: string): string {
 /**
  * Creact a store use react context.
  * No need useContext from now on.
- * 
+ *
  * @param initStore pass init states here
- * @returns 
+ * @returns
  * 1. Provider(just wrapped in Root level.no props need)
  * 2. useStore -- a hook to exact state and setters in Provider.(state and setters will merge into a big object)
  * 3. useStoreRaw -- a hook to exact state and setters in Provider.(state and setters will NOT merge)
@@ -25,32 +44,19 @@ function capitalize(str: string): string {
  * // in parent component
  * const { Provider, useStore } = createStoreContext({ count: 1, init: false })
  * return <Provider>{props.children}</Provider>
- * 
+ *
  * // in child component
  * cosnt { count, setCount } = useStore()
- * 
+ *
  */
-const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
-  type Setters = {
-    /**
-     * inputState will be merged to the store
-     */
-    set(inputStore: MayStateFn<Partial<T>>): void
-    /**
-     * set store to it's default value
-     */
-    setToInit(): void
-  } & {
-    [K in `set${Capitalize<Extract<keyof T, string>>}`]: (
-      inputStore: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any>
-    ) => void
-  }
-  type ContextValue = {
-    storeState: T
-    setters: Setters
-  }
-
-  const Context = createContext<ContextValue>({
+const createStoreContext = <T extends StoreInitState>(
+  initStore: T
+): {
+  Provider: (props: { children?: React.ReactNode }) => JSX.Element
+  useContextStore(): T & StoreSetters<T>
+  useContextStoreRaw(): StoreContext<T>
+} => {
+  const Context = createContext<StoreContext<T>>({
     storeState: initStore,
     setters: {} as any // DANGEROUS: use any force Object type
   })
@@ -59,9 +65,9 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
     /**
      * It should be add to component tree root(without any props)
      */
-    Provider: (props: { children?: React.ReactNode }): JSX.Element => {
+    Provider: (props) => {
       const [storeState, setEntireStoreState] = useState(initStore)
-      const setters = useMemo<Setters>(
+      const setters = useMemo(
         () =>
           ({
             set(inputStore) {
@@ -74,7 +80,7 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
               setEntireStoreState(initStore)
             },
             ...Object.keys(initStore).reduce((acc, name) => {
-              acc[`set${capitalize(name)}`] = function (inputState: unknown) {
+              acc[`set${capitalize(name)}`] = function (inputState) {
                 setEntireStoreState((old) => ({
                   ...old,
                   [name]: typeof inputState === 'function' ? inputState(old[name]) : inputState
@@ -82,7 +88,7 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
               }
               return acc
             }, {})
-          } as Setters),
+          } as StoreSetters<T>),
         []
       )
       const contextValue = useMemo(() => ({ storeState, setters }), [storeState, setters])
@@ -91,14 +97,14 @@ const createStoreContext = <T extends { [key: string]: any }>(initStore: T) => {
     /**
      * use this store. Every xxx will has a corresponding setXxx.(All setter properties will always start with 'set')
      */
-    useStore(): T & Setters {
+    useContextStore() {
       const store = useContext(Context)
       return { ...store.storeState, ...store.setters }
     },
     /**
      * all states and setters are separate
      */
-    useStoreRaw(): ContextValue {
+    useContextStoreRaw() {
       const store = useContext(Context)
       return store
     }
