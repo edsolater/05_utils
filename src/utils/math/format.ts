@@ -49,7 +49,6 @@ export default function format(
   } = {}
 ) {
   addDefault(options, {
-    hasSignPlus: false,
     separator: '_',
     autoAddZero: true,
     fractionLength: 3
@@ -61,7 +60,7 @@ export default function format(
       const newIntegerPart = [...integerPart].reduceRight((acc, cur, idx, strN) => {
         const indexFromRight = strN.length - 1 - idx
         const shouldAddSeparator =
-          indexFromRight !== 0 && indexFromRight % options.fractionLength! === 0
+          indexFromRight !== 0 && indexFromRight % options.fractionLength === 0
         return cur + (shouldAddSeparator ? options.separator : '') + acc
       }, '')
       return `${newIntegerPart}.${fraction}`
