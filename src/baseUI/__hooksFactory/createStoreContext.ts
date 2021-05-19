@@ -1,24 +1,45 @@
 import React, { createContext, useContext, useMemo, useState } from 'react'
 
-type MayStateFn<T> = T | ((old: T) => T)
-type StoreInitState = { [key: string]: any }
-type StoreSetters<T extends StoreInitState> = {
+type MayStateFn<T, S extends StoreTemplate> = T | ((prev: T, store: S) => T)
+
+type StoreTemplate = { [key: string]: any }
+type StorePiece<T extends StoreTemplate> = Partial<T>
+
+type Setters<T extends StoreTemplate> = {
   /**
    * inputState will be merged to the store
    */
-  set(inputStore: MayStateFn<Partial<T>>): void
+  set(piece: MayStateFn<StorePiece<T>, T>): StorePiece<T> | void
   /**
    * set store to it's default value
    */
-  setToInit(): void
+  resetStore(): StorePiece<T> | void
 } & {
   [K in `set${Capitalize<Extract<keyof T, string>>}`]: (
-    inputStore: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any>
+    newState: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any, T>
+  ) => StorePiece<T> | void
+}
+
+type ActionOptionTemplate<T extends StoreTemplate, W> = {
+  [actionName: string]: (
+    store: T,
+    setters: Setters<T>,
+    actions: W
+  ) => (...args: any[]) => StorePiece<T> | void
+}
+type ActionFinalTemplate<T extends StoreTemplate, W extends ActionOptionTemplate<T, any>> = {
+  [K in keyof ActionOptionTemplate<T, W>]: (
+    ...args: Parameters<ReturnType<ActionOptionTemplate<T, W>[K]>>
   ) => void
 }
-type StoreContext<T extends StoreInitState> = {
-  storeState: T
-  setters: StoreSetters<T>
+type FromActionOptionTemplate<W extends ActionOptionTemplate<any, any>> = {
+  [ActionName in keyof W]: ReturnType<W[ActionName]>
+}
+
+type ThisStoreContext<T extends StoreTemplate, W extends ActionOptionTemplate<T, any>> = {
+  store: T
+  setters: Setters<T>
+  actions: FromActionOptionTemplate<W>
 }
 
 /**
@@ -26,7 +47,7 @@ type StoreContext<T extends StoreInitState> = {
  * @param str string(camlCase)
  * @returns  string(PascalCase)
  */
-function capitalize(str: string): string {
+function capitalize(str: string): Capitalize<string> {
   if (!str) return ''
   return str[0].toUpperCase() + str.slice(1)
 }
@@ -35,7 +56,7 @@ function capitalize(str: string): string {
  * Creact a store use react context.
  * No need useContext from now on.
  *
- * @param initStore pass init states here
+ * @param initStoreObject pass init states here
  * @returns
  * 1. Provider(just wrapped in Root level.no props need)
  * 2. useStore -- a hook to exact state and setters in Provider.(state and setters will merge into a big object)
@@ -49,16 +70,20 @@ function capitalize(str: string): string {
  * cosnt { count, setCount } = useStore()
  *
  */
-const createStoreContext = <T extends StoreInitState>(
-  initStore: T
+const createStoreContext = <T extends StoreTemplate, AOT extends ActionOptionTemplate<T, any>>(
+  initStoreObject: T,
+  options?: {
+    actions?: AOT
+  }
 ): {
   Provider: (props: { children?: React.ReactNode }) => JSX.Element
-  useContextStore(): T & StoreSetters<T>
-  useContextStoreRaw(): StoreContext<T>
+  useContextStore(): T & Setters<T> & FromActionOptionTemplate<AOT>
+  useContextStoreRaw(): ThisStoreContext<T, AOT>
 } => {
-  const Context = createContext<StoreContext<T>>({
-    storeState: initStore,
-    setters: {} as any // DANGEROUS: use any force Object type
+  const Context = createContext<ThisStoreContext<T, AOT>>({
+    store: initStoreObject,
+    setters: {} as any, // DANGEROUS: use any force Object type
+    actions: {} as any // DANGEROUS: use any force Object type
   })
 
   return {
@@ -66,32 +91,59 @@ const createStoreContext = <T extends StoreInitState>(
      * It should be add to component tree root(without any props)
      */
     Provider: (props) => {
-      const [storeState, setEntireStoreState] = useState(initStore)
-      const setters = useMemo(
+      const [store, setEntireStore] = useState(initStoreObject)
+      console.log('reC: ')
+
+      console.log('store: ', store)
+      const setters = useMemo<Setters<T>>(
         () =>
           ({
             set(inputStore) {
-              setEntireStoreState((old) => ({
-                ...old,
-                ...(typeof inputStore === 'function' ? inputStore(old) : inputStore)
+              setEntireStore((oldStore) => ({
+                ...oldStore,
+                ...(typeof inputStore === 'function' ? inputStore(oldStore, oldStore) : inputStore)
               }))
             },
-            setToInit() {
-              setEntireStoreState(initStore)
+            resetStore() {
+              setEntireStore(initStoreObject)
             },
-            ...Object.keys(initStore).reduce((acc, name) => {
-              acc[`set${capitalize(name)}`] = function (inputState) {
-                setEntireStoreState((old) => ({
-                  ...old,
-                  [name]: typeof inputState === 'function' ? inputState(old[name]) : inputState
+            ...Object.keys(initStoreObject).reduce((acc, name) => {
+              acc[`set${capitalize(name)}`] = (inputState) => {
+                setEntireStore((oldStore) => ({
+                  ...oldStore,
+                  [name]:
+                    typeof inputState === 'function'
+                      ? inputState(oldStore[name], oldStore)
+                      : inputState
                 }))
               }
               return acc
             }, {})
-          } as StoreSetters<T>),
+          } as Setters<T>),
         []
       )
-      const contextValue = useMemo(() => ({ storeState, setters }), [storeState, setters])
+
+      const actions = useMemo(
+        () =>
+          Object.entries(options?.actions ?? {}).reduce((acc, [customedEventName, returnFn]) => {
+            acc[customedEventName] = (...inputArgs: Parameters<ReturnType<typeof returnFn>>) => {
+              setEntireStore((oldStore) => {
+                const result = returnFn(oldStore, setters, actions)(...inputArgs)
+                console.log('result', result)
+                return result
+                  ? {
+                      ...oldStore,
+                      ...result
+                    }
+                  : oldStore
+              })
+            }
+            return acc
+          }, {}) as ActionFinalTemplate<T, AOT>,
+        []
+      )
+      const contextValue = useMemo(() => ({ store, setters, actions }), [store])
+      // @ts-ignore
       return React.createElement(Context.Provider, { value: contextValue }, props.children)
     },
     /**
@@ -99,7 +151,11 @@ const createStoreContext = <T extends StoreInitState>(
      */
     useContextStore() {
       const store = useContext(Context)
-      return { ...store.storeState, ...store.setters }
+      return {
+        ...store.store,
+        ...store.setters,
+        ...store.actions
+      }
     },
     /**
      * all states and setters are separate
