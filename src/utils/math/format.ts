@@ -1,3 +1,5 @@
+import isObject from '../judgers/isObject'
+import merge from '../object/merge'
 import addDefault from '../object/addDefault'
 import applyActions from './applyActions'
 
@@ -80,10 +82,8 @@ type AnyFn = (...args: any[]) => void
 // #endregion
 type AddOptions<F, Options> = F & { addOptions(options?: Options): AddOptions<F, Options> }
 
-
 /**
- * @todo this use is too complicated!!!
- * 
+ *
  * add new property: addOptions([options]) to input function.
  * configedProcesser is a function with options setted.
  * but it's type is same as input function.
@@ -91,10 +91,9 @@ type AddOptions<F, Options> = F & { addOptions(options?: Options): AddOptions<F,
  *
  * default options type  will be the last param of input function.
  * (you can specify the type manually)
- * 
+ *
  * @example
  * const foo = makeFunctionCanReturnConfigedProcessor(format)
- * 
  * const newFormat = foo.addOptions({ separator: '$$' })
  * console.log(newFormat(123456, { alwaysSign: true }))  // same as : format(123456, {separator: '$$', alwaysSign: true})
  */
@@ -119,3 +118,28 @@ function makeFunctionCanReturnConfigedProcessor<
   return pureFunc
 }
 
+/**
+ * attach a param to the function.return the function's copy.
+ * predefined param and runtime param will merge eventually
+ * 
+ * @returns new function
+ * @example
+ * onst newFormat = partlyInvoke(format, 1, { alwaysSign: true })
+ * console.log(newFormat(123456)) // same as : format(123456, { alwaysSign: true})
+ */
+function partlyInvoke<F extends AnyFn, Index extends number>(
+  pureFunc: F,
+  paramIndex: Index,
+  param: Partial<Parameters<F>[Index]>
+): F {
+  const partlyInvokedFunction = (...args: Parameters<F>) => {
+    const oldParam = args[paramIndex]
+    const newParam = isObject(oldParam) && isObject(param) ? merge(oldParam, param) : param
+    return pureFunc(...args.slice(0, paramIndex), newParam, ...args.slice(paramIndex + 1))
+  }
+  //@ts-ignore
+  return partlyInvokedFunction
+}
+
+const newFormat = partlyInvoke(format, 1, { alwaysSign: true })
+console.log(newFormat(123456))
