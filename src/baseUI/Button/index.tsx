@@ -7,6 +7,7 @@ import merge from 'utils/object/merge'
 
 export interface ButtonProps extends DivProps<'button'>, ButtonStyleProps {}
 
+/** TODO: 因为这不够 Headless，有内置CSS的缘故。这样复用性不高，必须要装emotion，并不headless  */
 /**
  * 将子元素显示在一行，相当于flexbox
  */

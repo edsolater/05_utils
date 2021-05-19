@@ -1,7 +1,7 @@
 /**
  * @mutable
  *
- * 给配置对象添加默认值（改变原对象）
+ * add default config object to original object. (will mutate object)
  */
 export default function addDefault<T extends object, U extends Partial<T>>(
   initConfig: T,

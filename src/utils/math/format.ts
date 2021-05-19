@@ -47,14 +47,14 @@ export default function format(
      */
     fractionLength?: number
   } = {}
-) {
+): string {
   addDefault(options, {
     separator: '_',
     autoAddZero: true,
     fractionLength: 3
   })
   const result = applyActions(n, [
-    (n) => n.toFixed(options.fractionLength!),
+    (n) => n.toFixed(options.fractionLength),
     (str: string) => {
       const [integerPart, fraction] = str.split('.')
       const newIntegerPart = [...integerPart].reduceRight((acc, cur, idx, strN) => {
