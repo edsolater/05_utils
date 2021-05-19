@@ -18,7 +18,7 @@ export default function format(
      * format(1) // result: '1.000'
      * format(1, {hasPositiveSign:true}) // result: '+1.000'
      */
-    hasSignPlus?: boolean
+    alwaysSign?: boolean
     /**
      * separator symbol
      * @default '_'
@@ -53,9 +53,9 @@ export default function format(
     autoAddZero: true,
     fractionLength: 3
   })
-  const result = applyActions(n, [
+  return applyActions(n, [
     (n) => n.toFixed(options.fractionLength),
-    (str: string) => {
+    (str) => {
       const [integerPart, fraction] = str.split('.')
       const newIntegerPart = [...integerPart].reduceRight((acc, cur, idx, strN) => {
         const indexFromRight = strN.length - 1 - idx
@@ -65,14 +65,13 @@ export default function format(
       }, '')
       return `${newIntegerPart}.${fraction}`
     },
-    (str: string) => {
+    (str) => {
       const isPositive = str[0] !== '-' && str[0] !== '0'
-      return (isPositive && options.hasSignPlus ? '+' : '') + str
+      return (isPositive && options.alwaysSign ? '+' : '') + str
     }
   ])
-  return result
 }
-//#region ------------------- 测试 -------------------
-// console.log(format(123456, { hasSignPlus: true }))
-// console.log(format(7000000.2))
-//#endregion
+// #region ------------------- 测试 -------------------
+console.log(format(123456, { alwaysSign: true }))
+console.log(format(7000000.2))
+// #endregion
