@@ -3,6 +3,49 @@ import merge from '../object/merge'
 import addDefault from '../object/addDefault'
 import applyActions from './applyActions'
 
+type FormatOptions = {
+  /**
+   * whether positive number should has '+'
+   * @default false
+   * @example
+   * format(1) // result: '1.000'
+   * format(1, { hasPositiveSign: true }) // result: '+1.000'
+   */
+  alwaysSign?: boolean
+  /**
+   * separator symbol
+   * @default '_'
+   * @example
+   * format(7000000.2) // result: '7_000_000.200'
+   * format(7000000.2, { separator: ',' }) // result: '7,000,000.200'
+   */
+  separator?: string
+  /**
+   * whether the number string can shrink or grow
+   *
+   * (the max length of number is still limited by `fractionLength`)
+   * @default true
+   * @example
+   * format(100.2, { autoAddZero: true, fractionLength: 3 }) // result: '100.200'
+   * format(100.2, { autoAddZero: false, fractionLength: 3 }) // result: '100.2'
+   * format(100.1234, { autoAddZero: false, fractionLength: 3 }) // result: '100.123'
+   */
+  autoAddZero?: boolean
+  /**
+   * how many fraction number. (if there is noting, 0 will be added )
+   * @default 3
+   * @example
+   * format(100.2, { fractionLength: 3 }) // result: '100.200'
+   * format(100.1234, { fractionLength: 6 }) // result: '100.123400'
+   */
+  fractionLength?: number
+}
+const defaultOptions: FormatOptions = {
+  separator: '_',
+  autoAddZero: true,
+  fractionLength: 3
+}
+
 /**
  * to formated number string
  * @example
@@ -10,51 +53,8 @@ import applyActions from './applyActions'
  * format(8800.1234, { hasPositiveSign: true, seperator: '', fractionLength: 6 }) // result: '+8800.123400'
  * format(100.1234, { autoAddZero: false, fractionLength: 3 }) // result: '100.123'
  */
-export default function format(
-  n: number,
-  options: {
-    /**
-     * whether positive number should has '+'
-     * @default false
-     * @example
-     * format(1) // result: '1.000'
-     * format(1, { hasPositiveSign: true }) // result: '+1.000'
-     */
-    alwaysSign?: boolean
-    /**
-     * separator symbol
-     * @default '_'
-     * @example
-     * format(7000000.2) // result: '7_000_000.200'
-     * format(7000000.2, { separator: ',' }) // result: '7,000,000.200'
-     */
-    separator?: string
-    /**
-     * whether the number string can shrink or grow
-     *
-     * (the max length of number is still limited by `fractionLength`)
-     * @default true
-     * @example
-     * format(100.2, { autoAddZero: true, fractionLength: 3 }) // result: '100.200'
-     * format(100.2, { autoAddZero: false, fractionLength: 3 }) // result: '100.2'
-     * format(100.1234, { autoAddZero: false, fractionLength: 3 }) // result: '100.123'
-     */
-    autoAddZero?: boolean
-    /**
-     * how many fraction number. (if there is noting, 0 will be added )
-     * @default 3
-     * @example
-     * format(100.2, { fractionLength: 3 }) // result: '100.200'
-     * format(100.1234, { fractionLength: 6 }) // result: '100.123400'
-     */
-    fractionLength?: number
-  } = {}
-): string {
-  addDefault(options, {
-    separator: '_',
-    autoAddZero: true,
-    fractionLength: 3
-  })
+export default function format(n: number, options: FormatOptions = {}): string {
+  addDefault(options, defaultOptions)
   console.log(n, options)
   return applyActions(n, [
     (n) => n.toFixed(options.fractionLength),
@@ -63,7 +63,7 @@ export default function format(
       const newIntegerPart = [...integerPart].reduceRight((acc, cur, idx, strN) => {
         const indexFromRight = strN.length - 1 - idx
         const shouldAddSeparator =
-          indexFromRight !== 0 && indexFromRight % options.fractionLength === 0
+          indexFromRight !== 0 && indexFromRight % options.fractionLength! === 0
         return cur + (shouldAddSeparator ? options.separator : '') + acc
       }, '')
       return `${newIntegerPart}.${fraction}`
@@ -74,6 +74,21 @@ export default function format(
     }
   ])
 }
+
+/**
+ * @mutable
+ * (this will mutate original function)
+ */
+format.addOptions_mutable = (options: FormatOptions): void => {
+  Object.assign(defaultOptions, options)
+}
+
+/**
+ * @immutable
+ * {@link format.addOptions_mutable}'s immutable version
+ */
+format.addOptions = (options: FormatOptions) => partlyInvoke(format, 1, options)
+
 // #region ------------------- 测试 -------------------
 console.log(format(123456, { alwaysSign: true }))
 console.log(format(7000000.2))
@@ -121,7 +136,7 @@ function makeFunctionCanReturnConfigedProcessor<
 /**
  * attach a param to the function.return the function's copy.
  * predefined param and runtime param will merge eventually
- * 
+ *
  * @returns new function
  * @example
  * onst newFormat = partlyInvoke(format, 1, { alwaysSign: true })
