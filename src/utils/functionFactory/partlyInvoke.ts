@@ -1,6 +1,7 @@
 import isObject from '../judgers/isObject'
 import merge from '../object/merge'
-import format, { AnyFn } from '../math/format'
+import format from '../math/format'
+import { AnyFn } from 'typings/constants'
 
 /**
  * attach a param to the function.return the function's copy.

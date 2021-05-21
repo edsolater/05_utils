@@ -1,6 +1,7 @@
 import addDefault from '../object/addDefault'
 import applyActions from './applyActions'
 import { partlyInvoke } from '../functionFactory/partlyInvoke'
+import { AnyFn } from 'typings/constants'
 
 type FormatOptions = {
   /**
@@ -91,8 +92,6 @@ format.addOptions = (options: FormatOptions) => partlyInvoke(format, 1, options)
 // #region ------------------- 测试 -------------------
 console.log(format(123456, { alwaysSign: true }))
 console.log(format(7000000.2))
-export type AnyFn = (...args: any[]) => void
-
 // #endregion
 type AddOptions<F, Options> = F & { addOptions(options?: Options): AddOptions<F, Options> }
 
