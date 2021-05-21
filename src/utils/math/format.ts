@@ -1,7 +1,6 @@
-import isObject from '../judgers/isObject'
-import merge from '../object/merge'
 import addDefault from '../object/addDefault'
 import applyActions from './applyActions'
+import { partlyInvoke } from '../functionFactory/partlyInvoke'
 
 type FormatOptions = {
   /**
@@ -92,7 +91,7 @@ format.addOptions = (options: FormatOptions) => partlyInvoke(format, 1, options)
 // #region ------------------- 测试 -------------------
 console.log(format(123456, { alwaysSign: true }))
 console.log(format(7000000.2))
-type AnyFn = (...args: any[]) => void
+export type AnyFn = (...args: any[]) => void
 
 // #endregion
 type AddOptions<F, Options> = F & { addOptions(options?: Options): AddOptions<F, Options> }
@@ -132,29 +131,3 @@ function makeFunctionCanReturnConfigedProcessor<
   //@ts-ignore
   return pureFunc
 }
-
-/**
- * attach a param to the function.return the function's copy.
- * predefined param and runtime param will merge eventually
- *
- * @returns new function
- * @example
- * onst newFormat = partlyInvoke(format, 1, { alwaysSign: true })
- * console.log(newFormat(123456)) // same as : format(123456, { alwaysSign: true})
- */
-function partlyInvoke<F extends AnyFn, Index extends number>(
-  pureFunc: F,
-  paramIndex: Index,
-  param: Partial<Parameters<F>[Index]>
-): F {
-  const partlyInvokedFunction = (...args: Parameters<F>) => {
-    const oldParam = args[paramIndex]
-    const newParam = isObject(oldParam) && isObject(param) ? merge(oldParam, param) : param
-    return pureFunc(...args.slice(0, paramIndex), newParam, ...args.slice(paramIndex + 1))
-  }
-  //@ts-ignore
-  return partlyInvokedFunction
-}
-
-const newFormat = partlyInvoke(format, 1, { alwaysSign: true })
-console.log(newFormat(123456))
