@@ -4,16 +4,14 @@ import createStoreContext from 'baseUI/__hooksFactory/createStoreContext'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
-const { Provider: WrappedProvider, useContextStoreRaw } = createStoreContext(
+const { Provider: WrappedProvider, useContextStoreRaw, useContextStore } = createStoreContext(
   { count: 1, init: false },
   {
     actions: {
-      setInner: ({store, setters, actions /* TODO: 这边的类型 */}) => (n: number) => {
+      setInner: ({ setters , actions}) => () => {
         setters.setCount((n) => n + 1)
       },
-      hello: ({store, setters, actions}) => (boolean: boolean): Partial<typeof store> => {
-        return store
-      }
+      hello: ({ store }) => () => {}
     }
   }
 )
@@ -29,19 +27,20 @@ const GlobalStoreExample = () => {
   )
 }
 const Inner = () => {
-  const store = useContextStoreRaw()
-  const {
-    store: { count },
-    // setters: { setCount, resetStore },
-    actions: { setInner }
-  } = store
+  // const store = useContextStoreRaw()
+  // const {
+  //   store: { count },
+  //   // setters: { setCount, resetStore },
+  //   actions: { setInner }
+  // } = store
+  const {count, setInner} = useContextStore()
   return (
     <>
       you have clicked {count} times
       <Button
         onClick={() => {
           // setCount((n) => n + 1)
-          setInner(4)
+          setInner()
         }}
       ></Button>
     </>
