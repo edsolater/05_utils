@@ -127,16 +127,13 @@ const createStoreContext = <T extends StoreTemplate, AOT extends ActionOptionTem
         () =>
           Object.entries(options?.actions ?? {}).reduce((acc, [customedEventName, returnFn]) => {
             acc[customedEventName] = (...inputArgs: Parameters<ReturnType<typeof returnFn>>) => {
-              setEntireStore((oldStore) => {
-                const result = returnFn(oldStore, setters, actions)(...inputArgs)
-                console.log('result', result)
-                return result
-                  ? {
-                      ...oldStore,
-                      ...result
-                    }
-                  : oldStore
-              })
+              //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次
+              const result = returnFn(store, setters, actions)(...inputArgs)
+              if (result)
+                setEntireStore((oldStore) => ({
+                  ...oldStore,
+                  ...result
+                }))
             }
             return acc
           }, {}) as ActionFinalTemplate<T, AOT>,
