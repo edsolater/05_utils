@@ -8,11 +8,10 @@ const { Provider: WrappedProvider, useContextStoreRaw } = createStoreContext(
   { count: 1, init: false },
   {
     actions: {
-      setInner: (store, setters, actions /* TODO: 这边的类型 */) => (n: number) => {
-        console.log(2333) /* FIXME 触发了2次数，为什么？ */
+      setInner: ({store, setters, actions /* TODO: 这边的类型 */}) => (n: number) => {
         setters.setCount((n) => n + 1)
       },
-      hello: (store, setters, actions) => (boolean: boolean): Partial<typeof store> => {
+      hello: ({store, setters, actions}) => (boolean: boolean): Partial<typeof store> => {
         return store
       }
     }
@@ -36,7 +35,6 @@ const Inner = () => {
     // setters: { setCount, resetStore },
     actions: { setInner }
   } = store
-  console.log('2222sadf')
   return (
     <>
       you have clicked {count} times
