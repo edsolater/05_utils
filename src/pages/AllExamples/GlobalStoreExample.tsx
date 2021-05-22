@@ -8,10 +8,12 @@ const { Provider: WrappedProvider, useContextStoreRaw, useContextStore } = creat
   { count: 1, init: false },
   {
     actions: {
-      setInner: ({ setters , actions}) => () => {
+      setInner: ({ setters , dangerous_actions}) => () => {
         setters.setCount((n) => n + 1)
       },
-      hello: ({ store }) => () => {}
+      hello: ({ store, dangerous_actions }) => () => {
+        dangerous_actions.setInner()
+      }
     }
   }
 )
@@ -33,14 +35,14 @@ const Inner = () => {
   //   // setters: { setCount, resetStore },
   //   actions: { setInner }
   // } = store
-  const {count, setInner} = useContextStore()
+  const {count, hello} = useContextStore()
   return (
     <>
       you have clicked {count} times
       <Button
         onClick={() => {
           // setCount((n) => n + 1)
-          setInner()
+          hello()
         }}
       ></Button>
     </>

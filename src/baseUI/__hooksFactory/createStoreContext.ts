@@ -25,9 +25,9 @@ type ActionOptionFunction<T extends StoreTemplate, W = any> = (storeInfo: {
   setters: Setters<T>
   /**
    * Avoid to use if You can
-   * It's type is not well
+   * It's type is not well!!!
    */
-  actions: W
+  dangerous_actions: W
 }) => (...args: any[]) => StorePiece<T> | void
 
 type ActionOptionTemplate<T extends StoreTemplate, W = any> = {
@@ -129,7 +129,7 @@ const createStoreContext = <
             acc[customedEventName] = (...inputArgs: Parameters<ReturnType<typeof returnFn>>) => {
               //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次
               // @ts-ignore
-              const result = returnFn({ store, setters, actions })(...inputArgs)
+              const result = returnFn({ store, setters, dangerous_actions: actions })(...inputArgs)
               if (result)
                 setEntireStore((oldStore) => ({
                   ...oldStore,
