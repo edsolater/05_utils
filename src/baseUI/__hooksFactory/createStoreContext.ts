@@ -20,26 +20,27 @@ type Setters<T extends StoreTemplate> = {
   ) => StorePiece<T> | void
 }
 
-type ActionOptionTemplate<T extends StoreTemplate, W> = {
-  [actionName: string]: (
-    store: T,
-    setters: Setters<T>,
-    actions: W
-  ) => (...args: any[]) => StorePiece<T> | void
+type ActionOptionFunction<T extends StoreTemplate, W = any> = (storeInfo: {
+  store: T
+  setters: Setters<T>
+  /**
+   * Avoid to use if You can
+   * It's type is not well!!!
+   */
+  dangerous_actions: W
+}) => (...args: any[]) => StorePiece<T> | void
+
+type ActionOptionTemplate<T extends StoreTemplate, W = any> = {
+  [actionName: string]: ActionOptionFunction<T, W>
 }
-type ActionFinalTemplate<T extends StoreTemplate, W extends ActionOptionTemplate<T, any>> = {
-  [K in keyof ActionOptionTemplate<T, W>]: (
-    ...args: Parameters<ReturnType<ActionOptionTemplate<T, W>[K]>>
-  ) => void
-}
-type FromActionOptionTemplate<W extends ActionOptionTemplate<any, any>> = {
+type RuntimeActions<W extends ActionOptionTemplate<any, any>> = {
   [ActionName in keyof W]: ReturnType<W[ActionName]>
 }
 
-type ThisStoreContext<T extends StoreTemplate, W extends ActionOptionTemplate<T, any>> = {
+type ThisStoreContext<T extends StoreTemplate, W extends ActionOptionTemplate<T>> = {
   store: T
   setters: Setters<T>
-  actions: FromActionOptionTemplate<W>
+  actions: RuntimeActions<W>
 }
 
 /**
@@ -70,14 +71,17 @@ function capitalize(str: string): Capitalize<string> {
  * cosnt { count, setCount } = useStore()
  *
  */
-const createStoreContext = <T extends StoreTemplate, AOT extends ActionOptionTemplate<T, any>>(
+const createStoreContext = <
+  T extends StoreTemplate,
+  AOT extends ActionOptionTemplate<T, any /* TODO: 这里引用自身并不会正确推断 */>
+>(
   initStoreObject: T,
   options?: {
     actions?: AOT
   }
 ): {
   Provider: (props: { children?: React.ReactNode }) => JSX.Element
-  useContextStore(): T & Setters<T> & FromActionOptionTemplate<AOT>
+  useContextStore(): T & Setters<T> & RuntimeActions<AOT>
   useContextStoreRaw(): ThisStoreContext<T, AOT>
 } => {
   const Context = createContext<ThisStoreContext<T, AOT>>({
@@ -92,34 +96,30 @@ const createStoreContext = <T extends StoreTemplate, AOT extends ActionOptionTem
      */
     Provider: (props) => {
       const [store, setEntireStore] = useState(initStoreObject)
-      console.log('reC: ')
-
-      console.log('store: ', store)
-      const setters = useMemo<Setters<T>>(
-        () =>
-          ({
-            set(inputStore) {
+      const setters = useMemo(
+        () => ({
+          set(inputStore) {
+            setEntireStore((oldStore) => ({
+              ...oldStore,
+              ...(typeof inputStore === 'function' ? inputStore(oldStore, oldStore) : inputStore)
+            }))
+          },
+          resetStore() {
+            setEntireStore(initStoreObject)
+          },
+          ...Object.keys(initStoreObject).reduce((acc, name) => {
+            acc[`set${capitalize(name)}`] = (inputState) => {
               setEntireStore((oldStore) => ({
                 ...oldStore,
-                ...(typeof inputStore === 'function' ? inputStore(oldStore, oldStore) : inputStore)
+                [name]:
+                  typeof inputState === 'function'
+                    ? inputState(oldStore[name], oldStore)
+                    : inputState
               }))
-            },
-            resetStore() {
-              setEntireStore(initStoreObject)
-            },
-            ...Object.keys(initStoreObject).reduce((acc, name) => {
-              acc[`set${capitalize(name)}`] = (inputState) => {
-                setEntireStore((oldStore) => ({
-                  ...oldStore,
-                  [name]:
-                    typeof inputState === 'function'
-                      ? inputState(oldStore[name], oldStore)
-                      : inputState
-                }))
-              }
-              return acc
-            }, {})
-          } as Setters<T>),
+            }
+            return acc
+          }, {})
+        }),
         []
       )
 
@@ -127,19 +127,17 @@ const createStoreContext = <T extends StoreTemplate, AOT extends ActionOptionTem
         () =>
           Object.entries(options?.actions ?? {}).reduce((acc, [customedEventName, returnFn]) => {
             acc[customedEventName] = (...inputArgs: Parameters<ReturnType<typeof returnFn>>) => {
-              setEntireStore((oldStore) => {
-                const result = returnFn(oldStore, setters, actions)(...inputArgs)
-                console.log('result', result)
-                return result
-                  ? {
-                      ...oldStore,
-                      ...result
-                    }
-                  : oldStore
-              })
+              //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次
+              // @ts-ignore
+              const result = returnFn({ store, setters, dangerous_actions: actions })(...inputArgs)
+              if (result)
+                setEntireStore((oldStore) => ({
+                  ...oldStore,
+                  ...result
+                }))
             }
             return acc
-          }, {}) as ActionFinalTemplate<T, AOT>,
+          }, {}),
         []
       )
       const contextValue = useMemo(() => ({ store, setters, actions }), [store])
