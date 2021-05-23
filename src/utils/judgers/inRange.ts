@@ -10,6 +10,6 @@
  * inRange(4, [4, 4]) // true
  * inRange(4, [4.1, 5]) // true
  */
-export default function inRange(n: number, range: [left: number, right: number]) {
+export default function inRange(n: number, range: [left: number, right: number]): boolean {
   return range[0] <= n && n <= range[1]
 }

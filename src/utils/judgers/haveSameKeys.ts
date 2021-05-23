@@ -1,5 +1,5 @@
 import areShallowEqualArray from './areShallowEqualArray'
-import isObject from './isObject'
+import isObjectLike from './isObjectLike'
 
 /**
  * 判断两个对象是否具有相同的键
@@ -10,6 +10,6 @@ import isObject from './isObject'
  */
 export default function haveSameKeys(val1: unknown, val2: unknown) {
   return Boolean(
-    isObject(val1) && isObject(val2) && areShallowEqualArray(Object.keys(val1), Object.keys(val2))
+    isObjectLike(val1) && isObjectLike(val2) && areShallowEqualArray(Object.keys(val1), Object.keys(val2))
   )
 }

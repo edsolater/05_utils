@@ -1,8 +1,9 @@
+import _getType from './_getType'
 /**
- * 判断是否是个对象
- * (数组被认为是对象，函数被认为非对象)
- * @param val 目标值
+ * 检测值是否是个对象(!!!不包含数组!!!)
+ * @param val 检测值
+ * @returns 是/否
  */
-export default function isObject(val: unknown): val is object {
-  return typeof val === 'object' && val !== null
+export default function isObject(val: unknown): val is Extract<object, Array<any>> {
+  return _getType(val) === 'object'
 }

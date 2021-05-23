@@ -1,10 +1,10 @@
 import getObjectSize from '../object/getObjectSize'
-import isObject from './isObject'
+import isObjectLike from './isObjectLike'
 
 /**
  * 判断对象是否为空
  * @param val 目标对象
  */
 export default function isEmptyObject(val: unknown): boolean {
-  return isObject(val) && getObjectSize(val) === 0
+  return isObjectLike(val) && getObjectSize(val) === 0
 }

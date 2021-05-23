@@ -6,6 +6,6 @@
  * inArray(2, [1, 2, 3]) // true
  * inArray('hello', ['hello', 'world']) // true
  */
-export default function inArray<T extends unknown>(val: T, arr: T[]) {
+export default function inArray<T extends unknown>(val: T, arr: T[]):boolean {
   return arr.includes(val)
 }

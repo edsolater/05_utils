@@ -1,5 +1,5 @@
-import isObject from 'utils/judgers/isObject'
+import isObjectLike from 'utils/judgers/isObjectLike'
 
 export default function isHTMLElement(value: any): value is HTMLElement {
-  return isObject(value) && Boolean((value as { tagName: string }).tagName)
+  return isObjectLike(value) && Boolean((value as { tagName: string }).tagName)
 }

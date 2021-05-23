@@ -1,6 +1,6 @@
-import isArray from '../judgers/isArray'
-import isNull from '../judgers/isNull'
-import isObject from '../judgers/isObject'
+import isArray from './isArray'
+import isNull from './isNull'
+import isObjectLike from './isObjectLike'
 
 /**
  * 获取值的粗略类型（以小写形式）（不会显示是什么对象）
@@ -20,7 +20,7 @@ import isObject from '../judgers/isObject'
  * getType(Object.create(null)) // 'object'
  * getType(new Date()) // 'object'
  */
-export default function getType(
+export default function _getType(
   val: unknown
 ):
   | 'null'
@@ -33,5 +33,5 @@ export default function getType(
   | 'array'
   | 'function'
   | 'object' {
-  return isNull(val) ? 'null' : isArray(val) ? 'array' : isObject(val) ? 'object' : typeof val
+  return isNull(val) ? 'null' : isArray(val) ? 'array' : isObjectLike(val) ? 'object' : typeof val
 }

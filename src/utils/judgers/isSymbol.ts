@@ -1,6 +1,6 @@
-import getType from '../string/getType';
+import _getType from './_getType';
 
 function isSymbol(val: unknown): val is symbol {
-  return getType(val) === 'symbol';
+  return _getType(val) === 'symbol';
 }
 export default isSymbol

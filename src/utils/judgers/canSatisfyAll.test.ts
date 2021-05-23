@@ -1,6 +1,6 @@
-import isObject from './isObject'
+import isObjectLike from './isObjectLike'
 import canSatisfyAll from './canSatisfyAll'
 
 test('基础案例', () => {
-  expect(canSatisfyAll({}, isObject)).toBe(true)
+  expect(canSatisfyAll({}, isObjectLike)).toBe(true)
 })

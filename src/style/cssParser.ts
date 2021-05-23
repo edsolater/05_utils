@@ -1,8 +1,8 @@
 import { css, SerializedStyles } from '@emotion/react'
 import flat from 'utils/array/flat'
 import isFunction from 'utils/judgers/isFunction'
+import isObjectLike from 'utils/judgers/isObjectLike'
 import isObject from 'utils/judgers/isObject'
-import isObjectLiteral from 'utils/judgers/isObjectLiteral'
 import divide from 'utils/object/divide'
 import { ICSS, ICSSObject } from './ICSS'
 import { mergeDeep } from '../utils/merge'
@@ -19,7 +19,7 @@ export function mixCSSObjects(
   //@ts-expect-error
   return flat(icsses)
     .map((icss) => (isFunction(icss) ? icss() : icss))
-    .filter(isObject)
+    .filter(isObjectLike)
 }
 
 /**在最终解析CSS时，中间件队列 */
@@ -36,7 +36,7 @@ export function parseCSS(icss: ICSS): SerializedStyles {
   const nestedMiddleware = (cssobj: ICSSObject) =>
     middleware(
       mapValues(cssobj, (value) =>
-        isObjectLiteral(value) ? nestedMiddleware(value as ICSSObject) : value
+        isObject(value) ? nestedMiddleware(value as ICSSObject) : value
       )
     )
   const parsedCSS = composed ? nestedMiddleware(composed) : undefined

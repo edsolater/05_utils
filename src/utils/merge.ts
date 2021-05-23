@@ -1,5 +1,5 @@
 import { MayDeepArray } from 'typings/tools'
-import isObject from './judgers/isObject'
+import isObjectLike from './judgers/isObjectLike'
 import flat from './array/flat'
 import { OnlyObject } from '../style/cssParser'
 import isArray from './judgers/isArray'
@@ -24,7 +24,7 @@ export function mergeDeepObject<T>(...deepObjArray: MayDeepArray<T>[]): OnlyObje
   for (const obj of flattedItems) {
     for (const [key, value] of Object.entries(obj ?? {})) {
       let mergedValue =
-        isObject(resultObj[key]) && isObject(value)
+        isObjectLike(resultObj[key]) && isObjectLike(value)
           ? mergeDeepObject([resultObj[key], value])
           : value
       resultObj[key] = mergedValue
@@ -56,7 +56,7 @@ export function mergeDeep<T>(...objDeepArray: MayDeepArray<T>[]): OnlyObject<T> 
       let mergedValue =
         isArray(resultObj[key]) && isArray(value)
           ? [...resultObj[key], ...value]
-          : isObject(resultObj[key]) && isObject(value)
+          : isObjectLike(resultObj[key]) && isObjectLike(value)
           ? mergeDeep([resultObj[key], value])
           : value
       resultObj[key] = mergedValue

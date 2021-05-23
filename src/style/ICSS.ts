@@ -1,10 +1,10 @@
 import { CSSObject} from '@emotion/react'
 import { MayDeepArray } from 'typings/tools'
-import isObject from 'utils/judgers/isObject'
+import isObjectLike from 'utils/judgers/isObjectLike'
 export interface ICSSObject extends CSSObject {}
 export type ICSS = MayDeepArray<ICSSObject | undefined>
 export function ICSS(cssObject: string | number | ICSS, description?: string): ICSS {
-  if (isObject(cssObject)) {
+  if (isObjectLike(cssObject)) {
     return cssObject
   } else {
     throw new TypeError(description)

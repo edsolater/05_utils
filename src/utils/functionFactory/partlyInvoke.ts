@@ -1,4 +1,4 @@
-import isObject from '../judgers/isObject'
+import isObjectLike from '../judgers/isObjectLike'
 import merge from '../object/merge'
 import format from '../math/format'
 import { AnyFn } from 'typings/constants'
@@ -19,7 +19,7 @@ export function partlyInvoke<F extends AnyFn, Index extends number>(
 ): F {
   const partlyInvokedFunction = (...args: Parameters<F>) => {
     const oldParam = args[paramIndex]
-    const newParam = isObject(oldParam) && isObject(param) ? merge(oldParam, param) : param
+    const newParam = isObjectLike(oldParam) && isObjectLike(param) ? merge(oldParam, param) : param
     return pureFunc(...args.slice(0, paramIndex), newParam, ...args.slice(paramIndex + 1))
   }
   //@ts-ignore

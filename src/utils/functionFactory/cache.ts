@@ -1,4 +1,4 @@
-import isObject from "../judgers/isObject"
+import isObjectLike from "../judgers/isObjectLike"
 
 // COUNT：使用次数 1
 type Key = string
@@ -24,7 +24,7 @@ function ShallowMap<InputKey extends object | { [key: string]: unknown }, Return
 
   // compute idle key for parameters in an invoke.
   const calcKey = (input: unknown, valueMap = objectHashMap, canShallow = true): Key =>
-    isObject(input)
+    isObjectLike(input)
       ? Object.entries(input)
           .map(([key, val]) => {
             if (typeof val !== 'object' || val === null) return `${key}${val}`

@@ -1,4 +1,4 @@
-import isObject from './isObject'
+import isObjectLike from './isObjectLike'
 import areSame from './areSame'
 import areShallowEqualArray from './areShallowEqualArray'
 
@@ -13,7 +13,7 @@ import areShallowEqualArray from './areShallowEqualArray'
  * areDeepEqual({ a: 1, b: { c: 2, d: 3 } }, { a: 1, b: { c: 2, d: 3 } }) // false
  */
 export default function areShallowEqual(val1: unknown, val2: unknown) {
-  return isObject(val1) && isObject(val2)
+  return isObjectLike(val1) && isObjectLike(val2)
     ? areShallowEqualArray(Object.entries(val1).flat(), Object.entries(val2).flat())
     : areSame(val1, val2)
 }
