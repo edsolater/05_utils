@@ -3,7 +3,7 @@
  *
  * add default config object to original object. (will mutate object)
  */
-export default function addDefault_mutable<T extends object, U extends Partial<T>>(
+export default function addDefault<T extends object, U extends Partial<T>>(
   initConfig: T,
   defaultConfig: U
 ): asserts initConfig is T & U {

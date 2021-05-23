@@ -1,4 +1,4 @@
-import addDefault_mutable from 'utils/object/addDefault'
+import addDefault from 'utils/object/addDefault'
 
 /**
  * 捕获桌面或窗口
@@ -8,7 +8,7 @@ import addDefault_mutable from 'utils/object/addDefault'
 export async function evokeWindow(
   constraints: MediaStreamConstraints = {}
 ): Promise<MediaStream | undefined> {
-  addDefault_mutable(constraints, { video: true, audio: true })
+  addDefault(constraints, { video: true, audio: true })
   try {
     //@ts-ignore
     return window.navigator.mediaDevices.getDisplayMedia(constraints)
@@ -24,7 +24,7 @@ export async function evokeWindow(
 export async function evokeCamera(
   constraints: MediaStreamConstraints = {}
 ): Promise<MediaStream | undefined> {
-  addDefault_mutable(constraints, { video: true, audio: true })
+  addDefault(constraints, { video: true, audio: true })
   try {
     return window.navigator.mediaDevices.getUserMedia(constraints)
   } catch (e) {
@@ -39,7 +39,7 @@ export async function evokeCamera(
 export async function evokeMicrophone(
   constraints: Pick<MediaStreamConstraints, 'audio'> = { audio: true }
 ): Promise<MediaStream | undefined> {
-  addDefault_mutable(constraints, { audio: true })
+  addDefault(constraints, { audio: true })
   try {
     return window.navigator.mediaDevices.getUserMedia(constraints)
   } catch (e) {

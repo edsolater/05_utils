@@ -1,1 +1,0 @@
-// 与 createStoreContext 不同的是，它不制造Context， 而是直接用JavaScript全局作用域来管理状态（这会在concurrentMode下出问题）

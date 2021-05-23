@@ -1,12 +1,13 @@
 import React from 'react'
 import Button from 'baseUI/Button'
-import createStoreContext from 'baseUI/__hooksFactory/createStoreContext'
+import createStore from 'baseUI/__hooksFactory/createStore'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
-const { Provider: WrappedProvider, useContextStore } = createStoreContext(
+const { useStore: useContextStore } = createStore(
   { count: 1, init: false },
   {
+    storeIn: 'javascript-variable',
     actions: {
       setInner: ({ setters }) => () => {
         setters.setCount((n) => n + 1)
@@ -20,11 +21,9 @@ const { Provider: WrappedProvider, useContextStore } = createStoreContext(
 const GlobalStoreExample = () => {
   return (
     <ExampleCard title='GlobalStore' category='hooks'>
-      <WrappedProvider>
-        <ExampleGroup caption='onClickOutside'>
-          <Inner />
-        </ExampleGroup>
-      </WrappedProvider>
+      <ExampleGroup caption='onClickOutside'>
+        <Inner />
+      </ExampleGroup>
     </ExampleCard>
   )
 }
@@ -35,14 +34,18 @@ const Inner = () => {
   //   // setters: { setCount, resetStore },
   //   actions: { setInner }
   // } = store
-  const { count, hello } = useContextStore()
+  const {
+    store: { count },
+    actions: { hello },
+    setters: { setCount }
+  } = useContextStore()
   return (
     <>
       you have clicked {count} times
       <Button
         onClick={() => {
-          // setCount((n) => n + 1)
-          hello()
+          setCount((n) => n + 1)
+          // hello()
         }}
       ></Button>
     </>

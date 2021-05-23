@@ -1,7 +1,7 @@
 import CSS from 'baseUI/CSS'
 import Div from 'baseUI/Div'
 import cssColor from 'baseUI/__config/cssColor'
-import createStoreContext from 'baseUI/__hooksFactory/createStoreContext'
+import createStore from 'baseUI/__hooksFactory/createStore'
 import React, { useState } from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
@@ -11,7 +11,7 @@ import ExampleGroup from './ExampleGroup'
  */
 const DivExample = () => {
   const [isFocused, setIsFocused] = useState(false)
-  const GlobalStoreContext = createStoreContext({count: 1})
+  const GlobalStoreContext = createStore({count: 1})
   return (
     <ExampleCard category='baseUI' title='Div'>
       <ExampleGroup caption='onClickOutside'>
