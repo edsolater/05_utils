@@ -1,4 +1,4 @@
-import addDefault from '../object/addDefault'
+import addDefault_mutable from '../object/addDefault'
 import applyActions from './applyActions'
 import { partlyInvoke } from '../functionFactory/partlyInvoke'
 import { AnyFn } from 'typings/constants'
@@ -54,7 +54,7 @@ const defaultOptions: FormatOptions = {
  * format(100.1234, { autoAddZero: false, fractionLength: 3 }) // result: '100.123'
  */
 export default function format(n: number, options: FormatOptions = {}): string {
-  addDefault(options, defaultOptions)
+  addDefault_mutable(options, defaultOptions)
   console.log(n, options)
   return applyActions(n, [
     (n) => n.toFixed(options.fractionLength),

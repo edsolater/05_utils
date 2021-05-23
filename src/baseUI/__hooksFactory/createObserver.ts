@@ -1,4 +1,4 @@
-import addDefault from "utils/object/addDefault";
+import addDefault_mutable from "utils/object/addDefault";
 
 interface ObserverOptions {
   feature?: {
@@ -24,5 +24,5 @@ const defaultOptions:ObserverOptions = {
  * IDEA：不好，感觉直接用hooks更符合直觉
  */
 export default function createObserver(options:ObserverOptions = {}) {
-  addDefault(options, defaultOptions)
+  addDefault_mutable(options, defaultOptions)
 }
