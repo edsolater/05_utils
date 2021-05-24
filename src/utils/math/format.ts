@@ -1,7 +1,6 @@
 import addDefault from '../object/addDefault'
 import applyActions from './applyActions'
 import { partlyInvoke } from '../functionFactory/partlyInvoke'
-import { AnyFn } from 'typings/constants'
 
 type FormatOptions = {
   /**
@@ -76,6 +75,22 @@ export default function format(n: number, options: FormatOptions = {}): string {
 }
 
 /**
+ * parse a string
+ *
+ * it a function that reverse the result of {@link format}
+ * @param numberString a string represent a number. e.g. -70,000.050
+ * @example
+ * parseFormatedNumberString('-70,000.050') // result: -70000.05
+ */
+export function parseFormatedNumberString(numberString: string): number {
+  const pureNumberString = [...numberString].reduce(
+    (acc, char) => acc + (/\d|\.|-/.test(char) ? char : ''),
+    ''
+  )
+  return Number(pureNumberString)
+}
+
+/**
  * @mutable
  * (this will mutate original function)
  */
@@ -84,7 +99,6 @@ export function addOptions_format(options: FormatOptions): void {
 }
 
 /**
- * @immutable
  * {@link format.addOptions_mutable}'s immutable version
  */
 format.addOptions = (options: FormatOptions) => partlyInvoke(format, 1, options)
@@ -93,41 +107,3 @@ format.addOptions = (options: FormatOptions) => partlyInvoke(format, 1, options)
 console.log(format(123456, { alwaysSign: true }))
 console.log(format(7000000.2))
 // #endregion
-type AddOptions<F, Options> = F & { addOptions(options?: Options): AddOptions<F, Options> }
-
-/**
- *
- * add new property: addOptions([options]) to input function.
- * configedProcesser is a function with options setted.
- * but it's type is same as input function.
- *
- *
- * default options type  will be the last param of input function.
- * (you can specify the type manually)
- *
- * @example
- * const foo = makeFunctionCanReturnConfigedProcessor(format)
- * const newFormat = foo.addOptions({ separator: '$$' })
- * console.log(newFormat(123456, { alwaysSign: true }))  // same as : format(123456, {separator: '$$', alwaysSign: true})
- */
-function makeFunctionCanReturnConfigedProcessor<
-  Options extends Parameters<F>[-1],
-  F extends AnyFn = AnyFn
->(pureFunc: F): AddOptions<F, Options> {
-  const addOptions = (options?: Options) =>
-    //@ts-ignore
-    makeFunctionCanReturnConfigedProcessor(function configedFn(...args: Required<Parameters<F>>) {
-      const newArgs = [
-        ...args.slice(0, args.length),
-        {
-          ...options,
-          ...(typeof args[args.length - 1] === 'object' ? args[args.length - 1] : undefined) // TODO: 这个判断有点粗糙
-        }
-      ]
-      return pureFunc(...newArgs)
-    })
-  pureFunc[addOptions.name] = addOptions
-  //@ts-ignore
-  return pureFunc
-}
-// TODO：欠缺了一个反向解析的函数， parseFormated()
