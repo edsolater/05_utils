@@ -130,3 +130,4 @@ function makeFunctionCanReturnConfigedProcessor<
   //@ts-ignore
   return pureFunc
 }
+// TODO：欠缺了一个反向解析的函数， parseFormated()
