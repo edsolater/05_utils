@@ -79,7 +79,7 @@ export default function format(n: number, options: FormatOptions = {}): string {
  * @mutable
  * (this will mutate original function)
  */
-format.addOptions_mutable = (options: FormatOptions): void => {
+export function addOptions_format(options: FormatOptions): void {
   Object.assign(defaultOptions, options)
 }
 
