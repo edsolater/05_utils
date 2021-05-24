@@ -1,25 +1,36 @@
-import isFunction from 'utils/judgers/isFunction'
+import { NotFunctionValue, Primitive } from 'typings/constants'
+import { getValue } from './getValue'
 
-type Primitive = boolean | number | string
-type RichPrimitive = Primitive | bigint | symbol
 /**
+ * this Function can generally replace javascript:switch
  *
- * @param mayValue
- * @param params the parameters that will be passed in mayValue(if it's function)
+ * @param value detected value
+ * @param conditionPairs conditions (one of them or none of them can match). this's returned Value must have same type.
+ * @param fallbackValue
  * @returns
  */
-function valuefiy<T extends Primitive | (() => Primitive), Params extends any[]>(
-  mayValue: T,
-  params?: Params
-): Extract<T, Primitive> {
-  // @ts-ignore
-  return isFunction(mayValue) ? mayValue(...params) : mayValue
-}
-function parallelSwitch<T extends Primitive>(
-  value: any,
-  chains: [is: any, returnValue: T | (() => T)][]
-) {
-  for (const [is, returnValue] of chains) {
-    if (value === is) return valuefiy(returnValue)
+export default function parallelSwitch<
+  Input,
+  Value extends Primitive | object,
+  FallbackValue = undefined
+>(
+  value: Input,
+  conditionPairs: ReadonlyArray<
+    [is: NotFunctionValue | ((value: Input) => boolean), returnValue: Value | (() => Value)]
+  >,
+  fallbackValue?: FallbackValue
+): Value | FallbackValue {
+  for (const [is, returnValue] of conditionPairs) {
+    if (value === is || is === true || getValue(is, [value]) === true) return getValue(returnValue)
   }
+  // @ts-ignore
+  return fallbackValue
 }
+
+//#region ------------------- 测试 -------------------
+// const a = parallelSwitch('hello', [
+//   ['world', 1],
+//   ['hello', 4]
+// ])
+// console.log('a: ', a)
+//#endregion

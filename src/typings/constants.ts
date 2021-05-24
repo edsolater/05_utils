@@ -4,10 +4,13 @@
  *
  ******************************/
 
+export type Primitive = boolean | number | string
+export type RichPrimitive = Primitive | bigint | symbol
 /**
  * 任何函数
  */
 export type AnyFn = (...args: any[]) => void
+export type NotFunctionValue = Exclude<any, AnyFn>
 
 /**
  * 移动距离
