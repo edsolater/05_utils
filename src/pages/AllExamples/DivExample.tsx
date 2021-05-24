@@ -1,7 +1,7 @@
 import CSS from 'baseUI/CSS'
 import Div from 'baseUI/Div'
 import cssColor from 'baseUI/__config/cssColor'
-import createStore from 'baseUI/__hooksFactory/createStore'
+import createStore from 'baseUI/__hooks/createStore'
 import React, { useState } from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'

@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import addDefault from 'utils/object/addDefault'
 
 type MayStateFn<T, S extends StoreTemplate> = T | ((prev: T, store: S) => T)
@@ -54,6 +48,61 @@ function capitalize(str: string): Capitalize<string> {
   return str[0].toUpperCase() + str.slice(1)
 }
 
+const getSetters = <S extends StoreTemplate>(
+  initStore: S,
+  setStore: React.Dispatch<React.SetStateAction<S>>
+): Setters<S> =>
+  ({
+    set(inputStore) {
+      setStore((oldStore) => ({
+        ...oldStore,
+        ...(typeof inputStore === 'function' ? inputStore(oldStore, oldStore) : inputStore)
+      }))
+    },
+    resetStore() {
+      setStore(initStore)
+    },
+    ...Object.keys(initStore).reduce((acc, name) => {
+      acc[`set${capitalize(name)}`] = (inputState) => {
+        setStore((oldStore) => ({
+          ...oldStore,
+          [name]:
+            typeof inputState === 'function' ? inputState(oldStore[name], oldStore) : inputState
+        }))
+      }
+      return acc
+    }, {})
+  } as Setters<S>)
+
+const getActions = <
+  S extends StoreTemplate,
+  AOT extends ActionOptionTemplate<S, any /* TODO: 这里引用自身并不会正确推断 */>
+>(
+  currentStore: S,
+  setStore: React.Dispatch<React.SetStateAction<S>>,
+  setters: Setters<S>,
+  actionsTemplate: AOT | undefined
+) => {
+  if (!actionsTemplate) return {}
+  else {
+    return Object.entries(actionsTemplate).reduce((acc, [customedEventName, returnFn]) => {
+      acc[customedEventName] = (...inputArgs) => {
+        //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次
+        // @ts-ignore
+        const result = returnFn({ store: currentStore, setters, dangerous_actions: actions })(
+          ...inputArgs
+        )
+        if (result)
+          setStore((oldStore) => ({
+            ...oldStore,
+            ...result
+          }))
+      }
+      return acc
+    }, {})
+  }
+}
+
 /**
  * Creact a store use react context.
  * No need useContext from now on.
@@ -72,7 +121,7 @@ function capitalize(str: string): Capitalize<string> {
  * cosnt { count, setCount } = useStore()
  *
  */
-const createStore = <
+export default function createStore<
   T extends StoreTemplate,
   AOT extends ActionOptionTemplate<T, any /* TODO: 这里引用自身并不会正确推断 */>,
   UseContext extends 'react-context' | 'javascript-variable' | undefined = undefined
@@ -95,63 +144,11 @@ const createStore = <
        */
       Provider: (props: { children?: React.ReactNode }) => JSX.Element
     }
-  : {}) => {
+  : {}) {
   addDefault(options, {
     //@ts-expect-error
     storeIn: 'react-context'
   })
-
-  const getSetters = <S extends StoreTemplate>(
-    initStore: S,
-    setStore: React.Dispatch<React.SetStateAction<S>>
-  ): Setters<S> =>
-    ({
-      set(inputStore) {
-        setStore((oldStore) => ({
-          ...oldStore,
-          ...(typeof inputStore === 'function' ? inputStore(oldStore, oldStore) : inputStore)
-        }))
-      },
-      resetStore() {
-        setStore(initStore)
-      },
-      ...Object.keys(initStore).reduce((acc, name) => {
-        acc[`set${capitalize(name)}`] = (inputState) => {
-          setStore((oldStore) => ({
-            ...oldStore,
-            [name]:
-              typeof inputState === 'function' ? inputState(oldStore[name], oldStore) : inputState
-          }))
-        }
-        return acc
-      }, {})
-    } as Setters<S>)
-
-  const getActions = <S extends StoreTemplate>(
-    currentStore: S,
-    setStore: React.Dispatch<React.SetStateAction<S>>,
-    setters: Setters<S>
-  ) => {
-    const actions = Object.entries(options?.actions ?? {}).reduce(
-      (acc, [customedEventName, returnFn]) => {
-        acc[customedEventName] = (...inputArgs: Parameters<ReturnType<typeof returnFn>>) => {
-          //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次
-          // @ts-ignore
-          const result = returnFn({ store: currentStore, setters, dangerous_actions: actions })(
-            ...inputArgs
-          )
-          if (result)
-            setStore((oldStore) => ({
-              ...oldStore,
-              ...result
-            }))
-        }
-        return acc
-      },
-      {}
-    )
-    return actions
-  }
 
   if (options.storeIn == 'react-context') {
     const Context = createContext({
@@ -163,7 +160,11 @@ const createStore = <
       Provider: ({ children }) => {
         const [store, setEntireStore] = useState(initStoreObject)
         const setters = useMemo(() => getSetters(initStoreObject, setEntireStore), [])
-        const actions = useMemo(() => getActions(store, setEntireStore, setters), [])
+        const actions = useMemo(() => getActions(store, setEntireStore, setters, options.actions), [
+          store,
+          setters,
+          options.actions
+        ])
         const contextValue = useMemo(() => ({ store, setters, actions }), [store])
         // @ts-ignore
         return React.createElement(Context.Provider, { value: contextValue }, children)
@@ -178,7 +179,8 @@ const createStore = <
     const storeVariable = {
       state: initStoreObject,
       setState(nextState: MayStateFn<any, T>) {
-        storeVariable.state = typeof nextState === 'function' ? nextState(storeVariable.state) : nextState
+        storeVariable.state =
+          typeof nextState === 'function' ? nextState(storeVariable.state) : nextState
         storeVariable.setters.forEach((setter) => setter(storeVariable.state))
       },
       setters: [] as ((s: T) => void)[]
@@ -187,8 +189,11 @@ const createStore = <
     return {
       useStore: () => {
         const [store, stateSetter] = useState(storeVariable.state)
-        const setters = useMemo(() => getSetters(store, storeVariable.setState), [])
-        const actions = useMemo(() => getActions(store, storeVariable.setState, setters), [])
+        const setters = useMemo(() => getSetters(initStoreObject, storeVariable.setState), [])
+        const actions = useMemo(
+          () => getActions(store, storeVariable.setState, setters, options.actions),
+          [store, setters, options.actions]
+        )
         useEffect(() => {
           if (!storeVariable.setters.includes(stateSetter)) {
             storeVariable.setters.push(stateSetter)
@@ -199,4 +204,31 @@ const createStore = <
     } as any
   }
 }
-export default createStore
+
+/**
+ * it is like createStore. But acutally, this is just useState.
+ * @param initStoreObject 
+ * @param options 
+ * @returns 
+ */
+export function useStoreState<
+  T extends StoreTemplate,
+  AOT extends ActionOptionTemplate<T, any /* TODO: 这里引用自身并不会正确推断 */>
+>(
+  initStoreObject: T,
+  options?: { actions: AOT }
+): {
+  store: T
+  setters: Setters<T>
+  actions: RuntimeActions<AOT>
+} {
+  const [store, stateSetter] = useState(initStoreObject)
+  const setters = useMemo(() => getSetters(initStoreObject, stateSetter), [])
+  const actions = useMemo(() => getActions(store, stateSetter, setters, options?.actions), [
+    store,
+    setters,
+    options?.actions
+  ])
+  //@ts-ignore
+  return { store, setters, actions }
+}
