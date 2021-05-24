@@ -1,6 +1,6 @@
 import isObjectLike from '../judgers/isObjectLike'
 import merge from '../object/merge'
-import format from '../math/format'
+import formatNumber from '../math/formatNumber'
 import { AnyFn } from 'typings/constants'
 
 /**
@@ -25,5 +25,5 @@ export function partlyInvoke<F extends AnyFn, Index extends number>(
   //@ts-ignore
   return partlyInvokedFunction
 }
-const newFormat = partlyInvoke(format, 1, { alwaysSign: true })
+const newFormat = partlyInvoke(formatNumber, 1, { alwaysSign: true })
 console.log(newFormat(123456))
