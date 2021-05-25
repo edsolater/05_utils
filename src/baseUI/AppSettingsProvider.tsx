@@ -30,10 +30,10 @@ export interface AppSetting {
     Transform?: TransformProps
   }
   /**
-   * baseUI的css的具体值（可能不包含在props中）
+   * baseUI的css的具体值（可能不包含在props中， 是CSS的尺寸细节）
    */
   css?:{
-    Button?: ButtonDetailCSS
+    Button?: ButtonDetailCSS,
   }
 }
 //#endregion

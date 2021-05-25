@@ -18,6 +18,7 @@ export function mixCSSObjects(
 ): ICSS {
   //@ts-expect-error
   return flat(icsses)
+  //@ts-ignore
     .map((icss) => (isFunction(icss) ? icss() : icss))
     .filter(isObjectLike)
 }
