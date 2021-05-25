@@ -11,7 +11,7 @@ import { getValue } from './getValue'
  */
 export default function parallelSwitch<
   Input,
-  Value extends Primitive | object,
+  Value extends Primitive, // this type is not correct
   FallbackValue = undefined
 >(
   value: Input,
@@ -19,8 +19,9 @@ export default function parallelSwitch<
     [is: NotFunctionValue | ((value: Input) => boolean), returnValue: Value | (() => Value)]
   >,
   fallbackValue?: FallbackValue
-): Value | FallbackValue {
+): NotFunctionValue extends Input ? Value : Value | FallbackValue {
   for (const [is, returnValue] of conditionPairs) {
+    // @ts-expect-error FIXME: it's a bug
     if (value === is || is === true || getValue(is, [value]) === true) return getValue(returnValue)
   }
   // @ts-ignore
