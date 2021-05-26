@@ -13,7 +13,7 @@ const DivExample = () => {
   const [isFocused, setIsFocused] = useState(false)
   const GlobalStoreContext = createStore({count: 1})
   return (
-    <ExampleCard category='baseUI' title='Div'>
+    <ExampleCard category='BaseUI' title='Div'>
       <ExampleGroup caption='onClickOutside'>
         <CSS
           width='100px'

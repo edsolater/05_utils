@@ -1,0 +1,55 @@
+import React from 'react'
+import Button from 'baseUI/Button'
+import ExampleCard from './ExampleCard'
+import ExampleGroup from './ExampleGroup'
+import createStore from 'baseUI/__hooks/createStore'
+import _AppProviders from 'baseUI/_AppProviders'
+
+const { useStore: useContextStore, Provider } = createStore({ count: 1 })
+
+const { useStore: useContextStore2, Provider: Provider2 } = createStore({ count: 1 })
+
+const AppProvidersExample = () => {
+  return (
+    <_AppProviders list={[{ provider: Provider }, { provider: Provider2 }]}>
+      <ExampleCard title='_AppProviders' category='_Hollow'>
+        <ExampleGroup caption='onClickOutside'>
+          <Inner />
+        </ExampleGroup>
+      </ExampleCard>
+    </_AppProviders>
+  )
+}
+const Inner = () => {
+  const {
+    store: { count },
+    setters: { setCount }
+  } = useContextStore()
+  const {
+    store: { count: count2 },
+    setters: { setCount: setCount2 }
+  } = useContextStore2()
+  return (
+    <>
+      you have clicked {count} times
+      <Button
+        onClick={() => {
+          setCount((n) => n + 1)
+        }}
+      >
+        😬
+      </Button>
+
+      another: you have clicked {count2} times
+      <Button
+        onClick={() => {
+          setCount2((n) => n + 1)
+        }}
+      >
+        👾
+      </Button>
+    </>
+  )
+}
+
+export default AppProvidersExample

@@ -1,5 +1,6 @@
 import GlobalSettings from 'baseUI/AppSettingsProvider'
 import React from 'react'
+import AppProvidersExample from './AppProvidersExample'
 import ButtonExample from './ButtonExample'
 import CardExample from './CardExample'
 import DivExample from './DivExample'
@@ -12,6 +13,7 @@ import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings>
+    <AppProvidersExample />
     <GlobalStoreExample />
     <DivExample />
     <TransformExample />

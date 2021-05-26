@@ -3,7 +3,7 @@ import React from 'react'
 import { toPx } from 'style/cssUnits'
 import { cssValues } from 'style/cssValue'
 export interface ExampleCardProps extends DivProps {
-  category?: 'hooks' | 'baseUI'
+  category?: 'hooks' | 'BaseUI' | '_Hollow'
   title?: string
 }
 const ExampleCard = (props: ExampleCardProps) => (
@@ -17,7 +17,7 @@ const ExampleCard = (props: ExampleCardProps) => (
       width: 'clamp(400px, 80vw, 1200px)',
       margin: '32px auto',
       borderRadius: 8,
-      padding: toPx(8, 16)
+      padding: toPx([8, 16])
     }}
   >
     <h1>{props.title}</h1>
