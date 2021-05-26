@@ -1,14 +1,14 @@
 /**
  * @param str input string
  * @example
- * _parseString('helloWorld') => ['hello', 'world']
- * _parseString('helloWorldUI') => ['hello', 'world', 'u', 'i']
- * _parseString('helloWOrld') => ['hello', 'w', 'orld']
- * _parseString('hello-world') => ['hello', 'world']
- * _parseString('hello--world') => ['hello', 'world']
- * _parseString('hello_world') => ['hello', 'world']
- * _parseString('hello__world') => ['hello', 'world']
- * _parseString('_hello$world') => ['hello', 'world']
+ * 'helloWorld' => ['hello', 'world']
+ * 'helloWorldUI' => ['hello', 'world', 'u', 'i']
+ * 'helloWOrld' => ['hello', 'w', 'orld']
+ * 'hello-world' => ['hello', 'world']
+ * 'hello--world' => ['hello', 'world']
+ * 'hello_world' => ['hello', 'world']
+ * 'hello__world' => ['hello', 'world']
+ * '_hello$world' => ['hello', 'world']
  */
 function _parseString(str: string): string[] {
   return str
@@ -21,7 +21,7 @@ function _parseString(str: string): string[] {
 
 /**
  * @example
- * toCamelCase('hello-world') => 'helloWorld'
+ * 'hello-world' => 'helloWorld'
  */
 export function toCamelCase(str: string): string {
   return _parseString(str)
@@ -31,7 +31,7 @@ export function toCamelCase(str: string): string {
 
 /**
  * @example
- * toPascalCase('hello-world') => 'HelloWorld'
+ * 'hello-world' => 'HelloWorld'
  */
 export function toPascalCase(str: string): string {
   return _parseString(str)
@@ -41,7 +41,7 @@ export function toPascalCase(str: string): string {
 
 /**
  * @example
- * toKebabCase('hello_World') => 'hello-world'
+ * 'hello_World' => 'hello-world'
  */
 export function toKebabCase(str: string) {
   return _parseString(str).join('-')
@@ -49,7 +49,7 @@ export function toKebabCase(str: string) {
 
 /**
  * @example
- * toSnakeCase('hello-world') => 'hello_world'
+ * 'hello-world' => 'hello_world'
  */
 export function toSnakeCase(str: string) {
   return _parseString(str).join('_')
@@ -57,7 +57,7 @@ export function toSnakeCase(str: string) {
 
 /**
  * @example
- * toConstantCase('hello-world') => 'hello_world'
+ * 'hello-world' => 'hello_world'
  */
 export function toConstantCase(str: string) {
   return toUpperCase(_parseString(str).join('_'))
@@ -65,8 +65,8 @@ export function toConstantCase(str: string) {
 
 /**
  * @example
- * toLowerCase('hello-world') => 'hello-world'
- * toLowerCase('HELLO_WORLD') => 'hello_world'
+ * 'hello-world' => 'hello-world'
+ * 'HELLO_WORLD' => 'hello_world'
  */
 export function toLowerCase(str: string) {
   return str.toLowerCase()
@@ -74,8 +74,8 @@ export function toLowerCase(str: string) {
 
 /**
  * @example
- * toUpperCase('helloworld') => 'HELLOWORLD'
- * toUpperCase('hello_world') => 'HELLO_WORLD'
+ * 'helloworld'=> 'HELLOWORLD'
+ * 'hello_world' => 'HELLO_WORLD'
  */
 export function toUpperCase(str: string) {
   return str.toUpperCase()
@@ -83,7 +83,7 @@ export function toUpperCase(str: string) {
 
 /**
  * @example
- * capitalize('hello') => 'Hello'
+ * 'hello' => 'Hello'
  */
 export function capitalize(str: string): Capitalize<string> {
   if (!str) return ''
@@ -92,18 +92,31 @@ export function capitalize(str: string): Capitalize<string> {
 
 /**
  * @example
- * uncapitalize('Hello') => 'hello'
+ * 'Hello' => 'hello'
  */
 export function uncapitalize(str: string): Capitalize<string> {
   if (!str) return ''
   return str[0].toLowerCase() + str.slice(1)
 }
 
+/**
+ * @example
+ * ('hello_world', {to: 'PascalCase' }) => 'HelloWorld'
+ * (' hello world', {to: 'camelCase' }) => 'helloWorld'
+ * ('hello-world', {to: 'CONSTANT_CASE' }) => 'HELLO_WORLD'
+ */
 export default function changeCase(
   str: string,
-  targetCase: 'camelCase' | 'PascalCase' | 'kebab-case' | 'snake_case' | 'CONSTANT_CASE'
+  options: {
+    to:
+      | 'camelCase'
+      | 'PascalCase'
+      | 'kebab-case'
+      | 'snake_case'
+      | 'CONSTANT_CASE' /* IDEA 增加属性：copyCaseFrom （就像 Word 的 ctrl + shift + C） */
+  }
 ): string {
-  switch (targetCase) {
+  switch (options.to) {
     case 'camelCase':
       return toCamelCase(str)
     case 'PascalCase':
