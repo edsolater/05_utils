@@ -104,8 +104,8 @@ const getActions = <
 }
 
 /**
- * Creact a store use react context.
- * No need useContext from now on.
+ * Creact a store.
+ * No need useContext.
  *
  * @param initStoreObject pass init states here
  * @returns

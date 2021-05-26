@@ -1,7 +1,7 @@
 /**
  * @todo 有一部分要放到style文件夹下，一部分直接 _config
  */
- const cssColor = {
+const cssColor = {
   red: 'red',
   crimson: 'crimson',
   dodgerblue: 'dodgerblue',
@@ -17,5 +17,3 @@
 } as const
 export default cssColor
 export type CSSColorString = string
-
-// IDEA: 根据UX相关设计软件，也需要管理字体，也就是说，还需要个cssFont对象

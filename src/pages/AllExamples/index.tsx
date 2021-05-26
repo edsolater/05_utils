@@ -8,11 +8,13 @@ import DropdownExample from './DropdownExample'
 import GlobalStoreExample from './GlobalStoreExample'
 import IconExample from './IconExample'
 import InputExample from './InputExample'
+import MaskExample from './MaskExample'
 import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings>
+    <MaskExample />
     <AppProvidersExample />
     <GlobalStoreExample />
     <DivExample />
