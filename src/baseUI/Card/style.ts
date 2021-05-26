@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { cssVar } from 'style/cssFunctions'
 import { mixCSSObjects } from 'style/cssParser'
+import { toCssValue, toPx } from 'style/cssUnits'
 import { cssValues } from 'style/cssValue'
 
 // 声明组件有哪些props是纯粹改变外观的
@@ -44,8 +45,8 @@ export const useCardStyle = ({
   const coreCss = useMemo(
     () =>
       mixCSSObjects({
-        width: cssVar('--card-width', width ?? 'unset'),
-        height: cssVar('--card-width', height ?? 'unset'),
+        width: cssVar('--card-width', toCssValue(width) ?? 'unset'),
+        height: cssVar('--card-width', toCssValue(height) ?? 'unset'),
         borderRadius: borderRadius === 'small' ? 4 : borderRadius === 'large' ? 32 : 8,
         boxShadow: cssValues.smoothShadow,
         background: bgImg ? `url(${bgImg}) center / cover` : gradient,

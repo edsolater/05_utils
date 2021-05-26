@@ -1,4 +1,7 @@
 import { MayDeepArray } from 'typings/tools'
+import isNumber from 'utils/judgers/isNumber'
+import isString from 'utils/judgers/isString'
+import isUndefined from 'utils/judgers/isUndefined'
 export type CSSLength = number | string
 export type CSSValue = number | string
 /**
@@ -26,7 +29,6 @@ function changeUnit(val: number | string, unit: string) {
   }
 }
 
-
 /**
  * 给css变量加上单位（使用css数值的clac+var转换模式，改变数值后无需再通过JS重新固定单位）
  * @param variableName css变量名
@@ -40,14 +42,23 @@ export const attachCSSVariableUnit = (variableName: string, unit: 'px' | 'deg' |
 
 export const fromPx = (rule: string): number => parseFloat(rule)
 
-export const toPx = (...ns: MayDeepArray<number | string>[]) =>
-  ns
+export const toPx = (v: MayDeepArray<number | string>) =>
+  [v]
     .flat(Infinity)
     .map((n) => changeUnit(n, 'px'))
     .join(' ')
 
-export const toPer = (...ns: MayDeepArray<number | string>[]) =>
-  ns
+/**
+ * 与 {@link toPx} 的区别在于：如果已有单位，则不做更改
+ */
+export const toCssValue = (v: MayDeepArray<number | string | undefined>) =>
+  [v]
+    .flat(Infinity)
+    .map((n) => (isNumber(n) ? toPx(n) : isUndefined(n) ? '' : n))
+    .join(' ')
+
+export const toPer = (v: MayDeepArray<number | string>) =>
+  [v]
     .flat(Infinity)
     .map((n) => changeUnit(n, '%'))
     .join(' ')
