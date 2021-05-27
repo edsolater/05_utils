@@ -87,7 +87,7 @@ const getActions = <
   else {
     return Object.entries(actionsTemplate).reduce((acc, [customedEventName, returnFn]) => {
       acc[customedEventName] = (...inputArgs) => {
-        //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次
+        //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次。UPDATE：估计这里也是React的初始化渲染机制导致的问题
         // @ts-ignore
         const result = returnFn({ store: currentStore, setters, dangerous_actions: actions })(
           ...inputArgs
