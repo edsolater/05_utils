@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import addDefault from 'utils/object/addDefault'
 
 type MayStateFn<T, S extends StoreTemplate> = T | ((prev: T, store: S) => T)
 
@@ -79,27 +78,23 @@ const getActions = <
   AOT extends ActionOptionTemplate<S, any /* TODO: 这里引用自身并不会正确推断 */>
 >(
   currentStore: S,
-  setStore: React.Dispatch<React.SetStateAction<S>>,
   setters: Setters<S>,
   actionsTemplate: AOT | undefined
 ) => {
   if (!actionsTemplate) return {}
   else {
-    return Object.entries(actionsTemplate).reduce((acc, [customedEventName, returnFn]) => {
-      acc[customedEventName] = (...inputArgs) => {
-        //使用store而不是oldStore， 是因为， 第一次调用setEntireStore， 总会重渲染2次。UPDATE：估计这里也是React的初始化渲染机制导致的问题
-        // @ts-ignore
-        const result = returnFn({ store: currentStore, setters, dangerous_actions: actions })(
-          ...inputArgs
-        )
-        if (result)
-          setStore((oldStore) => ({
-            ...oldStore,
-            ...result
-          }))
-      }
-      return acc
-    }, {})
+    const actions = Object.entries(actionsTemplate).reduce(
+      (acc, [customedEventName, actionTemplateFunction]) => {
+        acc[customedEventName] = (...inputArgs) => {
+          actionTemplateFunction({ store: currentStore, setters, dangerous_actions: actions })(
+            ...inputArgs
+          )
+        }
+        return acc
+      },
+      {}
+    )
+    return actions
   }
 }
 
@@ -145,12 +140,9 @@ export default function createStore<
       Provider: (props: { children?: React.ReactNode }) => JSX.Element
     }
   : {}) {
-  addDefault(options, {
-    //@ts-expect-error
-    storeIn: 'react-context'
-  })
+  const { storeIn = 'react-context' } = options
 
-  if (options.storeIn == 'react-context') {
+  if (storeIn == 'react-context') {
     const Context = createContext({
       store: initStoreObject,
       setters: {} as any, // DANGEROUS: use any force Object type
@@ -160,13 +152,12 @@ export default function createStore<
       Provider: ({ children }) => {
         const [store, setEntireStore] = useState(initStoreObject)
         const setters = useMemo(() => getSetters(initStoreObject, setEntireStore), [])
-        const actions = useMemo(() => getActions(store, setEntireStore, setters, options.actions), [
+        const actions = useMemo(() => getActions(store, setters, options.actions), [
           store,
           setters,
           options.actions
         ])
         const contextValue = useMemo(() => ({ store, setters, actions }), [store])
-        // @ts-ignore
         return React.createElement(Context.Provider, { value: contextValue }, children)
       },
       useStore() {
@@ -188,15 +179,16 @@ export default function createStore<
 
     return {
       useStore: () => {
-        const [store, stateSetter] = useState(storeVariable.state)
+        const [store, setStore] = useState(storeVariable.state)
         const setters = useMemo(() => getSetters(initStoreObject, storeVariable.setState), [])
-        const actions = useMemo(
-          () => getActions(store, storeVariable.setState, setters, options.actions),
-          [store, setters, options.actions]
-        )
+        const actions = useMemo(() => getActions(store, setters, options.actions), [
+          store,
+          setters,
+          options.actions
+        ])
         useEffect(() => {
-          if (!storeVariable.setters.includes(stateSetter)) {
-            storeVariable.setters.push(stateSetter)
+          if (!storeVariable.setters.includes(setStore)) {
+            storeVariable.setters.push(setStore)
           }
         })
         return { store, setters, actions }
@@ -207,9 +199,9 @@ export default function createStore<
 
 /**
  * it is like createStore. But acutally, this is just useState.
- * @param initStoreObject 
- * @param options 
- * @returns 
+ * @param initStoreObject
+ * @param options
+ * @returns
  */
 export function useStoreState<
   T extends StoreTemplate,
@@ -222,9 +214,9 @@ export function useStoreState<
   setters: Setters<T>
   actions: RuntimeActions<AOT>
 } {
-  const [store, stateSetter] = useState(initStoreObject)
-  const setters = useMemo(() => getSetters(initStoreObject, stateSetter), [])
-  const actions = useMemo(() => getActions(store, stateSetter, setters, options?.actions), [
+  const [store, setStore] = useState(initStoreObject)
+  const setters = useMemo(() => getSetters(initStoreObject, setStore), [])
+  const actions = useMemo(() => getActions(store, setters, options?.actions), [
     store,
     setters,
     options?.actions

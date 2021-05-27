@@ -1,7 +1,7 @@
 import React from 'react'
 // @ts-expect-error
-// import {unstable_createRoot as createRoot} from 'react-dom'
-import { render } from 'react-dom'
+import {unstable_createRoot as createRoot} from 'react-dom'
+// import { render } from 'react-dom'
 import './style/initial.css'
 import TestGrounds from 'pages/TestEggs'
 import Home from 'pages/Home'
@@ -16,5 +16,5 @@ function App() {
     <AllExamples />
   )
 }
-// createRoot(document.getElementById('app')).render(<App />)
-render(<App />, document.getElementById('app'))
+createRoot(document.getElementById('app')).render(<App />)
+// render(<App />, document.getElementById('app'))

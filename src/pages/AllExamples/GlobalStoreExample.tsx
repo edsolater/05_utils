@@ -12,8 +12,8 @@ const { useStore: useContextStore } = createStore(
       setInner: ({ setters }) => () => {
         setters.setCount((n) => n + 1)
       },
-      hello: ({ dangerous_actions }) => () => {
-        dangerous_actions.setInner()
+      hello: ({ setters, dangerous_actions }) => () => {
+        setters.setCount((n) => n + 1) // FIXME: 直接改变就只触发一次233了
       }
     }
   }
@@ -44,8 +44,8 @@ const Inner = () => {
       you have clicked {count} times
       <Button
         onClick={() => {
-          setCount((n) => n + 1)
-          // hello()
+          // setCount((n) => n + 1)
+          hello()
         }}
       ></Button>
     </>
