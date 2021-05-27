@@ -16,7 +16,6 @@ const MaskExample = () => {
         <Mask
           isOpen={isMaskOpen}
           onClose={() => {
-            console.log('2323: ', 2323)
             setIsMaskOpen(false)
           }}
         ></Mask>

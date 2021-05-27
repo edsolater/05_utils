@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useRef } from 'react'
 import Div, { DivProps } from 'baseUI/Div'
 import ReactDOM from 'react-dom'
 import cssColor from 'baseUI/__config/cssColor'
 import cssDefaults from 'baseUI/__config/cssDefaults'
 import _ViewController from 'baseUI/_ViewController'
+import useUpdateEffect from '../../hooks/useUpdateEffect'
 
 const maskRoot = document.createElement('div')
 document.body.append(maskRoot)
-
 export interface MaskProps extends DivProps {
   /**
    * 是否显示此mask
@@ -25,26 +25,18 @@ const Mask: FC<MaskProps> = (props) => {
   const { isOpen, onOpenStart, onOpen, onCloseStart, onClose } = props
   const maskRef = useRef<HTMLDivElement>()
 
-  useEffect(() => { // FIXME： 为什么第一次是开了又关呢？
-    console.log('isOpen: ', isOpen)
-    if (isOpen) {
+  useUpdateEffect(() => {
+    if (isOpen === true) {
       onOpenStart?.({ el: maskRef.current! })
-      maskRef.current!.addEventListener(
-        'transitionend',
-        () => {
-          console.log('from inner1')
-          onOpen?.({ el: maskRef.current! })
-        },
-        { once: true }
-      )
-    } else {
+      maskRef.current!.addEventListener('transitionend', () => onOpen?.({ el: maskRef.current! }), {
+        once: true
+      })
+    }
+    if (isOpen === false) {
       onCloseStart?.({ el: maskRef.current! })
       maskRef.current!.addEventListener(
         'transitionend',
-        () => {
-          console.log('from inner2')
-          onClose?.({ el: maskRef.current! })
-        },
+        () => onClose?.({ el: maskRef.current! }),
         { once: true }
       )
     }

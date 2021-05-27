@@ -9,7 +9,7 @@ export type RichPrimitive = Primitive | bigint | symbol
 /**
  * 任何函数
  */
-export type AnyFn = (...args: any[]) => void
+export type AnyFn = (...args: any[]) => any
 export type NotFunctionValue = Exclude<any, AnyFn>
 
 /**
