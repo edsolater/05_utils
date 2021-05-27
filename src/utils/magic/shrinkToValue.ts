@@ -8,7 +8,7 @@ import isFunction from '../judgers/isFunction'
  * @param params the parameters that will be passed in mayValue(if it's function)
  * @returns a pure value which can't be a function
  */
-export function getValue<T>(
+export function shrinkToValue<T>(
   mayValue: T,
   params?: T extends AnyFn ? Parameters<T> : any[]
 ): Exclude<T, AnyFn> {

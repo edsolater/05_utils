@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { DivProps } from '.'
 import { TagMap } from './TagMap'
 type Callback = (entry: ResizeObserverEntry) => void
 type IndexInCallback = number
@@ -39,20 +38,20 @@ export const featureProps = ['onResize'] as const
 
 /** @mutable 具体实现  */
 export function useFeature<TagName extends keyof TagMap = 'div'>(
-  props: DivProps<TagName>,
+  { onResize }: FeatureProps<TagName>,
   { domRef }: { domRef: React.MutableRefObject<TagMap[TagName] | undefined> }
 ) {
-  if (props.onResize) {
-    useEffect(() => {
+  useEffect(() => {
+    if (onResize) {
       // 因为这个ResizeObserver是维护在文件里的，最多只会加载一次
       const resizeObserver = elementResizeObserver || createElementResizeObserver()
       resizeObserver.observe(domRef.current!)
       const callbackIndex = pushCallbackToStack((entry) => {
-        props.onResize?.({ el: domRef.current!, entry })
+        onResize?.({ el: domRef.current!, entry })
       })
       return () => {
         clearCallbackByIndex(callbackIndex)
       }
-    }, [])
-  }
+    }
+  }, [onResize])
 }

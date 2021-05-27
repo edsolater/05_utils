@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { DivProps } from '.'
 import { TagMap } from './TagMap'
 
 /**
@@ -19,26 +18,25 @@ export const featureProps = ['onHoverStart', 'onHoverEnd'] as const
 
 /** @mutable 具体实现  */
 export function useFeature<TagName extends keyof TagMap = 'div'>(
-  props: DivProps<TagName>,
+  { onHoverStart, onHoverEnd }: FeatureProps<TagName>,
   { domRef }: { domRef: React.MutableRefObject<TagMap[TagName] | undefined> }
 ) {
-  //#region ------------------- 感知 Hover 的开始与结束 -------------------
-  if (props.onHoverStart) {
-    useEffect(() => {
+  useEffect(() => {
+    if (onHoverStart) {
       domRef.current!.addEventListener('pointerenter', (e) =>
-        props.onHoverStart?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
+        onHoverStart?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
       )
-    }, [])
-  }
-  if (props.onHoverEnd) {
-    useEffect(() => {
+    }
+  }, [onHoverStart])
+
+  useEffect(() => {
+    if (onHoverEnd) {
       domRef.current!.addEventListener('pointerleave', (e) =>
-        props.onHoverEnd?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
+        onHoverEnd?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
       )
       domRef.current!.addEventListener('pointercancel', (e) =>
-        props.onHoverEnd?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
+        onHoverEnd?.({ el: domRef.current!, nativeEvent: e as PointerEvent })
       )
-    }, [])
-  }
-  //#endregion
+    }
+  }, [onHoverEnd])
 }

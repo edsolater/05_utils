@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { shrinkToValue } from 'utils/magic/shrinkToValue'
 
 type MayStateFn<T, S extends StoreTemplate> = T | ((prev: T, store: S) => T)
 
@@ -12,12 +13,15 @@ type Setters<T extends StoreTemplate> = {
   /**
    * set store to it's default value
    */
-  resetStore(): Partial<T> | void
+  resetAll(): void
 } & {
   [K in `set${Capitalize<Extract<keyof T, string>>}`]: (
     newState: MayStateFn<K extends `set${infer O}` ? T[Uncapitalize<O>] : any, T>
-  ) => Partial<T> | void
-}
+  ) => void
+} &
+  {
+    [K in `reset${Capitalize<Extract<keyof T, string>>}`]: () => void
+  }
 
 type ActionOptionFunction<T extends StoreTemplate, W = any> = (storeInfo: {
   store: T
@@ -55,18 +59,26 @@ const getSetters = <S extends StoreTemplate>(
     set(inputStore) {
       setStore((oldStore) => ({
         ...oldStore,
-        ...(typeof inputStore === 'function' ? inputStore(oldStore, oldStore) : inputStore)
+        ...shrinkToValue(inputStore, [oldStore, oldStore])
       }))
     },
-    resetStore() {
+    resetAll() {
       setStore(initStore)
     },
     ...Object.keys(initStore).reduce((acc, name) => {
       acc[`set${capitalize(name)}`] = (inputState) => {
         setStore((oldStore) => ({
           ...oldStore,
-          [name]:
-            typeof inputState === 'function' ? inputState(oldStore[name], oldStore) : inputState
+          [name]: shrinkToValue(inputState, [oldStore[name], oldStore])
+        }))
+      }
+      return acc
+    }, {}),
+    ...Object.keys(initStore).reduce((acc, name) => {
+      acc[`reset${capitalize(name)}`] = () => {
+        setStore((oldStore) => ({
+          ...oldStore,
+          [name]: initStore[name]
         }))
       }
       return acc

@@ -1,5 +1,5 @@
 import { NotFunctionValue, Primitive } from 'typings/constants'
-import { getValue } from './getValue'
+import { shrinkToValue } from './shrinkToValue'
 
 /**
  * this Function can generally replace javascript:switch
@@ -22,7 +22,7 @@ export default function parallelSwitch<
 ): NotFunctionValue extends Input ? Value : Value | FallbackValue {
   for (const [is, returnValue] of conditionPairs) {
     // @ts-expect-error FIXME: it's a bug
-    if (value === is || is === true || getValue(is, [value]) === true) return getValue(returnValue)
+    if (value === is || is === true || shrinkToValue(is, [value]) === true) return shrinkToValue(returnValue)
   }
   // @ts-ignore
   return fallbackValue

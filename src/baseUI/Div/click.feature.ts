@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { DivProps } from '.'
 import { TagMap } from './TagMap'
 
 /**
@@ -19,27 +18,28 @@ export const featureProps = ['onClick', 'onClickOutside'] as const
 
 /** @mutable 具体实现  */
 export function useFeature<TagName extends keyof TagMap = 'div'>(
-  props: DivProps<TagName>,
+  { onClick, onClickOutside }: FeatureProps<TagName>,
   { domRef }: { domRef: React.MutableRefObject<TagMap[TagName] | undefined> }
 ) {
-  if (props.onClick) {
-    useEffect(() => {
-      const whenClickInside = (e: MouseEvent) =>
-        props.onClick?.({ el: domRef.current!, nativeEvent: e })
-      //@ts-ignore
-      domRef.current!.addEventListener('click', whenClickInside)
-    }, [])
-  }
-  if (props.onClickOutside) {
-    useEffect(() => {
+  useEffect(() => {
+    if (onClick) {
+      const whenClickInside = (e: Event) =>
+        onClick?.({ el: domRef.current!, nativeEvent: e as MouseEvent })
+      domRef.current!.addEventListener('click', whenClickInside, { passive: true })
+      return () => domRef.current!.removeEventListener('click', whenClickInside)
+    }
+  }, [onClick])
+
+  useEffect(() => {
+    if (onClickOutside) {
       const WhenClickOutside = (e: MouseEvent) => {
         const paths = e.composedPath()
         if (!paths.includes(domRef.current!)) {
-          props.onClickOutside?.({ el: domRef.current!, nativeEvent: e })
+          onClickOutside?.({ el: domRef.current!, nativeEvent: e })
         }
       }
       document.addEventListener('click', WhenClickOutside, { passive: true })
       return () => document.removeEventListener('click', WhenClickOutside)
-    }, [])
-  }
+    }
+  }, [onClickOutside])
 }
