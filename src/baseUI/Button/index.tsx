@@ -12,15 +12,17 @@ export interface ButtonProps extends DivProps<'button'>, ButtonStyleProps {}
  * 将子元素显示在一行，相当于flexbox
  */
 const Button = (bareProps: ButtonProps) => {
-  const { props: propsSetting, css: cssSettings } = useContext(AppSettings)
-  const mixedProps = merge(propsSetting?.Button, bareProps)
+  const appSettings = useContext(AppSettings)
+  const mixedProps = merge(appSettings.props?.Button, bareProps)
 
   return (
     <Div
       as='button'
-      {...pick(merge(propsSetting?.Button, bareProps), divProps)}
-      css={getButtonCSS(cssSettings?.Button ?? {}, mixedProps)}
-    >{mixedProps.children ?? '🤨'}</Div>
+      {...pick(mixedProps, divProps)}
+      css={getButtonCSS(appSettings.css?.Button ?? {}, mixedProps)}
+    >
+      {mixedProps.children ?? '🤨'}
+    </Div>
   )
 }
 

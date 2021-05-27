@@ -12,14 +12,9 @@ const MaskExample = () => {
   const [isMaskOpen, setIsMaskOpen] = useState(false)
   return (
     <ExampleCard category='BaseUI' title='Mask'>
-      <ExampleGroup caption='卡片'>
-        <Mask
-          isOpen={isMaskOpen}
-          onClose={() => {
-            setIsMaskOpen(false)
-          }}
-        ></Mask>
-        <Button onClick={() => setIsMaskOpen((b) => !b)}>开启蒙版</Button>
+      <ExampleGroup caption='点击按钮打开蒙版'>
+        <Mask isOpen={isMaskOpen} onClose={() => setIsMaskOpen(false)}></Mask>
+        <Button onClick={() => setIsMaskOpen((b) => !b)}>toggle</Button>
       </ExampleGroup>
     </ExampleCard>
   )

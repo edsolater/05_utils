@@ -19,6 +19,8 @@ export interface ButtonStyleProps {
    * 按钮的大小
    */
   size?: 'small' | 'medium' | 'large'
+  // TODO 按钮内字母全大写（这样更符合规范，用css font-variant）
+  // autoUppercase?: boolean
 }
 const defaultStyleProps: ButtonStyleProps = {
   type: 'fill',
