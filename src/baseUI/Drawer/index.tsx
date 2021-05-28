@@ -6,14 +6,14 @@ import cssDefaults from 'baseUI/__config/cssDefaults'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import createElementByString from './dom/createElementByString'
 
-const maskRoot = createElementByString(
-  '<div class="mask-root" style="position:fixed; inset:0; pointer-events: none"></div>'
+const drawerRoot = createElementByString(
+  '<div class="drawer-root" style="position:fixed; inset:0; pointer-events: none"></div>'
 )
-document.body.append(maskRoot)
+document.body.append(drawerRoot)
 
-export interface MaskProps extends DivProps {
+export interface DrawerProps extends DivProps {
   /**
-   * 是否显示此mask
+   * 是否显示此drawer
    * @default false
    */
   isOpen?: boolean
@@ -40,42 +40,43 @@ export interface MaskProps extends DivProps {
 }
 
 /**
- * 打开时，会生成一个 <Mask> 在 mask-root
- * (可能同时存在多个Mask)
- * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 mask
+ * 打开时，会生成一个 <Drawer> 在 drawer-root
+ * (可能同时存在多个Drawer)
+ * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 drawer
  */
-const Mask: FC<MaskProps> = (props) => {
+const Drawer: FC<DrawerProps> = (props) => {
   const { isOpen, onOpenStart, onOpen, onCloseStart, onClose } = props
-  const maskRef = useRef<HTMLDivElement>()
+  const drawerRef = useRef<HTMLDivElement>()
 
   useUpdateEffect(() => {
-    const openCallback = () => onOpen?.({ el: maskRef.current! })
-    const closeCallback = () => onClose?.({ el: maskRef.current! })
+    const openCallback = () => onOpen?.({ el: drawerRef.current! })
+    const closeCallback = () => onClose?.({ el: drawerRef.current! })
 
     if (isOpen === true) {
-      maskRef.current!.removeEventListener('transitionend', closeCallback)
-      onOpenStart?.({ el: maskRef.current! })
-      maskRef.current!.addEventListener('transitionend', openCallback, {
+      drawerRef.current!.removeEventListener('transitionend', closeCallback)
+      onOpenStart?.({ el: drawerRef.current! })
+      drawerRef.current!.addEventListener('transitionend', openCallback, {
         passive: true,
         once: true
       })
     }
 
     if (isOpen === false) {
-      maskRef.current!.removeEventListener('transitionend', openCallback)
-      onCloseStart?.({ el: maskRef.current! })
-      maskRef.current!.addEventListener('transitionend', closeCallback, {
+      drawerRef.current!.removeEventListener('transitionend', openCallback)
+      onCloseStart?.({ el: drawerRef.current! })
+      drawerRef.current!.addEventListener('transitionend', closeCallback, {
         once: true,
         passive: true
       })
     }
   }, [isOpen])
 
+  // todo: 有个Drawer的占位，但还没开始写。估计会跟Mask纠缠在一起，需要多重考虑
   return ReactDOM.createPortal(
     <Div
-      domRef={maskRef}
-      className='mask'
-      //但这里没预留定义初始props的接口
+      domRef={drawerRef}
+      className='drawer'
+      //但这里没预留定义初始 props 的接口
       css={{
         width: '100%',
         height: '100%',
@@ -87,8 +88,8 @@ const Mask: FC<MaskProps> = (props) => {
       }}
       onClick={onClose}
     ></Div>,
-    maskRoot
+    drawerRoot
   )
 }
 
-export default Mask
+export default Drawer
