@@ -3,20 +3,20 @@ import Button from 'baseUI/Button'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 import createStore from 'baseUI/__hooks/createStore'
-import _AppProviders from 'baseUI/_AppProviders'
+import AppProviders from 'baseUI/AppProviders'
 
 const { useStore: useContextStore, Provider } = createStore({ count: 1 })
 const { useStore: useContextStore2, Provider: Provider2 } = createStore({ count: 1 })
 
 const AppProvidersExample = () => {
   return (
-    <_AppProviders list={[Provider, { provider: Provider2 }]}>
+    <AppProviders list={[Provider, { provider: Provider2 }]}>
       <ExampleCard title='_AppProviders' category='_Hollow'>
         <ExampleGroup caption='onClickOutside'>
           <Inner />
         </ExampleGroup>
       </ExampleCard>
-    </_AppProviders>
+    </AppProviders>
   )
 }
 const Inner = () => {

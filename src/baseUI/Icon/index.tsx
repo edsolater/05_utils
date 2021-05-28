@@ -9,6 +9,9 @@ import pick from 'utils/object/pick'
 export interface IconProps extends DivProps, FeatureCoreProps, IconStyleProps {
   iconImage?: ImageProps
 }
+/**
+ * @BaseUIComponent
+ */
 const Icon = (props: IconProps) => {
   const { src, name, sholdUseRaw } = useFeatureCore(props)
   const { coreCss, iconImageCss } = useIconStyle(props, { src })

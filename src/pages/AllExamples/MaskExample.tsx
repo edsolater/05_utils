@@ -1,6 +1,6 @@
 import Button from 'baseUI/Button'
 import Mask from 'baseUI/Mask'
-import _ViewController from 'baseUI/_ViewController'
+import ViewController from 'baseUI/ViewController'
 import React, { useState } from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'

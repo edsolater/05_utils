@@ -3,18 +3,12 @@ import Div, { DivProps } from 'baseUI/Div'
 import ReactDOM from 'react-dom'
 import cssColor from 'baseUI/__config/cssColor'
 import cssDefaults from 'baseUI/__config/cssDefaults'
-import _ViewController from 'baseUI/_ViewController'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
+import { createElementByString } from './dom/createElementByString'
 
-export function createElementByString(innerHTMLStr): HTMLElement {
-  const tempNode = document.createElement('div')
-  tempNode.innerHTML = innerHTMLStr
-  if (tempNode.firstElementChild === null)
-    throw "can't create an element by input, maybe you type wrong string"
-  return tempNode.firstElementChild as any
-}
-
-const maskRoot = createElementByString('<div class="mask-root"></div>')
+const maskRoot = createElementByString(
+  '<div class="mask-root" style="position:fixed; inset:0; pointer-events: none"></div>'
+)
 document.body.append(maskRoot)
 
 export interface MaskProps extends DivProps {
@@ -83,8 +77,9 @@ const Mask: FC<MaskProps> = (props) => {
       className='mask'
       //但这里没预留定义初始props的接口
       css={{
-        position: 'fixed',
-        inset: '0',
+        width: '100%',
+        height: '100%',
+        cursor: 'pointer',
         backgroundColor: cssColor.darkMask,
         opacity: isOpen ? '1' : '0',
         pointerEvents: isOpen ? 'initial' : 'none',

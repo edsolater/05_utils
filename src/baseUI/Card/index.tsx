@@ -6,6 +6,9 @@ import pick from 'utils/object/pick'
 
 export interface CardProps extends DivProps, CardStyleProps {}
 
+/**
+ * @BaseUIComponent
+ */
 const Card = (props: CardProps) => {
   const { coreCss } = useCardStyle(props)
   return <Div {...pick(props, divProps)} css={mixCSSObjects(props.css, coreCss)} />

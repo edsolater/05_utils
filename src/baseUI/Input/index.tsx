@@ -26,6 +26,9 @@ export interface InputProps extends DivProps, InputStyleProps {
   prefixNode?: ReactNode
   iconProps?: IconProps
 }
+/**
+ * @BaseUIComponent
+ */
 const Input = (props: InputProps) => {
   const [value, setValue] = useState('')
   const inputBodyRef = useRef<HTMLInputElement | HTMLTextAreaElement>()

@@ -13,6 +13,9 @@ export interface TagProps extends DivProps, TagStyleProps {
   onClose?: () => void // TODO: 应该有提供取消关闭的控制对象的
   closeIconProp?: IconProps
 }
+/**
+ * @BaseUIComponent
+ */
 export default function Tag(props: TagProps) {
   const { coreCss, tagCloseIconCss, tagCloseIconColor } = useTagStyle(props)
   return props.open === undefined || props.open === true ? (

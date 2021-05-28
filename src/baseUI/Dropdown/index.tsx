@@ -5,6 +5,9 @@ import pick from 'utils/object/pick'
 import Card, { CardProps } from 'baseUI/Card'
 
 // 应该就是一种 Card 的特殊呈现形式
+/**
+ * @BaseUIComponent
+ */
 export interface DropdownProps extends DivProps, DropdownStyleProps {
   toggleBy?: 'click' | 'hover'
   cardProps?: CardProps

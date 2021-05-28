@@ -12,7 +12,7 @@ export interface ImageCoreProp {
 export const imageProps: (keyof ImageCoreProp)[] = ['src', 'alt']
 
 /**
- * 将子元素显示在一行，相当于flexbox
+ * @BaseUIComponent
  */
 const Image = (props: ImageProps) => {
   const { coreCss } = useImageStyle(props)

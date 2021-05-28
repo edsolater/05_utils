@@ -7,6 +7,8 @@ import pick from 'utils/object/pick'
 export interface RowBoxProps extends DivProps, RowBoxStyleProps {}
 
 /**
+ * @BaseUIComponent
+ * 
  * 将子元素显示在一行，相当于flexbox
  */
 const RowBox = (props: RowBoxProps) => {

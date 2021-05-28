@@ -7,8 +7,13 @@ export interface AppProvidersProps {
   list?: Array<{ provider: Provider; value?: any } | Provider>
 }
 
+/**
+ * @SideEffectComponent
+ * 
+ * Context.Provider 的注册机，并不会实际存在于HTML树中
+ */
 //@ts-ignore
-const _AppProviders: FC<AppProvidersProps> = (props) => {
+const AppProviders: FC<AppProvidersProps> = (props) => {
   const { list = [] } = props
   return list.reduce(
     (acc, providerInfo) =>
@@ -19,4 +24,4 @@ const _AppProviders: FC<AppProvidersProps> = (props) => {
   )
 }
 
-export default _AppProviders
+export default AppProviders
