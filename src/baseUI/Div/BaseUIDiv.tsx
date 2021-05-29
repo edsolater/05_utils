@@ -23,7 +23,6 @@ export interface BaseUIDivProps<TagName extends keyof TagMap = 'div'> extends Di
 export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
   props: BaseUIDivProps<TagName>
 ) {
-  console.log('props._className: ', [props._className, props.className])
   return (
     <Div
       as={props.as}

@@ -51,7 +51,6 @@ export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagNam
   useFeatureClick<TagName>(props, { domRef: divRef })
   useFeatureHover<TagName>(props, { domRef: divRef })
   useFeatureResize<TagName>(props, { domRef: divRef })
-  console.log('props.className: ', props.className, typeof props.className)
   const allProps = {
     ...props.htmlProps,
     children: props.children,

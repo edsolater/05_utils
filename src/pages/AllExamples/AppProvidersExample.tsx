@@ -11,7 +11,7 @@ const { useStore: useContextStore2, Provider: Provider2 } = createStore({ count:
 const AppProvidersExample = () => {
   return (
     <AppProviders list={[Provider, { provider: Provider2 }]}>
-      <ExampleCard title='_AppProviders' category='_Hollow'>
+      <ExampleCard title='_AppProviders' category='SideEffectComponent'>
         <ExampleGroup caption='onClickOutside'>
           <Inner />
         </ExampleGroup>

@@ -3,7 +3,7 @@ import React from 'react'
 import { toPx } from 'style/cssUnits'
 import { cssValues } from 'style/cssValue'
 export interface ExampleCardProps extends DivProps {
-  category?: 'hooks' | 'BaseUI' | '_Hollow'
+  category?: 'hooks' | 'BaseUIComponent' | 'SideEffectComponent'
   title?: string
 }
 const ExampleCard = (props: ExampleCardProps) => (

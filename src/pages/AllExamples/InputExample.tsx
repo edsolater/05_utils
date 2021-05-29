@@ -8,7 +8,7 @@ import ExampleGroup from './ExampleGroup'
  * Input 的使用示例
  */
 const InputExample = () => (
-  <ExampleCard category='BaseUI' title="Input">
+  <ExampleCard category='BaseUIComponent' title="Input">
     <ExampleGroup caption='输入框（待完善）'>
       <Input iconProps={{ name: 'smile', color: '#333' }} inputFocusColor={cssColor.dodgerblue}>Large</Input>
       <Input iconProps={{ name: 'smile', color: '#333' }} row="auto-increase">Large</Input>

@@ -83,6 +83,7 @@ export function useFeatureMove(
     if (movable) {
       const el = component.current!
       const offsetRect =
+        // todo: 不更新的话，一滚动就没了
         moveBoundary === 'offsetParent' ? el.offsetParent?.getBoundingClientRect() : undefined
       attachPointer(el, {
         start() {

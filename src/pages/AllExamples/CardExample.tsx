@@ -8,7 +8,7 @@ import ExampleGroup from './ExampleGroup'
  * Button 的使用示例
  */
 const CardExample = () => (
-  <ExampleCard category='BaseUI' title='Card（Div变种）'>
+  <ExampleCard category='BaseUIComponent' title='Card（Div变种）'>
     <ExampleGroup caption='卡片'>
       <ViewController hidden>
         <Card width={200} height={300} color='#1e1c35' />

@@ -10,7 +10,7 @@ import ExampleGroup from './ExampleGroup'
 const DrawerExample = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   return (
-    <ExampleCard category='BaseUI' title='Drawer'>
+    <ExampleCard category='BaseUIComponent' title='Drawer'>
       <ExampleGroup caption='基础调用'>
         <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} needMask></Drawer>
         <Button onClick={() => setIsDrawerOpen((b) => !b)}>toggle</Button>

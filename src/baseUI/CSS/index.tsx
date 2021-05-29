@@ -3,7 +3,7 @@ import React, {  ReactNode } from 'react'
 import omit from 'utils/object/omit'
 
 /**
- * @BaseUIComponent
+ * @SideEffectComponent
  * 
  * 这是个透明组件，作用是在其上设定的CSS属性，“下沉”到子节点的CSSProps
  */

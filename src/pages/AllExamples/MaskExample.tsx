@@ -10,7 +10,7 @@ import ExampleGroup from './ExampleGroup'
 const MaskExample = () => {
   const [isMaskOpen, setIsMaskOpen] = useState(false)
   return (
-    <ExampleCard category='BaseUI' title='Mask'>
+    <ExampleCard category='BaseUIComponent' title='Mask'>
       <ExampleGroup caption='简单调用'>
         <Mask isOpen={isMaskOpen} onClose={() => setIsMaskOpen(false)}></Mask>
         <Button onClick={() => setIsMaskOpen((b) => !b)}>toggle</Button>

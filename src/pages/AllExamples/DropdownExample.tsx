@@ -8,7 +8,7 @@ import ExampleGroup from './ExampleGroup'
  * Dropdown 的使用示例
  */
 const DropdownExample = () => (
-  <ExampleCard category='BaseUI' title='Dropdown（依赖于Card）'>
+  <ExampleCard category='BaseUIComponent' title='Dropdown（依赖于Card）'>
     <ExampleGroup caption='基本'>
       <Dropdown toggleBy="hover" cardProps={{ height:'100px', width: '300px' }}>
         <Icon name='smile' />

@@ -10,7 +10,7 @@ export interface ViewControllerProps extends DivProps, CssProps {
   if?: boolean
 }
 /**
- * @HollowComponent
+ * @SideEffectComponent
  * 
  * 不一定会在HTML中体现，肯定不会在DOM树中，因为 display:contents 了
  * 能控制子组件的渲染与否
