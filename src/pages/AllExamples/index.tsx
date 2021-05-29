@@ -4,6 +4,7 @@ import AppProvidersExample from './AppProvidersExample'
 import ButtonExample from './ButtonExample'
 import CardExample from './CardExample'
 import DivExample from './DivExample'
+import DrawerExample from './DrawerExample'
 import DropdownExample from './DropdownExample'
 import GlobalStoreExample from './GlobalStoreExample'
 import IconExample from './IconExample'
@@ -14,6 +15,7 @@ import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings>
+    <DrawerExample />
     <MaskExample />
     <AppProvidersExample />
     <GlobalStoreExample />

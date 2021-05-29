@@ -13,7 +13,8 @@ const cssColor = {
   /** 带有一点灰，用于辅助说明 */
   grayText: 'hsl(0deg 0% 20% / 70%)',
   darkMask: 'hsl(0deg 0% 0% / 17%)',
-  darkMaskLighter: 'hsl(0deg 0% 0% / 8%)'
+  darkMaskLighter: 'hsl(0deg 0% 0% / 8%)',
+  whiteCard: 'hsl(0deg 0% 100%)',
 } as const
 export default cssColor
 export type CSSColorString = string

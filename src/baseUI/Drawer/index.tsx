@@ -11,7 +11,7 @@ const drawerRoot = createElementByString(
 )
 document.body.append(drawerRoot)
 
-export interface DrawerProps extends DivProps {
+export interface DrawerCardProps extends DivProps {
   /**
    * 是否显示此drawer
    * @default false
@@ -19,24 +19,28 @@ export interface DrawerProps extends DivProps {
   isOpen?: boolean
 
   /**
-   * 点击打开时
+   * <Drawer> 组件出现的方向：上下左右
+   * @default 'left'
    */
-  onOpenStart?: (info: { el: HTMLDivElement }) => void
+  direction?: 'top' | 'right' | 'bottom' | 'left'
 
   /**
-   * 打开的过渡动画结束后
+   * 打开的瞬间（可能还是完全透明的）
    */
   onOpen?: (info: { el: HTMLDivElement }) => void
-
   /**
-   * 关闭动画开始时
+   * 打开，过渡动画结束（此时已完全可见）
    */
-  onCloseStart?: (info: { el: HTMLDivElement }) => void
+  onOpenTransitionEnd?: (info: { el: HTMLDivElement }) => void
 
   /**
-   * 关闭动画完毕后
+   * 准备的瞬间（还没有消失完全）
    */
   onClose?: (info: { el: HTMLDivElement }) => void
+  /**
+   * 关闭，过渡动画结束（此时已完全不可见）
+   */
+  onCloseTransitionEnd?: (info: { el: HTMLDivElement }) => void
 }
 
 /**
@@ -44,17 +48,17 @@ export interface DrawerProps extends DivProps {
  * (可能同时存在多个Drawer)
  * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 drawer
  */
-const Drawer: FC<DrawerProps> = (props) => {
-  const { isOpen, onOpenStart, onOpen, onCloseStart, onClose } = props
+const Drawer: FC<DrawerCardProps> = (props) => {
+  const { isOpen, onOpenTransitionEnd, onOpen, onCloseTransitionEnd, onClose } = props
   const drawerRef = useRef<HTMLDivElement>()
 
   useUpdateEffect(() => {
-    const openCallback = () => onOpen?.({ el: drawerRef.current! })
-    const closeCallback = () => onClose?.({ el: drawerRef.current! })
+    const openCallback = () => onOpenTransitionEnd?.({ el: drawerRef.current! })
+    const closeCallback = () => onCloseTransitionEnd?.({ el: drawerRef.current! })
 
     if (isOpen === true) {
       drawerRef.current!.removeEventListener('transitionend', closeCallback)
-      onOpenStart?.({ el: drawerRef.current! })
+      onOpen?.({ el: drawerRef.current! })
       drawerRef.current!.addEventListener('transitionend', openCallback, {
         passive: true,
         once: true
@@ -63,7 +67,7 @@ const Drawer: FC<DrawerProps> = (props) => {
 
     if (isOpen === false) {
       drawerRef.current!.removeEventListener('transitionend', openCallback)
-      onCloseStart?.({ el: drawerRef.current! })
+      onClose?.({ el: drawerRef.current! })
       drawerRef.current!.addEventListener('transitionend', closeCallback, {
         once: true,
         passive: true
@@ -75,19 +79,21 @@ const Drawer: FC<DrawerProps> = (props) => {
   return ReactDOM.createPortal(
     <Div
       domRef={drawerRef}
-      className='drawer'
-      //但这里没预留定义初始 props 的接口
+      className='Drawer'
       css={{
-        width: '100%',
+        position: 'fixed',
+        left: isOpen ? '0' : '-30%',
+        width: '30%',
         height: '100%',
-        cursor: 'pointer',
-        backgroundColor: cssColor.darkMask,
+        backgroundColor: cssColor.whiteCard,
+        boxShadow: cssDefaults.shadow.drawerShadow,
         opacity: isOpen ? '1' : '0',
-        pointerEvents: isOpen ? 'initial' : 'none',
-        transition: cssDefaults.transiton.normal
+        transition: cssDefaults.transiton.slow,
+        pointerEvents: 'initial'
       }}
-      onClick={onClose}
-    ></Div>,
+    >
+      {props.children}
+    </Div>,
     drawerRoot
   )
 }

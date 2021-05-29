@@ -19,24 +19,22 @@ export interface MaskProps extends DivProps {
   isOpen?: boolean
 
   /**
-   * 点击打开时
-   */
-  onOpenStart?: (info: { el: HTMLDivElement }) => void
-
-  /**
-   * 打开的过渡动画结束后
+   * 打开的瞬间（可能还是完全透明的）
    */
   onOpen?: (info: { el: HTMLDivElement }) => void
-
   /**
-   * 关闭动画开始时
+   * 打开，过渡动画结束（此时已完全可见）
    */
-  onCloseStart?: (info: { el: HTMLDivElement }) => void
+  onOpenTransitionEnd?: (info: { el: HTMLDivElement }) => void
 
   /**
-   * 关闭动画完毕后
+   * 准备的瞬间（还没有消失完全）
    */
   onClose?: (info: { el: HTMLDivElement }) => void
+  /**
+   * 关闭，过渡动画结束（此时已完全不可见）
+   */
+  onCloseTransitionEnd?: (info: { el: HTMLDivElement }) => void
 }
 
 /**
@@ -45,16 +43,17 @@ export interface MaskProps extends DivProps {
  * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 mask
  */
 const Mask: FC<MaskProps> = (props) => {
-  const { isOpen, onOpenStart, onOpen, onCloseStart, onClose } = props
+  const { isOpen, onOpenTransitionEnd, onOpen, onCloseTransitionEnd, onClose } = props
+  const isCloseBySelf = useRef(false)
   const maskRef = useRef<HTMLDivElement>()
 
   useUpdateEffect(() => {
-    const openCallback = () => onOpen?.({ el: maskRef.current! })
-    const closeCallback = () => onClose?.({ el: maskRef.current! })
+    const openCallback = () => onOpenTransitionEnd?.({ el: maskRef.current! })
+    const closeCallback = () => onCloseTransitionEnd?.({ el: maskRef.current! })
 
     if (isOpen === true) {
       maskRef.current!.removeEventListener('transitionend', closeCallback)
-      onOpenStart?.({ el: maskRef.current! })
+      onOpen?.({ el: maskRef.current! })
       maskRef.current!.addEventListener('transitionend', openCallback, {
         passive: true,
         once: true
@@ -63,7 +62,7 @@ const Mask: FC<MaskProps> = (props) => {
 
     if (isOpen === false) {
       maskRef.current!.removeEventListener('transitionend', openCallback)
-      onCloseStart?.({ el: maskRef.current! })
+      !isCloseBySelf && onClose?.({ el: maskRef.current! })
       maskRef.current!.addEventListener('transitionend', closeCallback, {
         once: true,
         passive: true
@@ -85,7 +84,10 @@ const Mask: FC<MaskProps> = (props) => {
         pointerEvents: isOpen ? 'initial' : 'none',
         transition: cssDefaults.transiton.normal
       }}
-      onClick={onClose}
+      onClick={(event) => {
+        isCloseBySelf.current = true
+        onClose?.(event)
+      }}
     ></Div>,
     maskRoot
   )
