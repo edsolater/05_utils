@@ -37,6 +37,7 @@ const TrafficLight = () => {
     <Div
       className={status[statusIndex]}
       css={{
+        '--light-color': colors[colorIndex],
         width: 50,
         height: 50,
         borderRadius: toPer(50),
@@ -45,7 +46,6 @@ const TrafficLight = () => {
           animation: `${keyframeBlink} ${blinkingTime / 3}ms infinite`
         }
       }}
-      style={{ '--light-color': colors[colorIndex] }}
     ></Div>
   )
 }

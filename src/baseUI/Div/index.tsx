@@ -1,6 +1,5 @@
-/** @jsx jsx */
 import { jsx } from '@emotion/react'
-import { CSSProperties, ReactNode, useRef } from 'react'
+import { useRef } from 'react'
 import { parseCSS } from 'style/cssParser'
 import { ICSS } from 'style/ICSS'
 import { ClassName, classname } from './util/classname'
@@ -22,41 +21,40 @@ import {
 import { TagMap } from './TagMap'
 import { IRefs, mergeRefs } from './util/mergeRefs'
 import concat from 'utils/array/concat'
+import { ReactProps } from 'typings/constants'
+import { MayDeepArray } from 'typings/tools'
+export { default as BaseUIDiv } from './BaseUIDiv'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
 export interface DivProps<TagName extends keyof TagMap = 'div'>
   extends FeatureClickProps<TagName>,
     FeatureHoverProps<TagName>,
-    FeatureResizeProps<TagName> {
+    FeatureResizeProps<TagName>,
+    ReactProps {
   // 只能低层组件使用
   as?: TagName
+
   domRef?: IRefs<TagMap[TagName]>
-  className?: ClassName
-  // 对interface，typescript有缓存
   css?: ICSS
-  /**
-   * 在原来style的基础上，增加了对css variable的type类型的支持
-   * 其实就是元素的style
-   */
-  style?: CSSProperties | { [cssVariableName: string]: number | string | undefined }
-  children?: ReactNode
+  className?: MayDeepArray<ClassName>
   htmlProps?: JSX.IntrinsicElements[TagName]
 }
+
 export const divProps: ReadonlyArray<keyof DivProps> = concat(
-  ['as', 'domRef', 'className', 'css', 'style', 'children', 'htmlProps'],
+  ['as', 'domRef', 'className', 'css', 'children', 'htmlProps'],
   featureClickProps,
   featureHoverProps,
   featureResizeProps
 )
-const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
+export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>()
   useFeatureClick<TagName>(props, { domRef: divRef })
   useFeatureHover<TagName>(props, { domRef: divRef })
   useFeatureResize<TagName>(props, { domRef: divRef })
+  console.log('props.className: ', props.className, typeof props.className)
   const allProps = {
     ...props.htmlProps,
     children: props.children,
-    style: props.style,
     className: classname(props.className),
     ref: mergeRefs(props.domRef, divRef),
     css: parseCSS(props.css)

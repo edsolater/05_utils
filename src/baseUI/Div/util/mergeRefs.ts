@@ -15,7 +15,7 @@ export function mergeRefs<T = any>(
 ): RefCallback<T> {
   return useCallback((el) => {
     if (el) {
-      refs.forEach((ref) => loadRef(ref, el))
+      refs.flat(Infinity).forEach((ref) => loadRef(ref, el))
     }
   }, refs)
 }

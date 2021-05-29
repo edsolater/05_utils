@@ -55,3 +55,26 @@ type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: undefined }
  * const d: F = { a: 1, b: true, c: () => true, d: '2' } // Error
  */
 export type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U
+
+/**
+ * 只选取满足条件的属性名
+ * @example
+ * PickByValue<{a: boolean, b: boolean, c: string}, boolean> // {a: boolean, b: boolean}
+ */
+export type PickByValue<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T]
+
+/**
+ * 只选取不满足条件的属性名
+ * @example
+ * OmitByValue<{a: undefined, b: undefined, c: string}, undefined> // {c: string}
+ */
+export type OmitByValue<T, U> = { [P in keyof T]: T[P] extends U ? never : P }[keyof T]
+
+/**
+ * 删除 属性值为undefined的属性
+ * @example
+ * NotUndefinedValue<{a: number, b: never}> // {a: number}
+ */
+export type NotUndefinedValue<O> = {
+  [Q in OmitByValue<O, undefined>]: O[Q]
+}

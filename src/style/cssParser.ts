@@ -43,7 +43,6 @@ export function parseCSS(icss: ICSS): SerializedStyles {
   const parsedCSS = composed ? nestedMiddleware(composed) : undefined
   return css(parsedCSS)
 }
-export type OnlyObject<T> = T extends object ? never : T
 
 /**
  * 处理Transform相关的单独属性
