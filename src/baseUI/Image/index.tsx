@@ -12,26 +12,36 @@ export interface ImageCoreProp {
    */
   src: string | string[]
   alt?: string
+  /**
+   * if it can't patch any of src, then, this event listener will be invoked
+   */
+  onSrcFailed?: () => any
 }
 
 /**
  * @BaseUIComponent
  */
 const Image = (props: ImageProps) => {
+  const { src, alt, onSrcFailed } = props
   const { coreCss } = useImageStyle(props)
   const [errorCount, setErrorCount] = useState(0)
-  const targetSrc = isArray(props.src)
-    ? props.src[errorCount] ?? props.src[props.src.length - 1]
-    : props.src
+  const [failToLoad, setFailToLoad] = useState(false)
+  const targetSrc = isArray(src) ? src[errorCount] ?? src[src.length - 1] : src
   return (
     <BaseUIDiv
       as='img'
       {...pick(props, divProps)}
       _htmlProps={{
         src: targetSrc,
-        alt: props.alt,
+        alt: alt,
         onError: () => {
-          setErrorCount((n) => (n < props.src.length ? n + 1 : n))
+          if (failToLoad) return
+          if (errorCount >= src.length) {
+            onSrcFailed?.()
+            setFailToLoad(true)
+          } else {
+            setErrorCount((n) => (n < src.length ? n + 1 : n))
+          }
         }
       }}
       _css={mixCSSObjects(props.css, coreCss)}
