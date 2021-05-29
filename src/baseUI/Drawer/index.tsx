@@ -14,7 +14,7 @@ import cssDefaults from 'baseUI/__config/cssDefaults'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import createElementByString from './dom/createElementByString'
 import Mask from 'baseUI/Mask'
-import { IProps } from 'typings/constants'
+import { ReactProps } from 'typings/constants'
 import DrawerCard from './DrawerCard'
 const DrawContext = createContext({})
 export interface DrawerCardProps extends DivProps {
@@ -55,7 +55,7 @@ export interface DrawerCardProps extends DivProps {
  * (可能同时存在多个Drawer)
  * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 drawer
  */
-const Drawer = (props: IProps<DrawerCardProps>) => {
+const Drawer = (props: ReactProps<DrawerCardProps>) => {
   // todo: 有个Drawer的占位，但还没开始写。估计会跟Mask纠缠在一起，需要多重考虑
   const { isOpen, needMask, onClose } = props
   return (

@@ -1,15 +1,10 @@
-import React, { FC, useRef } from 'react'
+import React, { useRef } from 'react'
 import Div, { DivProps } from 'baseUI/Div'
-import ReactDOM from 'react-dom'
 import cssColor from 'baseUI/__config/cssColor'
 import cssDefaults from 'baseUI/__config/cssDefaults'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
-import createElementByString from './dom/createElementByString'
-
-const maskTrack = createElementByString(
-  '<div class="mask-root" style="position:fixed; inset:0; pointer-events: none"></div>'
-)
-document.body.append(maskTrack)
+import MaskProtal from './MaskProtal'
+import { ReactProps } from 'typings/constants'
 
 export interface MaskProps extends DivProps {
   /**
@@ -42,7 +37,7 @@ export interface MaskProps extends DivProps {
  * (可能同时存在多个Mask)
  * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 mask
  */
-const Mask: FC<MaskProps> = (props) => {
+const Mask = (props: ReactProps<MaskProps>) => {
   const { isOpen, onOpenTransitionEnd, onOpen, onCloseTransitionEnd, onClose } = props
   const isCloseBySelf = useRef(false)
   const maskRef = useRef<HTMLDivElement>()
@@ -70,25 +65,26 @@ const Mask: FC<MaskProps> = (props) => {
     }
   }, [isOpen])
 
-  return ReactDOM.createPortal(
-    <Div
-      domRef={maskRef}
-      className='mask'
-      //但这里没预留定义初始props的接口
-      css={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: cssColor.darkMask,
-        opacity: isOpen ? '1' : '0',
-        pointerEvents: isOpen ? 'initial' : 'none',
-        transition: cssDefaults.transiton.normal
-      }}
-      onClick={(event) => {
-        isCloseBySelf.current = true
-        onClose?.(event)
-      }}
-    ></Div>,
-    maskTrack
+  return (
+    <MaskProtal>
+      <Div
+        domRef={maskRef}
+        className='mask'
+        // 但这里没预留定义初始props的接口
+        css={{
+          position: 'fixed',
+          inset: '0',
+          backgroundColor: cssColor.darkMask,
+          opacity: isOpen ? '1' : '0',
+          pointerEvents: isOpen ? 'initial' : 'none',
+          transition: cssDefaults.transiton.normal
+        }}
+        onClick={(event) => {
+          isCloseBySelf.current = true
+          onClose?.(event)
+        }}
+      />
+    </MaskProtal>
   )
 }
 

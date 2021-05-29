@@ -90,4 +90,4 @@ export type Direction3D = 'x' | 'y' | 'z'
  */
 export type Timestamp = number
 
-export type IProps<P = {}> = PropsWithChildren<P>
+export type ReactProps<P = {}> = PropsWithChildren<P>

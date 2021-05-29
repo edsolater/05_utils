@@ -1,15 +1,9 @@
 import React, { FC, useRef } from 'react'
 import Div, { DivProps } from 'baseUI/Div'
-import ReactDOM from 'react-dom'
 import cssColor from 'baseUI/__config/cssColor'
 import cssDefaults from 'baseUI/__config/cssDefaults'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
-import createElementByString from './dom/createElementByString'
-
-const drawerTrack = createElementByString(
-  '<div class="drawer-root" style="position:fixed; inset:0; pointer-events: none"></div>'
-)
-document.body.append(drawerTrack)
+import DrawerCardProtal from './DrawerCardProtal'
 
 export interface DrawerCardProps extends DivProps {
   /**
@@ -76,25 +70,26 @@ const DrawerCard: FC<DrawerCardProps> = (props) => {
   }, [isOpen])
 
   // todo: 有个Drawer的占位，但还没开始写。估计会跟Mask纠缠在一起，需要多重考虑
-  return ReactDOM.createPortal(
-    <Div
-      domRef={drawerRef}
-      className='DrawerCard'
-      css={{
-        position: 'fixed',
-        left: isOpen ? '0' : '-30%',
-        width: '30%',
-        height: '100%',
-        backgroundColor: cssColor.whiteCard,
-        boxShadow: cssDefaults.shadow.drawerShadow,
-        opacity: isOpen ? '1' : '0',
-        transition: cssDefaults.transiton.slow,
-        pointerEvents: 'initial'
-      }}
-    >
-      {props.children}
-    </Div>,
-    drawerTrack
+  return (
+    <DrawerCardProtal>
+      <Div
+        domRef={drawerRef}
+        className='DrawerCard'
+        css={{
+          position: 'fixed',
+          left: isOpen ? '0' : '-30%',
+          width: '30%',
+          height: '100%',
+          backgroundColor: cssColor.whiteCard,
+          boxShadow: cssDefaults.shadow.drawerShadow,
+          opacity: isOpen ? '1' : '0',
+          transition: cssDefaults.transiton.slow,
+          pointerEvents: 'initial'
+        }}
+      >
+        {props.children}
+      </Div>
+    </DrawerCardProtal>
   )
 }
 
