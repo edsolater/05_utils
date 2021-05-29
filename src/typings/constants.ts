@@ -4,6 +4,8 @@
  *
  ******************************/
 
+import { PropsWithChildren } from 'react'
+
 export type Primitive = boolean | number | string
 export type RichPrimitive = Primitive | bigint | symbol
 /**
@@ -87,3 +89,5 @@ export type Direction3D = 'x' | 'y' | 'z'
  * 对应event都有的timeStamp
  */
 export type Timestamp = number
+
+export type IProps<P = {}> = PropsWithChildren<P>

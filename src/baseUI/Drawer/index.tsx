@@ -1,16 +1,22 @@
-import React, { FC, useRef } from 'react'
+import React, {
+  ComponentProps,
+  createContext,
+  FC,
+  PropsWithChildren,
+  ReactNode,
+  useContext,
+  useRef
+} from 'react'
 import Div, { DivProps } from 'baseUI/Div'
 import ReactDOM from 'react-dom'
 import cssColor from 'baseUI/__config/cssColor'
 import cssDefaults from 'baseUI/__config/cssDefaults'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import createElementByString from './dom/createElementByString'
-
-const drawerRoot = createElementByString(
-  '<div class="drawer-root" style="position:fixed; inset:0; pointer-events: none"></div>'
-)
-document.body.append(drawerRoot)
-
+import Mask from 'baseUI/Mask'
+import { IProps } from 'typings/constants'
+import DrawerCard from './DrawerCard'
+const DrawContext = createContext({})
 export interface DrawerCardProps extends DivProps {
   /**
    * 是否显示此drawer
@@ -24,23 +30,24 @@ export interface DrawerCardProps extends DivProps {
    */
   direction?: 'top' | 'right' | 'bottom' | 'left'
 
-  /**
-   * 打开的瞬间（可能还是完全透明的）
-   */
-  onOpen?: (info: { el: HTMLDivElement }) => void
-  /**
-   * 打开，过渡动画结束（此时已完全可见）
-   */
-  onOpenTransitionEnd?: (info: { el: HTMLDivElement }) => void
+  needMask?: boolean
+  // /**
+  //  * 打开的瞬间（可能还是完全透明的）
+  //  */
+  // onOpen?: (info: { el: HTMLDivElement }) => void
+  // /**
+  //  * 打开，过渡动画结束（此时已完全可见）
+  //  */
+  // onOpenTransitionEnd?: (info: { el: HTMLDivElement }) => void
 
   /**
-   * 准备的瞬间（还没有消失完全）
+   * 点击关闭
    */
   onClose?: (info: { el: HTMLDivElement }) => void
-  /**
-   * 关闭，过渡动画结束（此时已完全不可见）
-   */
-  onCloseTransitionEnd?: (info: { el: HTMLDivElement }) => void
+  // /**
+  //  * 关闭，过渡动画结束（此时已完全不可见）
+  //  */
+  // onCloseTransitionEnd?: (info: { el: HTMLDivElement }) => void
 }
 
 /**
@@ -48,54 +55,26 @@ export interface DrawerCardProps extends DivProps {
  * (可能同时存在多个Drawer)
  * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 drawer
  */
-const Drawer: FC<DrawerCardProps> = (props) => {
-  const { isOpen, onOpenTransitionEnd, onOpen, onCloseTransitionEnd, onClose } = props
-  const drawerRef = useRef<HTMLDivElement>()
-
-  useUpdateEffect(() => {
-    const openCallback = () => onOpenTransitionEnd?.({ el: drawerRef.current! })
-    const closeCallback = () => onCloseTransitionEnd?.({ el: drawerRef.current! })
-
-    if (isOpen === true) {
-      drawerRef.current!.removeEventListener('transitionend', closeCallback)
-      onOpen?.({ el: drawerRef.current! })
-      drawerRef.current!.addEventListener('transitionend', openCallback, {
-        passive: true,
-        once: true
-      })
-    }
-
-    if (isOpen === false) {
-      drawerRef.current!.removeEventListener('transitionend', openCallback)
-      onClose?.({ el: drawerRef.current! })
-      drawerRef.current!.addEventListener('transitionend', closeCallback, {
-        once: true,
-        passive: true
-      })
-    }
-  }, [isOpen])
-
+const Drawer = (props: IProps<DrawerCardProps>) => {
   // todo: 有个Drawer的占位，但还没开始写。估计会跟Mask纠缠在一起，需要多重考虑
-  return ReactDOM.createPortal(
-    <Div
-      domRef={drawerRef}
-      className='Drawer'
-      css={{
-        position: 'fixed',
-        left: isOpen ? '0' : '-30%',
-        width: '30%',
-        height: '100%',
-        backgroundColor: cssColor.whiteCard,
-        boxShadow: cssDefaults.shadow.drawerShadow,
-        opacity: isOpen ? '1' : '0',
-        transition: cssDefaults.transiton.slow,
-        pointerEvents: 'initial'
-      }}
-    >
-      {props.children}
-    </Div>,
-    drawerRoot
+  const { isOpen, needMask, onClose } = props
+  return (
+    <DrawContext.Provider value={{ isClosedByMask: 2 } /* TODO */}>
+      {/* FIXME: 应该有个<_MaskProtal>组件，不然，一个APP中只能存在一个Mask了 */}
+      {needMask && <Drawer.Mask isOpen={isOpen} onClose={onClose} />}
+      <Drawer.Card isOpen={isOpen}>{props.children}</Drawer.Card>
+    </DrawContext.Provider>
   )
 }
 
+Drawer.Mask = (props: ComponentProps<typeof Mask>) => {
+  const hasDefaultMask = false
+  const drawerContectInfo = useContext(DrawContext)
+
+  return <Mask {...props} />
+}
+
+Drawer.Card = (props: ComponentProps<typeof DrawerCard>) => {
+  return <DrawerCard {...props} />
+}
 export default Drawer

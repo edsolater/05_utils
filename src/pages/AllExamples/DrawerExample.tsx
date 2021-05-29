@@ -13,7 +13,7 @@ const DrawerExample = () => {
   return (
     <ExampleCard category='BaseUI' title='Drawer'>
       <ExampleGroup caption='基础调用'>
-        <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}></Drawer>
+        <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} needMask></Drawer>
         <Button onClick={() => setIsDrawerOpen((b) => !b)}>toggle</Button>
       </ExampleGroup>
     </ExampleCard>

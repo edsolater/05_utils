@@ -6,10 +6,10 @@ import cssDefaults from 'baseUI/__config/cssDefaults'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import createElementByString from './dom/createElementByString'
 
-const maskRoot = createElementByString(
+const maskTrack = createElementByString(
   '<div class="mask-root" style="position:fixed; inset:0; pointer-events: none"></div>'
 )
-document.body.append(maskRoot)
+document.body.append(maskTrack)
 
 export interface MaskProps extends DivProps {
   /**
@@ -78,7 +78,6 @@ const Mask: FC<MaskProps> = (props) => {
       css={{
         width: '100%',
         height: '100%',
-        cursor: 'pointer',
         backgroundColor: cssColor.darkMask,
         opacity: isOpen ? '1' : '0',
         pointerEvents: isOpen ? 'initial' : 'none',
@@ -89,7 +88,7 @@ const Mask: FC<MaskProps> = (props) => {
         onClose?.(event)
       }}
     ></Div>,
-    maskRoot
+    maskTrack
   )
 }
 
