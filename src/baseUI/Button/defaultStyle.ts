@@ -84,7 +84,7 @@ export const getButtonCSS = cache(
         boxSizing: 'border-box'
       },
       props.size === 'small' && {
-        padding: cssVar('--button-padding_small', cssDetail.padding_small),
+        padding: cssVar('--button-padding_small', cssDetail.padding_small), // TODO：感觉我是滥用了 CSSVar，这里根本不需要用。用 React管理重渲染就够了。反而更清晰。CSSVar应该用在会频繁变更的属性值上。
         fontSize: cssVar('--button-font-size_small', cssDetail.fontSize_small),
         borderRadius: cssVar('--button-border-radius_small', cssDetail.borderRadius_small)
       },
