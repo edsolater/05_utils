@@ -1,10 +1,11 @@
-import React, { ComponentProps, ReactElement, ReactNode } from 'react'
+import React from 'react'
+import { ComponentProps } from 'react'
 import { DivProps } from 'baseUI/Div'
 import Mask from 'baseUI/Mask'
 import { ReactProps } from 'typings/constants'
 import DrawerCard from './DrawerCard'
 import createStore from 'baseUI/__hooks/createStore'
-import flat from 'utils/array/flat'
+import isChildrenContain from './isChildrenContain'
 const { Provider, useStore: useDrawerContext } = createStore({ currentMaskId: null })
 export interface DrawerCardProps extends DivProps {
   /**
@@ -19,7 +20,6 @@ export interface DrawerCardProps extends DivProps {
    */
   direction?: 'top' | 'right' | 'bottom' | 'left'
 
-  needMask?: boolean
   // /**
   //  * 打开的瞬间（可能还是完全透明的）
   //  */
@@ -40,9 +40,9 @@ export interface DrawerCardProps extends DivProps {
 }
 
 const _Drawer = (props: ReactProps<DrawerCardProps>) => {
-  // todo: 有个Drawer的占位，但还没开始写。估计会跟Mask纠缠在一起，需要多重考虑
   const { isOpen, onClose } = props
-  const hasCustomedDrawerMask = reactChildrenContain(props.children, _DrawerMask)
+  console.log('233: ', 233)
+  const hasCustomedDrawerMask = isChildrenContain(props.children, _DrawerMask)
   return (
     <>
       {hasCustomedDrawerMask || (
@@ -82,11 +82,3 @@ const Drawer = (props) => (
 Drawer.Mask = _DrawerMask
 Drawer.Card = _DrawerCard
 export default Drawer
-
-type ReactComponent = (...params) => ReactElement | null
-
-function reactChildrenContain(children: ReactNode, targetComponent: ReactComponent): boolean {
-  return flat([children]).some(
-    (item) => React.isValidElement(item) && item.type === targetComponent
-  )
-}
