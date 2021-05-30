@@ -1,5 +1,5 @@
 import isArray from '../judgers/isArray'
-import isItemOf from '../judgers/isItemOf'
+import isItemOf from '../judgers/isOneOf'
 import isString from '../judgers/isString'
 import objectFilter from './objectFilter'
 /**

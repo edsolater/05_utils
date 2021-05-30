@@ -41,7 +41,7 @@ const DivExample = () => {
         >
           <Div
             onResize={() => {
-              console.log(3)
+              // console.log(3)
             }}
           />
         </CSS>
