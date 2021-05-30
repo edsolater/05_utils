@@ -41,12 +41,11 @@ export interface DrawerCardProps extends DivProps {
 
 const _Drawer = (props: ReactProps<DrawerCardProps>) => {
   const { isOpen, onClose } = props
-  console.log('233: ', 233)
   const hasCustomedDrawerMask = isChildrenContain(props.children, _DrawerMask)
   return (
     <>
       {hasCustomedDrawerMask || (
-        <_DrawerMask maskBg='dodgerblue' /* TEMP */ isOpen={isOpen} onClose={onClose} />
+        <_DrawerMask isOpen={isOpen} onClose={onClose} />
       )}
       <_DrawerCard isOpen={isOpen}>{props.children}</_DrawerCard>
     </>
@@ -72,6 +71,10 @@ const Drawer = (props) => (
     <_Drawer {...props} />
   </Provider>
 )
+
+// TODO：Drawer要从_Drawer上转移挂载。 Object.assign(Drawer, _Drawer)
+// TODO: 然后，就可以直接 export default wrapProvider(Drawer, Provider)了
+
 /**
  * @UIComponent
  *
