@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import Div, { DivProps } from 'baseUI/Div'
-import cssColor from 'baseUI/__config/cssColor'
+import { CSSColorString } from 'baseUI/__config/cssColor'
 import cssDefaults from 'baseUI/__config/cssDefaults'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import MaskProtal from './MaskProtal'
@@ -30,6 +30,24 @@ export interface MaskProps extends DivProps {
    * 关闭，过渡动画结束（此时已完全不可见）
    */
   onCloseTransitionEnd?: (info: { el: HTMLDivElement }) => void
+
+  /**
+   * @cssProps
+   * mask's background.
+   * It should be non-transparent color/gradiant
+   *
+   * @default cssDefault.maskBg
+   */
+  maskBg?: CSSColorString
+
+  /**
+   * @cssProps
+   * opacity of the mask's background.
+   * For UI style's accordant. You should not config this option
+   *
+   * @default cssDefault.maskOpacity
+   */
+  maskOpacity?: string
 }
 
 /**
@@ -39,6 +57,7 @@ export interface MaskProps extends DivProps {
  */
 const Mask = (props: ReactProps<MaskProps>) => {
   const { isOpen, onOpenTransitionEnd, onOpen, onCloseTransitionEnd, onClose } = props
+  const { maskBg = cssDefaults.maskBg, maskOpacity = cssDefaults.maskOpacity } = props
   const isCloseBySelf = useRef(false)
   const maskRef = useRef<HTMLDivElement>()
 
@@ -65,6 +84,7 @@ const Mask = (props: ReactProps<MaskProps>) => {
     }
   }, [isOpen])
 
+  // TODO: 这里，没打开此mask时， mask的DOM依然存在。🤔这在设计上是不是更 “干净”
   return (
     <MaskProtal>
       <Div
@@ -74,8 +94,8 @@ const Mask = (props: ReactProps<MaskProps>) => {
         css={{
           position: 'fixed',
           inset: '0',
-          backgroundColor: cssColor.darkMask,
-          opacity: isOpen ? '1' : '0',
+          backgroundColor: maskBg,
+          opacity: isOpen ? maskOpacity : '0',
           pointerEvents: isOpen ? 'initial' : 'none',
           transition: cssDefaults.transiton.normal
         }}

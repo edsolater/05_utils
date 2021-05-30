@@ -1,3 +1,5 @@
+import cssColor from './cssColor'
+
 const cssDefaults = {
   transiton: {
     fast: '200ms',
@@ -10,6 +12,8 @@ const cssDefaults = {
       '0px 8px 32px rgba(0, 0, 0, 0.05)',
       '0px 16px 64px rgba(0, 0, 0, 0.025)'
     ].join(', ')
-  }
+  },
+  maskBg: cssColor.black,
+  maskOpacity: '0.2'
 } as const
 export default cssDefaults
