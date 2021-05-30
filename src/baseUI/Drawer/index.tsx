@@ -61,6 +61,7 @@ const _DrawerCard = (props: ComponentProps<typeof DrawerCard>) => {
 
 /**
  * @UIComponent 抽屉组件
+ * @JSComponenct 能用JS调用的组件（还没实现）
  *
  * 打开时，会生成一个 <Drawer> 在 drawer-root
  * (可能同时存在多个Drawer)
