@@ -15,7 +15,7 @@ interface AppLayoutProps extends DivProps {
  * this layout may be used in App root. For example: index.tsx(Trading Page)
  */
 export default function AppLayout(props: ReactProps<AppLayoutProps>) {
-  const [isScrollingDown, setIsScrollingDown] = useState(false)
+  const [isScrollingUp, setIsScrollingUp] = useState(true)
   const [isSideMenuCollapsed, setIsSideMenuCollapsed] = useState(false)
   const topbarElement = getChildElement(props.children, AppLayoutTopbar)
   const sideMenuElement = getChildElement(props.children, AppLayoutSideMenu)
@@ -37,7 +37,7 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       }}
     >
       <AppLayoutTopbar
-        isHidden={isScrollingDown}
+        isHidden={isScrollingUp}
         onTapSwitcher={setIsSideMenuCollapsed}
         {...topbarElement?.props}
       />
@@ -55,11 +55,11 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       />
       <AppLayoutContent
         onScrollDown={() => {
-          setIsScrollingDown(true)
+          setIsScrollingUp(false)
           contentElement?.props.onScrollDown?.()
         }}
         onScrollUp={() => {
-          setIsScrollingDown(false)
+          setIsScrollingUp(true)
           contentElement?.props.onScrollUp?.()
         }}
         {...contentElement?.props}
