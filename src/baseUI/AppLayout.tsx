@@ -37,7 +37,7 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       }}
     >
       <AppLayoutTopbar
-        hide={isScrollingDown}
+        isHidden={isScrollingDown}
         onTapSwitcher={setIsSideMenuCollapsed}
         {...topbarElement?.props}
       />
@@ -77,18 +77,14 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
  * b c c
  * b c c
  */
-interface AppLayoutTopbarProps extends ReactProps, DivProps {
-  hide?: boolean
+interface AppLayoutTopbarProps extends DivProps {
+  isHidden?: boolean
   onTapSwitcher?: (isOn: boolean) => void
+  children?: ReactNode | ((isHidden: boolean) => ReactNode)
 }
 function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTopbarProps> {
   const domRef = useRef<HTMLDivElement>(null)
-  const [blockHeight, setBlockHeight] = useState(0)
   const [hasTurnOn, setHasTurnOn] = useState(false)
-  useEffect(() => {
-    //TODO: this will only invoked once. Should use ResizeObserver instead
-    setBlockHeight(domRef.current?.scrollHeight ?? 0)
-  }, [])
   useEffect(() => {
     props.onTapSwitcher?.(hasTurnOn)
   }, [hasTurnOn])
@@ -96,17 +92,16 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
     <BaseUIDiv
       {...props}
       _domRef={domRef}
-      _css={{
-        gridArea: 'a',
-        height: props.hide ? '0' : toPx(blockHeight),
-        overflow: 'hidden',
-        transition: cssDefaults.transiton.normal
-      }}
+      _css={{ gridArea: 'a' }}
       _className={`${AppLayoutTopbar.name}`}
       onClick={() => {
         setHasTurnOn((b) => !b)
       }} //TEMP
-    />
+    >
+      {typeof props.children === 'function'
+        ? props.children(Boolean(props.isHidden))
+        : props.children}
+    </BaseUIDiv>
   )
 }
 

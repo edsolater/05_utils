@@ -14,7 +14,15 @@ const AppLayoutExample = () => (
     <ExampleGroup caption='basic'>
       <AppLayout topbarHeightCSS='56px'>
         <AppLayout.Topbar>
-          <Div css={{ height: '56px', background: cssColor.dodgerblueLight }} />
+          {(isHidden) => (
+            <Div
+              css={{
+                height: isHidden ? '56px' : '0',
+                background: cssColor.dodgerblueLight,
+                transition: cssDefaults.transiton.normal
+              }}
+            />
+          )}
         </AppLayout.Topbar>
 
         <AppLayout.SideMenu>
