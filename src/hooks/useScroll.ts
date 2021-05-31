@@ -1,4 +1,3 @@
-import { IRef } from 'baseUI/Div/util/mergeRefs'
 import { ScrollEvent } from 'baseUI/Scroll/_interface'
 import { MutableRefObject, useEffect, useRef } from 'react'
 
@@ -12,7 +11,7 @@ export default function useScroll(
   const prevScrollTop = useRef(0)
   const scrollHandler = (ev: ScrollEvent) => {
     const currentScrollTop = ev.target.scrollTop
-    // TODO: to rude
+    // TODO: too rude
     if (currentScrollTop > prevScrollTop.current) options?.onScrollDown?.()
     if (currentScrollTop < prevScrollTop.current) options?.onScrollUp?.()
     prevScrollTop.current = currentScrollTop

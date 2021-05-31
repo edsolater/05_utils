@@ -25,7 +25,7 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       _css={{
         resize: 'both',
         width: '100%',
-        height: '1000px',
+        height: '500px',
         position: 'relative',
         overflow: 'hidden',
         display: 'grid',

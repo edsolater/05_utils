@@ -8,6 +8,7 @@ function loadRef(ref, el) {
     ref.current = el
   }
 }
+// IDEA: Maybe, proxy can replace callback ref
 export function mergeRefs<T = any>(...refs: Array<IRefs<T>>): RefCallback<T> {
   return useCallback((el) => {
     if (el) {
