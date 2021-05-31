@@ -1,9 +1,8 @@
 import useScroll from 'hooks/useScroll'
 import React, { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
-import { toPx } from 'style/cssUnits'
 import { ReactProps } from 'typings/constants'
+import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
-import cssDefaults from './__config/cssDefaults'
 import getChildElement from './__functions/getChildElement'
 
 interface AppLayoutProps extends DivProps {
@@ -37,32 +36,32 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       }}
     >
       <AppLayoutTopbar
-        isHidden={isScrollingUp}
-        onTapSwitcher={setIsSideMenuCollapsed}
-        {...topbarElement?.props}
+        {...mergeDeepObject([
+          {
+            isHidden: isScrollingUp,
+            onTapSwitcher: setIsSideMenuCollapsed
+          },
+          topbarElement?.props
+        ])}
       />
       <AppLayoutSideMenu
-        isCollapsed={isSideMenuCollapsed}
-        onCollapseSelf={() => {
-          setIsSideMenuCollapsed(true)
-          sideMenuElement?.props.onCollapseSelf?.()
-        }}
-        onExpandSelf={() => {
-          setIsSideMenuCollapsed(false)
-          sideMenuElement?.props.onExpandSelf?.()
-        }}
-        {...sideMenuElement?.props} //TODO: too verbose 😖
+        {...mergeDeepObject([
+          {
+            isCollapsed: isSideMenuCollapsed,
+            onCollapseSelf: () => setIsSideMenuCollapsed(true),
+            onExpandSelf: () => setIsSideMenuCollapsed(false)
+          },
+          sideMenuElement?.props
+        ])}
       />
       <AppLayoutContent
-        onScrollDown={() => {
-          setIsScrollingUp(false)
-          contentElement?.props.onScrollDown?.()
-        }}
-        onScrollUp={() => {
-          setIsScrollingUp(true)
-          contentElement?.props.onScrollUp?.()
-        }}
-        {...contentElement?.props}
+        {...mergeDeepObject([
+          {
+            onScrollDown: () => setIsScrollingUp(false),
+            onScrollUp: () => setIsScrollingUp(true)
+          },
+          contentElement?.props
+        ])}
       />
     </BaseUIDiv>
   )
