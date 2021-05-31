@@ -1,15 +1,15 @@
-import Div, { DivProps } from 'baseUI/Div'
+import { BaseUIDiv, DivProps } from 'baseUI/Div'
 import React from 'react'
 import { toPx } from 'style/cssUnits'
 import { cssValues } from 'style/cssValue'
 export interface ExampleCardProps extends DivProps {
-  category?: 'hooks' | 'BaseUIComponent' | 'SideEffectComponent' | 'JSComponent'
+  category?: 'hooks' | 'BaseUIComponent' | 'SideEffectComponent' | 'TemplateComponent'
   title?: string
 }
 const ExampleCard = (props: ExampleCardProps) => (
-  <Div
+  <BaseUIDiv
     {...props}
-    css={{
+    _css={{
       display: 'grid',
       position: 'relative',
       gap: 32,
@@ -22,6 +22,6 @@ const ExampleCard = (props: ExampleCardProps) => (
   >
     <h1>{props.title}</h1>
     {props.children}
-  </Div>
+  </BaseUIDiv>
 )
 export default ExampleCard

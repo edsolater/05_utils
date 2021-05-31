@@ -1,6 +1,5 @@
 import { MayDeepArray } from 'typings/tools'
 import isNumber from 'utils/judgers/isNumber'
-import isString from 'utils/judgers/isString'
 import isUndefined from 'utils/judgers/isUndefined'
 export type CSSLength = number | string
 export type CSSValue = number | string
@@ -17,7 +16,8 @@ export type CSSNumber = string
  * @param unit css单位
  * @returns 更新过单位的css字符串值
  * @example
- * changeUnit(400, 'px') // '40px'
+ * changeUnit(400, 'px') // '400px'
+ * changeUnit('400px', 'px') // '400px'
  * changeUnit('40px', 'vw') // '40vw'
  */
 function changeUnit(val: number | string, unit: string) {
