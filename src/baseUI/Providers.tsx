@@ -1,19 +1,13 @@
 import React, { FC } from 'react'
 
 type Provider = any
-
-// TODO: 没写页面， 只是理论上，这样可以
-export interface AppProvidersProps {
-  list?: Array<{ provider: Provider; value?: any } | Provider>
-}
-
 /**
  * @SideEffectComponent
- * 
- * Context.Provider 的注册机，并不会实际存在于HTML树中
+ * A register machine for Context.Provider. 
+ * It may wrap the whole app. 
  */
 //@ts-ignore
-const AppProviders: FC<AppProvidersProps> = (props) => {
+const Providers: FC<{ list?: Array<{ provider: Provider; value?: any } | Provider> }> = (props) => {
   const { list = [] } = props
   return list.reduce(
     (acc, providerInfo) =>
@@ -24,4 +18,4 @@ const AppProviders: FC<AppProvidersProps> = (props) => {
   )
 }
 
-export default AppProviders
+export default Providers

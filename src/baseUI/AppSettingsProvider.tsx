@@ -38,6 +38,7 @@ export interface AppSetting {
 }
 //#endregion
 
+// IDEA：他不应该是一个Component. 而是一个自定义hook
 //#region ------------------- 实现 -------------------
 export const AppSettings = createContext<AppSetting>({})
 export default function AppSettingsProvider(props: AppSetting & {children?:ReactNode}) {
