@@ -16,6 +16,7 @@ interface AppLayoutProps extends DivProps {
  */
 export default function AppLayout(props: ReactProps<AppLayoutProps>) {
   const [isScrollingDown, setIsScrollingDown] = useState(false)
+  const [isSideMenuCollapsed, setIsSideMenuCollapsed] = useState(false)
   const topbarElement = getChildElement(props.children, AppLayoutTopbar)
   const sideMenuElement = getChildElement(props.children, AppLayoutSideMenu)
   const contentElement = getChildElement(props.children, AppLayoutContent)
@@ -36,8 +37,18 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       }}
     >
       <AppLayoutTopbar hide={isScrollingDown} {...topbarElement?.props} />
-      <AppLayoutSideMenu {...sideMenuElement?.props} />
-      <AppLayoutContent setIsScrollingDown={setIsScrollingDown} {...contentElement?.props} />
+      <AppLayoutSideMenu
+        isCollapse={isSideMenuCollapsed}
+        onCollapseSelf={() => setIsSideMenuCollapsed(true)}
+        onExpandSelf={() => setIsSideMenuCollapsed(false)}
+        {...sideMenuElement?.props}
+      />
+      <AppLayoutContent
+        onFoo
+        onScrollDown={() => setIsScrollingDown(true)}
+        onScrollUp={() => setIsScrollingDown(false)}
+        {...contentElement?.props}
+      />
     </BaseUIDiv>
   )
 }
@@ -77,12 +88,12 @@ function AppLayoutSideMenu<T extends ReactProps & DivProps>(props: T): ReactElem
 }
 
 function AppLayoutContent<
-  T extends ReactProps & DivProps & { setIsScrollingDown?: StateSetter<boolean> }
+  T extends ReactProps & DivProps & { onScrollDown?: () => void; onScrollUp?: () => void }
 >(props: T): ReactElement<T> {
   const domRef = useRef<HTMLDivElement>(null)
   useScroll(domRef, {
-    onScrollDown: () => props.setIsScrollingDown?.(true),
-    onScrollUp: () => props.setIsScrollingDown?.(false)
+    onScrollDown: props.onScrollDown,
+    onScrollUp: props.onScrollUp
   })
   return (
     <BaseUIDiv
