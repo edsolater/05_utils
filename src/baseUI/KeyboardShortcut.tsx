@@ -18,6 +18,7 @@ interface RawShortcutItem {
   whenFocusElement?: HTMLElement
   description?: string
 }
+
 interface KeyboardShortcutController {
   /** @immutable */
   getCurrentShortcut(): ShortcutItem[]
@@ -28,10 +29,17 @@ interface KeyboardShortcutController {
 }
 
 const emptyContext = {
-  getCurrentShortcut: () => [],
-  registShortcut: () => undefined,
-  clear: () => undefined
+  getCurrentShortcut: () => {
+    throw new Error(`Opps! You should load ${KeyboardShortcutContext.displayName} manually!`)
+  },
+  registShortcut: () => {
+    throw new Error(`Opps! You should load ${KeyboardShortcutContext.displayName} manually`)
+  },
+  clear: () => {
+    throw new Error(`Opps! You should load ${KeyboardShortcutContext.displayName} manually`)
+  }
 }
+
 const KeyboardShortcutContext = createContext<KeyboardShortcutController>(emptyContext)
 
 /**
@@ -42,39 +50,19 @@ const KeyboardShortcutContext = createContext<KeyboardShortcutController>(emptyC
  *
  * @JSComponet U can regist an shortcut through hooks: useKeyboardShortcut
  */
-// IDEA：越来越觉得，他不应该是一个Component， 应该就是一个副作用的hook
-export default function KeyboardShortcut(props: ReactProps) {
-  const shortcutList = useRef<ShortcutItem[]>([])
-  useEffect(() => {
-    window.addEventListener(
-      'keydown',
-      (ev) => {
-        for (const shortcutItem of shortcutList.current) {
-          if (
-            shortcutItem.charKey === ev.key.toLowerCase() &&
-            shortcutItem.hasCtrl === ev.ctrlKey &&
-            shortcutItem.hasAlt === ev.altKey &&
-            shortcutItem.hasShift === ev.shiftKey
-          ) {
-            shortcutItem.callback(ev)
-          }
-        }
-      },
-      { passive: true }
-    )
-  }, [])
-
+export default function KeyboardShortcutProvider(props: ReactProps) {
+  const globalShortcutList = useRef<ShortcutItem[]>([])
   return (
     <KeyboardShortcutContext.Provider
       value={{
         getCurrentShortcut() {
-          return shortcutList.current
+          return globalShortcutList.current
         },
         registShortcut(shortcutItem: ShortcutItem | RawShortcutItem) {
-          shortcutList.current.push(new ShortcutItem(shortcutItem))
+          globalShortcutList.current.push(new ShortcutItem(shortcutItem))
         },
         clear() {
-          shortcutList.current = []
+          globalShortcutList.current = []
         }
       }}
     >
@@ -83,13 +71,36 @@ export default function KeyboardShortcut(props: ReactProps) {
   )
 }
 
-export function useKeyboardShortcut() {
+//IDEA: should overload
+// export function useKeyboardShortcutRegister(key:string, callbackFunction:()=>void)
+export function useGlobalKeyboardShortcutRegister(options: { key: string; cb: () => void }) {
   const controllers = useContext(KeyboardShortcutContext)
   return controllers
 }
+export function useKeyboardShortcutRegister(
+  dom: HTMLElement,
+  options: ShortcutItem | /* TODO: how to return immediately? */ RawShortcutItem
+) {
+  useEffect(() => {
+    if (!dom) return
+    const shortcutItem = new ShortcutItem(options)
+    const shortcutHandler = (ev: KeyboardEvent) => {
+      if (
+        shortcutItem.charKey === ev.key.toLowerCase() &&
+        shortcutItem.hasCtrl === ev.ctrlKey &&
+        shortcutItem.hasAlt === ev.altKey &&
+        shortcutItem.hasShift === ev.shiftKey
+      ) {
+        shortcutItem.callback(ev)
+      }
+    }
+    dom.addEventListener('keydown', shortcutHandler, { passive: true })
+    return () => dom.removeEventListener('keydown', shortcutHandler)
+  }, [dom])
+}
 
+//#region ------------------- wrapper class: ShortcutItem -------------------
 type Key = string
-
 export class ShortcutItem {
   charKey: Key | undefined
   hasCtrl!: boolean // FIXME: 这样不可读，弃了
@@ -124,3 +135,4 @@ function parseKey(key: RawShortcutItem['key']) {
     charKey: keyArr.find((s) => /^\w$/.test(s))
   }
 }
+//#endregion

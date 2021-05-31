@@ -52,6 +52,7 @@ const _Drawer = (props: ReactProps<DrawerCardProps>) => {
   )
 }
 
+// IDEA: 本质上，这个用props传递控制项即可，犯不着用Context
 const _DrawerMask = (props: ComponentProps<typeof Mask>) => {
   return <Mask {...props} />
 }
