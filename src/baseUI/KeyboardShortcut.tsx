@@ -108,21 +108,19 @@ export class ShortcutItem {
     this.description = item.description
     this.whenFocusElement = item.whenFocusElement
     this.callback = item.callback
-    const { hasCtrl, hasAlt, hasShift, charKey } = this.#parseKey(item.key)
+    const { hasCtrl, hasAlt, hasShift, charKey } = parseKey(item.key)
     this.charKey = charKey
     this.hasCtrl = hasCtrl
     this.hasAlt = hasAlt
     this.hasShift = hasShift
   }
-  #parseKey = (key: RawShortcutItem['key']) => {
-    const keyArr = (typeof key === 'string' ? key.split('+') : key).map((s) =>
-      s.toLowerCase().trim()
-    )
-    return {
-      hasCtrl: keyArr.some((s) => s === 'ctrl'),
-      hasAlt: keyArr.some((s) => s === 'alt'),
-      hasShift: keyArr.some((s) => s === 'shift'),
-      charKey: keyArr.find((s) => /^\w$/.test(s))
-    }
+}
+function parseKey(key: RawShortcutItem['key']) {
+  const keyArr = (typeof key === 'string' ? key.split('+') : key).map((s) => s.toLowerCase().trim())
+  return {
+    hasCtrl: keyArr.some((s) => s === 'ctrl'),
+    hasAlt: keyArr.some((s) => s === 'alt'),
+    hasShift: keyArr.some((s) => s === 'shift'),
+    charKey: keyArr.find((s) => /^\w$/.test(s))
   }
 }
