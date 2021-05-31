@@ -1,6 +1,7 @@
 import AppLayout from 'baseUI/AppLayout'
 import Div from 'baseUI/Div'
 import cssColor from 'baseUI/__config/cssColor'
+import cssDefaults from 'baseUI/__config/cssDefaults'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
@@ -17,7 +18,18 @@ const AppLayoutExample = () => (
         </AppLayout.Topbar>
 
         <AppLayout.SideMenu>
-          <Div css={{ height: '200vh', background: cssColor.dodgerblue }}>Menu</Div>
+          {(collapsed) => (
+            <Div
+              css={{
+                height: '200vh',
+                width: collapsed ? '50px' : '100px',
+                background: cssColor.dodgerblue,
+                transition: cssDefaults.transiton.normal
+              }}
+            >
+              Menu
+            </Div>
+          )}
         </AppLayout.SideMenu>
 
         <AppLayout.Content>

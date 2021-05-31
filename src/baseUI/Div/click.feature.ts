@@ -8,11 +8,11 @@ export interface FeatureProps<TagName extends keyof TagMap = 'div'> {
   /**
    * 就是普通的onClick
    */
-  onClick?: ({ el, nativeEvent }: { el: TagMap[TagName]; nativeEvent: MouseEvent }) => void
+  onClick?: (ev: { el: TagMap[TagName]; nativeEvent: MouseEvent }) => void
   /**
    * 点击了元素区域外（此事件必须冒泡到document）
    */
-  onClickOutside?: ({ el, nativeEvent }: { el: TagMap[TagName]; nativeEvent: MouseEvent }) => void
+  onClickOutside?: (ev: { el: TagMap[TagName]; nativeEvent: MouseEvent }) => void
 }
 export const featureProps = ['onClick', 'onClickOutside'] as const
 

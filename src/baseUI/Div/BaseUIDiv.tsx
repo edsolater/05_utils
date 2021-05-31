@@ -25,6 +25,7 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
 ) {
   return (
     <Div
+      {...props}
       as={props.as}
       children={props.children}
       className={[props._className, props.className] /* why toString() because emotion add name*/}
