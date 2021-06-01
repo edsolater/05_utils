@@ -69,7 +69,7 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
 
 /**
  *
- * Usually, this will be the app's navbar
+ * Page's navbar
  * it's A !!!!
  *
  * a a a
@@ -106,7 +106,8 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
 
 /**
  *
- * Usually, this will be the app's navbar
+ * Page's SideMenu
+ * 
  * it's B!!!!
  *
  * a a a
@@ -135,7 +136,8 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
 
 /**
  *
- * Usually, this will be the article (the true content)
+ * Page's article/content
+ *
  * it's C!!!!
  *
  * a a a

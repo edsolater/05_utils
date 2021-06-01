@@ -44,9 +44,7 @@ const _Drawer = (props: ReactProps<DrawerCardProps>) => {
   const hasCustomedDrawerMask = isChildrenContain(props.children, _DrawerMask)
   return (
     <>
-      {hasCustomedDrawerMask || (
-        <_DrawerMask isOpen={isOpen} onClose={onClose} />
-      )}
+      {hasCustomedDrawerMask || <_DrawerMask isOpen={isOpen} onClose={onClose} />}
       <_DrawerCard isOpen={isOpen}>{props.children}</_DrawerCard>
     </>
   )
