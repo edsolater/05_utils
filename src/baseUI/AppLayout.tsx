@@ -3,6 +3,7 @@ import React, { ReactElement, ReactNode, useCallback, useEffect, useRef, useStat
 import { ReactProps } from 'typings/constants'
 import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
+import IScrollbar from './IScorllbar'
 import pickReactChild from './__functions/pickReactChild'
 
 interface SideMenuController {
@@ -186,10 +187,10 @@ function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutC
   })
   return (
     <BaseUIDiv
+      as='main'
       {...props}
       _domRef={domRef}
       _css={{ gridArea: 'c', overflow: 'auto' }}
-      as='main'
       _className={`${AppLayoutContent.name}`}
     >
       {typeof props.children === 'function'

@@ -1,5 +1,6 @@
 import AppLayout from 'baseUI/AppLayout'
 import Div from 'baseUI/Div'
+import IScrollbar from 'baseUI/IScorllbar'
 import cssColor from 'baseUI/__config/cssColor'
 import cssDefaults from 'baseUI/__config/cssDefaults'
 import React from 'react'
@@ -41,7 +42,23 @@ const AppLayoutExample = () => (
         </AppLayout.SideMenu>
 
         <AppLayout.Content>
-          <Div css={{ height: '300vh', background: cssColor.whitesmoke }}>Content</Div>
+          <IScrollbar>
+            <Div
+              className='wrapper'
+              css={{
+                height: '-webkit-fill-available', // TODO: this should be customized in styleParser. So that it won't break Firefox
+                overflow: 'auto'
+              }}
+            >
+              {/* 👆 scroll-bar belongs to this */}
+              <Div
+                className='long-content'
+                css={{ height: '300vh', background: cssColor.whitesmoke }}
+              >
+                Content
+              </Div>
+            </Div>
+          </IScrollbar>
         </AppLayout.Content>
       </AppLayout>
     </ExampleGroup>
