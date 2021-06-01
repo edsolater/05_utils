@@ -27,7 +27,7 @@ export default function useScroll(
 }
 
 /**
- * find first child element which can scroll itself.
+ * find first child element which can scroll itsxelf.
  * or it will return null
  */
 function findFirstScrollable(node: Element): null | Element {
