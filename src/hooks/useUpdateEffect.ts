@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * 与useEffect的区别是：初始化时，不触发回调
+ * The difference with React.useEffect: it will not invoke callback when in initial lifecycle
  */
 export default function useUpdateEffect(
   effect: Parameters<typeof useEffect>[0],

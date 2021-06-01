@@ -17,7 +17,7 @@ const AppLayoutExample = () => (
           {(isHidden) => (
             <Div
               css={{
-                height: isHidden ? '56px' : '0',
+                height: isHidden ? '0' : '56px',
                 background: cssColor.dodgerblueLight,
                 transition: cssDefaults.transiton.normal
               }}

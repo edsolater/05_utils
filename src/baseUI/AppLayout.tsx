@@ -1,10 +1,15 @@
 import useScroll from 'hooks/useScroll'
-import React, { ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ReactProps } from 'typings/constants'
 import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
 import pickReactChild from './__functions/pickReactChild'
 
+interface SideMenuController {
+  collapse(): void
+  expand(): void
+  toggle(): void
+}
 
 interface AppLayoutProps extends DivProps {
   topbarHeightCSS?: string
@@ -14,27 +19,45 @@ interface AppLayoutProps extends DivProps {
 interface AppLayoutTopbarProps extends DivProps {
   isHidden?: boolean
   onTapSwitcher?: (isOn: boolean) => void
-  children?: ReactNode | ((isHidden: boolean) => ReactNode)
+  sideMenuController?: SideMenuController
+  children?: ReactNode | ((isHidden: boolean, sideMenuController: SideMenuController) => ReactNode)
 }
 
 interface AppLayoutSideMenuProps extends DivProps {
   isCollapsed?: boolean
   onCollapseSelf?: () => void
   onExpandSelf?: () => void
-  children?: ReactNode | ((collapse: boolean) => ReactNode)
+  sideMenuController?: SideMenuController
+  children?: ReactNode | ((collapse: boolean, sideMenuController: SideMenuController) => ReactNode)
 }
 
-interface AppLayoutContentProps extends ReactProps, DivProps {
+interface AppLayoutContentProps extends DivProps {
   onScrollDown?: () => void
   onScrollUp?: () => void
+  sideMenuController?: SideMenuController
+  children?: ReactNode | ((sideMenuController: SideMenuController) => ReactNode)
 }
 
 /**
  * this layout may be used in App root. For example: index.tsx(Trading Page)
  */
 export default function AppLayout(props: ReactProps<AppLayoutProps>) {
-  const [isScrollingUp, setIsScrollingUp] = useState(true)
+  const [isScrollingDown, setIsScrollingDown] = useState(false)
+  const setScrollingDown = useCallback(() => setIsScrollingDown(true), [setIsScrollingDown])
+  const setScrollingUp = useCallback(() => setIsScrollingDown(false), [setIsScrollingDown])
+
+  // todo: following explain how important it is to create useToggle
   const [isSideMenuCollapsed, setIsSideMenuCollapsed] = useState(false)
+  const collapseSideMenu = useCallback(() => setIsSideMenuCollapsed(true), [setIsSideMenuCollapsed])
+  const expandSideMenu = useCallback(() => setIsSideMenuCollapsed(false), [setIsSideMenuCollapsed])
+  const toggleSideMenu = useCallback(() => setIsSideMenuCollapsed((b) => !b), [
+    setIsSideMenuCollapsed
+  ])
+  const sideMenuController: SideMenuController = {
+    collapse: collapseSideMenu,
+    expand: expandSideMenu,
+    toggle: toggleSideMenu
+  }
   const topbarElement = pickReactChild(props.children, AppLayoutTopbar)
   const sideMenuElement = pickReactChild(props.children, AppLayoutSideMenu)
   const contentElement = pickReactChild(props.children, AppLayoutContent)
@@ -57,8 +80,9 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       <AppLayoutTopbar
         {...mergeDeepObject([
           {
-            isHidden: isScrollingUp,
-            onTapSwitcher: setIsSideMenuCollapsed
+            isHidden: isScrollingDown,
+            onTapSwitcher: setIsSideMenuCollapsed,
+            sideMenuController: sideMenuController
           },
           topbarElement?.props
         ])}
@@ -67,8 +91,9 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
         {...mergeDeepObject([
           {
             isCollapsed: isSideMenuCollapsed,
-            onCollapseSelf: () => setIsSideMenuCollapsed(true),
-            onExpandSelf: () => setIsSideMenuCollapsed(false)
+            onCollapseSelf: collapseSideMenu,
+            onExpandSelf: expandSideMenu,
+            sideMenuController: sideMenuController
           },
           sideMenuElement?.props
         ])}
@@ -76,8 +101,9 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       <AppLayoutContent
         {...mergeDeepObject([
           {
-            onScrollDown: () => setIsScrollingUp(false),
-            onScrollUp: () => setIsScrollingUp(true)
+            onScrollDown: setScrollingDown,
+            onScrollUp: setScrollingUp,
+            sideMenuController: sideMenuController
           },
           contentElement?.props
         ])}
@@ -112,7 +138,7 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
       }} //TEMP
     >
       {typeof props.children === 'function'
-        ? props.children(Boolean(props.isHidden))
+        ? props.children(Boolean(props.isHidden), props.sideMenuController!)
         : props.children}
     </BaseUIDiv>
   )
@@ -121,7 +147,7 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
 /**
  *
  * Page's SideMenu
- * 
+ *
  * it's B!!!!
  *
  * a a a
@@ -136,7 +162,7 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
       _className={`${AppLayoutSideMenu.name}`}
     >
       {typeof props.children === 'function'
-        ? props.children(Boolean(props.isCollapsed))
+        ? props.children(Boolean(props.isCollapsed), props.sideMenuController!)
         : props.children}
     </BaseUIDiv>
   )
@@ -165,7 +191,11 @@ function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutC
       _css={{ gridArea: 'c', overflow: 'auto' }}
       as='main'
       _className={`${AppLayoutContent.name}`}
-    />
+    >
+      {typeof props.children === 'function'
+        ? props.children(props.sideMenuController!)
+        : props.children}
+    </BaseUIDiv>
   )
 }
 
