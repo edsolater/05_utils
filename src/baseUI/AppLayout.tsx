@@ -5,9 +5,28 @@ import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
 import pickReactChild from './__functions/pickReactChild'
 
+
 interface AppLayoutProps extends DivProps {
   topbarHeightCSS?: string
   topbarCollapseWhenContentScroll?: boolean
+}
+
+interface AppLayoutTopbarProps extends DivProps {
+  isHidden?: boolean
+  onTapSwitcher?: (isOn: boolean) => void
+  children?: ReactNode | ((isHidden: boolean) => ReactNode)
+}
+
+interface AppLayoutSideMenuProps extends DivProps {
+  isCollapsed?: boolean
+  onCollapseSelf?: () => void
+  onExpandSelf?: () => void
+  children?: ReactNode | ((collapse: boolean) => ReactNode)
+}
+
+interface AppLayoutContentProps extends ReactProps, DivProps {
+  onScrollDown?: () => void
+  onScrollUp?: () => void
 }
 
 /**
@@ -76,11 +95,6 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
  * b c c
  * b c c
  */
-interface AppLayoutTopbarProps extends DivProps {
-  isHidden?: boolean
-  onTapSwitcher?: (isOn: boolean) => void
-  children?: ReactNode | ((isHidden: boolean) => ReactNode)
-}
 function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTopbarProps> {
   const domRef = useRef<HTMLDivElement>(null)
   const [hasTurnOn, setHasTurnOn] = useState(false)
@@ -114,12 +128,6 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
  * b c c
  * b c c
  */
-interface AppLayoutSideMenuProps extends DivProps {
-  isCollapsed?: boolean
-  onCollapseSelf?: () => void
-  onExpandSelf?: () => void
-  children?: ReactNode | ((collapse: boolean) => ReactNode)
-}
 function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayoutSideMenuProps> {
   return (
     <BaseUIDiv
@@ -144,10 +152,6 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
  * b c c
  * b c c
  */
-interface AppLayoutContentProps extends ReactProps, DivProps {
-  onScrollDown?: () => void
-  onScrollUp?: () => void
-}
 function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutContentProps> {
   const domRef = useRef<HTMLDivElement>(null)
   useScroll(domRef, {
