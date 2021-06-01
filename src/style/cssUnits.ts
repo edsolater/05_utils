@@ -1,7 +1,7 @@
 import { MayDeepArray } from 'typings/tools'
 import isNumber from 'utils/judgers/isNumber'
 import isUndefined from 'utils/judgers/isUndefined'
-export type CSSLength = number | string
+export type CSSLength = string
 export type CSSValue = number | string
 /**
  * 表示倍率，常用于line-height、brightness()

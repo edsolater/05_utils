@@ -14,6 +14,9 @@ const cssDefaults = {
     ].join(', ')
   },
   maskBg: cssColor.black,
-  maskOpacity: '0.2'
+  maskOpacity: '0.2',
+  scrollbar: {
+    thumbColor: 'hsla(0deg 0% 76%)'
+  }
 } as const
 export default cssDefaults

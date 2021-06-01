@@ -3,7 +3,6 @@ import React, { ReactElement, ReactNode, useCallback, useEffect, useRef, useStat
 import { ReactProps } from 'typings/constants'
 import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
-import IScrollbar from './IScorllbar'
 import pickReactChild from './__functions/pickReactChild'
 
 interface SideMenuController {
@@ -64,7 +63,7 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
   const contentElement = pickReactChild(props.children, AppLayoutContent)
   return (
     <BaseUIDiv
-      _className='app-layout-container'
+      _className='AppLayout'
       _css={{
         resize: 'both',
         width: '100%',
@@ -114,8 +113,8 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
 }
 
 /**
- *
- * Page's navbar
+ * Page's Navbar.
+ * The Container is also a grid
  * it's A !!!!
  *
  * a a a
@@ -132,8 +131,8 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
     <BaseUIDiv
       {...props}
       _domRef={domRef}
-      _css={{ gridArea: 'a' }}
-      _className={`${AppLayoutTopbar.name}`}
+      _css={{ display: 'grid', gridArea: 'a' }}
+      _className='AppLayoutTopbar'
       onClick={() => {
         setHasTurnOn((b) => !b)
       }} //TEMP
@@ -146,8 +145,8 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
 }
 
 /**
- *
- * Page's SideMenu
+ * Page's SideMenu.
+ * The Container is also a grid
  *
  * it's B!!!!
  *
@@ -159,8 +158,8 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
   return (
     <BaseUIDiv
       {...props}
-      _css={{ gridArea: 'b', overflow: 'auto' }}
-      _className={`${AppLayoutSideMenu.name}`}
+      _css={{ display: 'grid', gridArea: 'b', overflow: 'auto' }}
+      _className='AppLayoutSideMenu'
     >
       {typeof props.children === 'function'
         ? props.children(Boolean(props.isCollapsed), props.sideMenuController!)
@@ -170,8 +169,8 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
 }
 
 /**
- *
- * Page's article/content
+ * The Container is also a grid
+ * Page's article/content.
  *
  * it's C!!!!
  *
@@ -190,8 +189,8 @@ function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutC
       as='main'
       {...props}
       _domRef={domRef}
-      _css={{ gridArea: 'c', overflow: 'auto' }}
-      _className={`${AppLayoutContent.name}`}
+      _css={{ display: 'grid', gridArea: 'c', overflow: 'auto' }}
+      _className='AppLayoutContent'
     >
       {typeof props.children === 'function'
         ? props.children(props.sideMenuController!)
