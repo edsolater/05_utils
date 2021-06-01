@@ -5,7 +5,7 @@ type ReactComponent = (...params) => ReactElement | null
  * @example
  * (props.children, _DrawerMask) => child(ReactComonent) // extract the target element in Children
  */
-export default function getChildElement<T extends ReactComponent>(
+export default function pickReactChild<T extends ReactComponent>(
   children: ReactNode,
   targetComponent: T
 ): ReturnType<T> | undefined {

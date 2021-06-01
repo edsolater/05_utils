@@ -3,7 +3,7 @@ import React, { ReactElement, ReactNode, useEffect, useRef, useState } from 'rea
 import { ReactProps } from 'typings/constants'
 import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
-import getChildElement from './__functions/getChildElement'
+import pickReactChild from './__functions/pickReactChild'
 
 interface AppLayoutProps extends DivProps {
   topbarHeightCSS?: string
@@ -16,9 +16,9 @@ interface AppLayoutProps extends DivProps {
 export default function AppLayout(props: ReactProps<AppLayoutProps>) {
   const [isScrollingUp, setIsScrollingUp] = useState(true)
   const [isSideMenuCollapsed, setIsSideMenuCollapsed] = useState(false)
-  const topbarElement = getChildElement(props.children, AppLayoutTopbar)
-  const sideMenuElement = getChildElement(props.children, AppLayoutSideMenu)
-  const contentElement = getChildElement(props.children, AppLayoutContent)
+  const topbarElement = pickReactChild(props.children, AppLayoutTopbar)
+  const sideMenuElement = pickReactChild(props.children, AppLayoutSideMenu)
+  const contentElement = pickReactChild(props.children, AppLayoutContent)
   return (
     <BaseUIDiv
       _className='app-layout-container'
