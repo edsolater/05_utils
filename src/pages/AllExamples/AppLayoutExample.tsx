@@ -45,7 +45,7 @@ const AppLayoutExample = () => (
           <ScrollDiv>
             <Div
               className='a-long-content'
-              css={{ height: '300vh', background: cssColor.whitesmoke }}
+              css={{ height: '3000px', background: cssColor.whitesmoke }}
             >
               Content
             </Div>

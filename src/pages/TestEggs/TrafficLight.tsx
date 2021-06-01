@@ -1,7 +1,7 @@
 import Div from 'baseUI/Div'
 import React, { useEffect, useState } from 'react'
 import { toPer } from 'style/cssUnits'
-import { cssVar, cssVarName } from 'style/cssFunctions'
+import { cssVar } from 'style/cssFunctions'
 import { keyframes } from '@emotion/react'
 const status = ['showing', 'blinking'] as const
 const colors = ['red', 'yellow', 'blue'] as const

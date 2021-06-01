@@ -4,9 +4,23 @@ const toCSS = (v: CSSValue) => (typeof v === 'number' ? toPx(v) : v)
 
 /* ---------------------------------- css变量 --------------------------------- */
 
-export const cssVar = <T>(cssVariableName: T, fallback?: CSSValue) =>
-  `var(${cssVariableName}${fallback ? ', ' + fallback : ''})`
-export const cssVarName = <T extends string>(name: T) => '--' + name
+/**
+ * @example
+ * ('--x') => 'var(--x)'
+ * ('--x', '0') => 'var(--x, 0)'
+ * ('--x', '0', 'px') => 'calc(var(--x, 0) * 1px)'
+ */
+export const cssVar = <T>(
+  cssVariableName: T,
+  fallback?: CSSValue,
+  unit?: 'px' | 'deg' | (string & {})
+) =>
+  unit
+    ? `calc(var(${cssVariableName}, ${fallback}) * 1${unit})`
+    : fallback
+    ? `var(${cssVariableName}, ${fallback})`
+    : `var(${cssVariableName})`
+
 /* --------------------------------- 传统css函数 -------------------------------- */
 
 export const cssCalc = (value: any) => `calc(${value})`

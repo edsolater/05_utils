@@ -29,16 +29,7 @@ function changeUnit(val: number | string, unit: string) {
   }
 }
 
-/**
- * 给css变量加上单位（使用css数值的clac+var转换模式，改变数值后无需再通过JS重新固定单位）
- * @param variableName css变量名
- * @param unit 单位
- * @returns 有 calc() 和 var() 的css值
- * @example
- * fn('--x', 'px') // 'calc(var(--x, 0) * 1px)'
- */
-export const attachCSSVariableUnit = (variableName: string, unit: 'px' | 'deg' | (string & {})) =>
-  `calc(var(${variableName}, 0) * 1${unit})`
+
 
 export const fromPx = (rule: string): number => parseFloat(rule)
 
