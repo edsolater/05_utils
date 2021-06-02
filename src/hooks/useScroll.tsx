@@ -1,4 +1,3 @@
-import { ScrollEvent } from 'baseUI/Scroll/_interface'
 import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { MutableRefObject, useEffect, useRef } from 'react'
 

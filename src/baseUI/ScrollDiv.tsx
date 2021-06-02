@@ -63,19 +63,7 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
     }
   })
 
-  // useEffect(() => {
-  //   const content = contentBoxRef.current!
-  //   const scrollbar = scrollbarBoxRef.current!
-  //   const scrollbarThumb = scrollbarThumbRef.current!
-
-  //   content.addEventListener('scroll', () => {
-  //     const scrollbarHeight = content.clientHeight * (content.clientHeight / content.scrollHeight)
-  //     if (!isScrollingByThumb) setCSSVariable(scrollbar, '--scrollbar-height', scrollbarHeight)
-
-  //     const scrollbarTop = scrollbarHeight * (content.scrollTop / content.clientHeight)
-  //     if (!isScrollingByThumb) setCSSVariable(scrollbar, '--scrollbar-top', scrollbarTop)
-  //   })
-  // }, [])
+  // TODO: let thumb react user interaction
 
   return (
     <BaseUIDiv
