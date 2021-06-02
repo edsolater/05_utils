@@ -180,8 +180,8 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
 function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutContentProps> {
   const domRef = useRef<HTMLDivElement>(null)
   useScroll(domRef, {
-    onScrollDown: props.onScrollDown,
-    onScrollUp: props.onScrollUp
+    onScroll: ({ scrollDirection }) =>
+      scrollDirection === 'down' ? props.onScrollDown?.() : props.onScrollUp?.(),
   })
   return (
     <BaseUIDiv
@@ -201,5 +201,3 @@ function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutC
 AppLayout.Topbar = AppLayoutTopbar
 AppLayout.SideMenu = AppLayoutSideMenu
 AppLayout.Content = AppLayoutContent
-
-

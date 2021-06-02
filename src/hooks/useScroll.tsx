@@ -4,33 +4,46 @@ import { MutableRefObject, useEffect, useRef } from 'react'
 
 export default function useScroll(
   ref: MutableRefObject<HTMLElement | null>,
-  options?: {
+  options: {
     disable?: boolean
-    onScrollDown?: () => void
-    onScrollUp?: () => void
+    onScroll?: (event: {
+      targetScrollTop: number
+      targetScrollHeight: number
+      targetScrollLeft: number
+      targetScrollWidth: number
+
+      scrollDirection: 'down' | 'up'
+    }) => void
   }
 ) {
   let targetElement: Element | null = null
   const prevScrollTop = useRef(0)
-  const scrollHandler = (ev: ScrollEvent) => {
+
+  const recordScroll = (ev: ScrollEvent) => {
     const currentScrollTop = ev.target.scrollTop
-    if (currentScrollTop > prevScrollTop.current) options?.onScrollDown?.()
-    if (currentScrollTop < prevScrollTop.current) options?.onScrollUp?.()
+    if (currentScrollTop === prevScrollTop.current) return
+    options.onScroll?.({
+      targetScrollTop: ev.target.scrollTop,
+      targetScrollLeft: ev.target.scrollLeft,
+      targetScrollWidth: ev.target.scrollWidth,
+      targetScrollHeight: ev.target.scrollHeight,
+      scrollDirection: currentScrollTop > prevScrollTop.current ? 'down' : 'up'
+    })
     prevScrollTop.current = currentScrollTop
   }
 
   useEffect(() => {
     if (ref.current === null) return
-    if (options?.disable === true) {
+    if (!options.disable) {
       prevScrollTop.current = ref.current!.scrollTop ?? 0
       targetElement = findFirstScrollable(ref.current)
       if (!isHTMLElement(targetElement)) return
-      targetElement.addEventListener('scroll', scrollHandler as any)
+      targetElement.addEventListener('scroll', recordScroll as any)
     } else {
       if (!isHTMLElement(targetElement)) return
-      targetElement.removeEventListener('scroll', scrollHandler as any)
+      targetElement.removeEventListener('scroll', recordScroll as any)
     }
-  }, [options?.disable])
+  }, [options.disable])
 }
 
 /**

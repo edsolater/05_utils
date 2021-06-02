@@ -1,3 +1,5 @@
+import useScroll from 'hooks/useScroll'
+import useToggle from 'hooks/useToggle'
 import React, { ReactChild, useEffect, useRef } from 'react'
 import { cssVar } from 'style/cssFunctions'
 import { CSSLength, toCssValue } from 'style/cssUnits'
@@ -19,26 +21,51 @@ interface ScrollDivProps extends DivProps {
  * this component will be a div and get a prettier scrollbar.
  */
 export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: ScrollDivProps) {
+  const [
+    isScrollingByThumb,
+    { on: setIsScrollingByThumb, off: setNotScrollingByThumb }
+  ] = useToggle(false)
   const contentBoxRef = useRef<HTMLDivElement>(null)
   const scrollbarBoxRef = useRef<HTMLDivElement>(null)
+  const scrollbarThumbRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    const contentBox = contentBoxRef.current!
-    const scrollbarBox = scrollbarBoxRef.current!
+    const content = contentBoxRef.current!
+    const scrollbar = scrollbarBoxRef.current!
 
-    /** use case: contentBox.xxx * scrollbarMapFactor === scrollbarBox.xxx */
-    const scrollbarHeight =
-      contentBox.clientHeight * (contentBox.clientHeight / contentBox.scrollHeight)
-    setCSSVariable(scrollbarBox, '--scrollbar-height', scrollbarHeight)
+    const scrollbarHeight = content.clientHeight * (content.clientHeight / content.scrollHeight)
+    if (!isScrollingByThumb) setCSSVariable(scrollbar, '--scrollbar-height', scrollbarHeight)
 
-    contentBox.addEventListener('scroll', () => {
-      const scrollbarHeight =
-        contentBox.clientHeight * (contentBox.clientHeight / contentBox.scrollHeight)
-      setCSSVariable(scrollbarBox, '--scrollbar-height', scrollbarHeight)
+    content.addEventListener('scroll', () => {
+      const scrollbarHeight = content.clientHeight * (content.clientHeight / content.scrollHeight)
+      if (!isScrollingByThumb) setCSSVariable(scrollbar, '--scrollbar-height', scrollbarHeight)
 
-      const scrollbarTop = scrollbarHeight * (contentBox.scrollTop / contentBox.clientHeight)
-      setCSSVariable(scrollbarBox, '--scrollbar-top', scrollbarTop)
+      const scrollbarTop = scrollbarHeight * (content.scrollTop / content.clientHeight)
+      if (!isScrollingByThumb) setCSSVariable(scrollbar, '--scrollbar-top', scrollbarTop)
     })
+
+    
   }, [])
+
+  useScroll(contentBoxRef, {
+    disable: isScrollingByThumb,
+    
+  })
+
+  // useEffect(() => {
+  //   const content = contentBoxRef.current!
+  //   const scrollbar = scrollbarBoxRef.current!
+  //   const scrollbarThumb = scrollbarThumbRef.current!
+
+  //   content.addEventListener('scroll', () => {
+  //     const scrollbarHeight = content.clientHeight * (content.clientHeight / content.scrollHeight)
+  //     if (!isScrollingByThumb) setCSSVariable(scrollbar, '--scrollbar-height', scrollbarHeight)
+
+  //     const scrollbarTop = scrollbarHeight * (content.scrollTop / content.clientHeight)
+  //     if (!isScrollingByThumb) setCSSVariable(scrollbar, '--scrollbar-top', scrollbarTop)
+  //   })
+  // }, [])
+
   return (
     <BaseUIDiv
       {...restProps}
@@ -60,6 +87,7 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
         }}
       >
         <Div
+          domRef={scrollbarThumbRef}
           className='my-scrollbar-thumb'
           css={{
             position: 'absolute',
