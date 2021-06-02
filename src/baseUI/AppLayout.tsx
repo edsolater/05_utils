@@ -1,6 +1,8 @@
 import useScroll from 'hooks/useScroll'
+import useToggle from 'hooks/useToggle'
 import React, { ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ReactProps } from 'typings/constants'
+import isFunction from 'utils/judgers/isFunction'
 import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
 import pickReactChild from './__functions/pickReactChild'
@@ -42,25 +44,22 @@ interface AppLayoutContentProps extends DivProps {
  * this layout may be used in App root. For example: index.tsx(Trading Page)
  */
 export default function AppLayout(props: ReactProps<AppLayoutProps>) {
-  const [isScrollingDown, setIsScrollingDown] = useState(false)
-  const setScrollingDown = useCallback(() => setIsScrollingDown(true), [setIsScrollingDown])
-  const setScrollingUp = useCallback(() => setIsScrollingDown(false), [setIsScrollingDown])
+  const [isScrollingDown, { on: setScrollingDown, off: setScrollingUp }] = useToggle(false)
 
-  // todo: following explain how important it is to create useToggle
-  const [isSideMenuCollapsed, setIsSideMenuCollapsed] = useState(false)
-  const collapseSideMenu = useCallback(() => setIsSideMenuCollapsed(true), [setIsSideMenuCollapsed])
-  const expandSideMenu = useCallback(() => setIsSideMenuCollapsed(false), [setIsSideMenuCollapsed])
-  const toggleSideMenu = useCallback(() => setIsSideMenuCollapsed((b) => !b), [
-    setIsSideMenuCollapsed
-  ])
+  const [
+    isSideMenuCollapsed,
+    { on: collapseSideMenu, off: expandSideMenu, toggle: toggleSideMenu }
+  ] = useToggle(false)
+
   const sideMenuController: SideMenuController = {
     collapse: collapseSideMenu,
     expand: expandSideMenu,
     toggle: toggleSideMenu
   }
-  const topbarElement = pickReactChild(props.children, AppLayoutTopbar)
-  const sideMenuElement = pickReactChild(props.children, AppLayoutSideMenu)
-  const contentElement = pickReactChild(props.children, AppLayoutContent)
+
+  const topbarElementProps = pickReactChild(props.children, AppLayoutTopbar)?.props
+  const sideMenuElementProps = pickReactChild(props.children, AppLayoutSideMenu)?.props
+  const contentElementProps = pickReactChild(props.children, AppLayoutContent)?.props
   return (
     <BaseUIDiv
       _className='AppLayout'
@@ -81,10 +80,10 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
         {...mergeDeepObject([
           {
             isHidden: isScrollingDown,
-            onTapSwitcher: setIsSideMenuCollapsed,
+            onTapSwitcher: collapseSideMenu,
             sideMenuController: sideMenuController
           },
-          topbarElement?.props
+          topbarElementProps
         ])}
       />
       <AppLayoutSideMenu
@@ -95,7 +94,7 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
             onExpandSelf: expandSideMenu,
             sideMenuController: sideMenuController
           },
-          sideMenuElement?.props
+          sideMenuElementProps
         ])}
       />
       <AppLayoutContent
@@ -105,7 +104,7 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
             onScrollUp: setScrollingUp,
             sideMenuController: sideMenuController
           },
-          contentElement?.props
+          contentElementProps
         ])}
       />
     </BaseUIDiv>
@@ -202,3 +201,5 @@ function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutC
 AppLayout.Topbar = AppLayoutTopbar
 AppLayout.SideMenu = AppLayoutSideMenu
 AppLayout.Content = AppLayoutContent
+
+
