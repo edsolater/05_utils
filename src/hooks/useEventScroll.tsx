@@ -1,7 +1,7 @@
 import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { MutableRefObject, useEffect, useRef } from 'react'
 
-export default function useScroll(
+export default function useEventScroll(
   ref: MutableRefObject<HTMLElement | null>,
   options: {
     disable?: boolean
