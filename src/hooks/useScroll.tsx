@@ -5,10 +5,12 @@ import { MutableRefObject, useEffect, useRef } from 'react'
 export default function useScroll(
   ref: MutableRefObject<HTMLElement | null>,
   options?: {
+    disable?: boolean
     onScrollDown?: () => void
     onScrollUp?: () => void
   }
 ) {
+  let targetElement: Element | null = null
   const prevScrollTop = useRef(0)
   const scrollHandler = (ev: ScrollEvent) => {
     const currentScrollTop = ev.target.scrollTop
@@ -16,14 +18,19 @@ export default function useScroll(
     if (currentScrollTop < prevScrollTop.current) options?.onScrollUp?.()
     prevScrollTop.current = currentScrollTop
   }
+
   useEffect(() => {
     if (ref.current === null) return
-    prevScrollTop.current = ref.current!.scrollTop ?? 0
-    let targetElement = findFirstScrollable(ref.current)
-    if (isHTMLElement(targetElement)) {
-      targetElement.addEventListener('scroll', scrollHandler as any, { passive: true })
+    if (options?.disable === true) {
+      prevScrollTop.current = ref.current!.scrollTop ?? 0
+      targetElement = findFirstScrollable(ref.current)
+      if (!isHTMLElement(targetElement)) return
+      targetElement.addEventListener('scroll', scrollHandler as any)
+    } else {
+      if (!isHTMLElement(targetElement)) return
+      targetElement.removeEventListener('scroll', scrollHandler as any)
     }
-  }, [])
+  }, [options?.disable])
 }
 
 /**
