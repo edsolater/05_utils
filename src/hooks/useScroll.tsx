@@ -6,42 +6,37 @@ export default function useScroll(
   ref: MutableRefObject<HTMLElement | null>,
   options: {
     disable?: boolean
-    onScroll?: (event: {
-      targetScrollTop: number
-      targetScrollHeight: number
-      targetScrollLeft: number
-      targetScrollWidth: number
-
-      scrollDirection: 'down' | 'up'
-    }) => void
+    initListeners?: boolean
+    onScroll?: (event: { target: HTMLElement; scrollDirection: 'down' | 'up' | 'none' }) => void
   }
 ) {
-  let targetElement: Element | null = null
+  const scrollableElement = useRef<HTMLElement | null>(null)
   const prevScrollTop = useRef(0)
 
-  const recordScroll = (ev: ScrollEvent) => {
+  const recordScroll = (ev: { target: HTMLElement }) => {
     const currentScrollTop = ev.target.scrollTop
-    if (currentScrollTop === prevScrollTop.current) return
+    const scrollYDirection = currentScrollTop - prevScrollTop.current
     options.onScroll?.({
-      targetScrollTop: ev.target.scrollTop,
-      targetScrollLeft: ev.target.scrollLeft,
-      targetScrollWidth: ev.target.scrollWidth,
-      targetScrollHeight: ev.target.scrollHeight,
-      scrollDirection: currentScrollTop > prevScrollTop.current ? 'down' : 'up'
+      target: ev.target,
+      scrollDirection: scrollYDirection > 0 ? 'down' : scrollYDirection < 0 ? 'up' : 'none'
     })
     prevScrollTop.current = currentScrollTop
   }
 
   useEffect(() => {
-    if (ref.current === null) return
+    if (!options.initListeners) return
+    recordScroll({ target: ref.current! })
+  }, [options.initListeners])
+
+  useEffect(() => {
+    prevScrollTop.current = ref.current!.scrollTop ?? 0
+    scrollableElement.current = findFirstScrollable(ref.current!)
     if (!options.disable) {
-      prevScrollTop.current = ref.current!.scrollTop ?? 0
-      targetElement = findFirstScrollable(ref.current)
-      if (!isHTMLElement(targetElement)) return
-      targetElement.addEventListener('scroll', recordScroll as any)
+      if (!isHTMLElement(scrollableElement.current)) return
+      scrollableElement.current.addEventListener('scroll', recordScroll as any)
     } else {
-      if (!isHTMLElement(targetElement)) return
-      targetElement.removeEventListener('scroll', recordScroll as any)
+      if (!isHTMLElement(scrollableElement.current)) return
+      scrollableElement.current.removeEventListener('scroll', recordScroll as any)
     }
   }, [options.disable])
 }
@@ -50,12 +45,12 @@ export default function useScroll(
  * find first child element which can scroll itsxelf.
  * or it will return null
  */
-function findFirstScrollable(node: Element): null | Element {
+function findFirstScrollable(node: HTMLElement): null | HTMLElement {
   if (!isHTMLElement(node)) return null
   if (node.scrollHeight !== node.clientHeight) return node
   else {
     for (const child of node.children) {
-      const result = findFirstScrollable(child)
+      const result = findFirstScrollable(child as HTMLElement)
       if (!isHTMLElement(result)) continue
       else return result
     }
