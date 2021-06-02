@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 /**
  * it too widely use that there should be a hook
@@ -15,13 +15,16 @@ export default function useToggle(
   }
 ] {
   const [isOn, setIsOn] = useState(initValue)
+  const on = useCallback(() => setIsOn(true), [])
+  const off = useCallback(() => setIsOn(false), [])
+  const toggle = useCallback(() => setIsOn((b) => !b), [])
   const controller = useMemo(
     () => ({
-      on: () => setIsOn(true),
-      off: () => setIsOn(false),
-      toggle: () => setIsOn((b) => b!)
+      on,
+      off,
+      toggle
     }),
-    [setIsOn]
+    [off, on, toggle]
   )
   return [isOn, controller]
 }
