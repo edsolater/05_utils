@@ -1,8 +1,7 @@
 import useScroll from 'hooks/useScroll'
 import useToggle from 'hooks/useToggle'
-import React, { ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, ReactNode, useRef } from 'react'
 import { ReactProps } from 'typings/constants'
-import isFunction from 'utils/judgers/isFunction'
 import { mergeDeepObject } from 'utils/merge'
 import { BaseUIDiv, DivProps } from './Div'
 import pickReactChild from './__functions/pickReactChild'
@@ -20,7 +19,6 @@ interface AppLayoutProps extends DivProps {
 
 interface AppLayoutTopbarProps extends DivProps {
   isHidden?: boolean
-  onTapSwitcher?: (isOn: boolean) => void
   sideMenuController?: SideMenuController
   children?: ReactNode | ((isHidden: boolean, sideMenuController: SideMenuController) => ReactNode)
 }
@@ -120,25 +118,21 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
  * b c c
  * b c c
  */
-function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTopbarProps> {
+function AppLayoutTopbar({
+  isHidden,
+  sideMenuController,
+  children,
+  ...restProps
+}: AppLayoutTopbarProps): ReactElement<AppLayoutTopbarProps> {
   const domRef = useRef<HTMLDivElement>(null)
-  const [hasTurnOn, setHasTurnOn] = useState(false)
-  useEffect(() => {
-    props.onTapSwitcher?.(hasTurnOn)
-  }, [hasTurnOn])
   return (
     <BaseUIDiv
-      {...props}
+      {...restProps}
       _domRef={domRef}
       _css={{ display: 'grid', gridArea: 'a' }}
       _className='AppLayoutTopbar'
-      onClick={() => {
-        setHasTurnOn((b) => !b)
-      }} //TEMP
     >
-      {typeof props.children === 'function'
-        ? props.children(Boolean(props.isHidden), props.sideMenuController!)
-        : props.children}
+      {typeof children === 'function' ? children(Boolean(isHidden), sideMenuController!) : children}
     </BaseUIDiv>
   )
 }
@@ -153,16 +147,23 @@ function AppLayoutTopbar(props: AppLayoutTopbarProps): ReactElement<AppLayoutTop
  * b c c
  * b c c
  */
-function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayoutSideMenuProps> {
+function AppLayoutSideMenu({
+  isCollapsed,
+  onCollapseSelf,
+  onExpandSelf,
+  sideMenuController,
+  children,
+  ...restProps
+}: AppLayoutSideMenuProps): ReactElement<AppLayoutSideMenuProps> {
   return (
     <BaseUIDiv
-      {...props}
+      {...restProps}
       _css={{ display: 'grid', gridArea: 'b', overflow: 'auto' }}
       _className='AppLayoutSideMenu'
     >
-      {typeof props.children === 'function'
-        ? props.children(Boolean(props.isCollapsed), props.sideMenuController!)
-        : props.children}
+      {typeof children === 'function'
+        ? children(Boolean(isCollapsed), sideMenuController!)
+        : children}
     </BaseUIDiv>
   )
 }
@@ -177,23 +178,27 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
  * b c c
  * b c c
  */
-function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutContentProps> {
+function AppLayoutContent({
+  onScrollDown,
+  onScrollUp,
+  sideMenuController,
+  children,
+  ...restProps
+}: AppLayoutContentProps): ReactElement<AppLayoutContentProps> {
   const domRef = useRef<HTMLDivElement>(null)
   useScroll(domRef, {
     onScroll: ({ scrollDirection }) =>
-      scrollDirection === 'down' ? props.onScrollDown?.() : props.onScrollUp?.(),
+      scrollDirection === 'down' ? onScrollDown?.() : onScrollUp?.()
   })
   return (
     <BaseUIDiv
       as='main'
-      {...props}
+      {...restProps}
       _domRef={domRef}
       _css={{ display: 'grid', gridArea: 'c', overflow: 'auto' }}
       _className='AppLayoutContent'
     >
-      {typeof props.children === 'function'
-        ? props.children(props.sideMenuController!)
-        : props.children}
+      {typeof children === 'function' ? children(sideMenuController!) : children}
     </BaseUIDiv>
   )
 }
