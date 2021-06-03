@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 /**
@@ -21,7 +22,13 @@ const config = {
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: ['.ts', '.tsx', '.js'],
-    modules: ['node_modules', 'pages', 'utils', 'baseUI', 'typings'] //typescript 识别根路径（绝对路径的根节点）
+    modules: ['node_modules'], // 模块内载入模块的 识别根路径（绝对路径的根节点）
+    alias:{
+      'pages': path.resolve(__dirname, 'pages/'),
+      'utils': path.resolve(__dirname, 'utils/'),
+      'baseUI': path.resolve(__dirname, 'baseUI/'),
+      'typings': path.resolve(__dirname, 'typings/'),
+    }
   },
 
   module: {
