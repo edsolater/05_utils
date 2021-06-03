@@ -32,7 +32,7 @@ const AppLayoutExample = () => (
               <Div
                 css={{
                   height: '200vh',
-                  width: collapsed ? '50px' : '300px',
+                  width: collapsed ? '50px' : 'clamp(200px, 15vw, 300px)',
                   background: cssColor.dodgerblue,
                   transition: cssDefaults.transiton.normal
                 }}
