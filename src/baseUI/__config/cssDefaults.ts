@@ -2,7 +2,7 @@ import cssColor from './cssColor'
 
 const cssDefaults = {
   transiton: {
-    immediately: '50ms',
+    immediately: '0ms',
     fast: '200ms',
     normal: '300ms',
     slow: '500ms'

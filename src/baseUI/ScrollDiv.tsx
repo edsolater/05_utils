@@ -22,7 +22,11 @@ interface ScrollDivProps extends DivProps {
 /**
  * @UIComponent a div with prettier scrollbar.
  */
-export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: ScrollDivProps) {
+export default function ScrollDiv({
+  scrollbarWidth,
+  children,
+  ...restProps
+}: ScrollDivProps): JSX.Element {
   const [
     isScrollingByThumb,
     { on: enableIsScrollingByThumb, off: disableIsScrollingByThumb }
@@ -31,37 +35,30 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
   const scrollbarRef = useRef<HTMLDivElement>(null)
   const scrollbarThumbRef = useRef<HTMLDivElement>(null)
 
-  const getScrollbarThumbInfo = (name: 'height' | 'top'): number => {
-    const content = contentRef.current
-    assert(notNullish(content))
-    switch (name) {
-      case 'top':
-        return content.scrollTop * (content.clientHeight / content.scrollHeight)
-      case 'height':
-        return content.clientHeight * (content.clientHeight / content.scrollHeight)
+  // only use it in useEffect
+  const getScrollbarThumbInfo = () => {
+    const content = contentRef.current!
+    return {
+      top: content.scrollTop * (content.clientHeight / content.scrollHeight),
+      height: content.clientHeight * (content.clientHeight / content.scrollHeight)
     }
   }
 
-  const setScollbarThumbCSSVariable = (key: 'height' | 'top', value: string | number): void => {
-    const scrollbar = scrollbarRef.current
-    assert(notNullish(scrollbar))
-    if (!isScrollingByThumb) {
-      setCSSVariable(scrollbar, `--scrollbar-${key}`, value)
+  // only use it in useEffect
+  const setScollbarThumbCSSVariable = (
+    keyValuePairs: [keyName: string, value: string | number][]
+  ): void => {
+    if (isScrollingByThumb) return
+    for (const [key, value] of keyValuePairs) {
+      setCSSVariable(scrollbarRef.current, `--scrollbar-${key}`, value)
     }
   }
-
-  const attachScrollbarThumbHeight = () =>
-    setScollbarThumbCSSVariable('height', getScrollbarThumbInfo('height'))
-
-  const attachScrollbarThumbTop = () =>
-    setScollbarThumbCSSVariable('top', getScrollbarThumbInfo('top'))
 
   useScroll(contentRef, {
     disable: isScrollingByThumb,
     initListeners: true,
     onScroll: () => {
-      attachScrollbarThumbHeight()
-      attachScrollbarThumbTop()
+      setScollbarThumbCSSVariable(Object.entries(getScrollbarThumbInfo()))
     }
   })
 
