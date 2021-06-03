@@ -60,7 +60,7 @@ export const featureProps: (keyof FeatureProps)[] = [
 ]
 
 /** @mutable 具体实现  */
-export function useUiMove(
+export function useElementMove(
   component: RefObject<HTMLDivElement | undefined>,
   {
     disable = false,

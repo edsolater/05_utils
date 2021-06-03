@@ -8,7 +8,7 @@ import isExist from 'utils/judgers/isExist'
 import notNullish from 'utils/judgers/notNullish'
 import assert from 'utils/magic/assert'
 import Div, { BaseUIDiv, DivProps } from './Div'
-import { useUiMove } from './Transform/move.feature'
+import { useElementMove } from './Transform/move.feature'
 import cssDefaults from './__config/cssDefaults'
 
 interface ScrollDivProps extends DivProps {
@@ -65,7 +65,7 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
   })
 
   // TODO: let thumb react user interaction
-  const {css: moveFeatureCSS} = useUiMove(scrollbarThumbRef, {
+  const {css: moveFeatureCSS} = useElementMove(scrollbarThumbRef, {
     
   })
 
