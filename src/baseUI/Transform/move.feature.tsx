@@ -7,7 +7,8 @@ import {
 import attachPointer from 'helper/manageEvent/attachPointer'
 import changeTransform from 'helper/manageStyle/changeTransform'
 import inertialSlide from 'helper/manageStyle/inertialSlide'
-import { RefObject, useEffect, useMemo } from 'react'
+import useToggle from 'hooks/useToggle'
+import { RefObject, useEffect, useMemo, useRef } from 'react'
 import { cssVar } from 'style/cssFunctions'
 import { mixCSSObjects } from 'style/cssParser'
 import { Vector, Delta2dTranslate } from 'typings/constants'
@@ -20,12 +21,27 @@ export interface FeatureProps {
   /* ----------------------------------- 拖动 ----------------------------------- */
 
   disable?: boolean
-  moveDirection?: 'x' | 'y' | 'both'
+  direction?: 'x' | 'y' | 'both'
   /** 可拖动的区域 */
   moveBoundary?: 'offsetParent' | 'none'
-  onMoveStart?: (el: HTMLDivElement) => void
-  onMoveEnd?: (el: HTMLDivElement, speedVector: Vector) => void
-  onMove?: (el: HTMLDivElement, delta: Delta2dTranslate) => void
+  onMoveStart?: (ev: { el: HTMLDivElement }) => void
+  onMoveEnd?: (ev: { el: HTMLDivElement; speedVector: Vector }) => void
+  onMove?: (ev: {
+    /**
+     * target element
+     */
+    el: HTMLDivElement
+
+    /**
+     *  a move piece  from last position
+     */
+    delta: Delta2dTranslate
+
+    /**
+     * move distance from moveStart
+     */
+    // TODO: deltaTotal: Delta2dTranslate
+  }) => void
   onReachOffsetBoundary?: (
     el: HTMLDivElement,
     boundary: 'left' | 'top' | 'right' | 'bottom'
@@ -47,7 +63,7 @@ export interface FeatureProps {
  */
 export const featureProps: (keyof FeatureProps)[] = [
   'disable',
-  'moveDirection',
+  'direction',
   'moveBoundary',
   'onMoveStart',
   'onMoveEnd',
@@ -59,8 +75,23 @@ export const featureProps: (keyof FeatureProps)[] = [
   'onSlideEnd'
 ]
 
-/** @mutable 具体实现  */
-export function useElementMove(
+/**
+ * @reactHook feature move
+ * this will set css variable on the element
+ *
+ * `--x` `--y` show how much distance does element move. number of px.
+ *
+ * @example
+ * useScroll(contentRef, {
+ *   disable: isScrollingByThumb,
+ *   initListeners: true,
+ *   onScroll: () => {
+ *     attachScrollbarThumb('height')
+ *     attachScrollbarThumb('top')
+ *   }
+ * })
+ */
+export function useMove(
   component: RefObject<HTMLDivElement | undefined>,
   {
     disable = false,
@@ -68,7 +99,7 @@ export function useElementMove(
     acc = 0.004,
     maxInitSpeed = 2,
     moveBoundary = 'offsetParent',
-    moveDirection = 'both',
+    direction: moveDirection = 'both',
     onMoveStart,
     onMove,
     onReachOffsetBoundary,
@@ -76,6 +107,7 @@ export function useElementMove(
     onSlideEnd
   }: FeatureProps
 ) {
+  const [isMoving, { on: setIsMoving, off: cancelIsMoving }] = useToggle(false)
   useEffect(() => {
     if (disable) return
     const el = component.current!
@@ -84,7 +116,8 @@ export function useElementMove(
       moveBoundary === 'offsetParent' ? el.offsetParent?.getBoundingClientRect() : undefined
     attachPointer(el, {
       start() {
-        onMoveStart?.(el)
+        onMoveStart?.({ el })
+        setIsMoving()
         // TODO:此时应该更新offsetRect的, 或者用resizeObserver监控更新
       },
       move({ prev, curr }) {
@@ -123,11 +156,12 @@ export function useElementMove(
           dx: computedDx,
           dy: computedDy
         }
-        onMove?.(el, computedDelta)
+        onMove?.({ el, delta: computedDelta })
         changeTransform(el, { translate: computedDelta })
       },
       end({ speedVector }) {
-        onMoveEnd?.(el, speedVector)
+        onMoveEnd?.({ el, speedVector })
+        cancelIsMoving()
         if (canInertialSlide) {
           inertialSlide(el, {
             speedVector,
@@ -145,11 +179,12 @@ export function useElementMove(
   const css = useMemo(
     () =>
       mixCSSObjects({
+        cursor: isMoving ? 'grabbing' : 'grab',
         touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
         userSelect: 'none', // 禁用掉文字的用户选择
         translate: disable ? [] : [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')]
       }),
-    [disable]
+    [disable, isMoving]
   )
   return { css }
 }

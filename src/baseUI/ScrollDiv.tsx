@@ -8,7 +8,7 @@ import isExist from 'utils/judgers/isExist'
 import notNullish from 'utils/judgers/notNullish'
 import assert from 'utils/magic/assert'
 import Div, { BaseUIDiv, DivProps } from './Div'
-import { useElementMove } from './Transform/move.feature'
+import { useMove } from './Transform/move.feature'
 import cssDefaults from './__config/cssDefaults'
 
 interface ScrollDivProps extends DivProps {
@@ -27,7 +27,7 @@ interface ScrollDivProps extends DivProps {
 export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: ScrollDivProps) {
   const [
     isScrollingByThumb,
-    { on: setIsScrollingByThumb, off: setNotScrollingByThumb }
+    { on: enableIsScrollingByThumb, off: disableIsScrollingByThumb }
   ] = useToggle(false)
   const contentRef = useRef<HTMLDivElement>(null)
   const scrollbarRef = useRef<HTMLDivElement>(null)
@@ -52,21 +52,35 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
     }
   }
 
-  const attachScrollbarThumb = (name: 'height' | 'top') =>
-    setScollbarThumbCSSVariable(name, getScrollbarThumbInfo(name))
+  const attachScrollbarThumbHeight = () =>
+    setScollbarThumbCSSVariable('height', getScrollbarThumbInfo('height'))
+
+  const attachScrollbarThumbTop = () =>
+    setScollbarThumbCSSVariable('top', getScrollbarThumbInfo('top'))
 
   useScroll(contentRef, {
     disable: isScrollingByThumb,
     initListeners: true,
     onScroll: () => {
-      attachScrollbarThumb('height')
-      attachScrollbarThumb('top')
+      attachScrollbarThumbHeight()
+      attachScrollbarThumbTop()
     }
   })
 
   // TODO: let thumb react user interaction
-  const {css: moveFeatureCSS} = useElementMove(scrollbarThumbRef, {
-    
+  const { css: elementMoveCSS } = useMove(scrollbarThumbRef, {
+    direction: 'y',
+    onMoveStart() {
+      disableIsScrollingByThumb()
+    },
+    onMoveEnd() {
+      enableIsScrollingByThumb()
+    },
+    onMove({ delta }) {
+      const deltaContentScrollTop = delta.dy
+      contentRef.current!.scrollBy({ top: deltaContentScrollTop })
+    }
+    //TODO: mapHooksReturn({dx,dy}){}
   })
 
   return (
@@ -93,14 +107,18 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
         <Div
           domRef={scrollbarThumbRef}
           className='my-scrollbar-thumb'
-          css={[{
-            position: 'absolute',
-            top: cssVar('--scrollbar-top', '0', 'px'),
-            left: '0',
-            right: '0',
-            height: cssVar('--scrollbar-height', '0', 'px'),
-            background: cssDefaults.scrollbar.thumbColor
-          }, moveFeatureCSS]}
+          css={[
+            {
+              position: 'absolute',
+              top: cssVar('--scrollbar-top', '0', 'px'),
+              left: '0',
+              right: '0',
+              height: cssVar('--scrollbar-height', '0', 'px'),
+              background: cssDefaults.scrollbar.thumbColor,
+              transition: cssDefaults.transiton.immediately
+            },
+            elementMoveCSS
+          ]}
         />
       </Div>
       <Div

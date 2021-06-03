@@ -98,9 +98,9 @@ const SortableList: FC<{
               rect: createRect(getElementRect(el))
             })
           }
-          moveDirection={direction}
-          onMoveStart={(el) => setElementStyle(el, 'z-index', '1')}
-          onMove={(movingElement, delta) => {
+          direction={direction}
+          onMoveStart={({el}) => setElementStyle(el, 'z-index', '1')}
+          onMove={({el:movingElement, delta}) => {
             let newRect: IRect
             sizeInfo.current = sizeInfo.current.set(index, ({ el, rect: oldRect }) => {
               newRect = oldRect.changePosition(delta)
@@ -143,7 +143,7 @@ const SortableList: FC<{
               changeTransform(info.el, { translate: delta, transition: 200 })
             })
           }}
-          onMoveEnd={(el) => deleteElementStyle(el, 'z-index')}
+          onMoveEnd={({el}) => deleteElementStyle(el, 'z-index')}
         >
           <Div className='temp-item' css={draggableItemCSS}>
             {text}

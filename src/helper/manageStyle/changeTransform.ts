@@ -7,7 +7,7 @@ import { deleteElementStyle, setElementStyle } from './elementStyle'
  * @param el 目标元素
  * @param opts 改变量
  */
-export default function changeTransform(
+export default function   changeTransform(
   el: HTMLElement,
   opts: { translate?: Partial<Delta2dTranslate>; transition?: number }
 ) {
