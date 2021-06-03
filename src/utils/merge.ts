@@ -5,6 +5,7 @@ import isArray from './judgers/isArray'
 import isFunction from './judgers/isFunction'
 
 // TODO: 这个方法要与下面的mergeDeep和成一个方法
+// ASK: 为什么要Deep这样的修饰？
 /**
  * 合并多个对象
  * (将数组看作值，实行覆盖)

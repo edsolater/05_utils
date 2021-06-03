@@ -28,16 +28,18 @@ const AppLayoutExample = () => (
 
         <AppLayout.SideMenu>
           {(collapsed) => (
-            <Div
-              css={{
-                height: '200vh',
-                width: collapsed ? '50px' : '100px',
-                background: cssColor.dodgerblue,
-                transition: cssDefaults.transiton.normal
-              }}
-            >
-              Menu
-            </Div>
+            <ScrollDiv>
+              <Div
+                css={{
+                  height: '200vh',
+                  width: collapsed ? '50px' : '100px',
+                  background: cssColor.dodgerblue,
+                  transition: cssDefaults.transiton.normal
+                }}
+              >
+                Menu
+              </Div>
+            </ScrollDiv>
           )}
         </AppLayout.SideMenu>
 

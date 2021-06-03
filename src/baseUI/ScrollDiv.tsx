@@ -72,7 +72,8 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
       {...restProps}
       _className='ScrollDiv'
       _css={{
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
       <Div
@@ -102,10 +103,11 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
       </Div>
       <Div
         domRef={contentRef}
-        className='my-scrollbar-article'
+        className='my-scrollbar-content'
         css={{
+          height: '100%',
+          width: '100%',
           overflow: 'auto',
-          position: 'absolute',
           inset: '0',
           '::-webkit-scrollbar': {
             display: 'none'
