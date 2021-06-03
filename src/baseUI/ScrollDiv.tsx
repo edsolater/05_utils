@@ -1,4 +1,4 @@
-import useEventScroll from 'hooks/useEventScroll'
+import useScroll from 'hooks/useScroll'
 import useToggle from 'hooks/useToggle'
 import React, { ReactChild, useCallback, useEffect, useRef } from 'react'
 import { cssVar } from 'style/cssFunctions'
@@ -8,7 +8,7 @@ import isExist from 'utils/judgers/isExist'
 import notNullish from 'utils/judgers/notNullish'
 import assert from 'utils/magic/assert'
 import Div, { BaseUIDiv, DivProps } from './Div'
-import { useFeatureMove } from './Transform/move.feature'
+import { useUiMove } from './Transform/move.feature'
 import cssDefaults from './__config/cssDefaults'
 
 interface ScrollDivProps extends DivProps {
@@ -33,7 +33,7 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
   const scrollbarRef = useRef<HTMLDivElement>(null)
   const scrollbarThumbRef = useRef<HTMLDivElement>(null)
 
-  const getScrollbarThumb = (name: 'height' | 'top'): number => {
+  const getScrollbarThumbInfo = (name: 'height' | 'top'): number => {
     const content = contentRef.current
     assert(notNullish(content))
     switch (name) {
@@ -44,7 +44,7 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
     }
   }
 
-  const setScollbarThumb = (key: 'height' | 'top', value: string | number): void => {
+  const setScollbarThumbCSSVariable = (key: 'height' | 'top', value: string | number): void => {
     const scrollbar = scrollbarRef.current
     assert(notNullish(scrollbar))
     if (!isScrollingByThumb) {
@@ -53,9 +53,9 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
   }
 
   const attachScrollbarThumb = (name: 'height' | 'top') =>
-    setScollbarThumb(name, getScrollbarThumb(name))
+    setScollbarThumbCSSVariable(name, getScrollbarThumbInfo(name))
 
-  useEventScroll(contentRef, {
+  useScroll(contentRef, {
     disable: isScrollingByThumb,
     initListeners: true,
     onScroll: () => {
@@ -65,7 +65,9 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
   })
 
   // TODO: let thumb react user interaction
-  // useFeatureMove
+  const {css: moveFeatureCSS} = useUiMove(scrollbarThumbRef, {
+    
+  })
 
   return (
     <BaseUIDiv
@@ -91,14 +93,14 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
         <Div
           domRef={scrollbarThumbRef}
           className='my-scrollbar-thumb'
-          css={{
+          css={[{
             position: 'absolute',
             top: cssVar('--scrollbar-top', '0', 'px'),
             left: '0',
             right: '0',
             height: cssVar('--scrollbar-height', '0', 'px'),
             background: cssDefaults.scrollbar.thumbColor
-          }}
+          }, moveFeatureCSS]}
         />
       </Div>
       <Div

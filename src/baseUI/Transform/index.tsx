@@ -16,7 +16,7 @@ import {
 import {
   FeatureProps as FeatureMoveProps,
   featureProps as featureMoveProps,
-  useFeatureMove
+  useUiMove
 } from './move.feature'
 
 export type BoundingRect = {
@@ -44,7 +44,7 @@ const Transform = (props: TransformProps) => {
   const box = useRef<HTMLDivElement>()
   const restProps = omit(props, [...featureResizeProps, ...featureMoveProps, ...featureScaleProps])
   const { resizeDot } = useFeatureResize(box, props)
-  const { css: featureMoveCss } = useFeatureMove(box, props)
+  const { css: featureMoveCss } = useUiMove(box, props)
   const { css: featureScaleCss } = useFeatureScale(box, props)
   return (
     <Div

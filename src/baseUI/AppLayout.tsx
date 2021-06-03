@@ -1,4 +1,4 @@
-import useEventScroll from 'hooks/useEventScroll'
+import useScroll from 'hooks/useScroll'
 import useToggle from 'hooks/useToggle'
 import React, { ReactElement, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ReactProps } from 'typings/constants'
@@ -179,7 +179,7 @@ function AppLayoutSideMenu(props: AppLayoutSideMenuProps): ReactElement<AppLayou
  */
 function AppLayoutContent(props: AppLayoutContentProps): ReactElement<AppLayoutContentProps> {
   const domRef = useRef<HTMLDivElement>(null)
-  useEventScroll(domRef, {
+  useScroll(domRef, {
     onScroll: ({ scrollDirection }) =>
       scrollDirection === 'down' ? props.onScrollDown?.() : props.onScrollUp?.(),
   })

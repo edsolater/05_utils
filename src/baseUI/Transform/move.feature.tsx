@@ -19,15 +19,12 @@ import asyncInvoke from './helper/asyncInvoke'
 export interface FeatureProps {
   /* ----------------------------------- 拖动 ----------------------------------- */
 
-  movable?: boolean
+  disable?: boolean
   moveDirection?: 'x' | 'y' | 'both'
   /** 可拖动的区域 */
   moveBoundary?: 'offsetParent' | 'none'
-  /**（不会阻断界面渲染） */
   onMoveStart?: (el: HTMLDivElement) => void
-  /**（不会阻断界面渲染） */
   onMoveEnd?: (el: HTMLDivElement, speedVector: Vector) => void
-  /**（不会阻断界面渲染） */
   onMove?: (el: HTMLDivElement, delta: Delta2dTranslate) => void
   onReachOffsetBoundary?: (
     el: HTMLDivElement,
@@ -49,7 +46,7 @@ export interface FeatureProps {
  * props的字符串们
  */
 export const featureProps: (keyof FeatureProps)[] = [
-  'movable',
+  'disable',
   'moveDirection',
   'moveBoundary',
   'onMoveStart',
@@ -63,10 +60,10 @@ export const featureProps: (keyof FeatureProps)[] = [
 ]
 
 /** @mutable 具体实现  */
-export function useFeatureMove(
+export function useUiMove(
   component: RefObject<HTMLDivElement | undefined>,
   {
-    movable = true,
+    disable = false,
     canInertialSlide = false,
     acc = 0.004,
     maxInitSpeed = 2,
@@ -80,80 +77,79 @@ export function useFeatureMove(
   }: FeatureProps
 ) {
   useEffect(() => {
-    if (movable) {
-      const el = component.current!
-      const offsetRect =
-        // todo: 不更新的话，一滚动就没了
-        moveBoundary === 'offsetParent' ? el.offsetParent?.getBoundingClientRect() : undefined
-      attachPointer(el, {
-        start() {
-          onMoveStart?.(el)
-          // TODO:此时应该更新offsetRect的, 或者用resizeObserver监控更新
-        },
-        move({ prev, curr }) {
-          const dx = curr.x - prev.x
-          const dy = curr.y - prev.y
-          let computedDx = 0
-          let computedDy = 0
-          let moveboxRect: DOMRect | undefined = undefined
-          if (moveDirection === 'both' || moveDirection === 'x') {
-            computedDx = dx
-            if (offsetRect) {
-              if (!moveboxRect) moveboxRect = el.getBoundingClientRect()
-              if (offsetRect.left > dx + moveboxRect.left) {
-                computedDx = offsetRect.left - moveboxRect.left
-                asyncInvoke(onReachOffsetBoundary, el, DIRECTION_LEFT)
-              } else if (offsetRect.right < dx + moveboxRect.right) {
-                computedDx = offsetRect.right - moveboxRect.right
-                asyncInvoke(onReachOffsetBoundary, el, DIRECTION_RIGHT)
-              }
+    if (disable) return
+    const el = component.current!
+    const offsetRect =
+      // todo: 不更新的话，一滚动就没了
+      moveBoundary === 'offsetParent' ? el.offsetParent?.getBoundingClientRect() : undefined
+    attachPointer(el, {
+      start() {
+        onMoveStart?.(el)
+        // TODO:此时应该更新offsetRect的, 或者用resizeObserver监控更新
+      },
+      move({ prev, curr }) {
+        const dx = curr.x - prev.x
+        const dy = curr.y - prev.y
+        let computedDx = 0
+        let computedDy = 0
+        let moveboxRect: DOMRect | undefined = undefined
+        if (moveDirection === 'both' || moveDirection === 'x') {
+          computedDx = dx
+          if (offsetRect) {
+            if (!moveboxRect) moveboxRect = el.getBoundingClientRect()
+            if (offsetRect.left > dx + moveboxRect.left) {
+              computedDx = offsetRect.left - moveboxRect.left
+              asyncInvoke(onReachOffsetBoundary, el, DIRECTION_LEFT)
+            } else if (offsetRect.right < dx + moveboxRect.right) {
+              computedDx = offsetRect.right - moveboxRect.right
+              asyncInvoke(onReachOffsetBoundary, el, DIRECTION_RIGHT)
             }
-          }
-          if (moveDirection === 'both' || moveDirection === 'y') {
-            computedDy = dy
-            if (offsetRect) {
-              if (!moveboxRect) moveboxRect = el.getBoundingClientRect()
-              if (offsetRect.top > moveboxRect.top + dy) {
-                computedDy = offsetRect.top - moveboxRect.top
-                asyncInvoke(onReachOffsetBoundary, el, DIRECTION_TOP)
-              } else if (offsetRect.bottom < moveboxRect.bottom + dy) {
-                computedDy = offsetRect.bottom - moveboxRect.bottom
-                asyncInvoke(onReachOffsetBoundary, el, DIRECTION_BOTTOM)
-              }
-            }
-          }
-          const computedDelta: Delta2dTranslate = {
-            dx: computedDx,
-            dy: computedDy
-          }
-          onMove?.(el, computedDelta)
-          changeTransform(el, { translate: computedDelta })
-        },
-        end({ speedVector }) {
-          onMoveEnd?.(el, speedVector)
-          if (canInertialSlide) {
-            inertialSlide(el, {
-              speedVector,
-              acc,
-              maxInitSpeed,
-              boundingBox: offsetRect,
-              onSlideEnd: () => {
-                onSlideEnd?.(el)
-              }
-            })
           }
         }
-      })
-    }
+        if (moveDirection === 'both' || moveDirection === 'y') {
+          computedDy = dy
+          if (offsetRect) {
+            if (!moveboxRect) moveboxRect = el.getBoundingClientRect()
+            if (offsetRect.top > moveboxRect.top + dy) {
+              computedDy = offsetRect.top - moveboxRect.top
+              asyncInvoke(onReachOffsetBoundary, el, DIRECTION_TOP)
+            } else if (offsetRect.bottom < moveboxRect.bottom + dy) {
+              computedDy = offsetRect.bottom - moveboxRect.bottom
+              asyncInvoke(onReachOffsetBoundary, el, DIRECTION_BOTTOM)
+            }
+          }
+        }
+        const computedDelta: Delta2dTranslate = {
+          dx: computedDx,
+          dy: computedDy
+        }
+        onMove?.(el, computedDelta)
+        changeTransform(el, { translate: computedDelta })
+      },
+      end({ speedVector }) {
+        onMoveEnd?.(el, speedVector)
+        if (canInertialSlide) {
+          inertialSlide(el, {
+            speedVector,
+            acc,
+            maxInitSpeed,
+            boundingBox: offsetRect,
+            onSlideEnd: () => {
+              onSlideEnd?.(el)
+            }
+          })
+        }
+      }
+    })
   }, [])
   const css = useMemo(
     () =>
       mixCSSObjects({
         touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
         userSelect: 'none', // 禁用掉文字的用户选择
-        translate: movable ? [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')] : []
+        translate: disable ? [] : [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')]
       }),
-    [movable]
+    [disable]
   )
   return { css }
 }

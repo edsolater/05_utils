@@ -1,7 +1,21 @@
 import isHTMLElement from 'helper/domElement/isHTMLElement'
 import { MutableRefObject, useEffect, useRef } from 'react'
 
-export default function useEventScroll(
+/**
+ * @reactHook scroll event
+ * better than addEventListener('scroll', cb)
+ * 
+ * @example
+ * useScroll(contentRef, {
+ *   disable: isScrollingByThumb,
+ *   initListeners: true,
+ *   onScroll: () => {
+ *     attachScrollbarThumb('height')
+ *     attachScrollbarThumb('top')
+ *   }
+ * })
+ */
+export default function useScroll(
   ref: MutableRefObject<HTMLElement | null>,
   options: {
     disable?: boolean
