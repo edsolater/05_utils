@@ -1,10 +1,9 @@
 import useScroll from 'hooks/useScroll'
 import useToggle from 'hooks/useToggle'
-import React, { ReactChild, useCallback, useEffect, useRef } from 'react'
+import React, { ReactChild, useRef } from 'react'
 import { cssVar } from 'style/cssFunctions'
-import { CSSLength, toCssValue } from 'style/cssUnits'
+import { CSSLength } from 'style/cssUnits'
 import { setCSSVariable } from 'style/cssVaraiable'
-import isExist from 'utils/judgers/isExist'
 import notNullish from 'utils/judgers/notNullish'
 import assert from 'utils/magic/assert'
 import Div, { BaseUIDiv, DivProps } from './Div'
@@ -21,8 +20,7 @@ interface ScrollDivProps extends DivProps {
 }
 
 /**
- * @UIComponent
- * this component will be a div and get a prettier scrollbar.
+ * @UIComponent a div with prettier scrollbar.
  */
 export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: ScrollDivProps) {
   const [
@@ -77,10 +75,12 @@ export default function ScrollDiv({ scrollbarWidth, children, ...restProps }: Sc
       enableIsScrollingByThumb()
     },
     onMove({ delta }) {
-      const deltaContentScrollTop = delta.dy
-      contentRef.current!.scrollBy({ top: deltaContentScrollTop })
+      const content = contentRef.current!
+      const thumbScrollDeltaTop = delta.dy
+      const contentScrollTop = thumbScrollDeltaTop * (content.scrollHeight / content.clientHeight)
+      contentRef.current!.scrollBy({ top: contentScrollTop })
     }
-    //TODO: mapHooksReturn({dx,dy}){}
+    // TODO: mapFromResult({dx,dy}){}
   })
 
   return (
