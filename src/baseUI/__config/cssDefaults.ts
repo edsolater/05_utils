@@ -16,7 +16,9 @@ const cssDefaults = {
   maskBg: cssColor.black,
   maskOpacity: '0.2',
   scrollbar: {
-    thumbColor: 'hsla(0deg 0% 76%)'
+    thumbColor: 'hsla(0deg 0% 0% / 0.3)'
+    // exclusive color for dark mode
+    // thumbColor_DarkMode: 
   }
 } as const
 export default cssDefaults
