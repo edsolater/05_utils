@@ -8,7 +8,7 @@
     "moduleResolution": "node", //可以自动使用文件夹下的 index.ts
     "noImplicitAny": false,
     "strict": true,
-    "baseUrl": "./src" //typescript 根路径（绝对路径的根节点）
+    "baseUrl": "./" //typescript 根路径（绝对路径的根节点）
   },
-  "include": ["src/**/*"],
+  "include": ["utils/**/*", "baseUI/**/*", "pages/**/*", "typings/**/*", "index.tsx"]
 }

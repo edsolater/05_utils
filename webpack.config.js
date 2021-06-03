@@ -7,13 +7,13 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const config = {
   mode: 'development',
   entry: {
-    main: './src/index.tsx'
+    main: './index.tsx'
   },
   // Enable sourcemaps for debugging webpack's output.
   devtool: 'eval-cheap-module-source-map',
   devServer: {
     contentBase: ['./dist', './public'],
-    inline: true,
+    inline: true
     // https: true,
     // host: '192.168.31.101',
     // port: 3000
@@ -21,7 +21,7 @@ const config = {
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: ['.ts', '.tsx', '.js'],
-    modules: ['src', 'node_modules'] //typescript 识别根路径（绝对路径的根节点）
+    modules: ['node_modules', 'pages', 'utils', 'baseUI', 'typings'] //typescript 识别根路径（绝对路径的根节点）
   },
 
   module: {
@@ -36,7 +36,8 @@ const config = {
           }
         }
       },
-      { // 未来这个可以去除
+      {
+        // 未来这个可以去除
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
       },
@@ -51,7 +52,7 @@ const config = {
         use: 'source-map-loader'
       }
     ]
-  },
+  }
   // plugins: [new BundleAnalyzerPlugin()], // 分析打包各部分所占大小
   // When importing a module whose path matches one of the following, just
   // assume a corresponding global variable exists and use that instead.
