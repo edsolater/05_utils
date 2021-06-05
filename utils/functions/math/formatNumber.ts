@@ -1,5 +1,5 @@
 import addDefault from '../object/addDefault'
-import applyActions from './applyActions'
+import fall from '../magic/fall'
 import { partlyInvoke } from '../functionFactory/partlyInvoke'
 
 type FormatOptions = {
@@ -55,7 +55,7 @@ const defaultOptions: FormatOptions = {
 export default function formatNumber(n: number, options: FormatOptions = {}): string {
   addDefault(options, defaultOptions)
   console.log(n, options)
-  return applyActions(n, [
+  return fall(n, [
     (n) => n.toFixed(options.fractionLength),
     (str) => {
       const [integerPart, fraction] = str.split('.')
