@@ -5,7 +5,7 @@ import { cssVar } from '../style/cssFunctions'
 import { CSSLength } from '../style/cssUnits'
 import { setCSSVariable } from '../style/cssVaraiable'
 import Div, { BaseUIDiv, DivProps } from './Div'
-import { useMove } from './Transform/move.feature'
+import { useFeatureMove } from '../hooks/useFeatureMove'
 import cssDefaults from './__config/cssDefaults'
 
 interface ScrollDivProps extends DivProps {
@@ -60,8 +60,7 @@ export default function ScrollDiv({
     }
   })
 
-  // TODO: let thumb react user interaction
-  const { css: elementMoveCSS } = useMove(scrollbarThumbRef, {
+  const { css: elementMoveCSS } = useFeatureMove(scrollbarThumbRef, {
     direction: 'y',
     onMoveStart() {
       disableIsScrollingByThumb()

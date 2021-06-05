@@ -17,13 +17,13 @@ import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings>
-    <AppLayoutExample />
+    {/* <AppLayoutExample />
     <KeyboardShortcutExample />
     <DrawerExample />
     <MaskExample />
     <AppProvidersExample />
     <GlobalStoreExample />
-    <DivExample />
+    <DivExample /> */}
     <TransformExample />
     <ButtonExample />
     <IconExample />

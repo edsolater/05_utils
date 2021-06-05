@@ -1,18 +1,23 @@
 import { RefObject, useEffect, useMemo } from 'react'
-import { cssVar } from '../../style/cssFunctions'
-import { mixCSSObjects } from '../../style/cssParser'
+import { cssVar } from '../style/cssFunctions'
+import { mixCSSObjects } from '../style/cssParser'
 import { Vector, Delta2dTranslate } from 'typings/constants'
-import asyncInvoke from './helper/asyncInvoke'
-import useToggle from '../../hooks/useToggle'
-import { DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_TOP, DIRECTION_BOTTOM } from 'utils/constants/constants'
+import asyncInvoke from '../components/Transform/helper/asyncInvoke'
+import useToggle from './useToggle'
+import {
+  DIRECTION_LEFT,
+  DIRECTION_RIGHT,
+  DIRECTION_TOP,
+  DIRECTION_BOTTOM
+} from 'utils/constants/constants'
 import attachPointer from 'utils/helper/manageEvent/attachPointer'
-import changeTransform from './changeTransform'
-import inertialSlide from './inertialSlide'
+import changeTransform from '../components/Transform/changeTransform'
+import inertialSlide from '../components/Transform/inertialSlide'
 
 /**
  * props定义声明
  */
-export interface FeatureProps {
+export interface MoveOptions {
   /* ----------------------------------- 拖动 ----------------------------------- */
 
   disable?: boolean
@@ -54,23 +59,6 @@ export interface FeatureProps {
 }
 
 /**
- * props的字符串们
- */
-export const featureProps: (keyof FeatureProps)[] = [
-  'disable',
-  'direction',
-  'moveBoundary',
-  'onMoveStart',
-  'onMoveEnd',
-  'onMove',
-  'onReachOffsetBoundary',
-  'canInertialSlide',
-  'acc',
-  'maxInitSpeed',
-  'onSlideEnd'
-]
-
-/**
  * @reactHook feature move
  * this will set css variable on the element
  *
@@ -86,7 +74,7 @@ export const featureProps: (keyof FeatureProps)[] = [
  *   }
  * })
  */
-export function useMove(
+export function useFeatureMove(
   component: RefObject<HTMLDivElement | undefined>,
   {
     disable = false,
@@ -100,7 +88,7 @@ export function useMove(
     onReachOffsetBoundary,
     onMoveEnd,
     onSlideEnd
-  }: FeatureProps
+  }: MoveOptions
 ) {
   const [isMoving, { on: setIsMoving, off: cancelIsMoving }] = useToggle(false)
   useEffect(() => {
