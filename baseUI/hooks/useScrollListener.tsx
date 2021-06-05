@@ -1,7 +1,7 @@
 import isHTMLElement from 'utils/helper/domElement/isHTMLElement'
 import { MutableRefObject, useEffect, useRef } from 'react'
 
-interface UseScrollOptions {
+interface UseScrollListenerOptions {
   disable?: boolean
   /**
    * invoke the onScroll callback initly
@@ -15,7 +15,7 @@ interface UseScrollOptions {
  * better than addEventListener('scroll', cb)
  *
  * @example
- * useScroll(contentRef, {
+ * useScrollListener(contentRef, {
  *   disable: isScrollingByThumb,
  *   init: true,
  *   onScroll: () => {
@@ -24,9 +24,9 @@ interface UseScrollOptions {
  *   }
  * })
  */
-export default function useScroll(
+export default function useScrollListener(
   ref: MutableRefObject<HTMLElement | null>,
-  { disable = false, init = false, onScroll }: UseScrollOptions
+  { disable = false, init = false, onScroll }: UseScrollListenerOptions
 ) {
   const scrollableElement = useRef<HTMLElement | null>(null)
   const prevScrollTop = useRef(0)
