@@ -8,7 +8,7 @@ import { IRefs, mergeRefs } from './util/mergeRefs'
 import { ReactProps } from 'typings/constants'
 import { TagMap } from './TagMap'
 import { MayDeepArray } from 'typings/tools'
-import useListenerClick, { ListenerClickOptions } from 'baseUI/hooks/useListenerClick'
+import useEventClick, { ListenerClickOptions } from 'baseUI/hooks/useEventClick'
 export { default as BaseUIDiv } from './BaseUIDiv'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
@@ -36,7 +36,7 @@ export const divProps: ReadonlyArray<keyof DivProps> = [
 ]
 export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>(null)
-  useListenerClick(divRef, { onClick: props.onClick })
+  useEventClick(divRef, { onClick: props.onClick })
   useFeatureHover(divRef, { onHover: props.onHover })
   const allProps = {
     ...props.htmlProps,

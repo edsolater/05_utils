@@ -11,7 +11,7 @@ export interface ListenerClickOptions {
 /**
  * 一般不用，直接用Div上的onClick属性
  */
-export default function useListenerClick(
+export default function useEventClick(
   domRef: RefObject<HTMLElement>,
   { disable = false, onClick }: ListenerClickOptions
 ) {

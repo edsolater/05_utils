@@ -1,4 +1,4 @@
-import useListenerScroll from '../hooks/useListenerScroll'
+import useEventScroll from '../hooks/useEventScroll'
 import useToggle from '../hooks/useToggle'
 import React, { ReactChild, useRef } from 'react'
 import { cssVar } from '../style/cssFunctions'
@@ -52,7 +52,7 @@ export default function ScrollDiv({
     }
   }
 
-  useListenerScroll(contentRef, {
+  useEventScroll(contentRef, {
     disable: isScrollingByThumb,
     init: true,
     onScroll: () => {

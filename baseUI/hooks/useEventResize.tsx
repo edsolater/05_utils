@@ -38,7 +38,7 @@ export interface ListenerResizeOptions {
 }
 export const featureProps = ['onResize'] as const
 
-export function useListenerResize(
+export function useEventResize(
   domRef: RefObject<HTMLElement>,
   { disable = false, onResize }: ListenerResizeOptions = {}
 ) {
