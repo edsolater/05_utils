@@ -1,5 +1,5 @@
-import Card from 'baseUI/component/Card'
-import ViewController from 'baseUI/component/ViewController'
+import Card from 'baseUI/components/Card'
+import ViewController from 'baseUI/components/ViewController'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'

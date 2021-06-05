@@ -1,4 +1,4 @@
-import GlobalSettings from 'baseUI/component/AppSettingsProvider'
+import GlobalSettings from 'baseUI/components/AppSettingsProvider'
 import React from 'react'
 import AppLayoutExample from './AppLayoutExample'
 import AppProvidersExample from './AppProvidersExample'

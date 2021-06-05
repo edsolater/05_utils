@@ -1,5 +1,5 @@
-import Div from 'baseUI/component/Div'
-import Transform from 'baseUI/component/Transform'
+import Div from 'baseUI/components/Div'
+import Transform from 'baseUI/components/Transform'
 import React, { useRef, useState } from 'react'
 const CollapseWatcher = () => {
   const [itemOrderState, setItemOrderState] = useState([

@@ -1,5 +1,5 @@
-import Div from 'baseUI/component/Div'
-import Button from 'baseUI/component/Button'
+import Div from 'baseUI/components/Div'
+import Button from 'baseUI/components/Button'
 import React, { useRef, useState } from 'react'
 const SimulateMouseClick = () => {
   const [counter, setCounter] = useState(0)

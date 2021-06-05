@@ -1,9 +1,9 @@
-import Transform from 'baseUI/component/Transform'
+import Transform from 'baseUI/components/Transform'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
-import cssColor from 'baseUI/component/__config/cssColor'
-import Div from 'baseUI/component/Div'
+import cssColor from 'baseUI/components/__config/cssColor'
+import Div from 'baseUI/components/Div'
 
 /**
  * Transform 的使用示例

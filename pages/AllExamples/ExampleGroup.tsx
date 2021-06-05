@@ -1,6 +1,6 @@
-import Caption from 'baseUI/component/Caption'
-import Div, { BaseUIDiv, DivProps } from 'baseUI/component/Div'
-import RowBox from 'baseUI/component/RowBox'
+import Caption from 'baseUI/components/Caption'
+import Div, { BaseUIDiv, DivProps } from 'baseUI/components/Div'
+import RowBox from 'baseUI/components/RowBox'
 import React from 'react'
 export interface ExampleGroupProps extends DivProps {
   caption?: string

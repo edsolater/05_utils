@@ -1,5 +1,5 @@
 import React from 'react'
-import Div from 'baseUI/component/Div'
+import Div from 'baseUI/components/Div'
 import { cssMixins } from "baseUI/style/cssMixins"
 import CollapseWatcher from './Transform'
 import GroupScroll from './GroupScroll'

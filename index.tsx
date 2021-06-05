@@ -6,7 +6,7 @@ import './initial.css'
 import TestGrounds from 'pages/TestEggs'
 import Home from 'pages/Home'
 import AllExamples from 'pages/AllExamples'
-import Providers from 'baseUI/component/Providers'
+import Providers from 'baseUI/components/Providers'
 import { rootVariables } from 'baseUI/style/cssVaraiable'
 import { setLotCss } from 'baseUI/style/setCSS'
 setLotCss(document.documentElement, Object.entries(rootVariables))

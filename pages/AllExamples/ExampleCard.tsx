@@ -1,4 +1,4 @@
-import { BaseUIDiv, DivProps } from 'baseUI/component/Div'
+import { BaseUIDiv, DivProps } from 'baseUI/components/Div'
 import React from 'react'
 import { toPx } from 'baseUI/style/cssUnits'
 import { cssValues } from 'baseUI/style/cssValue'

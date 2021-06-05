@@ -1,4 +1,4 @@
-import Tag from 'baseUI/component/Tag'
+import Tag from 'baseUI/components/Tag'
 import { useBooleanController } from 'baseUI/hooks/useBooleanController'
 import React from 'react'
 import ExampleCard from './ExampleCard'

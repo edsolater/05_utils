@@ -1,5 +1,5 @@
-import Button from 'baseUI/component/Button'
-import Drawer from 'baseUI/component/Drawer'
+import Button from 'baseUI/components/Button'
+import Drawer from 'baseUI/components/Drawer'
 import React, { useState } from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'

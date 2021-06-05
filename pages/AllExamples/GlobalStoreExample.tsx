@@ -1,6 +1,6 @@
 import React from 'react'
-import Button from 'baseUI/component/Button'
-import createStore from 'baseUI/component/__hooks/createStore'
+import Button from 'baseUI/components/Button'
+import createStore from 'baseUI/components/__hooks/createStore'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 

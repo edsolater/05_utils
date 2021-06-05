@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Button from 'baseUI/component/Button'
-import Mask from 'baseUI/component/Mask'
+import Button from 'baseUI/components/Button'
+import Mask from 'baseUI/components/Mask'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 

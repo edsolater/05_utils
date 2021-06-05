@@ -1,11 +1,11 @@
 /*******************************
  * 实验 draggable list 的
  ******************************/
-import Transform from 'baseUI/component/Transform'
+import Transform from 'baseUI/components/Transform'
 import React, { FC, useRef } from 'react'
 import { Direction } from 'typings/constants'
-import Div from 'baseUI/component/Div'
-import changeTransform from 'baseUI/component/Transform/changeTransform'
+import Div from 'baseUI/components/Div'
+import changeTransform from 'baseUI/components/Transform/changeTransform'
 import { setElementStyle, deleteElementStyle } from 'utils/helper/manageStyle/elementStyle'
 import { IMap, createMap } from 'utils/models/Color'
 import { IRect, createRect } from 'utils/models/Rect'

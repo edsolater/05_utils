@@ -1,4 +1,4 @@
-import Icon from 'baseUI/component/Icon'
+import Icon from 'baseUI/components/Icon'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'

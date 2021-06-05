@@ -1,5 +1,5 @@
-import Dropdown from 'baseUI/component/Dropdown'
-import Icon from 'baseUI/component/Icon'
+import Dropdown from 'baseUI/components/Dropdown'
+import Icon from 'baseUI/components/Icon'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
