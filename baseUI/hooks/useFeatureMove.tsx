@@ -59,18 +59,25 @@ export interface MoveOptions {
 }
 
 /**
- * @reactHook feature move
+ * @hook feature move
  * this will set css variable on the element
  *
  * `--x` `--y` show how much distance does element move. number of px.
  *
  * @example
- * useScroll(contentRef, {
- *   disable: isScrollingByThumb,
- *   initListeners: true,
- *   onScroll: () => {
- *     attachScrollbarThumb('height')
- *     attachScrollbarThumb('top')
+ * useFeatureMove(contentRef, {
+ *   direction: 'y',
+ *   onMoveStart() {
+ *     disableIsScrollingByThumb()
+ *   },
+ *   onMoveEnd() {
+ *     enableIsScrollingByThumb()
+ *   },
+ *   onMove({ delta }) {
+ *     const content = contentRef.current!
+ *     const thumbScrollDeltaTop = delta.dy
+ *     const contentScrollTop = thumbScrollDeltaTop * (content.scrollHeight / content.clientHeight)
+ *     contentRef.current!.scrollBy({ top: contentScrollTop })
  *   }
  * })
  */

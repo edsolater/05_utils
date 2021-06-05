@@ -1,15 +1,23 @@
 import isHTMLElement from 'utils/helper/domElement/isHTMLElement'
 import { MutableRefObject, useEffect, useRef } from 'react'
 
+interface UseScrollOptions {
+  disable?: boolean
+  /**
+   * invoke the onScroll callback initly
+   */
+  init?: boolean
+  onScroll?: (event: { target: HTMLElement; scrollDirection: 'down' | 'up' | 'none' }) => void
+}
 
 /**
- * @reactHook scroll event
+ * @hook scroll event
  * better than addEventListener('scroll', cb)
  *
  * @example
  * useScroll(contentRef, {
  *   disable: isScrollingByThumb,
- *   initListeners: true,
+ *   init: true,
  *   onScroll: () => {
  *     attachScrollbarThumb('height')
  *     attachScrollbarThumb('top')
@@ -18,11 +26,7 @@ import { MutableRefObject, useEffect, useRef } from 'react'
  */
 export default function useScroll(
   ref: MutableRefObject<HTMLElement | null>,
-  options: {
-    disable?: boolean
-    initListeners?: boolean
-    onScroll?: (event: { target: HTMLElement; scrollDirection: 'down' | 'up' | 'none' }) => void
-  }
+  { disable = false, init = false, onScroll }: UseScrollOptions
 ) {
   const scrollableElement = useRef<HTMLElement | null>(null)
   const prevScrollTop = useRef(0)
@@ -30,7 +34,7 @@ export default function useScroll(
   const recordScroll = (ev: { target: HTMLElement }) => {
     const currentScrollTop = ev.target.scrollTop
     const scrollYDirection = currentScrollTop - prevScrollTop.current
-    options.onScroll?.({
+    onScroll?.({
       target: ev.target,
       scrollDirection: scrollYDirection > 0 ? 'down' : scrollYDirection < 0 ? 'up' : 'none'
     })
@@ -38,21 +42,21 @@ export default function useScroll(
   }
 
   useEffect(() => {
-    if (!options.initListeners) return
+    if (!init) return
     recordScroll({ target: ref.current! })
-  }, [options.initListeners])
+  }, [init])
 
   useEffect(() => {
     prevScrollTop.current = ref.current!.scrollTop ?? 0
     scrollableElement.current = findFirstScrollable(ref.current!)
-    if (!options.disable) {
+    if (!disable) {
       if (!isHTMLElement(scrollableElement.current)) return
       scrollableElement.current.addEventListener('scroll', recordScroll as any)
     } else {
       if (!isHTMLElement(scrollableElement.current)) return
       scrollableElement.current.removeEventListener('scroll', recordScroll as any)
     }
-  }, [options.disable])
+  }, [disable])
 }
 
 /**

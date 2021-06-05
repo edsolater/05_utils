@@ -54,7 +54,7 @@ export default function ScrollDiv({
 
   useScroll(contentRef, {
     disable: isScrollingByThumb,
-    initListeners: true,
+    init: true,
     onScroll: () => {
       setScollbarThumbCSSVariable(Object.entries(getScrollbarThumbInfo()))
     }
