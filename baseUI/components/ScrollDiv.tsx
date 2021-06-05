@@ -5,7 +5,7 @@ import { cssVar } from '../style/cssFunctions'
 import { CSSLength } from '../style/cssUnits'
 import { setCSSVariable } from '../style/cssVaraiable'
 import Div, { BaseUIDiv, DivProps } from './Div'
-import { useFeatureMove } from '../hooks/useFeatureMove'
+import useFeatureMove from '../hooks/useFeatureMove'
 import cssDefaults from './__config/cssDefaults'
 
 interface ScrollDivProps extends DivProps {

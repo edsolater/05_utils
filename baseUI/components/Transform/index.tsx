@@ -1,8 +1,8 @@
 import React, { ReactNode, useRef } from 'react'
 
-import { FeatureScaleOptions, useFeatureScale } from '../../hooks/useFeatureScale'
-import { useFeatureResize, FeatureResizeOptions } from '../../hooks/useFeatureResize'
-import { FeatureMoveOptions, useFeatureMove } from '../../hooks/useFeatureMove'
+import useFeatureScale, { FeatureScaleOptions } from '../../hooks/useFeatureScale'
+import useFeatureResize, { FeatureResizeOptions } from '../../hooks/useFeatureResize'
+import useFeatureMove, { FeatureMoveOptions } from '../../hooks/useFeatureMove'
 import { fullVw, halfPer, toPer } from '../../style/cssUnits'
 import Div, { BaseUIDiv, DivProps } from '../Div'
 import cssColor from '../__config/cssColor'

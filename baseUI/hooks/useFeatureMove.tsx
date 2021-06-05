@@ -24,13 +24,13 @@ export interface FeatureMoveOptions {
   direction?: 'x' | 'y' | 'both'
   /** 可拖动的区域 */
   moveBoundary?: 'offsetParent' | 'none'
-  onMoveStart?: (ev: { el: HTMLDivElement }) => void
-  onMoveEnd?: (ev: { el: HTMLDivElement; speedVector: Vector }) => void
+  onMoveStart?: (ev: { el: HTMLElement }) => void
+  onMoveEnd?: (ev: { el: HTMLElement; speedVector: Vector }) => void
   onMove?: (ev: {
     /**
      * target element
      */
-    el: HTMLDivElement
+    el: HTMLElement
 
     /**
      *  a move piece  from last position
@@ -42,10 +42,7 @@ export interface FeatureMoveOptions {
      */
     // TODO: deltaTotal: Delta2dTranslate
   }) => void
-  onReachOffsetBoundary?: (
-    el: HTMLDivElement,
-    boundary: 'left' | 'top' | 'right' | 'bottom'
-  ) => void
+  onReachOffsetBoundary?: (el: HTMLElement, boundary: 'left' | 'top' | 'right' | 'bottom') => void
 
   /* ---------------------------------- 惯性滑动 ---------------------------------- */
 
@@ -55,7 +52,7 @@ export interface FeatureMoveOptions {
   acc?: number
   /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
   maxInitSpeed?: number
-  onSlideEnd?: (el: HTMLDivElement) => void
+  onSlideEnd?: (el: HTMLElement) => void
 }
 
 /**
@@ -81,8 +78,8 @@ export interface FeatureMoveOptions {
  *   }
  * })
  */
-export function useFeatureMove(
-  component: RefObject<HTMLDivElement | undefined>,
+export default function useFeatureMove(
+  component: RefObject<HTMLElement>,
   {
     disable = false,
     canSlide = false,

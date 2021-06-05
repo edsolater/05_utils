@@ -49,7 +49,7 @@ export interface FeatureResizeOptions {
  *   }
  * })
  */
-export function useFeatureResize(
+export default function useFeatureResize(
   component: RefObject<HTMLDivElement | undefined>,
   {
     disable = false,

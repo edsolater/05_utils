@@ -3,34 +3,16 @@ import { useRef } from 'react'
 import { parseCSS } from '../../style/cssParser'
 import { ICSS } from '../../style/ICSS'
 import { ClassName, classname } from './util/classname'
-import {
-  useFeature as useFeatureClick,
-  FeatureProps as FeatureClickProps,
-  featureProps as featureClickProps
-} from './click.feature'
-import {
-  useFeature as useFeatureHover,
-  FeatureProps as FeatureHoverProps,
-  featureProps as featureHoverProps
-} from './hover.feature'
-import {
-  useFeature as useFeatureResize,
-  FeatureProps as FeatureResizeProps,
-  featureProps as featureResizeProps
-} from './resize.feature'
+import { useFeatureHover, FeatureHoverOptions } from '../../hooks/useFeatureHover'
 import { IRefs, mergeRefs } from './util/mergeRefs'
-import concat from 'utils/functions/array/concat'
 import { ReactProps } from 'typings/constants'
 import { TagMap } from './TagMap'
 import { MayDeepArray } from 'typings/tools'
+import useListenerClick, { ListenerClickOptions } from 'baseUI/hooks/useListenerClick'
 export { default as BaseUIDiv } from './BaseUIDiv'
 
 // 设立BaseProps是为了给其他baseUI如Img用的
-export interface DivProps<TagName extends keyof TagMap = 'div'>
-  extends FeatureClickProps<TagName>,
-    FeatureHoverProps<TagName>,
-    FeatureResizeProps<TagName>,
-    ReactProps {
+export interface DivProps<TagName extends keyof TagMap = 'div'> extends ReactProps {
   // 只能低层组件使用
   as?: TagName
 
@@ -38,19 +20,24 @@ export interface DivProps<TagName extends keyof TagMap = 'div'>
   css?: ICSS
   className?: MayDeepArray<ClassName>
   htmlProps?: JSX.IntrinsicElements[TagName]
+  onHover?: FeatureHoverOptions['onHover']
+  onClick?: ListenerClickOptions['onClick']
 }
 
-export const divProps: ReadonlyArray<keyof DivProps> = concat(
-  ['as', 'domRef', 'className', 'css', 'children', 'htmlProps'],
-  featureClickProps,
-  featureHoverProps,
-  featureResizeProps
-)
+export const divProps: ReadonlyArray<keyof DivProps> = [
+  'as',
+  'domRef',
+  'className',
+  'css',
+  'children',
+  'htmlProps',
+  'onHover',
+  'onClick'
+]
 export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
-  const divRef = useRef<TagMap[TagName]>()
-  useFeatureClick<TagName>(props, { domRef: divRef })
-  useFeatureHover<TagName>(props, { domRef: divRef })
-  useFeatureResize<TagName>(props, { domRef: divRef })
+  const divRef = useRef<TagMap[TagName]>(null)
+  useListenerClick(divRef, { onClick: props.onClick })
+  useFeatureHover(divRef, { onHover: props.onHover })
   const allProps = {
     ...props.htmlProps,
     children: props.children,

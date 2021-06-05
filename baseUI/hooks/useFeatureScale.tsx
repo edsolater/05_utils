@@ -18,8 +18,7 @@ export interface FeatureScaleOptions {
   scaleWheelSpeed?: number
 }
 
-/** @mutable 具体实现  */
-export function useFeatureScale(
+export default function useFeatureScale(
   component: RefObject<HTMLDivElement | undefined>,
   { disable = true, canScaleByWheel = disable, scaleWheelSpeed = 0.001 }: FeatureScaleOptions = {}
 ) {

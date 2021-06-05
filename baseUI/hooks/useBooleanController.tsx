@@ -9,7 +9,7 @@ interface BooleanController {
   turnOff(): void
   toggle(): void
 }
-export function useBooleanController(init?: boolean): BooleanController {
+export default function useBooleanController(init?: boolean): BooleanController {
   const [open, setopen] = useState<boolean>(init ?? false)
   const controller: BooleanController = {
     state: open,
