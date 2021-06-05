@@ -1,11 +1,12 @@
-import React, { useRef } from 'react'
+import React, { ReactNode, useRef } from 'react'
 
-import { FeatureProps as FeatureScaleProps, useFeatureScale } from './scale.feature'
-import { FeatureProps as FeatureResizeProps, useFeatureResize } from './resize.feature'
-import { MoveOptions, useFeatureMove } from '../../hooks/useFeatureMove'
-import { fullVw } from '../../style/cssUnits'
-import pick from 'utils/functions/object/pick'
-import { BaseUIDiv, DivProps, divProps } from '../Div'
+import { FeatureScaleOptions, useFeatureScale } from '../../hooks/useFeatureScale'
+import { useFeatureResize, FeatureResizeOptions } from '../../hooks/useFeatureResize'
+import { FeatureMoveOptions, useFeatureMove } from '../../hooks/useFeatureMove'
+import { fullVw, halfPer, toPer } from '../../style/cssUnits'
+import Div, { BaseUIDiv, DivProps } from '../Div'
+import cssColor from '../__config/cssColor'
+import { cssVar } from 'baseUI/style/cssFunctions'
 
 export type BoundingRect = {
   left: number
@@ -13,11 +14,16 @@ export type BoundingRect = {
   right: number
   bottom: number
 }
-export interface TransformProps
-  extends DivProps,
-    FeatureResizeProps,
-    MoveOptions,
-    FeatureScaleProps {}
+export interface TransformProps extends DivProps {
+  /**内部元素的形状，会影响鼠标拖拽点的位置 */
+  innerShape?: 'rect' | 'circle'
+  resizable?: boolean
+  scaleable?: boolean
+  featureMoveOptions?: FeatureMoveOptions
+  featureResizeOptions?: FeatureResizeOptions
+  featureScaleOptions?: FeatureScaleOptions
+  children?: ReactNode
+}
 
 /**
  * @BaseUIComponent
@@ -28,31 +34,78 @@ export interface TransformProps
  *
  * @todo handoff {boolean} 把结果附加在其子children节点上
  */
-const Transform = (props: TransformProps) => {
-  const box = useRef<HTMLDivElement>()
-  const { resizeDot } = useFeatureResize(box, props)
-  const { css: featureMoveCss } = useFeatureMove(box, props)
-  const { css: featureScaleCss } = useFeatureScale(box, props)
+const Transform = ({
+  innerShape,
+  resizable = false,
+  scaleable = false,
+  featureMoveOptions,
+  featureResizeOptions,
+  featureScaleOptions,
+  children,
+  ...restProps
+}: TransformProps) => {
+  const box = useRef<HTMLDivElement>(null)
+  const resizeTrigger = useRef<HTMLDivElement>(null)
+  const [isMoving] = useFeatureMove(box, featureMoveOptions)
+  useFeatureResize(box, {
+    disable: !resizable,
+    ...featureResizeOptions,
+    resizeTriggerRef: resizeTrigger
+  })
+  const { css: featureScaleCss } = useFeatureScale(box, {
+    disable: !scaleable,
+    ...featureScaleOptions
+  })
   return (
     <BaseUIDiv
-      {...pick(props, divProps)}
+      {...restProps}
       _domRef={box}
       _className='Transform'
       _css={[
         {
           position: 'relative',
           width: 'max-content',
-          borderRadius: props.innerShape === 'circle' ? fullVw : '',
+          borderRadius: innerShape === 'circle' ? fullVw : '',
           '&:hover': {
             boxShadow: '0px 0px 0px 2px rgba(30, 143, 255, 0.219)'
           }
         },
-        featureMoveCss,
+        {
+          cursor: isMoving ? 'grabbing' : 'grab',
+          touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
+          userSelect: 'none', // 禁用掉文字的用户选择
+          translate: [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')]
+        },
         featureScaleCss
       ]}
     >
-      {props.children}
-      {resizeDot}
+      {children}
+      {resizable && (
+        <Div
+          domRef={resizeTrigger}
+          className='resize-trigger'
+          css={{
+            position: 'absolute',
+            right: innerShape === 'circle' ? toPer(14.625) : 0,
+            bottom: innerShape === 'circle' ? toPer(14.625) : 0,
+            width: 8,
+            height: 8,
+            background: cssColor.dodgerblue,
+            borderRadius: halfPer,
+            cursor: 'nw-resize',
+            opacity: 0,
+            translate: [halfPer, halfPer],
+            transition: '200ms',
+            '*:hover > &': {
+              opacity: 1
+            },
+            '&:hover': {
+              translate: [halfPer, halfPer],
+              scale: 2
+            }
+          }}
+        />
+      )}
     </BaseUIDiv>
   )
 }

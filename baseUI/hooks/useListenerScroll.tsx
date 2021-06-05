@@ -15,7 +15,7 @@ interface UseScrollListenerOptions {
  * better than addEventListener('scroll', cb)
  *
  * @example
- * useScrollListener(contentRef, {
+ * useListenerScroll(contentRef, {
  *   disable: isScrollingByThumb,
  *   init: true,
  *   onScroll: () => {
@@ -24,7 +24,7 @@ interface UseScrollListenerOptions {
  *   }
  * })
  */
-export default function useScrollListener(
+export default function useListenerScroll(
   ref: MutableRefObject<HTMLElement | null>,
   { disable = false, init = false, onScroll }: UseScrollListenerOptions
 ) {

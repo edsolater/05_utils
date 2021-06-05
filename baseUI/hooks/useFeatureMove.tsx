@@ -17,7 +17,7 @@ import inertialSlide from '../components/Transform/inertialSlide'
 /**
  * props定义声明
  */
-export interface MoveOptions {
+export interface FeatureMoveOptions {
   /* ----------------------------------- 拖动 ----------------------------------- */
 
   disable?: boolean
@@ -50,7 +50,7 @@ export interface MoveOptions {
   /* ---------------------------------- 惯性滑动 ---------------------------------- */
 
   /** 开启惯性滑动 */
-  canInertialSlide?: boolean
+  canSlide?: boolean
   /** （前提：已开启惯性滚动）惯性滑动中，地面摩擦的加速度，即，速度变化的快慢 */
   acc?: number
   /** （前提：已开启惯性滚动）惯性滑动的最大初速度（的绝对值） */
@@ -85,17 +85,17 @@ export function useFeatureMove(
   component: RefObject<HTMLDivElement | undefined>,
   {
     disable = false,
-    canInertialSlide = false,
+    canSlide = false,
     acc = 0.004,
     maxInitSpeed = 2,
     moveBoundary = 'offsetParent',
-    direction: moveDirection = 'both',
+    direction = 'both',
     onMoveStart,
     onMove,
     onReachOffsetBoundary,
     onMoveEnd,
     onSlideEnd
-  }: MoveOptions
+  }: FeatureMoveOptions = {}
 ) {
   const [isMoving, { on: setIsMoving, off: cancelIsMoving }] = useToggle(false)
   useEffect(() => {
@@ -116,7 +116,7 @@ export function useFeatureMove(
         let computedDx = 0
         let computedDy = 0
         let moveboxRect: DOMRect | undefined = undefined
-        if (moveDirection === 'both' || moveDirection === 'x') {
+        if (direction === 'both' || direction === 'x') {
           computedDx = dx
           if (offsetRect) {
             if (!moveboxRect) moveboxRect = el.getBoundingClientRect()
@@ -129,7 +129,7 @@ export function useFeatureMove(
             }
           }
         }
-        if (moveDirection === 'both' || moveDirection === 'y') {
+        if (direction === 'both' || direction === 'y') {
           computedDy = dy
           if (offsetRect) {
             if (!moveboxRect) moveboxRect = el.getBoundingClientRect()
@@ -152,7 +152,7 @@ export function useFeatureMove(
       end({ speedVector }) {
         onMoveEnd?.({ el, speedVector })
         cancelIsMoving()
-        if (canInertialSlide) {
+        if (canSlide) {
           inertialSlide(el, {
             speedVector,
             acc,
@@ -166,15 +166,5 @@ export function useFeatureMove(
       }
     })
   }, [])
-  const css = useMemo(
-    () =>
-      mixCSSObjects({
-        cursor: isMoving ? 'grabbing' : 'grab',
-        touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
-        userSelect: 'none', // 禁用掉文字的用户选择
-        translate: disable ? [] : [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')]
-      }),
-    [disable, isMoving]
-  )
-  return { css }
+  return [isMoving, { on: setIsMoving, off: cancelIsMoving }]
 }

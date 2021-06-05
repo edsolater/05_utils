@@ -1,4 +1,4 @@
-import useScroll from '../hooks/useScroll'
+import useListenerScroll from '../hooks/useListenerScroll'
 import useToggle from '../hooks/useToggle'
 import React, { ReactElement, ReactNode, useRef } from 'react'
 import { ReactProps } from 'typings/constants'
@@ -186,7 +186,7 @@ function AppLayoutContent({
   ...restProps
 }: AppLayoutContentProps): ReactElement<AppLayoutContentProps> {
   const domRef = useRef<HTMLDivElement>(null)
-  useScroll(domRef, {
+  useListenerScroll(domRef, {
     onScroll: ({ scrollDirection }) =>
       scrollDirection === 'down' ? onScrollDown?.() : onScrollUp?.()
   })

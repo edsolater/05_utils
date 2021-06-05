@@ -1,4 +1,4 @@
-import useScroll from '../hooks/useScroll'
+import useListenerScroll from '../hooks/useListenerScroll'
 import useToggle from '../hooks/useToggle'
 import React, { ReactChild, useRef } from 'react'
 import { cssVar } from '../style/cssFunctions'
@@ -52,7 +52,7 @@ export default function ScrollDiv({
     }
   }
 
-  useScroll(contentRef, {
+  useListenerScroll(contentRef, {
     disable: isScrollingByThumb,
     init: true,
     onScroll: () => {
@@ -60,7 +60,7 @@ export default function ScrollDiv({
     }
   })
 
-  const { css: elementMoveCSS } = useFeatureMove(scrollbarThumbRef, {
+  const [isMoving] = useFeatureMove(scrollbarThumbRef, {
     direction: 'y',
     onMoveStart() {
       disableIsScrollingByThumb()
@@ -111,7 +111,12 @@ export default function ScrollDiv({
               background: cssDefaults.scrollbar.thumbColor,
               transition: cssDefaults.transiton.immediately
             },
-            elementMoveCSS
+            {
+              cursor: isMoving ? 'grabbing' : 'grab',
+              touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
+              userSelect: 'none', // 禁用掉文字的用户选择
+              translate: [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')]
+            }
           ]}
         />
       </Div>
