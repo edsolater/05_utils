@@ -2,7 +2,7 @@ import React from 'react'
 import Button from 'baseUI/components/Button'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
-import createStore from 'baseUI/components/__hooks/createStore'
+import createStore from 'baseUI/hooks/createStore'
 import AppProviders from 'baseUI/components/Providers'
 
 const { useStore: useContextStore, Provider } = createStore({ count: 1 })

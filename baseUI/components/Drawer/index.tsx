@@ -3,7 +3,7 @@ import { ComponentProps } from 'react'
 import { ReactProps } from 'typings/constants'
 import { DivProps } from '../Div'
 import Mask from '../Mask'
-import createStore from '../__hooks/createStore'
+import createStore from '../../hooks/createStore'
 import DrawerCard from './DrawerCard'
 import isChildrenContain from './isChildrenContain'
 const { Provider, useStore: useDrawerContext } = createStore({ currentMaskId: null })

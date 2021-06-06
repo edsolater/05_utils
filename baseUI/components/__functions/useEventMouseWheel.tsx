@@ -10,7 +10,7 @@ type CallbackInfo = {
  * @param options
  * @returns hooks的结果
  */
-export default function useMouseWheel(
+export default function useEventMouseWheel(
   ref: RefObject<HTMLElement>,
   options?: {
     /**
