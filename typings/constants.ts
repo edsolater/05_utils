@@ -92,4 +92,4 @@ export type Timestamp = number
 
 export type ReactProps<P = {}> = PropsWithChildren<P>
 
-export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>
+export type StringNumber = string
