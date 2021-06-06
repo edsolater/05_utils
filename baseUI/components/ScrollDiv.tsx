@@ -120,11 +120,11 @@ export default function ScrollDiv({
           width: scrollbarWidth,
           overflow:
             scrollAxis === 'x'
-              ? 'scroll hidden'
+              ? 'auto hidden'
               : scrollAxis === 'y'
-              ? 'hidden scroll'
+              ? 'hidden auto'
               : scrollAxis === 'both'
-              ? 'scroll'
+              ? 'auto'
               : '',
           resize: 'none',
           '::-webkit-scrollbar': {
