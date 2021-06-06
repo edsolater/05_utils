@@ -89,7 +89,7 @@ export default function ScrollDiv({
         },
         '.ScrollDiv-scrollbar-box': {
           // 如果靠组件状态处理的话， 性能堪忧
-          opacity: '0',
+          opacity: '0.4',
           transition: cssDefaults.transiton.normal
         }
       }}

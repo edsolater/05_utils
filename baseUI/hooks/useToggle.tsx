@@ -16,12 +16,8 @@ export default function useToggle(
   }
 ] {
   const [isOn, setIsOn] = useState(initValue)
-  const on = useCallback(() => {
-    if (isOn === false) setIsOn(true)
-  }, [isOn])
-  const off = useCallback(() => {
-    if (isOn === true) setIsOn(false)
-  }, [isOn])
+  const on = useCallback(() => setIsOn(true), [])
+  const off = useCallback(() => setIsOn(false), [])
   const toggle = useCallback(() => setIsOn((b) => !b), [])
   const controller = useMemo(
     () => ({

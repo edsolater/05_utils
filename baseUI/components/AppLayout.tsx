@@ -43,7 +43,6 @@ interface AppLayoutContentProps extends DivProps {
  */
 export default function AppLayout(props: ReactProps<AppLayoutProps>) {
   const [isScrollingDown, { on: setScrollingDown, off: setScrollingUp }] = useToggle(false)
-
   const [
     isSideMenuCollapsed,
     { on: collapseSideMenu, off: expandSideMenu, toggle: toggleSideMenu }
