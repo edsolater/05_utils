@@ -1,9 +1,9 @@
 /**
  * @example
- * isBigint(2n) //=> true
- * isBigint(Bigint(3)) //=> true
- * isBigint('3') //=> false
+ * isBigInt(2n) //=> true
+ * isBigInt(Bigint(3)) //=> true
+ * isBigInt('3') //=> false
  */
-export default function isBigint(val: unknown): val is bigint {
+export default function isBigInt(val: unknown): val is bigint {
   return typeof val === 'bigint'
 }

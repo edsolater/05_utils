@@ -9,7 +9,7 @@
 
 import { StringNumber } from 'typings/constants'
 import isUndefined from '../functions/judgers/isUndefined'
-import isBigint from '../functions/judgers/isBigint'
+import isBigInt from '../functions/judgers/isBigInt'
 import isObjectLike from '../functions/judgers/isObjectLike'
 
 type CalableValue = StringNumber | number | bigint | SuperNumberData
@@ -33,7 +33,7 @@ function hasSuperNumberShape(v: any): v is SuperNumberData {
   if (!isObjectLike(v)) return false
 
   const { int, exp: exponential, divisor } = v as SuperNumber
-  if (isBigint(int) && isBigint(exponential) && isBigint(divisor)) return true
+  if (isBigInt(int) && isBigInt(exponential) && isBigInt(divisor)) return true
 
   return false
 }
