@@ -12,7 +12,7 @@ interface ScrollDivProps extends DivProps {
    */
   scrollbarWidth?: CSSLength
   /**@default 'y' */
-  scrollAxis: 'x' | 'y' | 'both'
+  scrollAxis?: 'x' | 'y' | 'both'
 }
 
 /**
