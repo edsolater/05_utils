@@ -1,11 +1,7 @@
-import useEventScroll from '../hooks/useEventScroll'
-import useToggle from '../hooks/useToggle'
-import React, { ReactChild, useRef } from 'react'
-import { cssVar } from '../style/cssFunctions'
-import { CSSLength } from '../style/cssUnits'
-import { setCSSVariable } from '../style/cssVaraiable'
+import { useToggle_Ref } from '../hooks/useToggle'
+import React, { ReactChild, useEffect, useRef } from 'react'
+import { CSSLength, toPx } from '../style/cssUnits'
 import Div, { BaseUIDiv, DivProps } from './Div'
-import useFeatureMove from '../hooks/useFeatureMove'
 import cssDefaults from './__config/cssDefaults'
 
 interface ScrollDivProps extends DivProps {
@@ -15,125 +11,144 @@ interface ScrollDivProps extends DivProps {
    * @default '8px'
    */
   scrollbarWidth?: CSSLength
+  /**@default 'y' */
+  scrollAxis: 'x' | 'y' | 'both'
 }
 
 /**
  * @UIComponent a div with prettier scrollbar.
  */
 export default function ScrollDiv({
-  scrollbarWidth,
+  scrollbarWidth = '8px',
+  scrollAxis = 'y',
   children,
   ...restProps
 }: ScrollDivProps): JSX.Element {
   const [
-    isScrollingByThumb,
-    { on: enableIsScrollingByThumb, off: disableIsScrollingByThumb }
-  ] = useToggle(false)
+    isScrollByContent,
+    { on: enableScrollByContent, off: disableScrollByContent }
+  ] = useToggle_Ref()
+  const [
+    isScrollByScrollbar,
+    { on: enableScrollByScrollbar, off: disableScrollByScrollbar }
+  ] = useToggle_Ref()
+  const outerBoxRef = useRef<HTMLDivElement>(null)
+  const contentBoxRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const scrollbarBoxRef = useRef<HTMLDivElement>(null)
   const scrollbarRef = useRef<HTMLDivElement>(null)
-  const scrollbarThumbRef = useRef<HTMLDivElement>(null)
 
-  // only use it in useEffect
-  const getScrollbarThumbInfo = () => {
-    const content = contentRef.current!
-    return {
-      top: content.scrollTop * (content.clientHeight / content.scrollHeight),
-      height: content.clientHeight * (content.clientHeight / content.scrollHeight)
+  useEffect(() => {
+    contentBoxRef.current!.addEventListener('pointerover', enableScrollByContent)
+    scrollbarBoxRef.current!.addEventListener('pointerover', enableScrollByScrollbar)
+    contentBoxRef.current!.addEventListener('pointerout', disableScrollByContent)
+    scrollbarBoxRef.current!.addEventListener('pointerout', disableScrollByScrollbar)
+    return () => {
+      contentBoxRef.current!.removeEventListener('pointerover', enableScrollByContent)
+      scrollbarBoxRef.current!.removeEventListener('pointerover', enableScrollByScrollbar)
+      contentBoxRef.current!.removeEventListener('pointerout', disableScrollByContent)
+      scrollbarBoxRef.current!.removeEventListener('pointerout', disableScrollByScrollbar)
     }
-  }
+  }, [])
 
-  // only use it in useEffect
-  const setScollbarThumbCSSVariable = (
-    keyValuePairs: [keyName: string, value: string | number][]
-  ): void => {
-    if (isScrollingByThumb) return
-    for (const [key, value] of keyValuePairs) {
-      setCSSVariable(scrollbarRef.current, `--scrollbar-${key}`, value)
+  useEffect(() => {
+    scrollbarRef.current!.style.height = toPx(contentRef.current!.scrollHeight)
+    const contentScrollHandler = ({ target }: Event): void => {
+      if (isScrollByScrollbar()) return
+      const scrollTop = (target as HTMLElement).scrollTop
+      scrollbarBoxRef.current!.scrollTo({ top: scrollTop })
     }
-  }
-
-  useEventScroll(contentRef, {
-    disable: isScrollingByThumb,
-    init: true,
-    onScroll: () => {
-      setScollbarThumbCSSVariable(Object.entries(getScrollbarThumbInfo()))
+    const scrollbarScrollHandler = ({ target }: Event): void => {
+      if (isScrollByContent()) return
+      const scrollTop = (target as HTMLElement).scrollTop
+      contentBoxRef.current!.scrollTo({ top: scrollTop })
     }
-  })
-
-  const [isMoving] = useFeatureMove(scrollbarThumbRef, {
-    direction: 'y',
-    onMoveStart() {
-      disableIsScrollingByThumb()
-    },
-    onMoveEnd() {
-      enableIsScrollingByThumb()
-    },
-    onMove({ delta }) {
-      const content = contentRef.current!
-      const thumbScrollDeltaTop = delta.dy
-      const contentScrollTop = thumbScrollDeltaTop * (content.scrollHeight / content.clientHeight)
-      contentRef.current!.scrollBy({ top: contentScrollTop })
+    contentBoxRef.current!.addEventListener('scroll', contentScrollHandler)
+    scrollbarBoxRef.current!.addEventListener('scroll', scrollbarScrollHandler)
+    return () => {
+      contentBoxRef.current!.removeEventListener('scroll', contentScrollHandler)
+      scrollbarBoxRef.current!.removeEventListener('scroll', scrollbarScrollHandler)
     }
-    // TODO: mapFromResult({dx,dy}){}
-  })
-
+  }, [])
   return (
     <BaseUIDiv
+      _domRef={outerBoxRef}
       {...restProps}
       _className='ScrollDiv'
       _css={{
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'auto',
+        '::-webkit-scrollbar': {
+          display: 'none'
+        },
+        ':hover': {
+          '.ScrollDiv-scrollbar-box': {
+            // 如果靠组件状态处理的话， 性能堪忧
+            opacity: '1'
+          }
+        },
+        '.ScrollDiv-scrollbar-box': {
+          // 如果靠组件状态处理的话， 性能堪忧
+          opacity: '0',
+          transition: cssDefaults.transiton.normal
+        }
       }}
     >
       <Div
-        domRef={scrollbarRef}
-        className='my-scrollbar'
-        css={{
-          position: 'absolute',
-          top: '0',
-          right: '0',
-          bottom: '0',
-          width: scrollbarWidth ?? '8px',
-          zIndex: 1
-        }}
-      >
-        <Div
-          domRef={scrollbarThumbRef}
-          className='my-scrollbar-thumb'
-          css={[
-            {
-              position: 'absolute',
-              top: cssVar('--scrollbar-top', '0', 'px'),
-              left: '0',
-              right: '0',
-              height: cssVar('--scrollbar-height', '0', 'px'),
-              background: cssDefaults.scrollbar.thumbColor,
-              transition: cssDefaults.transiton.immediately
-            },
-            {
-              cursor: isMoving ? 'grabbing' : 'grab',
-              touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
-              userSelect: 'none', // 禁用掉文字的用户选择
-              translate: [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')]
-            }
-          ]}
-        />
-      </Div>
-      <Div
-        domRef={contentRef}
-        className='my-scrollbar-content'
+        domRef={contentBoxRef}
+        className='ScrollDiv-content-box'
         css={{
           height: '100%',
-          width: '100%',
           overflow: 'auto',
-          inset: '0',
           '::-webkit-scrollbar': {
             display: 'none'
           }
         }}
       >
-        {children}
+        <Div className='ScrollDiv-content' domRef={contentRef}>
+          {children}
+        </Div>
+      </Div>
+      <Div
+        domRef={scrollbarBoxRef}
+        className='ScrollDiv-scrollbar-box'
+        css={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          height: '100%',
+          width: scrollbarWidth,
+          overflow:
+            scrollAxis === 'x'
+              ? 'scroll hidden'
+              : scrollAxis === 'y'
+              ? 'hidden scroll'
+              : scrollAxis === 'both'
+              ? 'scroll'
+              : '',
+          resize: 'none',
+          '::-webkit-scrollbar': {
+            width: scrollbarWidth,
+            background: 'transparent'
+          },
+          '::-webkit-scrollbar-thumb': {
+            width: scrollbarWidth,
+            borderRadius: scrollbarWidth,
+            background: cssDefaults.scrollbar.thumbColor,
+            ':hover': {
+              background: cssDefaults.scrollbar.thumbColorHover
+            },
+            ':active': {
+              background: cssDefaults.scrollbar.thumbColorActive
+            }
+          }
+        }}
+      >
+        <Div
+          domRef={scrollbarRef}
+          className='ScrollDiv-scrollbar-thumb'
+          css={{ width: '1px', pointerEvents: 'none' }}
+        ></Div>
       </Div>
     </BaseUIDiv>
   )

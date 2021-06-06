@@ -17,8 +17,8 @@ import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings>
-    {/* <AppLayoutExample />
-    <KeyboardShortcutExample />
+    <AppLayoutExample />
+    {/* <KeyboardShortcutExample />
     <DrawerExample />
     <MaskExample />
     <AppProvidersExample />

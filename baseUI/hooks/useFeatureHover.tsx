@@ -64,11 +64,12 @@ export function useFeatureHover(
   useEffect(() => {
     if (disable) return
     if (onHovering) {
-      const hoverHandler = (ev: PointerEvent) =>
+      const hoverHandler = (ev: PointerEvent) => 
         onHovering?.({ el: domRef.current!, nativeEvent: ev })
-      domRef.current!.addEventListener('pointerover', hoverHandler)
+      
+      domRef.current!.addEventListener('pointerover', hoverHandler) // TODO: 效果有待验证
       return () => {
-        domRef.current!.removeEventListener('pointerover', hoverHandler)
+        domRef.current!.removeEventListener('pointerover', hoverHandler) // TODO: 效果有待验证
       }
     }
   }, [disable, onHovering])
