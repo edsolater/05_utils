@@ -24,7 +24,7 @@ interface SuperNumberMethods {
   multi(b: CalableValue): SuperNumber
   divide(b: CalableValue): SuperNumber
 }
-export type SuperNumber = SuperNumberData & SuperNumberMethods
+export interface SuperNumber extends SuperNumberData, SuperNumberMethods {}
 
 /**
  *
@@ -38,7 +38,7 @@ function hasSuperNumberShape(v: any): v is SuperNumberData {
   return false
 }
 
-function getSuperNumberData(n: CalableValue): SuperNumberData {
+function SuperNumberData(n: CalableValue): SuperNumberData {
   if (hasSuperNumberShape(n)) return n
   const strN = String(n)
   const match = strN.match(/^(?<int>[+-]?\d*)(\.(?<decimal>\d+))?(e(?<exp>[+-]?\d+))?$/)
@@ -57,11 +57,11 @@ function getSuperNumberData(n: CalableValue): SuperNumberData {
  * SuperNumber(3.14e18) //=> { int: 3140000000000000000n, exp: 0n }
  * SuperNumber(-3.14e-18) //=> { int: -314n, exp: -20n }
  */
-function SuperNumber(n: CalableValue): SuperNumber {
-  const data = getSuperNumberData(n)
+export default function SuperNumber(n: CalableValue): SuperNumber {
+  const data = SuperNumberData(n)
   const methods = {
-    multi: (b: CalableValue) => SuperNumber(_multi(data, getSuperNumberData(b))),
-    divide: (b: CalableValue) => SuperNumber(_divide(data, getSuperNumberData(b)))
+    multi: (b: CalableValue) => SuperNumber(_multi(data, SuperNumberData(b))),
+    divide: (b: CalableValue) => SuperNumber(_divide(data, SuperNumberData(b)))
   }
   return { ...data, ...methods }
 }
@@ -77,3 +77,38 @@ const _divide = (a: SuperNumberData, b: SuperNumberData): SuperNumberData => ({
   exp: a.exp - b.exp,
   divisor: a.divisor * b.int
 })
+
+const _add = (a: SuperNumberData, b: SuperNumberData): SuperNumberData => {
+  const newA = _changeExp(a, b.exp)
+  return {
+    int: newA.int * b.divisor + b.int * a.divisor,
+    exp: b.exp,
+    divisor: newA.divisor * b.divisor
+  }
+}
+
+const _minus = (a: SuperNumberData, b: SuperNumberData): SuperNumberData => {
+  const newA = _changeExp(a, b.exp)
+  return {
+    int: newA.int * b.divisor - b.int * a.divisor,
+    exp: b.exp,
+    divisor: newA.divisor * b.divisor
+  }
+}
+
+const _changeExp = (n: SuperNumberData, toExp: bigint | number): SuperNumberData => {
+  const isBigger = BigInt(toExp) > n.exp
+  return isBigger
+    ? {
+        int: n.int,
+        exp: BigInt(toExp),
+        divisor: n.divisor * BigInt(10) ** (BigInt(toExp) - n.exp)
+      }
+    : {
+        int: n.int * BigInt(10) ** (n.exp - BigInt(toExp)),
+        exp: BigInt(toExp),
+        divisor: n.divisor
+      }
+}
+
+console.log(_changeExp(SuperNumber(3.14), 3))
