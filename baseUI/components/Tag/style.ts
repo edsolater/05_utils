@@ -1,5 +1,6 @@
+import cssDefaults from 'baseUI/settings/cssDefaults'
 import { useMemo } from 'react'
-import cssColor from '../__config/cssColor'
+import cssColor from '../../style/cssColor'
 import { mixCSSObjects } from '../../style/cssParser'
 import { ICSS } from '../../style/ICSS'
 
@@ -31,6 +32,6 @@ export const useTagStyle = ({ cssTagCloseIcon }: TagStyleProps) => {
   )
 
   const tagCloseIconCss = useMemo(() => mixCSSObjects(cssTagCloseIcon, {}), [cssTagCloseIcon])
-  const tagCloseIconColor = cssColor.darkText
+  const tagCloseIconColor = cssDefaults.darkText
   return { coreCss, tagCloseIconCss, tagCloseIconColor }
 }

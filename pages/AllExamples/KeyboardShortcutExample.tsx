@@ -3,7 +3,7 @@ import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 import KeyboardShortcut, { ShortcutItem, useKeyboardShortcutRegister } from 'baseUI/components/KeyboardShortcut'
 import Div from 'baseUI/components/Div'
-import cssColor from 'baseUI/components/__config/cssColor'
+import cssColor from 'baseUI/style/cssColor'
 
 const KeyboardShortcutExample = () => {
   return (

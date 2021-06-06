@@ -1,19 +1,19 @@
 import { RefObject, useEffect } from 'react'
 
-export interface ListenerClickOptions {
+export interface ListenerClickOptions<El extends HTMLElement = HTMLDivElement> {
   disable?: boolean
   /**
    * 就是普通的onClick
    */
-  onClick?: (ev: { el: HTMLElement; nativeEvent: MouseEvent }) => void
+  onClick?: (ev: { el: El; nativeEvent: MouseEvent }) => void
 }
 
 /**
  * 一般不用，直接用Div上的onClick属性
  */
-export default function useEventClick(
-  domRef: RefObject<HTMLElement>,
-  { disable = false, onClick }: ListenerClickOptions
+export default function useEventClick<El extends HTMLElement = HTMLDivElement>(
+  domRef: RefObject<El>,
+  { disable = false, onClick }: ListenerClickOptions<El>
 ) {
   useEffect(() => {
     if (disable || !onClick) return

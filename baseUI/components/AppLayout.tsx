@@ -4,7 +4,7 @@ import React, { ReactElement, ReactNode, useRef } from 'react'
 import { ReactProps } from 'typings/constants'
 import { mergeDeepObject } from 'utils/functions/merge'
 import { BaseUIDiv, DivProps } from './Div'
-import pickReactChild from './__functions/pickReactChild'
+import pickReactChild from '../functions/pickReactChild'
 
 interface SideMenuController {
   collapse(): void

@@ -1,5 +1,5 @@
+import cssDefaults from 'baseUI/settings/cssDefaults'
 import { useMemo } from 'react'
-import cssColor from '../__config/cssColor'
 import {  cssVar } from '../../style/cssFunctions'
 import { mixCSSObjects } from '../../style/cssParser'
 
@@ -46,7 +46,7 @@ export const useIconStyle = (
         borderRadius: '2px',
         transition: 'background 200ms',
         ':hover': {
-          background:cssColor.darkMaskLighter,
+          background:cssDefaults.darkMaskLighter,
           filter: `brightness(0.4) grayscale(0.5)`
         },
         '::before': {

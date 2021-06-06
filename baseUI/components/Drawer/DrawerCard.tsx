@@ -1,8 +1,8 @@
 import React, { FC, useRef } from 'react'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import Div, { DivProps } from '../Div'
-import cssColor from '../__config/cssColor'
-import cssDefaults from '../__config/cssDefaults'
+import cssColor from '../../style/cssColor'
+import cssDefaults from '../../settings/cssDefaults'
 import DrawerCardProtal from './DrawerCardProtal'
 
 export interface DrawerCardProps extends DivProps {
@@ -80,7 +80,7 @@ const DrawerCard: FC<DrawerCardProps> = (props) => {
           left: isOpen ? '0' : '-30%',
           width: '30%',
           height: '100%',
-          backgroundColor: cssColor.whiteCard,
+          backgroundColor: cssDefaults.whiteCard,
           boxShadow: cssDefaults.shadow.drawerShadow,
           opacity: isOpen ? '1' : '0',
           transition: cssDefaults.transiton.slow,

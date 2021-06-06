@@ -1,6 +1,6 @@
 import CSS from 'baseUI/components/CSS'
 import Div from 'baseUI/components/Div'
-import cssColor from 'baseUI/components/__config/cssColor'
+import cssColor from 'baseUI/style/cssColor'
 import createStore from 'baseUI/hooks/createStore'
 import React, { useState } from 'react'
 import ExampleCard from './ExampleCard'
@@ -11,7 +11,7 @@ import ExampleGroup from './ExampleGroup'
  */
 const DivExample = () => {
   const [isFocused, setIsFocused] = useState(false)
-  const GlobalStoreContext = createStore({count: 1})
+  const GlobalStoreContext = createStore({ count: 1 })
   return (
     <ExampleCard category='baseUI/componentComponent' title='Div'>
       <ExampleGroup caption='onClickOutside'>
@@ -23,9 +23,6 @@ const DivExample = () => {
           <Div
             onClick={() => {
               setIsFocused(true)
-            }}
-            onClickOutside={() => {
-              setIsFocused(false)
             }}
           />
         </CSS>
@@ -39,11 +36,7 @@ const DivExample = () => {
           resize='both'
           overflow='auto'
         >
-          <Div
-            onResize={() => {
-              // console.log(3)
-            }}
-          />
+          <Div />
         </CSS>
       </ExampleGroup>
     </ExampleCard>

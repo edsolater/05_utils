@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useMemo, useRef } from 'react'
 import React from 'react'
 import Div from '../components/Div'
-import cssColor from '../components/__config/cssColor'
+import cssColor from '../style/cssColor'
 import { toPer, halfPer } from '../style/cssUnits'
 import changeSizeByDeltaWidth from '../components/Transform/changeSizeByDeltaWidth'
 import { attachWheel } from 'utils/helper/attachEventHandler'

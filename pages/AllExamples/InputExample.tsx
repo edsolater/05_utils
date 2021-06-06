@@ -1,6 +1,6 @@
 import Input from 'baseUI/components/Input'
 import React from 'react'
-import cssColor from 'baseUI/components/__config/cssColor'
+import cssColor from 'baseUI/style/cssColor'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 

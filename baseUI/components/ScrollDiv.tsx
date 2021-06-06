@@ -2,7 +2,7 @@ import { useToggle_Ref } from '../hooks/useToggle'
 import React, { ReactChild, useEffect, useRef } from 'react'
 import { CSSLength, toPx } from '../style/cssUnits'
 import Div, { BaseUIDiv, DivProps } from './Div'
-import cssDefaults from './__config/cssDefaults'
+import cssDefaults from '../settings/cssDefaults'
 
 interface ScrollDivProps extends DivProps {
   children: ReactChild

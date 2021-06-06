@@ -2,7 +2,7 @@ import Transform from 'baseUI/components/Transform'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
-import cssColor from 'baseUI/components/__config/cssColor'
+import cssColor from 'baseUI/style/cssColor'
 import Div from 'baseUI/components/Div'
 
 /**

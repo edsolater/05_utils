@@ -5,7 +5,7 @@ import useFeatureResize, { FeatureResizeOptions } from '../../hooks/useFeatureRe
 import useFeatureMove, { FeatureMoveOptions } from '../../hooks/useFeatureMove'
 import { fullVw, halfPer, toPer } from '../../style/cssUnits'
 import Div, { BaseUIDiv, DivProps } from '../Div'
-import cssColor from '../__config/cssColor'
+import cssColor from '../../style/cssColor'
 import { cssVar } from 'baseUI/style/cssFunctions'
 
 export type BoundingRect = {

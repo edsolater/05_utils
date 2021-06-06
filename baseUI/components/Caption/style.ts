@@ -1,6 +1,6 @@
+import cssDefaults from "baseUI/settings/cssDefaults"
 import { cssVar } from "baseUI/style/cssFunctions"
 import { mixCSSObjects } from "baseUI/style/cssParser"
-import cssColor from "../__config/cssColor"
 
 // 声明组件有哪些props是纯粹改变外观的
 export interface CaptionStyleProps {
@@ -15,7 +15,7 @@ export const useCaptionStyle = ({ align = 'left' }: CaptionStyleProps) => {
       fontSize: '0.8em',
       color: cssVar(
         '--caption-text-color',
-        cssColor.grayText
+        cssDefaults.grayText
       )
     },
     align === 'left' && { textAlign: 'left' },

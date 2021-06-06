@@ -20,8 +20,8 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> extends ReactPro
   css?: ICSS
   className?: MayDeepArray<ClassName>
   htmlProps?: JSX.IntrinsicElements[TagName]
-  onHover?: FeatureHoverOptions['onHover']
-  onClick?: ListenerClickOptions['onClick']
+  onHover?: FeatureHoverOptions<TagMap[TagName]>['onHover']
+  onClick?: ListenerClickOptions<TagMap[TagName]>['onClick']
 }
 
 export const divProps: ReadonlyArray<keyof DivProps> = [
@@ -36,7 +36,7 @@ export const divProps: ReadonlyArray<keyof DivProps> = [
 ]
 export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>(null)
-  useEventClick(divRef, { onClick: props.onClick })
+  useEventClick<TagMap[TagName]>(divRef, { onClick: props.onClick })
   useFeatureHover(divRef, { onHover: props.onHover })
   const allProps = {
     ...props.htmlProps,

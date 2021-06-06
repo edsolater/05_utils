@@ -1,6 +1,13 @@
-import cssColor from './cssColor'
+import merge from 'utils/functions/object/merge'
+import cssColor from '../style/cssColor'
+const defaultColor = {
+  whiteCard: 'hsl(0deg 0% 100%)',
+  grayText: 'hsl(0deg 0% 20% / 70%)',
+  darkText: 'hsl(213deg 6% 32%)', // 带有一点蓝
+  defaultBackgroundGray: '#666'
+} as const
 
-const cssDefaults = {
+const componentDefault = {
   transiton: {
     immediately: '0ms',
     fast: '200ms',
@@ -22,6 +29,10 @@ const cssDefaults = {
     thumbColorActive: 'hsla(0deg 0% 0% / 0.5)'
     // exclusive color for dark mode
     // thumbColor_darkMode:
-  }
+  },
+  darkMaskLighter: 'hsl(0deg 0% 0% / 8%)'
 } as const
+
+const cssDefaults = merge(componentDefault, defaultColor)
+
 export default cssDefaults

@@ -4,29 +4,29 @@ import useToggle from './useToggle'
 /**
  * props定义声明
  */
-export interface FeatureHoverOptions {
+export interface FeatureHoverOptions<El extends HTMLElement = HTMLDivElement> {
   disable?: boolean
   /**
    * hover 开始（鼠标移入的瞬间）
    */
-  onHoverStart?: (event: { el: HTMLElement; nativeEvent: PointerEvent }) => void
+  onHoverStart?: (event: { el: El; nativeEvent: PointerEvent }) => void
   /**
    * hover 结束（鼠标移出/取消的瞬间）
    */
-  onHoverEnd?: (event: { el: HTMLElement; nativeEvent: PointerEvent }) => void
+  onHoverEnd?: (event: { el: El; nativeEvent: PointerEvent }) => void
   /**
    * 与 onscroll一样，这是一个高频触发事件，尽量使用 onHover 或 onHoverStart 和 onHoverEnd  代替
    */
-  onHovering?: (event: { el: HTMLElement; nativeEvent: PointerEvent }) => void
+  onHovering?: (event: { el: El; nativeEvent: PointerEvent }) => void
   /**
    * hover 的状态改变时触发
    */
-  onHover?: (event: { el: HTMLElement; nativeEvent: PointerEvent; state: 'start' | 'end' }) => void
+  onHover?: (event: { el: El; nativeEvent: PointerEvent; state: 'start' | 'end' }) => void
 }
 
-export function useFeatureHover(
-  domRef: RefObject<HTMLElement>,
-  { disable = false, onHoverStart, onHoverEnd, onHovering, onHover }: FeatureHoverOptions
+export function useFeatureHover<El extends HTMLElement = HTMLDivElement>(
+  domRef: RefObject<El>,
+  { disable = false, onHoverStart, onHoverEnd, onHovering, onHover }: FeatureHoverOptions<El>
 ) {
   const [isHover, { on, off }] = useToggle(false)
   useEffect(() => {

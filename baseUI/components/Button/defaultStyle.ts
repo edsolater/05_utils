@@ -3,9 +3,10 @@ import merge from 'utils/functions/object/merge'
 import { ButtonProps } from '.'
 import { cssVar, cssBrightness } from '../../style/cssFunctions'
 import { mixCSSObjects } from '../../style/cssParser'
-import cssColor from '../__config/cssColor'
-import cssFont from '../__config/cssFont'
-import cssSize from '../__config/cssSize'
+import cssColor from '../../style/cssColor'
+import cssFont from '../../settings/cssFont'
+import cssSize from '../../settings/cssSize'
+import cssDefaults from 'baseUI/settings/cssDefaults'
 /**
  * 声明组件有哪些props是纯粹改变外观的
  */
@@ -108,7 +109,7 @@ export const getButtonCSS = cache(
           inset: '0',
           borderRadius: 'inherit',
           zIndex: '-1',
-          background: cssVar('--button-background', cssColor.defaultBackgroundGray)
+          background: cssVar('--button-background', cssDefaults.defaultBackgroundGray)
         },
         ':hover::before': { filter: cssBrightness(1.4) },
         ':active::before': { filter: cssBrightness(0.8) }
