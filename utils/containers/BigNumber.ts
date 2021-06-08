@@ -126,39 +126,30 @@ interface ToStringOptions {
  * @example
  * _toString(BigNumber(-3.1413)) //=> '-3.141'
  * _toString(BigNumber(-3.1418)) //=> '-3.142'
+ * _toString(BigNumber('3.8'), { decimalNumber: 0 }) //=> '4'
  *
  */
 const _toString = (n: BigNumberData, { decimalNumber = 3 }: ToStringOptions = {}): StringNumber => {
-  if (decimalNumber === 0) return _toStringWithoutDecimal(n)
-
   const zeroExpN = _changeExp(n, 0)
 
-  const isNegative = zeroExpN.int < BigInt(0)
+  const valueWithoutDecimal_multiTen =
+    (zeroExpN.int * BigInt(10) ** BigInt(decimalNumber + 1)) / zeroExpN.divisor
+  const valueWithoutDecimal_str = String(
+    (valueWithoutDecimal_multiTen +
+      BigInt(Number(String(valueWithoutDecimal_multiTen).slice(-1)) >= 5 ? 10 : 0)) /
+      BigInt(10)
+  )
 
-  const unsignInt = zeroExpN.int * BigInt(isNegative ? -1 : 1)
-
-  const intPart = String(unsignInt / zeroExpN.divisor)
-
-  const decimalPart = String(
-    ((unsignInt - BigInt(intPart) * zeroExpN.divisor) * BigInt(10) ** BigInt(decimalNumber + 1)) /
-      zeroExpN.divisor
-  ).padStart(decimalNumber + 1, '0')
-
-  // TODO: haven't consider about round-off
-  const shrinkedDecimal =
-    decimalPart.slice(0, -2) +
-    (Number(decimalPart.slice(-2, -1)) + (Number(decimalPart.slice(-1)) >= 5 ? 1 : 0))
-
-  return `${isNegative ? '-' : ''}${intPart}.${shrinkedDecimal}`
-}
-
-const _toStringWithoutDecimal = (n: BigNumberData) => {
-  // TODO: haven't consider about round-off
-  const zeroExpN = _changeExp(n, 0)
-  return String((zeroExpN.int * BigInt(10) ** zeroExpN.exp) / zeroExpN.divisor)
+  if (decimalNumber === 0) {
+    return valueWithoutDecimal_str
+  } else {
+    return `${valueWithoutDecimal_str.slice(0, -decimalNumber)}.${valueWithoutDecimal_str.slice(
+      -decimalNumber
+    )}`
+  }
 }
 
 // console.log(_toString(BigNumber(-3.1413))) //=> '-3.141'
 console.log(_toString(BigNumber(-3.02)))
-console.log(_toString(BigNumber('3333333.444'), { decimalNumber: 10 }))
-console.log(_toString(BigNumber('3.6'), { decimalNumber: 0 }))
+console.log(_toString(BigNumber('3333333.4449'), { decimalNumber: 3 }))
+console.log(_toString(BigNumber('3.8'), { decimalNumber: 0 }))
