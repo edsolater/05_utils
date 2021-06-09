@@ -10,9 +10,7 @@ import ExampleGroup from './ExampleGroup'
 const HoverableExample = () => (
   <ExampleCard category='baseUI/componentComponent' title='Hoverable'>
     <ExampleGroup caption=''>
-      <Hoverable>
-        <Icon name='smile' />
-      </Hoverable>
+      <Hoverable>{(hover) => (hover ? <Icon name='smile' /> : <Icon name='close' />)}</Hoverable>
     </ExampleGroup>
   </ExampleCard>
 )
