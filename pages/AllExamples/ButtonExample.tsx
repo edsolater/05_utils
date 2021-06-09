@@ -7,10 +7,10 @@ import ExampleGroup from './ExampleGroup'
  * Button 的使用示例
  */
 const ButtonExample = () => (
-  <ExampleCard title="Button" category='baseUI/componentComponent'>
+  <ExampleCard title='Button' category='baseUI/componentComponent'>
     <ExampleGroup caption='不同按钮类型对比'>
       <Button type='fill'>fill</Button>
-      <Button type='border'>border</Button>
+      <Button type='outline'>border</Button>
       <Button type='text'>text</Button>
     </ExampleGroup>
 
@@ -24,10 +24,14 @@ const ButtonExample = () => (
       </Button>
     </ExampleGroup>
 
-    <ExampleGroup caption='外框按钮（主色）（默认）'>
-      <Button size='large'>Large</Button>
-      <Button>medium</Button>
-      <Button size='small'>small</Button>
+    <ExampleGroup caption='外框按钮（主色）'>
+      <Button type='outline' size='large'>
+        Large
+      </Button>
+      <Button type='outline'>medium</Button>
+      <Button type='outline' size='small'>
+        small
+      </Button>
     </ExampleGroup>
 
     <ExampleGroup caption='文字按钮'>

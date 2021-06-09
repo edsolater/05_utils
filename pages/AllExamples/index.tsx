@@ -20,12 +20,12 @@ const AllExamples = () => (
   <GlobalSettings>
     <HoverableExample />
     <AppLayoutExample />
-    {/* <KeyboardShortcutExample />
+    <KeyboardShortcutExample />
     <DrawerExample />
     <MaskExample />
     <AppProvidersExample />
     <GlobalStoreExample />
-    <DivExample /> */}
+    <DivExample />
     <TransformExample />
     <ButtonExample />
     <IconExample />

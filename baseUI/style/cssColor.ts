@@ -1,5 +1,6 @@
 const cssColor = {
   red: 'red',
+  white: 'white',
   black: 'hsl(0deg 0% 0%)',
   gray: 'gray',
   crimson: 'crimson',
