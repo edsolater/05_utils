@@ -5,14 +5,18 @@ import { shrinkToValue } from 'utils/functions/magic/shrinkToValue'
 import { useFeatureHover } from 'baseUI/hooks/useFeatureHover'
 
 interface HoverableProps {
-  noCssEffect?: boolean
+  /** it will add filter:brightness(0.6) for it's direct child
+   * this props can disable the action
+   * @default true
+   */
+  cssEffect?: boolean
   children?: ReactChild | ((isHoverd: boolean) => ReactChild)
 }
 
 /**
  * @HollowComponent make it child hoverable (it's a hollowComponent)
  */
-export default function Hoverable({ noCssEffect, children }: HoverableProps) {
+export default function Hoverable({ cssEffect = true, children }: HoverableProps) {
   const [isHovered, { on, off }] = useToggle(false)
   const ref = useRef<HTMLDivElement>(null)
   useFeatureHover(ref, {
@@ -26,16 +30,12 @@ export default function Hoverable({ noCssEffect, children }: HoverableProps) {
       _domRef={ref}
       _className='Hoverable'
       _css={[
-        {
-          display: 'contents'
-        },
-        noCssEffect
-          ? undefined
-          : {
-              '> *:hover': {
-                // filter: 'brightness(0.6)'
-              }
-            }
+        { display: 'contents' },
+        cssEffect && {
+          '> *:hover': {
+            filter: 'brightness(0.6)'
+          }
+        }
       ]}
     >
       {shrinkToValue(children, [isHovered])}

@@ -1,6 +1,7 @@
 const cssColor = {
   red: 'red',
   black: 'hsl(0deg 0% 0%)',
+  gray: 'gray',
   crimson: 'crimson',
   dodgerblue: 'dodgerblue', // 'hsl(210deg 100% 56%)'
   dodgerblueLight: 'hsl(210deg 100% 80%)',
