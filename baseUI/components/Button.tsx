@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from 'react'
+import React, { ReactNode } from 'react'
 import { useAppSettings } from './AppSettings'
 import Div, { DivProps } from './Div'
 import cssDefaults from 'baseUI/settings/cssDefaults'
@@ -11,7 +11,11 @@ import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
 import addDefault from 'utils/functions/magic/addDefault'
 
-export interface ButtonProps extends DivProps<'button'> {
+export interface ButtonProps extends DivProps<'button'>, ButtonCSSProps {
+  children?: ReactNode
+}
+
+export interface ButtonCSSProps {
   /**
    * @cssProp
    * @default 'fill'
@@ -22,19 +26,6 @@ export interface ButtonProps extends DivProps<'button'> {
    * @default 'medium'
    */
   size?: 'small' | 'medium' | 'large'
-  children?: ReactNode
-}
-
-/**
- * @BaseUIComponent
- */
-export default function Button(props: ButtonProps) {
-  const { baseUICSS } = useAppSettings()
-  return (
-    <Div as='button' {...props} css={getButtonCSS(props, baseUICSS?.Button ?? {})}>
-      {props.children ?? '🤨'}
-    </Div>
-  )
 }
 
 export interface ButtonDetailCSS {
@@ -57,7 +48,7 @@ export interface ButtonDetailCSS {
   buttonBorderColor_outline?: CSSObject['borderColor']
 }
 
-const getButtonCSS = cache((_props: ButtonProps, cssSettings: ButtonDetailCSS) => {
+const getCSS = cache((_props: ButtonCSSProps, cssSettings: ButtonDetailCSS) => {
   const props = addDefault(_props, { type: 'fill', size: 'medium' })
   return mixCSSObjects(
     {
@@ -120,3 +111,15 @@ const getButtonCSS = cache((_props: ButtonProps, cssSettings: ButtonDetailCSS) =
     }
   )
 })
+
+/**
+ * @UIComponent Button
+ */
+export default function Button(props: ButtonProps) {
+  const { baseUICSS } = useAppSettings()
+  return (
+    <Div as='button' {...props} css={getCSS(props, baseUICSS?.Button ?? {})}>
+      {props.children ?? '🤨'}
+    </Div>
+  )
+}
