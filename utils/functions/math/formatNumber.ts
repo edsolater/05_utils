@@ -1,6 +1,6 @@
-import addDefault from '../object/addDefault'
 import fall from '../magic/fall'
 import { partlyInvoke } from '../functionFactory/partlyInvoke'
+import addDefault from '../magic/addDefault'
 
 type FormatOptions = {
   /**
@@ -52,9 +52,8 @@ const defaultOptions: FormatOptions = {
  * formatNumber(8800.1234, { hasPositiveSign: true, seperator: '', fractionLength: 6 }) // result: '+8800.123400'
  * formatNumber(100.1234, { autoAddZero: false, fractionLength: 3 }) // result: '100.123'
  */
-export default function formatNumber(n: number, options: FormatOptions = {}): string {
-  addDefault(options, defaultOptions)
-  console.log(n, options)
+export default function formatNumber(n: number, _options: FormatOptions = {}): string {
+  const options = addDefault(_options, defaultOptions)
   return fall(n, [
     (n) => n.toFixed(options.fractionLength),
     (str) => {

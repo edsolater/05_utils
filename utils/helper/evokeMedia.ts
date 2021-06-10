@@ -1,4 +1,4 @@
-import addDefault from '../functions/object/addDefault'
+import addDefault from '../functions/magic/addDefault'
 
 /**
  * 捕获桌面或窗口
@@ -6,9 +6,9 @@ import addDefault from '../functions/object/addDefault'
  * @param constraints 捕获的参数
  */
 export async function evokeWindow(
-  constraints: MediaStreamConstraints = {}
+  _constraints: MediaStreamConstraints = {}
 ): Promise<MediaStream | undefined> {
-  addDefault(constraints, { video: true, audio: true })
+  const constraints = addDefault(_constraints, { video: true, audio: true })
   try {
     //@ts-ignore
     return window.navigator.mediaDevices.getDisplayMedia(constraints)
@@ -22,9 +22,9 @@ export async function evokeWindow(
  * @param constraints 捕获的参数
  */
 export async function evokeCamera(
-  constraints: MediaStreamConstraints = {}
+  _constraints: MediaStreamConstraints = {}
 ): Promise<MediaStream | undefined> {
-  addDefault(constraints, { video: true, audio: true })
+  const constraints = addDefault(_constraints, { video: true, audio: true })
   try {
     return window.navigator.mediaDevices.getUserMedia(constraints)
   } catch (e) {
@@ -37,9 +37,9 @@ export async function evokeCamera(
  * @param constraints 捕获的参数
  */
 export async function evokeMicrophone(
-  constraints: Pick<MediaStreamConstraints, 'audio'> = { audio: true }
+  _constraints: Pick<MediaStreamConstraints, 'audio'> = { audio: true }
 ): Promise<MediaStream | undefined> {
-  addDefault(constraints, { audio: true })
+  const constraints = addDefault(_constraints, { audio: true })
   try {
     return window.navigator.mediaDevices.getUserMedia(constraints)
   } catch (e) {
