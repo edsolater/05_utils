@@ -11,18 +11,14 @@ import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
 import addDefault from 'utils/functions/magic/addDefault'
 
-export interface ButtonProps extends DivProps<'button'>, ButtonCSSProps {
-  children?: ReactNode
-}
+export interface ButtonProps extends DivProps<'button'>, ButtonCSSProps {}
 
-export interface ButtonCSSProps {
+interface ButtonCSSProps {
   /**
-   * @cssProp
    * @default 'fill'
    */
   type?: 'fill' | 'outline' | 'text'
   /**
-   * @cssProp
    * @default 'medium'
    */
   size?: 'small' | 'medium' | 'large'
