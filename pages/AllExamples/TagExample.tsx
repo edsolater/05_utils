@@ -1,5 +1,5 @@
 import Tag from 'baseUI/components/Tag'
-import useBooleanController from 'baseUI/hooks/useBooleanController'
+import useToggle from 'baseUI/hooks/useToggle'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
@@ -8,11 +8,11 @@ import ExampleGroup from './ExampleGroup'
  * Button 的使用示例
  */
 const TagExample = () => {
-  const controller = useBooleanController(true)
+  const [isOn, { off }] = useToggle(true)
   return (
     <ExampleCard category='baseUI/componentComponent' title='Tag'>
       <ExampleGroup caption='基本'>
-        <Tag open={controller.state} onClose={() => controller.turnOff()}>
+        <Tag open={isOn} onClose={off}>
           edsolater
         </Tag>
       </ExampleGroup>
