@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode } from 'react'
 import { ButtonDetailCSS } from './Button'
+import { CaptionDetailCSS } from './Caption'
 
 //#region ------------------- props声明 -------------------
 
@@ -9,6 +10,7 @@ export interface AppSetting {
    */
   baseUICSS?: {
     Button?: ButtonDetailCSS
+    Caption?: CaptionDetailCSS
   }
 }
 //#endregion

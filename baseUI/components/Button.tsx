@@ -39,7 +39,7 @@ export default function Button({
     <Div
       as='button'
       {...restProps}
-      css={getButtonCSS(appSettings.baseUICSS?.Button, { type, size })}
+      css={getButtonCSS({ type, size }, appSettings.baseUICSS?.Button)}
     >
       {children ?? '🤨'}
     </Div>
@@ -66,67 +66,65 @@ export interface ButtonDetailCSS {
   buttonBorderColor_outline?: CSSObject['borderColor']
 }
 
-const getButtonCSS = cache(
-  (cssSettings: ButtonDetailCSS | undefined, { size, type }: ButtonProps) => {
-    return mixCSSObjects(
-      {
-        style: 'none',
-        borderWidth: 0,
-        cursor: 'pointer',
-        userSelect: 'none',
-        width: 'max-content',
-        boxSizing: 'border-box'
+const getButtonCSS = cache(({ size, type }: ButtonProps, cssSettings?: ButtonDetailCSS) =>
+  mixCSSObjects(
+    {
+      style: 'none',
+      borderWidth: 0,
+      cursor: 'pointer',
+      userSelect: 'none',
+      width: 'max-content',
+      boxSizing: 'border-box'
+    },
+    size === 'small' && {
+      padding: cssSettings?.padding_small ?? `${cssSize.mini} ${cssSize.large}`,
+      fontSize: cssSettings?.fontSize_small ?? cssFont.medium,
+      borderRadius: cssSettings?.borderRadius_small ?? cssSize.mini
+    },
+    size === 'medium' && {
+      padding: cssSettings?.padding_medium ?? `${cssSize.mini} ${cssSize.large}`,
+      fontSize: cssSettings?.fontSize_medium ?? cssFont.medium,
+      borderRadius: cssSettings?.borderRadius_medium ?? cssSize.mini
+    },
+    size === 'large' && {
+      padding: cssSettings?.padding_large ?? `${cssSize.mini} ${cssSize.large}`,
+      fontSize: cssSettings?.fontSize_large ?? cssFont.medium,
+      borderRadius: cssSettings?.borderRadius_large ?? cssSize.mini
+    },
+    type === 'fill' && {
+      color: cssSettings?.buttonTextColor ?? cssColor.white,
+      position: 'relative',
+      background: 'none',
+      '::before': {
+        content: "''",
+        position: 'absolute',
+        inset: '0',
+        borderRadius: 'inherit',
+        zIndex: '-1',
+        background: cssDefaults.defaultBackgroundGray
       },
-      size === 'small' && {
-        padding: cssSettings?.padding_small ?? `${cssSize.mini} ${cssSize.large}`,
-        fontSize: cssSettings?.fontSize_small ?? cssFont.medium,
-        borderRadius: cssSettings?.borderRadius_small ?? cssSize.mini
-      },
-      size === 'medium' && {
-        padding: cssSettings?.padding_medium ?? `${cssSize.mini} ${cssSize.large}`,
-        fontSize: cssSettings?.fontSize_medium ?? cssFont.medium,
-        borderRadius: cssSettings?.borderRadius_medium ?? cssSize.mini
-      },
-      size === 'large' && {
-        padding: cssSettings?.padding_large ?? `${cssSize.mini} ${cssSize.large}`,
-        fontSize: cssSettings?.fontSize_large ?? cssFont.medium,
-        borderRadius: cssSettings?.borderRadius_large ?? cssSize.mini
-      },
-      type === 'fill' && {
-        color: cssSettings?.buttonTextColor ?? cssColor.white,
-        position: 'relative',
-        background: 'none',
-        '::before': {
-          content: "''",
-          position: 'absolute',
-          inset: '0',
-          borderRadius: 'inherit',
-          zIndex: '-1',
-          background: cssDefaults.defaultBackgroundGray
-        },
-        ':hover::before': { filter: cssBrightness(1.4) },
-        ':active::before': { filter: cssBrightness(0.8) }
-      },
-      type === 'outline' && {
-        position: 'relative',
-        background: cssColor.transparent,
-        color: cssSettings?.buttonTextColor,
-        '::before': {
-          content: "''",
-          position: 'absolute',
-          inset: '0',
-          borderRadius: 'inherit',
-          borderWidth: cssSettings?.buttonBorderLineWidth_outline ?? '1px',
-          borderStyle: 'solid',
-          borderColor: cssSettings?.buttonBorderColor_outline ?? 'currentcolor',
-          opacity: cssSettings?.buttonBorderLineOpacity_outline ?? '0.3',
-          color: 'inherit'
-        }
-      },
-      type === 'text' && {
-        color: cssSettings?.buttonTextColor,
-        background: 'transparent'
+      ':hover::before': { filter: cssBrightness(1.4) },
+      ':active::before': { filter: cssBrightness(0.8) }
+    },
+    type === 'outline' && {
+      position: 'relative',
+      background: cssColor.transparent,
+      color: cssSettings?.buttonTextColor,
+      '::before': {
+        content: "''",
+        position: 'absolute',
+        inset: '0',
+        borderRadius: 'inherit',
+        borderWidth: cssSettings?.buttonBorderLineWidth_outline ?? '1px',
+        borderStyle: 'solid',
+        borderColor: cssSettings?.buttonBorderColor_outline ?? 'currentcolor',
+        opacity: cssSettings?.buttonBorderLineOpacity_outline ?? '0.3',
+        color: 'inherit'
       }
-    )
-  }
+    },
+    type === 'text' && {
+      color: cssSettings?.buttonTextColor,
+      background: 'transparent'
+    }
+  )
 )
