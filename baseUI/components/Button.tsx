@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext } from 'react'
-import { AppSettings } from './AppSettingsProvider'
+import { useAppSettings } from './AppSettings'
 import Div, { DivProps } from './Div'
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import cssFont from 'baseUI/settings/cssFont'
@@ -33,14 +33,10 @@ export default function Button({
   children,
   ...restProps
 }: ButtonProps) {
-  const appSettings = useContext(AppSettings)
+  const { baseUICSS } = useAppSettings()
 
   return (
-    <Div
-      as='button'
-      {...restProps}
-      css={getButtonCSS({ type, size }, appSettings.baseUICSS?.Button)}
-    >
+    <Div as='button' {...restProps} css={getButtonCSS({ type, size }, baseUICSS?.Button)}>
       {children ?? '🤨'}
     </Div>
   )

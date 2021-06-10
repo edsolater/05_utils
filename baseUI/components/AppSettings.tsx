@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode } from 'react'
+import React, { createContext, ReactNode, useContext } from 'react'
 import { ButtonDetailCSS } from './Button'
 import { CaptionDetailCSS } from './Caption'
 
@@ -22,3 +22,9 @@ export default function AppSettingsProvider(props: AppSetting & { children?: Rea
   return <AppSettings.Provider value={props ?? {}}>{props.children}</AppSettings.Provider>
 }
 //#endregion
+
+// 只有 Provider 级别组件，才有组件hook。
+
+export function useAppSettings(){
+  return useContext(AppSettings)
+}

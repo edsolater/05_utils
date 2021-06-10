@@ -4,7 +4,7 @@ import { BaseUIDiv, DivProps } from './Div'
 import cache from 'utils/functions/functionFactory/cache'
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import { CSSObject } from '@emotion/react'
-import { AppSettings } from './AppSettingsProvider'
+import { AppSettings, useAppSettings } from './AppSettings'
 
 export interface CaptionProps extends DivProps {
   /**
@@ -17,9 +17,9 @@ export interface CaptionProps extends DivProps {
  * @BaseUIComponent
  */
 export default function Caption({ align, ...restProps }: CaptionProps) {
-  const appSettings = useContext(AppSettings)
+  const { baseUICSS } = useAppSettings()
   return (
-    <BaseUIDiv {...restProps} _css={getCSS({ align }, appSettings.baseUICSS?.Caption)}></BaseUIDiv>
+    <BaseUIDiv {...restProps} _css={getCSS({ align }, baseUICSS?.Caption)}></BaseUIDiv>
   )
 }
 
