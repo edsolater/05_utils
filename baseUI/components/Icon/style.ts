@@ -1,6 +1,6 @@
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import { useMemo } from 'react'
-import {  cssVar } from '../../style/cssFunctions'
+import { cssVar } from '../../style/cssFunctions'
 import { mixCSSObjects } from '../../style/cssParser'
 
 // 声明组件有哪些props是纯粹改变外观的
@@ -14,16 +14,11 @@ export interface IconStyleProps {
    * CSS: 代表颜色的CSS色值（只要是background属性能接受的值）
    */
   hoverColor?: string
-  /**
-   * CSS: 图标可点击
-   */
-  clickable?: boolean
 }
 // TODO:是否有必要？
 export const iconPropsDefault: IconStyleProps = {
   color: undefined,
-  hoverColor: undefined,
-  clickable: undefined
+  hoverColor: undefined
 }
 
 // 表明具体有哪些props是纯粹改变外观的（JS代码声明，也便于提取相关属性）
@@ -31,24 +26,16 @@ export const iconProps: (keyof IconStyleProps)[] = Object.keys(iconPropsDefault)
 
 // 样式的具体css-in-js实现
 // BaseUI的样式：只提供能在黑白视图中，瞬间明白这玩意儿是干啥用的基础界面UI：
-export const useIconStyle = (
-  { color, hoverColor, clickable }: IconStyleProps,
-  { src }: { src: string }
-) => {
+export const useIconStyle = ({ color, hoverColor }: IconStyleProps, { src }: { src: string }) => {
   const coreCss = useMemo(
     () =>
       mixCSSObjects({
         // TODO 常见的图标尺寸要查询： 24*24 48*48 等等
         width: cssVar('--icon-width', '1.5rem'),
         height: cssVar('--icon-width', '1.5rem'),
-        cursor: clickable && 'pointer',
         position: 'relative',
         borderRadius: '2px',
         transition: 'background 200ms',
-        ':hover': {
-          background:cssDefaults.darkMaskLighter,
-          filter: `brightness(0.4) grayscale(0.5)`
-        },
         '::before': {
           content: "''",
           position: 'absolute',
@@ -61,7 +48,7 @@ export const useIconStyle = (
           }
         }
       }),
-    [color, hoverColor, clickable]
+    [color, hoverColor]
   )
   const iconImageCss = useMemo(
     () =>

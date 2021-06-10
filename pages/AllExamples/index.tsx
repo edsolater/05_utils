@@ -8,6 +8,7 @@ import DivExample from './DivExample'
 import DrawerExample from './DrawerExample'
 import DropdownExample from './DropdownExample'
 import GlobalStoreExample from './GlobalStoreExample'
+import HoverableExample from './HoverableExample'
 import IconExample from './IconExample'
 import InputExample from './InputExample'
 import KeyboardShortcutExample from './KeyboardShortcutExample'
@@ -17,13 +18,14 @@ import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings>
+    <HoverableExample />
     <AppLayoutExample />
-    {/* <KeyboardShortcutExample />
+    <KeyboardShortcutExample />
     <DrawerExample />
     <MaskExample />
     <AppProvidersExample />
     <GlobalStoreExample />
-    <DivExample /> */}
+    <DivExample />
     <TransformExample />
     <ButtonExample />
     <IconExample />

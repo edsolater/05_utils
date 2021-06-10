@@ -11,6 +11,7 @@ export interface IconProps extends DivProps, FeatureCoreProps, IconStyleProps {
 }
 /**
  * @BaseUIComponent
+ * Icon's basicPath need to be setted 
  */
 const Icon = (props: IconProps) => {
   const { src, name, sholdUseRaw } = useFeatureCore(props)
