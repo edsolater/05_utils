@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useContext } from 'react'
 import { ButtonDetailCSS } from './Button'
 import { CaptionDetailCSS } from './Caption'
+import { CardDetailCSS } from './Card'
 
 //#region ------------------- props声明 -------------------
 
@@ -11,6 +12,7 @@ export interface AppSetting {
   baseUICSS?: {
     Button?: ButtonDetailCSS
     Caption?: CaptionDetailCSS
+    Card?: CardDetailCSS
   }
 }
 //#endregion
@@ -25,6 +27,6 @@ export default function AppSettingsProvider(props: AppSetting & { children?: Rea
 
 // 只有 Provider 级别组件，才有组件hook。
 
-export function useAppSettings(){
+export function useAppSettings() {
   return useContext(AppSettings)
 }

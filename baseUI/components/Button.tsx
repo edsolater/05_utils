@@ -9,6 +9,7 @@ import { cssBrightness } from 'baseUI/style/cssFunctions'
 import { mixCSSObjects } from 'baseUI/style/cssParser'
 import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
+import addDefault from 'utils/functions/magic/addDefault'
 
 export interface ButtonProps extends DivProps<'button'> {
   /**
@@ -27,17 +28,11 @@ export interface ButtonProps extends DivProps<'button'> {
 /**
  * @BaseUIComponent
  */
-export default function Button({
-  type = 'fill',
-  size = 'medium',
-  children,
-  ...restProps
-}: ButtonProps) {
+export default function Button(props: ButtonProps) {
   const { baseUICSS } = useAppSettings()
-
   return (
-    <Div as='button' {...restProps} css={getButtonCSS({ type, size }, baseUICSS?.Button)}>
-      {children ?? '🤨'}
+    <Div as='button' {...props} css={getButtonCSS(props, baseUICSS?.Button ?? {})}>
+      {props.children ?? '🤨'}
     </Div>
   )
 }
@@ -62,8 +57,9 @@ export interface ButtonDetailCSS {
   buttonBorderColor_outline?: CSSObject['borderColor']
 }
 
-const getButtonCSS = cache(({ size, type }: ButtonProps, cssSettings?: ButtonDetailCSS) =>
-  mixCSSObjects(
+const getButtonCSS = cache((_props: ButtonProps, cssSettings: ButtonDetailCSS) => {
+  const props = addDefault(_props, { type: 'fill', size: 'medium' })
+  return mixCSSObjects(
     {
       style: 'none',
       borderWidth: 0,
@@ -72,23 +68,23 @@ const getButtonCSS = cache(({ size, type }: ButtonProps, cssSettings?: ButtonDet
       width: 'max-content',
       boxSizing: 'border-box'
     },
-    size === 'small' && {
-      padding: cssSettings?.padding_small ?? `${cssSize.mini} ${cssSize.large}`,
-      fontSize: cssSettings?.fontSize_small ?? cssFont.medium,
-      borderRadius: cssSettings?.borderRadius_small ?? cssSize.mini
+    props.size === 'small' && {
+      padding: cssSettings.padding_small ?? `${cssSize.mini} ${cssSize.large}`,
+      fontSize: cssSettings.fontSize_small ?? cssFont.medium,
+      borderRadius: cssSettings.borderRadius_small ?? cssSize.mini
     },
-    size === 'medium' && {
-      padding: cssSettings?.padding_medium ?? `${cssSize.mini} ${cssSize.large}`,
-      fontSize: cssSettings?.fontSize_medium ?? cssFont.medium,
-      borderRadius: cssSettings?.borderRadius_medium ?? cssSize.mini
+    props.size === 'medium' && {
+      padding: cssSettings.padding_medium ?? `${cssSize.mini} ${cssSize.large}`,
+      fontSize: cssSettings.fontSize_medium ?? cssFont.medium,
+      borderRadius: cssSettings.borderRadius_medium ?? cssSize.mini
     },
-    size === 'large' && {
-      padding: cssSettings?.padding_large ?? `${cssSize.mini} ${cssSize.large}`,
-      fontSize: cssSettings?.fontSize_large ?? cssFont.medium,
-      borderRadius: cssSettings?.borderRadius_large ?? cssSize.mini
+    props.size === 'large' && {
+      padding: cssSettings.padding_large ?? `${cssSize.mini} ${cssSize.large}`,
+      fontSize: cssSettings.fontSize_large ?? cssFont.medium,
+      borderRadius: cssSettings.borderRadius_large ?? cssSize.mini
     },
-    type === 'fill' && {
-      color: cssSettings?.buttonTextColor ?? cssColor.white,
+    props.type === 'fill' && {
+      color: cssSettings.buttonTextColor ?? cssColor.white,
       position: 'relative',
       background: 'none',
       '::before': {
@@ -97,30 +93,30 @@ const getButtonCSS = cache(({ size, type }: ButtonProps, cssSettings?: ButtonDet
         inset: '0',
         borderRadius: 'inherit',
         zIndex: '-1',
-        background: cssDefaults.defaultBackgroundGray
+        background: cssSettings.buttonBackground_fill ?? cssDefaults.defaultBackgroundGray
       },
       ':hover::before': { filter: cssBrightness(1.4) },
       ':active::before': { filter: cssBrightness(0.8) }
     },
-    type === 'outline' && {
+    props.type === 'outline' && {
       position: 'relative',
       background: cssColor.transparent,
-      color: cssSettings?.buttonTextColor,
+      color: cssSettings.buttonTextColor,
       '::before': {
         content: "''",
         position: 'absolute',
         inset: '0',
         borderRadius: 'inherit',
-        borderWidth: cssSettings?.buttonBorderLineWidth_outline ?? '1px',
+        borderWidth: cssSettings.buttonBorderLineWidth_outline ?? '1px',
         borderStyle: 'solid',
-        borderColor: cssSettings?.buttonBorderColor_outline ?? 'currentcolor',
-        opacity: cssSettings?.buttonBorderLineOpacity_outline ?? '0.3',
+        borderColor: cssSettings.buttonBorderColor_outline ?? 'currentcolor',
+        opacity: cssSettings.buttonBorderLineOpacity_outline ?? '0.3',
         color: 'inherit'
       }
     },
-    type === 'text' && {
-      color: cssSettings?.buttonTextColor,
+    props.type === 'text' && {
+      color: cssSettings.buttonTextColor,
       background: 'transparent'
     }
   )
-)
+})

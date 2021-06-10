@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { mixCSSObjects } from '../style/cssParser'
 import { BaseUIDiv, DivProps } from './Div'
 import cache from 'utils/functions/functionFactory/cache'
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import { CSSObject } from '@emotion/react'
-import { AppSettings, useAppSettings } from './AppSettings'
+import { useAppSettings } from './AppSettings'
 
 export interface CaptionProps extends DivProps {
   /**
@@ -16,25 +16,23 @@ export interface CaptionProps extends DivProps {
 /**
  * @BaseUIComponent
  */
-export default function Caption({ align, ...restProps }: CaptionProps) {
+export default function Caption(props: CaptionProps) {
   const { baseUICSS } = useAppSettings()
-  return (
-    <BaseUIDiv {...restProps} _css={getCSS({ align }, baseUICSS?.Caption)}></BaseUIDiv>
-  )
+  return <BaseUIDiv {...props} _css={getCSS(props, baseUICSS?.Caption ?? {})} />
 }
 
 export interface CaptionDetailCSS {
   captionTextColor?: CSSObject['color']
 }
 
-const getCSS = cache(({ align }: CaptionProps, cssSetting?: CaptionDetailCSS) =>
+const getCSS = cache((props: CaptionProps, cssSetting: CaptionDetailCSS) =>
   mixCSSObjects(
     {
       fontSize: '0.8em',
-      color: cssSetting?.captionTextColor ?? cssDefaults.grayText
+      color: cssSetting.captionTextColor ?? cssDefaults.grayText
     },
-    align === 'left' && { textAlign: 'left' },
-    align === 'center' && { textAlign: 'center' },
-    align === 'right' && { textAlign: 'right' }
+    props.align === 'left' && { textAlign: 'left' },
+    props.align === 'center' && { textAlign: 'center' },
+    props.align === 'right' && { textAlign: 'right' }
   )
 )
