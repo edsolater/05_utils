@@ -1,8 +1,5 @@
 import React from 'react'
-import { ICSS } from '../../style/ICSS'
-import { ClassName } from './util/classname'
 import { TagMap } from './TagMap'
-import { IRefs } from './util/mergeRefs'
 import { mergeDeepObject } from 'utils/functions/merge'
 import { DivProps, Div } from './index'
 
@@ -11,10 +8,12 @@ import { DivProps, Div } from './index'
  */
 
 export interface BaseUIDivProps<TagName extends keyof TagMap = 'div'> extends DivProps<TagName> {
-  _domRef?: IRefs<TagMap[TagName]>
-  _className?: ClassName
-  _css?: ICSS
-  _htmlProps?: JSX.IntrinsicElements[TagName]
+  _domRef?: DivProps<TagName>['domRef']
+  _className?: DivProps<TagName>['className']
+  _css?: DivProps<TagName>['css']
+  _onHover?: DivProps<TagName>['onHover']
+  _onClick?: DivProps<TagName>['onClick']
+  _htmlProps?: DivProps<TagName>['htmlProps']
 }
 /**
  * 基础组件专用Div，_props 会自动合并到props上
@@ -28,9 +27,17 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
       {...props}
       as={props.as}
       children={props.children}
-      className={[props._className, props.className] /* why toString() because emotion add name*/}
+      className={[props._className, props.className]}
       domRef={[props._domRef]}
       css={[props._css, props.css]}
+      onClick={(...params) => {
+        props._onClick?.(...params)
+        props.onClick?.(...params)
+      }}
+      onHover={(...params) => {
+        props._onHover?.(...params)
+        props.onHover?.(...params)
+      }}
       htmlProps={mergeDeepObject([props._htmlProps, props.htmlProps])}
     />
   )

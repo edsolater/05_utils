@@ -1,11 +1,12 @@
 import React from 'react'
 import { mixCSSObjects } from '../style/cssParser'
-import { BaseUIDiv, DivProps } from './Div'
+import { BaseUIDiv, divProps, DivProps } from './Div'
 import cache from 'utils/functions/functionFactory/cache'
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import { CSSObject } from '@emotion/react'
 import { useAppSettings } from './AppSettings'
 import addDefault from 'utils/functions/magic/addDefault'
+import pick from 'utils/functions/object/pick'
 
 export interface CaptionProps extends DivProps, CaptionCSSProps {}
 
@@ -39,5 +40,5 @@ const getCSS = cache((_props: CaptionCSSProps, _cssSetting: CaptionDetailCSS) =>
  */
 export default function Caption(props: CaptionProps) {
   const { baseUICSS } = useAppSettings()
-  return <BaseUIDiv {...props} _css={getCSS(props, baseUICSS?.Caption ?? {})} />
+  return <BaseUIDiv {...pick(props, divProps)} _css={getCSS(props, baseUICSS?.Caption ?? {})} />
 }

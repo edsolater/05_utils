@@ -21,7 +21,7 @@ export interface FeatureHoverOptions<El extends HTMLElement = HTMLDivElement> {
   /**
    * hover 的状态改变时触发
    */
-  onHover?: (event: { el: El; nativeEvent: PointerEvent; state: 'start' | 'end' }) => void
+  onHover?: (event: { el: El; nativeEvent: PointerEvent; now: 'start' | 'end' }) => void
 }
 
 export function useFeatureHover<El extends HTMLElement = HTMLDivElement>(
@@ -35,7 +35,7 @@ export function useFeatureHover<El extends HTMLElement = HTMLDivElement>(
       const hoverStartHandler = (ev: PointerEvent) => {
         on()
         onHoverStart?.({ el: domRef.current!, nativeEvent: ev })
-        onHover?.({ el: domRef.current!, nativeEvent: ev, state: 'start' })
+        onHover?.({ el: domRef.current!, nativeEvent: ev, now: 'start' })
       }
       domRef.current!.addEventListener('pointerenter', hoverStartHandler)
       return () => {
@@ -50,7 +50,7 @@ export function useFeatureHover<El extends HTMLElement = HTMLDivElement>(
       const hoverEndHandler = (ev: PointerEvent) => {
         off()
         onHoverEnd?.({ el: domRef.current!, nativeEvent: ev })
-        onHover?.({ el: domRef.current!, nativeEvent: ev, state: 'end' })
+        onHover?.({ el: domRef.current!, nativeEvent: ev, now: 'end' })
       }
       domRef.current!.addEventListener('pointerleave', hoverEndHandler)
       domRef.current!.addEventListener('pointercancel', hoverEndHandler)

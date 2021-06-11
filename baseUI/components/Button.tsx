@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { useAppSettings } from './AppSettings'
-import Div, { DivProps } from './Div'
+import Div, { divProps, DivProps } from './Div'
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import cssFont from 'baseUI/settings/cssFont'
 import cssSize from 'baseUI/settings/cssSize'
@@ -10,6 +10,7 @@ import { mixCSSObjects } from 'baseUI/style/cssParser'
 import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
 import addDefault from 'utils/functions/magic/addDefault'
+import pick from 'utils/functions/object/pick'
 
 export interface ButtonProps extends DivProps<'button'>, ButtonCSSProps {}
 
@@ -114,7 +115,7 @@ const getCSS = cache((_props: ButtonCSSProps, cssSettings: ButtonDetailCSS) => {
 export default function Button(props: ButtonProps) {
   const { baseUICSS } = useAppSettings()
   return (
-    <Div as='button' {...props} css={getCSS(props, baseUICSS?.Button ?? {})}>
+    <Div as='button' {...pick(props, divProps)} css={getCSS(props, baseUICSS?.Button ?? {})}>
       {props.children ?? '🤨'}
     </Div>
   )

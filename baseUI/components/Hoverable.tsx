@@ -15,7 +15,7 @@ export default function Hoverable({ children }: HoverableProps) {
   const [isHovered, { on, off }] = useToggle(false)
   const ref = useRef<HTMLDivElement>(null)
   useFeatureHover(ref, {
-    onHover({ state }) {
+    onHover({ now: state }) {
       if (state === 'start') on()
       if (state === 'end') off()
     }
