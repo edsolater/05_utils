@@ -12,9 +12,12 @@ const TagExample = () => {
   return (
     <ExampleCard category='baseUI/componentComponent' title='Tag'>
       <ExampleGroup caption='基本'>
-        <Tag open={isOn} onClose={off}>
-          edsolater
-        </Tag>
+        {isOn && <Tag onClose={off}>edsolater</Tag>}
+        {isOn && (
+          <Tag controls onClose={off}>
+            Ed zhang
+          </Tag>
+        )}
       </ExampleGroup>
     </ExampleCard>
   )
