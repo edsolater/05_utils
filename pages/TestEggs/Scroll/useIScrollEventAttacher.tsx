@@ -1,4 +1,4 @@
-import useRecordRef from '../../hooks/useRecordedRef'
+import useRecordRef from '../../../baseUI/hooks/useRecordedRef'
 import timeout from 'utils/helper/timeout'
 import { ID } from 'typings/constants'
 import { ScrollEvent } from './_interface'

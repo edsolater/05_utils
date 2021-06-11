@@ -6,12 +6,12 @@
  *
  **********************/
 import React, { useEffect, useRef } from 'react'
-import Div from '../Div'
-import { mergeRefs } from '../Div/util/mergeRefs'
-import useRecordRef from '../../hooks/useRecordedRef'
+import Div from '../../../baseUI/components/Div'
+import { mergeRefs } from '../../../baseUI/components/Div/util/mergeRefs'
+import useRecordRef from '../../../baseUI/hooks/useRecordedRef'
 import { clone } from './clone'
 import { useIScrollEventAttacher } from './useIScrollEventAttacher'
-import useHandler from '../../hooks/useHandler'
+import useHandler from '../../../baseUI/hooks/useHandler'
 import makeElementScroll from './makeElementScroll'
 import { ScrollProps, ScrollHandles } from './_interface'
 import { scrollRoot } from './_css'

@@ -2,8 +2,8 @@ import React, { Fragment, ReactNode, useRef, useState } from 'react'
 import Div, { DivProps } from 'baseUI/components/Div'
 import { mixCSSObjects } from 'baseUI/style/cssParser'
 import { cssMixins } from "baseUI/style/cssMixins"
-import Scroll from 'baseUI/components/Scroll'
-import { ScrollHandles, ScrollEvent } from 'baseUI/components/Scroll/_interface'
+import Scroll from 'pages/TestEggs/Scroll'
+import { ScrollHandles, ScrollEvent } from 'pages/TestEggs/Scroll/_interface'
 interface GroupScrollProps<T> extends DivProps {
   /**隐藏scrollbar */
   hideScrollbar?: boolean
