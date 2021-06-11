@@ -20,12 +20,13 @@ export interface CaptionDetailCSS {
   captionTextColor?: CSSObject['color']
 }
 
-const getCSS = cache((_props: CaptionCSSProps, cssSetting: CaptionDetailCSS) => {
+const getCSS = cache((_props: CaptionCSSProps, _cssSetting: CaptionDetailCSS) => {
   const props = addDefault(_props, { align: 'left' })
+  const cssSetting = addDefault(_cssSetting, { captionTextColor: cssDefaults.grayText })
   return mixCSSObjects(
     {
       fontSize: '0.8em',
-      color: cssSetting.captionTextColor ?? cssDefaults.grayText
+      color: cssSetting.captionTextColor
     },
     props.align === 'left' && { textAlign: 'left' },
     props.align === 'center' && { textAlign: 'center' },
