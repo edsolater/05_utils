@@ -1,3 +1,4 @@
+import React from 'react'
 import { jsx } from '@emotion/react'
 import { useRef } from 'react'
 import { parseCSS } from '../../style/cssParser'
@@ -17,6 +18,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> extends ReactPro
   as?: TagName
 
   domRef?: IRefs<TagMap[TagName]>
+  isFragment?: boolean // 该节点的行为，就像 React.Fragnment
   css?: ICSS
   className?: MayDeepArray<ClassName>
   htmlProps?: JSX.IntrinsicElements[TagName]
@@ -27,6 +29,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> extends ReactPro
 export const divProps: ReadonlyArray<keyof DivProps> = [
   'as',
   'domRef',
+  'isFragment',
   'className',
   'css',
   'children',
@@ -38,6 +41,7 @@ export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagNam
   const divRef = useRef<TagMap[TagName]>(null)
   useEventClick<TagMap[TagName]>(divRef, { onClick: props.onClick })
   useFeatureHover(divRef, { onHover: props.onHover })
+  if (props.isFragment) return jsx(React.Fragment, { children: props.children })
   const allProps = {
     ...props.htmlProps,
     children: props.children,
