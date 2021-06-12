@@ -7,38 +7,42 @@ import { CSSObject } from '@emotion/react'
 import { useAppSettings } from './AppSettings'
 import addDefault from 'utils/functions/magic/addDefault'
 import pick from 'utils/functions/object/pick'
+import mergeObjects from 'utils/functions/object/mergeObjects'
 
-export interface CaptionProps extends DivProps, CaptionCSSProps {}
-
-interface CaptionCSSProps {
+export interface CaptionProps extends DivProps {
   /**
+   * @cssProps
    * @default 'left
    */
   align?: 'left' | 'center' | 'right'
 }
 
-export interface CaptionDetailCSS {
-  captionTextColor?: CSSObject['color']
+export interface CaptionSprops extends CaptionProps {
+  textColor?: Extract<CSSObject['color'], string>
 }
 
-const getCSS = cache((_props: CaptionCSSProps, _cssSetting: CaptionDetailCSS) => {
-  const props = addDefault(_props, { align: 'left' })
-  const cssSetting = addDefault(_cssSetting, { captionTextColor: cssDefaults.grayText })
-  return mixCSSObjects(
+const defaultSprops: CaptionSprops = {
+  align: 'left',
+  textColor: cssDefaults.grayText
+}
+
+const getCSS = cache((sprops: CaptionSprops) =>
+  mixCSSObjects(
     {
       fontSize: '0.8em',
-      color: cssSetting.captionTextColor
+      color: sprops.textColor
     },
-    props.align === 'left' && { textAlign: 'left' },
-    props.align === 'center' && { textAlign: 'center' },
-    props.align === 'right' && { textAlign: 'right' }
+    sprops.align === 'left' && { textAlign: 'left' },
+    sprops.align === 'center' && { textAlign: 'center' },
+    sprops.align === 'right' && { textAlign: 'right' }
   )
-})
+)
 
 /**
  * @BaseUIComponent
  */
 export default function Caption(props: CaptionProps) {
-  const { globalProps: baseUICSS } = useAppSettings()
-  return <BaseUIDiv {...pick(props, divProps)} _css={getCSS(props, baseUICSS?.Caption ?? {})} />
+  const appSettings = useAppSettings()
+  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Caption), defaultSprops)
+  return <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops)} />
 }

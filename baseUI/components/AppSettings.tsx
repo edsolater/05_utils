@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext } from 'react'
 import { ButtonSprops } from './Button'
-import { CaptionDetailCSS } from './Caption'
+import { CaptionSprops } from './Caption'
 import { CardDetailCSS } from './Card'
 import { IconDetailCSS } from './Icon'
 
@@ -12,7 +12,7 @@ export interface AppSetting {
    */
   globalProps?: {
     Button?: ButtonSprops
-    Caption?: CaptionDetailCSS
+    Caption?: CaptionSprops
     Card?: CardDetailCSS
     Icon?: IconDetailCSS
   }
