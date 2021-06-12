@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext } from 'react'
 import { ButtonDetailCSS } from './Button'
 import { CaptionDetailCSS } from './Caption'
 import { CardDetailCSS } from './Card'
+import { IconDetailCSS } from './Icon'
 
 //#region ------------------- props声明 -------------------
 
@@ -13,6 +14,7 @@ export interface AppSetting {
     Button?: ButtonDetailCSS
     Caption?: CaptionDetailCSS
     Card?: CardDetailCSS
+    Icon?: IconDetailCSS
   }
 }
 //#endregion
