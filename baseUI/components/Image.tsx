@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { BaseUIDiv, divProps, DivProps } from '../Div'
-import { mixCSSObjects } from '../../style/cssParser'
-import { useImageStyle, ImageStyleProps } from './style'
+import { BaseUIDiv, divProps, DivProps } from './Div'
+import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
 import isArray from 'utils/functions/judgers/isArray'
+import cache from 'utils/functions/functionFactory/cache'
 
-export interface ImageProps extends DivProps<'img'>, ImageStyleProps, ImageCoreProp {}
-export interface ImageCoreProp {
+interface ImageCSSProps {}
+export interface ImageProps extends DivProps<'img'>, ImageCSSProps {
   /**
    * 可接收 src 数组，代表不断的回退方案。（这些Src并不会同时下载）
    */
@@ -18,19 +18,19 @@ export interface ImageCoreProp {
   onSrcFailed?: () => any
 }
 
+const getCSS = cache((props: ImageCSSProps) => mixCSSObjects())
 /**
  * @BaseUIComponent
  */
 const Image = (props: ImageProps) => {
   const { src, alt, onSrcFailed } = props
-  const { coreCss } = useImageStyle(props)
   const [errorCount, setErrorCount] = useState(0)
   const [failToLoad, setFailToLoad] = useState(false)
   const targetSrc = isArray(src) ? src[errorCount] ?? src[src.length - 1] : src
   return (
     <BaseUIDiv
-      as='img'
       {...pick(props, divProps)}
+      as='img'
       _htmlProps={{
         src: targetSrc,
         alt: alt,
@@ -44,7 +44,7 @@ const Image = (props: ImageProps) => {
           }
         }
       }}
-      _css={mixCSSObjects(props.css, coreCss)}
+      _css={getCSS(props)}
     />
   )
 }
