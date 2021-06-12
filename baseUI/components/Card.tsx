@@ -1,66 +1,84 @@
 import React from 'react'
 import { mixCSSObjects } from '../style/cssParser'
-import { DivProps, BaseUIDiv } from './Div'
+import { DivProps, BaseUIDiv, divProps } from './Div'
 import { useAppSettings } from './AppSettings'
 import { CSSObject } from '@emotion/serialize'
 import { toCssValue } from 'baseUI/style/cssUnits'
 import { cssValues } from 'baseUI/style/cssValue'
 import cache from 'utils/functions/functionFactory/cache'
 import addDefault from 'utils/functions/magic/addDefault'
+import mergeObjects from 'utils/functions/object/mergeObjects'
+import pick from 'utils/functions/object/pick'
 
-export interface CardProps extends DivProps, CardCSSProps {}
-interface CardCSSProps {
+export interface CardProps extends DivProps {
   /**
-   * 卡片的颜色
+   * @cssProps 卡片的颜色
    */
   color?: string
 
   /**
-   * 卡片的背景图片（background能接收即可）
+   * @cssProps 卡片的背景图片（background能接收即可）
    */
   bgImg?: string
 
   /**
-   * 卡片的渐变图片
+   * @cssProps 卡片的渐变图片
    */
   gradient?: string
 
   /**
-   * 卡片的宽度
+   * @cssProps 卡片的宽度
    */
   width?: number | string
   /**
-   * 卡片的高度
+   * @cssProps 卡片的高度
    */
   height?: number | string
   /**
-   * 卡片的圆角程度
+   * @cssProps 卡片的圆角程度
    * @default 'medium'
    */
   borderRadius?: 'small' | 'medium' | 'large'
 }
 
-export interface CardDetailCSS {
-  cardWidth?: CSSObject['width']
-  cardHeight?: CSSObject['height']
+export interface CardSprops extends CardProps {
+  width?: Extract<CSSObject['width'], string>
+  height?: Extract<CSSObject['height'], string>
+
+  'borderRadius--small'?: Extract<CSSObject['borderRadius'], string>
+  'borderRadius--medium'?: Extract<CSSObject['borderRadius'], string>
+  'borderRadius--large'?: Extract<CSSObject['borderRadius'], string>
 }
 
-const getCSS = cache((_props: CardCSSProps, cssSetting?: CardDetailCSS) => {
-  const props = addDefault(_props, { borderRadius: 'medium' })
-  return mixCSSObjects({
-    width: (toCssValue(props.width) || cssSetting?.cardWidth) ?? 'unset',
-    height: (toCssValue(props.height) || cssSetting?.cardHeight) ?? 'unset',
-    borderRadius: props.borderRadius === 'small' ? 4 : props.borderRadius === 'large' ? 32 : 8,
+const defaultSprops: CardSprops = {
+  borderRadius: 'medium',
+
+  'borderRadius--small': '4px',
+  'borderRadius--medium': '8px',
+  'borderRadius--large': '32px'
+}
+
+const getCSS = cache((sprops: CardSprops) =>
+  mixCSSObjects({
+    width: (toCssValue(sprops.width) || sprops?.width) ?? 'unset',
+    height: (toCssValue(sprops.height) || sprops?.height) ?? 'unset',
+    borderRadius:
+      sprops.borderRadius === 'small'
+        ? sprops['borderRadius--small']
+        : sprops.borderRadius === 'medium'
+        ? sprops['borderRadius--medium']
+        : sprops['borderRadius--large'],
     boxShadow: cssValues.smoothShadow,
-    background: props.bgImg ? `url(${props.bgImg}) center / cover` : props.gradient,
-    backgroundColor: props.color
+    background: sprops.bgImg ? `url(${sprops.bgImg}) center / cover` : sprops.gradient,
+    backgroundColor: sprops.color
   })
-})
+)
 
 /**
  * @BaseUIComponent
  */
 export default function Card(props: CardProps) {
-  const { globalProps: baseUICSS } = useAppSettings()
-  return <BaseUIDiv {...props} _css={getCSS(props, baseUICSS?.Card)} />
+  const appSettings = useAppSettings()
+  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Card), defaultSprops)
+  return <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops)} />
 }
