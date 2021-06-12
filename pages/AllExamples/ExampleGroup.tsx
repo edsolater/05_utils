@@ -1,6 +1,6 @@
 import Caption from 'baseUI/components/Caption'
 import Div, { BaseUIDiv, DivProps } from 'baseUI/components/Div'
-import RowBox from 'baseUI/components/RowBox'
+import Row from 'baseUI/components/Row'
 import React from 'react'
 export interface ExampleGroupProps extends DivProps {
   caption?: string
@@ -14,7 +14,7 @@ export default function ExampleGroup(props: ExampleGroupProps) {
         </Caption>
       )}
       <Div css={{ display: 'grid', gap: 8 }}>
-        <RowBox noStratch>{props.children}</RowBox>
+        <Row noStratch>{props.children}</Row>
       </Div>
     </BaseUIDiv>
   )
