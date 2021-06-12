@@ -26,6 +26,7 @@ export interface IconProps extends DivProps, IconCSSProps {
 
   imageProps?: ImageProps
 }
+//IDEA: 可以通过 Local_ 与 Global_ 前缀有选择地智能提示props。（这要依托typescript的智能提示能力，JS无此限制）
 
 interface IconCSSProps {
   /**
@@ -34,24 +35,26 @@ interface IconCSSProps {
    * CSS: 代表颜色的CSS色值（只要是background属性能接受的值）
    * 不设定，使用图标原本的颜色
    */
-  color?: string
+  color?: CSSObject['color']
   /**
    * CSS: 代表颜色的CSS色值（只要是background属性能接受的值）
    */
-  hoverColor?: string
+  hoverColor?: CSSObject['color']
+
+  size?: CSSObject['width']
 }
 
 export interface IconDetailCSS {
   /** this will set both width and height */
-  iconSize?: CSSObject['width']
+  size?: CSSObject['width']
 }
 
 const getCSS = cache((props: IconCSSProps, _cssSetting: IconDetailCSS, src: string) => {
-  const cssSetting = addDefault(_cssSetting, { iconSize: '24px' })
+  const cssSetting = addDefault(_cssSetting, { size: '24px' })
   return mixCSSObjects({
     // TODO 常见的图标尺寸要查询： 24*24 48*48 等等
-    width: cssSetting.iconSize,
-    height: cssSetting.iconSize,
+    width: props.size ?? cssSetting.size,
+    height: props.size ?? cssSetting.size,
     position: 'relative',
     borderRadius: '2px',
     transition: 'background 200ms',
