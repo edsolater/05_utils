@@ -4,6 +4,7 @@ import { CaptionSprops } from './Caption'
 import { CardSprops } from './Card'
 import { IconDetailCSS } from './Icon'
 import { InputSprops } from './Input'
+import { RowSprops } from './Row'
 
 //#region ------------------- props声明 -------------------
 
@@ -17,6 +18,7 @@ export interface AppSetting {
     Card?: CardSprops
     Icon?: IconDetailCSS
     Input?: InputSprops
+    Row?: RowSprops
   }
 }
 //#endregion
