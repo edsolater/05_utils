@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext } from 'react'
 import { ButtonSprops } from './Button'
 import { CaptionSprops } from './Caption'
 import { CardSprops } from './Card'
-import { IconDetailCSS } from './Icon'
+import { IconSprops } from './Icon'
 import { InputSprops } from './Input'
 import { RowSprops } from './Row'
 
@@ -16,7 +16,7 @@ export interface AppSetting {
     Button?: ButtonSprops
     Caption?: CaptionSprops
     Card?: CardSprops
-    Icon?: IconDetailCSS
+    Icon?: IconSprops
     Input?: InputSprops
     Row?: RowSprops
   }
