@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext } from 'react'
-import { ButtonDetailCSS } from './Button'
+import { ButtonSprops } from './Button'
 import { CaptionDetailCSS } from './Caption'
 import { CardDetailCSS } from './Card'
 import { IconDetailCSS } from './Icon'
@@ -10,8 +10,8 @@ export interface AppSetting {
   /**
    * baseUI的css的具体值（可能不包含在props中， 是CSS的尺寸细节）
    */
-  baseUICSS?: {
-    Button?: ButtonDetailCSS
+  globalProps?: {
+    Button?: ButtonSprops
     Caption?: CaptionDetailCSS
     Card?: CardDetailCSS
     Icon?: IconDetailCSS

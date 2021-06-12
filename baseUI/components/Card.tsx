@@ -61,6 +61,6 @@ const getCSS = cache((_props: CardCSSProps, cssSetting?: CardDetailCSS) => {
  * @BaseUIComponent
  */
 export default function Card(props: CardProps) {
-  const { baseUICSS } = useAppSettings()
+  const { globalProps: baseUICSS } = useAppSettings()
   return <BaseUIDiv {...props} _css={getCSS(props, baseUICSS?.Card)} />
 }

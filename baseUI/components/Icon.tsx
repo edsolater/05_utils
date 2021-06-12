@@ -84,7 +84,7 @@ const getImageCSS = cache(() =>
  * Icon's basicPath need to be setted
  */
 const Icon = (props: IconProps) => {
-  const { baseUICSS } = useAppSettings()
+  const { globalProps: baseUICSS } = useAppSettings()
   const src = `${iconFileBasePath}/${props.name}.${iconFileType}`
   const sholdUseRaw = !props.color
   return (

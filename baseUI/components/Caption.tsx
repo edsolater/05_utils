@@ -39,6 +39,6 @@ const getCSS = cache((_props: CaptionCSSProps, _cssSetting: CaptionDetailCSS) =>
  * @BaseUIComponent
  */
 export default function Caption(props: CaptionProps) {
-  const { baseUICSS } = useAppSettings()
+  const { globalProps: baseUICSS } = useAppSettings()
   return <BaseUIDiv {...pick(props, divProps)} _css={getCSS(props, baseUICSS?.Caption ?? {})} />
 }
