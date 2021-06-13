@@ -9,12 +9,12 @@ import { mixCSSObjects } from 'baseUI/style/cssParser'
 /**
  * @BaseUIComponent
  */
-export interface DropdownProps extends DivProps, DropdownCSSProps {
+export interface DropdownProps extends DivProps {
   toggleBy?: 'click' | 'hover'
   cardProps?: CardProps
 }
 
-interface DropdownCSSProps {}
+export interface DropdownSprops extends DropdownProps {}
 
 const getCSS = cache((props: DropdownProps) =>
   mixCSSObjects({

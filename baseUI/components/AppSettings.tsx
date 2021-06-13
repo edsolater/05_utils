@@ -2,6 +2,7 @@ import React, { createContext, ReactNode, useContext } from 'react'
 import { ButtonSprops } from './Button'
 import { CaptionSprops } from './Caption'
 import { CardSprops } from './Card'
+import { DropdownSprops } from './Dropdown'
 import { IconSprops } from './Icon'
 import { InputSprops } from './Input'
 import { RowSprops } from './Row'
@@ -19,6 +20,7 @@ export interface AppSetting {
     Icon?: IconSprops
     Input?: InputSprops
     Row?: RowSprops
+    Dropdown?: DropdownSprops
   }
 }
 //#endregion
