@@ -7,6 +7,7 @@ import { IconSprops } from './Icon'
 import { ImageSprops } from './Image'
 import { InputSprops } from './Input'
 import { RowSprops } from './Row'
+import { TagSprops } from './Tag'
 
 //#region ------------------- props声明 -------------------
 
@@ -19,10 +20,11 @@ export interface AppSetting {
     Caption?: CaptionSprops
     Card?: CardSprops
     Icon?: IconSprops
-    Image?:ImageSprops
+    Image?: ImageSprops
     Input?: InputSprops
     Row?: RowSprops
     Dropdown?: DropdownSprops
+    Tag?: TagSprops
   }
 }
 //#endregion

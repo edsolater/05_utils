@@ -142,7 +142,7 @@ export default function Button(props: ButtonProps) {
   const _sprops = mergeProps(appSettings.globalProps?.Button, props)
   const sprops = addDefaultProps(_sprops, defaultSprops)
   return (
-    <BaseUIDiv {...pick(sprops, divProps)} as='button' css={getCSS(sprops)}>
+    <BaseUIDiv {...pick(sprops, divProps)} as='button' _css={getCSS(sprops)}>
       {sprops.children ?? '🤨'}
     </BaseUIDiv>
   )

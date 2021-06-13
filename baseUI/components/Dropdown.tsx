@@ -57,7 +57,6 @@ export default function Dropdown(props: DropdownProps) {
 
   const [opened, setopened] = useState(false)
 
-  console.log('sprops: ', sprops) // FIXME
   return (
     <BaseUIDiv
       {...pick(sprops, divProps)}
