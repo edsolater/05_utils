@@ -6,7 +6,7 @@ import isObjectLike from '../judgers/isObjectLike'
  * @param inputObject
  * @returns
  */
-export default function deepClone<T extends object>(inputObject: T): T {
+export default function deepClone<T>(inputObject: T): T {
   // @ts-ignore
   return Object.fromEntries(
     Object.entries(inputObject).map(([key, value]) => [
