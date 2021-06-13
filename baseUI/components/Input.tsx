@@ -9,11 +9,11 @@ import cssColor from 'baseUI/style/cssColor'
 import { cssVar } from 'baseUI/style/cssFunctions'
 import { mixCSSObjects } from 'baseUI/style/cssParser'
 import cache from 'utils/functions/functionFactory/cache'
-import { mergeDeepObject } from 'utils/functions/mergeObjects'
 import { cssMixins } from 'baseUI/style/cssMixins'
 import addDefault from 'utils/functions/magic/addDefault'
 import mergeObjects from 'utils/functions/object/mergeObjects'
 import { useAppSettings } from './AppSettings'
+import mergeProps from 'baseUI/functions/mergeProps'
 
 export interface InputProps extends DivProps {
   //TODO: 需要加入min-height之类，得有个最小高度
@@ -122,36 +122,29 @@ export default function Input(props: InputProps) {
       {sprops.prefixNode}
       {sprops.props_Icon && (
         <Icon
-          {...mergeDeepObject([
-            // TODO: 应该有个 mergeWithOptions() 与 mergeProps() 。 浅复制不需要特意封装方法。这样 <BaseUIDiv> 就失去了意义
-            sprops.props_Icon,
-            {
-              classNames: 'Input-Icon',
-              css: getIconCSS(sprops)
-            }
-          ])}
+          {...mergeProps(sprops.props_Icon, {
+            classNames: 'Input-Icon',
+            css: getIconCSS(sprops)
+          })}
         />
       )}
       <Div
-        {...mergeDeepObject([
-          sprops.props_body,
-          {
-            as: isTextarea ? 'textarea' : 'input',
-            className: 'Input-body',
-            domRef: inputBodyRef,
-            css: getBodyCSS(sprops, { isTextarea }),
-            htmlProps: {
-              rows: typeof sprops.row === 'number' ? sprops.row : 1,
-              placeholder: sprops.placeholder,
-              disabled: sprops.disabled,
-              value,
-              onChange: (e) => {
-                if (sprops.row === 'auto-increase') syncHeight()
-                return setValue(e.target.value)
-              }
+        {...mergeProps(sprops.props_body, {
+          as: isTextarea ? 'textarea' : 'input',
+          className: 'Input-body',
+          domRef: inputBodyRef,
+          css: getBodyCSS(sprops, { isTextarea }),
+          htmlProps: {
+            rows: typeof sprops.row === 'number' ? sprops.row : 1,
+            placeholder: sprops.placeholder,
+            disabled: sprops.disabled,
+            value,
+            onChange: (e) => {
+              if (sprops.row === 'auto-increase') syncHeight()
+              return setValue(e.target.value)
             }
           }
-        ])}
+        })}
       />
     </BaseUIDiv>
   )

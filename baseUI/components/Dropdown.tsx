@@ -10,7 +10,7 @@ import cssDefaults from 'baseUI/settings/cssDefaults'
 import addDefault from 'utils/functions/magic/addDefault'
 import mergeObjects from 'utils/functions/object/mergeObjects'
 import { useAppSettings } from './AppSettings'
-import { mergeDeepObject } from 'utils/functions/mergeObjects'
+import mergeProps from 'baseUI/functions/mergeProps'
 
 // 应该就是一种 Card 的特殊呈现形式
 /**
@@ -27,11 +27,10 @@ export interface DropdownSprops extends DropdownProps {
   cardColor?: CSSPropertyValue<'color'>
 }
 
-
 const defaultSprops: DropdownSprops = {
   distance: '16px',
-  cardColor: cssDefaults.whiteCard
-  // props_Card: { css: { background: cssDefaults.defaultBackgroundGray } } //TODO
+  // cardColor: cssDefaults.whiteCard
+  props_Card: { css: { background: cssDefaults.defaultBackgroundGray } } //TODO
 }
 
 const getCSS = cache((props: DropdownSprops) =>
@@ -65,13 +64,13 @@ export default function Dropdown(props: DropdownProps) {
       {opened && ( //TODO：这个if逻辑导致每次都要重新加载整个卡片内容，就第一次是整体加载，然后都是显示/隐藏 //IDEA: 把这个显示的逻辑单独提取成一个组件
         // TODO: 要换成 HeadlessUI 的形式
         <Card
-          {...mergeDeepObject([
+          {...mergeProps(
             {
               classNames: 'Dropdown-Card',
               css: getCardCSS(sprops)
             },
             sprops.props_Card
-          ])}
+          )}
         />
       )}
     </BaseUIDiv>

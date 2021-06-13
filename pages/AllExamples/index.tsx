@@ -19,7 +19,7 @@ import TransformExample from './TransformExample'
 const AllExamples = () => (
   <GlobalSettings>
     <AppLayoutExample />
-    {/* <HoverableExample />
+    <HoverableExample />
     <KeyboardShortcutExample />
     <DrawerExample />
     <MaskExample />
@@ -28,11 +28,11 @@ const AllExamples = () => (
     <DivExample />
     <TransformExample />
     <ButtonExample />
-    <IconExample />
     <CardExample />
     <InputExample />
     <DropdownExample />
-    <TagExample /> */}
+    <TagExample />
+    <IconExample />
   </GlobalSettings>
 )
 export default AllExamples

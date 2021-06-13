@@ -25,13 +25,12 @@ import { ObjectNotArray } from "typings/constants"
   return resultObj
 }
 
-const a = mergeObjects(
-  [
-    { a: 3, b: 2 },
-    { a: 1, b: 3 }
-  ],
-  (key, v1, v2) => {
-    return key === 'a' ? [v1, v2] : v2
-  }
-)
-console.log(a)
+// const a = mergeObjects(
+//   [
+//     { a: 3, b: 2 },
+//     { a: 1, b: 3 }
+//   ],
+//   (key, v1, v2) => {
+//     return key === 'a' ? [v1, v2] : v2
+//   }
+// )

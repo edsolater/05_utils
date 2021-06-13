@@ -38,7 +38,7 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
         props._onHover?.(...params)
         props.onHover?.(...params)
       }}
-      htmlProps={mergeProps([props._htmlProps, props.htmlProps])}
+      htmlProps={mergeProps(props._htmlProps, props.htmlProps)}
     />
   )
 }

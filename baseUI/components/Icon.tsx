@@ -81,6 +81,7 @@ export default function Icon(props: IconProps) {
 
   const src = `${iconFileBasePath}/${sprops.name}.${iconFileType}`
   const sholdUseRaw = !sprops.color
+  console.log('props: ', props)
   return (
     <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops, { src })}>
       {sholdUseRaw && (
