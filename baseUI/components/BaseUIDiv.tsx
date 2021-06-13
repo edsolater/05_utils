@@ -3,7 +3,7 @@ import { DivProps, Div, TagMap } from './Div'
 import { mergeProps } from '../functions'
 
 /**
- * 基础组件专用Div，其  _props 会自动 merge
+ * 基础组件专用版<Div>，其  _props 会自动 merge
  */
 
 export interface BaseUIDivProps<TagName extends keyof TagMap = 'div'> extends DivProps<TagName> {
@@ -23,21 +23,23 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
 ) {
   return (
     <Div
-      {...props}
       as={props.as}
       children={props.children}
-      className={[props._className, props.className]}
-      domRef={[props._domRef, props.domRef]}
-      css={[props._css, props.css]}
-      onClick={(...params) => {
-        props._onClick?.(...params)
-        props.onClick?.(...params)
-      }}
-      onHover={(...params) => {
-        props._onHover?.(...params)
-        props.onHover?.(...params)
-      }}
-      htmlProps={mergeProps(props._htmlProps, props.htmlProps)}
+      {...mergeProps<BaseUIDivProps<TagName>>(
+        {
+          className: props._className,
+          domRef: props._domRef,
+          css: props._css,
+          onClick(...params) {
+            props._onClick?.(...params)
+          },
+          onHover(...params) {
+            props._onHover?.(...params)
+          },
+          htmlProps: props._htmlProps
+        },
+        props
+      )}
     />
   )
 }
