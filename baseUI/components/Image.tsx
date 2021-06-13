@@ -4,9 +4,11 @@ import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
 import isArray from 'utils/functions/judgers/isArray'
 import cache from 'utils/functions/functionFactory/cache'
+import addDefault from 'utils/functions/magic/addDefault'
+import { useAppSettings } from './AppSettings'
+import mergeObjects from 'utils/functions/object/mergeObjects'
 
-interface ImageCSSProps {}
-export interface ImageProps extends DivProps<'img'>, ImageCSSProps {
+export interface ImageProps extends DivProps<'img'> {
   /**
    * 可接收 src 数组，代表不断的回退方案。（这些Src并不会同时下载）
    */
@@ -17,19 +19,25 @@ export interface ImageProps extends DivProps<'img'>, ImageCSSProps {
    */
   onSrcFailed?: () => any
 }
+export interface ImageSprops extends ImageProps {}
 
-const getCSS = cache((props: ImageCSSProps) => mixCSSObjects())
+const defaultSprops: ImageSprops = { src: '' }
+
+const getCSS = cache((props: ImageProps) => mixCSSObjects())
 /**
  * @BaseUIComponent
  */
 const Image = (props: ImageProps) => {
-  const { src, alt, onSrcFailed } = props
+  const appSettings = useAppSettings()
+  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Image), defaultSprops)
+
+  const { src, alt, onSrcFailed } = sprops
   const [errorCount, setErrorCount] = useState(0)
   const [failToLoad, setFailToLoad] = useState(false)
   const targetSrc = isArray(src) ? src[errorCount] ?? src[src.length - 1] : src
   return (
     <BaseUIDiv
-      {...pick(props, divProps)}
+      {...pick(sprops, divProps)}
       as='img'
       _htmlProps={{
         src: targetSrc,

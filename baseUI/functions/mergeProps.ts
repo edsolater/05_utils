@@ -6,7 +6,7 @@ import isFunction from 'utils/functions/judgers/isFunction'
 import isObject from 'utils/functions/judgers/isObject'
 import notNullish from 'utils/functions/judgers/notNullish'
 import parallelSwitch from 'utils/functions/magic/parallelSwitch'
-import { mergeObjects } from 'utils/functions/mergeObjects'
+import { _mergeObjects } from 'utils/functions/_mergeObjects'
 import mergeFunction from './mergeFunction'
 
 /**prop may very deep like children */
@@ -18,7 +18,7 @@ export default function mergeProps<P extends Array<MayDeepArray<PropObject | und
   const trimedProps = flat(propsObjs).filter(notNullish)
   if (trimedProps.length === 0) return {}
   if (trimedProps.length === 1) return trimedProps[0]
-  return mergeObjects(trimedProps, (key, v1, v2) =>
+  return _mergeObjects(trimedProps, (key, v1, v2) =>
     parallelSwitch<string, any, any>(
       key,
       [

@@ -4,6 +4,7 @@ import { CaptionSprops } from './Caption'
 import { CardSprops } from './Card'
 import { DropdownSprops } from './Dropdown'
 import { IconSprops } from './Icon'
+import { ImageSprops } from './Image'
 import { InputSprops } from './Input'
 import { RowSprops } from './Row'
 
@@ -18,6 +19,7 @@ export interface AppSetting {
     Caption?: CaptionSprops
     Card?: CardSprops
     Icon?: IconSprops
+    Image?:ImageSprops
     Input?: InputSprops
     Row?: RowSprops
     Dropdown?: DropdownSprops
