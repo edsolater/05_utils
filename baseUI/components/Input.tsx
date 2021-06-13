@@ -6,14 +6,12 @@ import { setInlineStyle } from '../style/setCSS'
 import { toPx } from '../style/cssUnits'
 import { CSSObject } from '@emotion/react'
 import cssColor from 'baseUI/style/cssColor'
-import { cssVar } from 'baseUI/style/cssFunctions'
 import { mixCSSObjects } from 'baseUI/style/cssParser'
 import cache from 'utils/functions/functionFactory/cache'
 import { cssMixins } from 'baseUI/style/cssMixins'
-import addDefault from 'utils/functions/magic/addDefault'
-import mergeObjects from 'utils/functions/object/mergeObjects'
 import { useAppSettings } from './AppSettings'
 import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 export interface InputProps extends DivProps {
   //TODO: 需要加入min-height之类，得有个最小高度
@@ -100,7 +98,8 @@ const getBodyCSS = cache((sprops: InputSprops, detail: { isTextarea: boolean }) 
  */
 export default function Input(props: InputProps) {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Input), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Input, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
 
   const [value, setValue] = useState('')
   const inputBodyRef = useRef<HTMLInputElement | HTMLTextAreaElement>()

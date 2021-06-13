@@ -5,10 +5,10 @@ import { BaseUIDiv, DivProps, divProps } from './Div'
 import Image, { ImageProps } from './Image'
 import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
-import addDefault from 'utils/functions/magic/addDefault'
 import { useAppSettings } from './AppSettings'
 import { CSSPropertyValue } from 'baseUI/style/cssValue'
-import mergeObjects from 'utils/functions/object/mergeObjects'
+import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 const iconFileBasePath = '/icons' //CONFIG 配置项
 const iconFileType = 'svg' //CONFIG 配置项
@@ -43,8 +43,8 @@ const defaultSprops: IconSprops = {
   size: '24px'
 }
 
-const getCSS = cache((sprops: IconSprops, core: { src: string }) => {
-  return mixCSSObjects({
+const getCSS = cache((sprops: IconSprops, core: { src: string }) =>
+  mixCSSObjects({
     width: sprops.size,
     height: sprops.size,
     position: 'relative',
@@ -62,7 +62,7 @@ const getCSS = cache((sprops: IconSprops, core: { src: string }) => {
       }
     }
   })
-})
+)
 const getImageCSS = cache(() =>
   mixCSSObjects({
     width: '100%',
@@ -77,11 +77,11 @@ const getImageCSS = cache(() =>
  */
 export default function Icon(props: IconProps) {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Icon), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Icon, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
 
   const src = `${iconFileBasePath}/${sprops.name}.${iconFileType}`
   const sholdUseRaw = !sprops.color
-  console.log('props: ', props)
   return (
     <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops, { src })}>
       {sholdUseRaw && (

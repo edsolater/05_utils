@@ -4,9 +4,9 @@ import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
 import cache from 'utils/functions/functionFactory/cache'
 import { CSSPropertyValue } from 'baseUI/style/cssValue'
-import addDefault from 'utils/functions/magic/addDefault'
-import mergeObjects from 'utils/functions/object/mergeObjects'
 import { useAppSettings } from './AppSettings'
+import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 export interface RowProps extends DivProps {
   /**
@@ -47,7 +47,9 @@ const getCSS = cache((sprops: RowSprops) =>
  */
 const Row = (props: RowProps) => {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Row), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Row, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
+  
   return <BaseUIDiv {...pick(sprops, divProps)} css={getCSS(sprops)}></BaseUIDiv>
 }
 

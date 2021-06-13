@@ -5,9 +5,9 @@ import cache from 'utils/functions/functionFactory/cache'
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import { CSSObject } from '@emotion/react'
 import { useAppSettings } from './AppSettings'
-import addDefault from 'utils/functions/magic/addDefault'
 import pick from 'utils/functions/object/pick'
-import mergeObjects from 'utils/functions/object/mergeObjects'
+import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 export interface CaptionProps extends DivProps {
   /**
@@ -43,6 +43,7 @@ const getCSS = cache((sprops: CaptionSprops) =>
  */
 export default function Caption(props: CaptionProps) {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Caption), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Caption, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
   return <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops)} />
 }

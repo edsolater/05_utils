@@ -10,9 +10,9 @@ import { _mergeObjects } from 'utils/functions/_mergeObjects'
 import mergeFunction from './mergeFunction'
 
 /**prop may very deep like children */
-type PropObject = object
+export type AnyProp = { [props: string]: any }
 
-export default function mergeProps<P extends Array<MayDeepArray<PropObject | undefined>>>(
+export default function mergeProps<P extends Array<MayDeepArray<AnyProp | undefined>>>(
   ...propsObjs: P
 ): any {
   const trimedProps = flat(propsObjs).filter(notNullish)
@@ -29,7 +29,7 @@ export default function mergeProps<P extends Array<MayDeepArray<PropObject | und
         [() => isObject(v1) && isObject(v2), () => mergeProps(v1 as AnyObj, v2 as AnyObj)],
         [() => isArray(v1) && isArray(v2), () => (v1 as any[]).concat(v2)]
       ],
-      v2
+      v2 ?? v1
     )
   )
 }

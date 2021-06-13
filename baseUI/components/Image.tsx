@@ -4,9 +4,9 @@ import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
 import isArray from 'utils/functions/judgers/isArray'
 import cache from 'utils/functions/functionFactory/cache'
-import addDefault from 'utils/functions/magic/addDefault'
 import { useAppSettings } from './AppSettings'
-import mergeObjects from 'utils/functions/object/mergeObjects'
+import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 export interface ImageProps extends DivProps<'img'> {
   /**
@@ -25,11 +25,12 @@ const defaultSprops: ImageSprops = { src: '' }
 
 const getCSS = cache((props: ImageProps) => mixCSSObjects())
 /**
- * @BaseUIComponent
+ * @BaseUIComponent·
  */
 const Image = (props: ImageProps) => {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Image), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Image, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
 
   const { src, alt, onSrcFailed } = sprops
   const [errorCount, setErrorCount] = useState(0)

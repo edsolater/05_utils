@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { useAppSettings } from './AppSettings'
-import Div, { divProps, DivProps } from './Div'
+import { BaseUIDiv, divProps, DivProps } from './Div'
 import cssDefaults from 'baseUI/settings/cssDefaults'
 import cssFont from 'baseUI/settings/cssFont'
 import cssSize from 'baseUI/settings/cssSize'
@@ -9,9 +9,9 @@ import { cssBrightness } from 'baseUI/style/cssFunctions'
 import { mixCSSObjects } from 'baseUI/style/cssParser'
 import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
-import addDefault from 'utils/functions/magic/addDefault'
 import pick from 'utils/functions/object/pick'
-import mergeObjects from 'utils/functions/object/mergeObjects'
+import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 export interface ButtonProps extends DivProps<'button'> {
   /**
@@ -139,10 +139,11 @@ const getCSS = cache((sprops: ButtonSprops) =>
  */
 export default function Button(props: ButtonProps) {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Button), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Button, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
   return (
-    <Div as='button' {...pick(sprops, divProps)} css={getCSS(sprops)}>
+    <BaseUIDiv {...pick(sprops, divProps)} as='button' css={getCSS(sprops)}>
       {sprops.children ?? '🤨'}
-    </Div>
+    </BaseUIDiv>
   )
 }

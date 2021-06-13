@@ -6,9 +6,9 @@ import { CSSObject } from '@emotion/serialize'
 import { toCssValue } from 'baseUI/style/cssUnits'
 import { cssValues } from 'baseUI/style/cssValue'
 import cache from 'utils/functions/functionFactory/cache'
-import addDefault from 'utils/functions/magic/addDefault'
-import mergeObjects from 'utils/functions/object/mergeObjects'
 import pick from 'utils/functions/object/pick'
+import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 export interface CardProps extends DivProps {
   /**
@@ -79,6 +79,7 @@ const getCSS = cache((sprops: CardSprops) =>
  */
 export default function Card(props: CardProps) {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Card), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Card, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
   return <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops)} />
 }

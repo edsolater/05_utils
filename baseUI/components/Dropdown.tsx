@@ -5,12 +5,10 @@ import Card, { CardProps } from './Card'
 import cache from 'utils/functions/functionFactory/cache'
 import { mixCSSObjects } from 'baseUI/style/cssParser'
 import { CSSPropertyValue } from 'baseUI/style/cssValue'
-import { CSSObject } from '@emotion/react'
 import cssDefaults from 'baseUI/settings/cssDefaults'
-import addDefault from 'utils/functions/magic/addDefault'
-import mergeObjects from 'utils/functions/object/mergeObjects'
 import { useAppSettings } from './AppSettings'
 import mergeProps from 'baseUI/functions/mergeProps'
+import addDefaultProps from 'baseUI/functions/addDefaultProps'
 
 // 应该就是一种 Card 的特殊呈现形式
 /**
@@ -18,39 +16,47 @@ import mergeProps from 'baseUI/functions/mergeProps'
  */
 export interface DropdownProps extends DivProps {
   toggleBy?: 'click' | 'hover'
+
   props_Card?: CardProps
+  /**
+   * @cssProps
+   * this is just a shorcut of props_Card.css.background
+   */
+  cardBg?: CSSPropertyValue<'background'>
+
   /**@cssProps */
-  distance?: CSSPropertyValue<'gap'>
+  gapFromButton?: CSSPropertyValue<'gap'>
 }
 
 export interface DropdownSprops extends DropdownProps {
-  cardColor?: CSSPropertyValue<'color'>
 }
 
 const defaultSprops: DropdownSprops = {
-  distance: '16px',
-  // cardColor: cssDefaults.whiteCard
-  props_Card: { css: { background: cssDefaults.defaultBackgroundGray } } //TODO
+  gapFromButton: '16px',
+  cardBg: cssDefaults.whiteCard
 }
 
-const getCSS = cache((props: DropdownSprops) =>
+const getCSS = cache((sprops: DropdownSprops) =>
   mixCSSObjects({
     position: 'relative'
   })
 )
-const getCardCSS = cache((props: DropdownSprops) =>
+const getCardCSS = cache((sprops: DropdownSprops) =>
   mixCSSObjects({
     position: 'absolute',
-    background: props.cardColor,
-    top: `calc(100% + ${props.distance})`,
+    background: sprops.cardBg,
+    top: `calc(100% + ${sprops.gapFromButton})`,
     zIndex: '1'
   })
 )
 
 export default function Dropdown(props: DropdownProps) {
   const appSettings = useAppSettings()
-  const sprops = addDefault(mergeObjects(props, appSettings.globalProps?.Dropdown), defaultSprops)
+  const _sprops = mergeProps(appSettings.globalProps?.Dropdown, props)
+  const sprops = addDefaultProps(_sprops, defaultSprops)
+
   const [opened, setopened] = useState(false)
+
   console.log('sprops: ', sprops) // FIXME
   return (
     <BaseUIDiv
