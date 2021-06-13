@@ -1,4 +1,4 @@
-import isObjectLike from "../judgers/isObjectLike"
+import isObjectLike from "../judgers/isObjectOrArray"
 
 // COUNT：使用次数 1
 type Key = string

@@ -9,7 +9,7 @@
 
 import { StringNumber } from 'typings/constants'
 import isBigInt from '../functions/judgers/isBigInt'
-import isObjectLike from '../functions/judgers/isObjectLike'
+import isObjectLike from '../functions/judgers/isObjectOrArray'
 
 type CalableValue = StringNumber | number | bigint | SuperNumberData
 

@@ -1,5 +1,5 @@
 import getObjectSize from '../object/getObjectSize'
-import isObjectLike from './isObjectLike'
+import isObjectLike from './isObjectOrArray'
 
 /**
  * 判断对象是否为空

@@ -1,5 +1,5 @@
 import { MayDeepArray } from 'typings/tools'
-import isObjectLike from 'utils/functions/judgers/isObjectLike'
+import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
 import isExist from 'utils/functions/judgers/isExist'
 import flat from 'utils/functions/array/flat'
 

@@ -1,28 +1,36 @@
 import { NotFunctionValue, Primitive } from '../../../typings/constants'
 import { shrinkToValue } from './shrinkToValue'
 
+// TODO: It's type generic is not correct
 /**
  * this Function can generally replace javascript:switch
  *
  * @param value detected value
  * @param conditionPairs conditions (one of them or none of them can match). this's returned Value must have same type.
  * @param fallbackValue
- * @returns
+ * @example
+ * parallelSwitch('hello', [
+ *   [(k) => k.charAt(0) === 'h', 3],
+ *   ['world', 4]
+ * ]) //=> 3
  */
 export default function parallelSwitch<
   Input,
   Value extends Primitive, // this type is not correct
-  FallbackValue = undefined
+  FallbackValue
 >(
   value: Input,
-  conditionPairs: ReadonlyArray<
-    [is: NotFunctionValue | ((value: Input) => boolean), returnValue: Value | (() => Value)]
+  conditionPairs: Array<
+    [
+      is: NotFunctionValue | ((value: Input) => boolean),
+      returnValue: Value | ((value: Input) => Value)
+    ]
   >,
   fallbackValue?: FallbackValue
 ): NotFunctionValue extends Input ? Value : Value | FallbackValue {
   for (const [is, returnValue] of conditionPairs) {
-    // @ts-expect-error FIXME: it's a bug
-    if (value === is || is === true || shrinkToValue(is, [value]) === true) return shrinkToValue(returnValue)
+    if (value === is || shrinkToValue(is, [value]) === true)
+      return shrinkToValue(returnValue, [value])
   }
   // @ts-ignore
   return fallbackValue

@@ -1,4 +1,4 @@
-import isObjectLike from './isObjectLike'
+import isObjectLike from './isObjectOrArray'
 import canSatisfyAll from './canSatisfyAll'
 
 test('基础案例', () => {

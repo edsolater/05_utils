@@ -10,7 +10,7 @@ import cssDefaults from 'baseUI/settings/cssDefaults'
 import addDefault from 'utils/functions/magic/addDefault'
 import mergeObjects from 'utils/functions/object/mergeObjects'
 import { useAppSettings } from './AppSettings'
-import { mergeDeepObject } from 'utils/functions/merge'
+import { mergeDeepObject } from 'utils/functions/mergeObjects'
 
 // 应该就是一种 Card 的特殊呈现形式
 /**

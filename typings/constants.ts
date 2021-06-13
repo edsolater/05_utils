@@ -7,11 +7,14 @@
 import { PropsWithChildren } from 'react'
 
 export type Primitive = boolean | number | string
+export type ObjectNotArray = { [key: string]: any }
 export type RichPrimitive = Primitive | bigint | symbol
 /**
  * 任何函数
  */
 export type AnyFn = (...args: any[]) => any
+export type AnyObj = { [key: string]: any }
+export type AnyArr = any[]
 export type NotFunctionValue = Exclude<any, AnyFn>
 
 /**

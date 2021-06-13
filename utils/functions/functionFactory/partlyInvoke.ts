@@ -1,4 +1,4 @@
-import isObjectLike from '../judgers/isObjectLike'
+import isObjectLike from '../judgers/isObjectOrArray'
 import merge from '../object/merge'
 import formatNumber from '../math/formatNumber'
 import { AnyFn } from '../../../typings/constants'

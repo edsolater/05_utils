@@ -1,4 +1,4 @@
-import isObjectLike from '../judgers/isObjectLike'
+import isObjectLike from '../judgers/isObjectOrArray'
 
 /**
  * 克隆对象

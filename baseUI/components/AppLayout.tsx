@@ -2,9 +2,9 @@ import useEventScroll from '../hooks/useEventScroll'
 import useToggle from '../hooks/useToggle'
 import React, { ReactElement, ReactNode, useRef } from 'react'
 import { ReactProps } from 'typings/constants'
-import { mergeDeepObject } from 'utils/functions/merge'
 import { BaseUIDiv, DivProps } from './Div'
 import pickReactChild from '../functions/pickReactChild'
+import mergeProps from 'baseUI/functions/mergeProps'
 
 interface SideMenuController {
   collapse(): void
@@ -74,17 +74,17 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
       }}
     >
       <AppLayoutTopbar
-        {...mergeDeepObject([
+        {...mergeProps(
           {
             isHidden: isScrollingDown,
             onTapSwitcher: collapseSideMenu,
             sideMenuController: sideMenuController
           },
           topbarElementProps
-        ])}
+        )}
       />
       <AppLayoutSideMenu
-        {...mergeDeepObject([
+        {...mergeProps(
           {
             isCollapsed: isSideMenuCollapsed,
             onCollapseSelf: collapseSideMenu,
@@ -92,17 +92,17 @@ export default function AppLayout(props: ReactProps<AppLayoutProps>) {
             sideMenuController: sideMenuController
           },
           sideMenuElementProps
-        ])}
+        )}
       />
       <AppLayoutContent
-        {...mergeDeepObject([
+        {...mergeProps(
           {
             onScrollDown: setScrollingDown,
             onScrollUp: setScrollingUp,
             sideMenuController: sideMenuController
           },
           contentElementProps
-        ])}
+        )}
       />
     </BaseUIDiv>
   )

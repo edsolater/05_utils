@@ -1,4 +1,4 @@
-import isObjectLike from './isObjectLike'
+import isObjectLike from './isObjectOrArray'
 import areSame from './areSame'
 import areShallowEqualArray from './areShallowEqualArray'
 

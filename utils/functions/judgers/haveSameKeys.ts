@@ -1,5 +1,5 @@
 import areShallowEqualArray from './areShallowEqualArray'
-import isObjectLike from './isObjectLike'
+import isObjectLike from './isObjectOrArray'
 
 /**
  * 判断两个对象是否具有相同的键

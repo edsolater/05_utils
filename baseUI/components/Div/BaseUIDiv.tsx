@@ -1,7 +1,7 @@
 import React from 'react'
 import { TagMap } from './TagMap'
-import { mergeDeepObject } from 'utils/functions/merge'
 import { DivProps, Div } from './index'
+import mergeProps from 'baseUI/functions/mergeProps'
 
 /**
  * 基础组件专用Div，其  _props 会自动 merge
@@ -28,7 +28,7 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
       as={props.as}
       children={props.children}
       className={[props._className, props.className]}
-      domRef={[props._domRef]}
+      domRef={[props._domRef, props.domRef]}
       css={[props._css, props.css]}
       onClick={(...params) => {
         props._onClick?.(...params)
@@ -38,7 +38,7 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
         props._onHover?.(...params)
         props.onHover?.(...params)
       }}
-      htmlProps={mergeDeepObject([props._htmlProps, props.htmlProps])}
+      htmlProps={mergeProps([props._htmlProps, props.htmlProps])}
     />
   )
 }

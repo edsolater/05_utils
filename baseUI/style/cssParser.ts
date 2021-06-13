@@ -1,13 +1,13 @@
 import { css, SerializedStyles } from '@emotion/react'
 import flat from 'utils/functions/array/flat'
 import isFunction from 'utils/functions/judgers/isFunction'
-import isObjectLike from 'utils/functions/judgers/isObjectLike'
+import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
 import isObject from 'utils/functions/judgers/isObject'
 import divide from 'utils/functions/object/divide'
 import { ICSS, ICSSObject } from './ICSS'
-import { mergeDeep } from 'utils/functions/merge'
 import mapValues from 'utils/functions/object/mapValues'
 import { MayDeepArray } from 'typings/tools'
+import isArray from 'utils/functions/judgers/isArray'
 
 /**
  * 用在非<Div>的组件上，与toCss目的相反
@@ -17,10 +17,12 @@ export function mixCSSObjects(
   ...icsses: MayDeepArray<ICSS | ((...any: any[]) => ICSS) | undefined | {}>[]
 ): ICSS {
   //@ts-expect-error
-  return flat(icsses)
-  //@ts-ignore
-    .map((icss) => (isFunction(icss) ? icss() : icss))
-    .filter(isObjectLike)
+  return (
+    flat(icsses)
+      //@ts-ignore
+      .map((icss) => (isFunction(icss) ? icss() : icss))
+      .filter(isObjectLike)
+  )
 }
 
 /**在最终解析CSS时，中间件队列 */
@@ -76,4 +78,36 @@ function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
     // 无需再做解析处理
     return cssObj
   }
+}
+
+/**
+ * 合并多个对象
+ * (如果是数组，则合并)
+ * @param objDeepArray 嵌套数组的对象
+ * @example
+ * mergeDeep({a:3, b:2}, {a:1}) // {a:1, b:2}
+ * mergeDeep({a:3, b:2}, undefined, {a:1}) // {a:1, b:2}
+ * mergeDeep({a:3, b:2, c:{a:2}}, {a:1, c:{b:3}}) // {a:1, b:2, c:{a:2, b:3}}
+ * mergeDeep({a:3, b:2, c:{a:2}}, {a:1, c:{b:3}}, false) // {a:1, b:2, c:{a:2, b:3}}
+ * mergeDeep({a:3, b:2, c:{a:2}}, {a:1, c:{b:3}}, {c:false}) // {a:1, b:2, c:false}
+ * mergeDeep({a:3, b:2, c:{a:2}}, [{a:1, c:{b:3}}, {c:false}]) // {a:1, b:2, c:false}
+ *
+ * mergeDeep({a:3, b:2, c:[2]}, {a:1, c:[3]}, {c:[4,5]}) // {a:1, b:2, c:[2,3,4,5]}
+ */
+export function mergeDeep<T>(...objDeepArray: MayDeepArray<T>[]): T {
+  const flattedItems = flat(objDeepArray).filter(Boolean)
+  const resultObj = {}
+  for (const obj of flattedItems) {
+    for (const [key, value] of Object.entries(obj ?? {})) {
+      let mergedValue =
+        isArray(resultObj[key]) && isArray(value)
+          ? [...resultObj[key], ...value]
+          : isObjectLike(resultObj[key]) && isObjectLike(value)
+          ? mergeDeep([resultObj[key], value])
+          : value
+      resultObj[key] = mergedValue
+    }
+  }
+  //@ts-expect-error
+  return resultObj
 }

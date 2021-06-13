@@ -1,6 +1,6 @@
 import isArray from './isArray'
 import isNull from './isNull'
-import isObjectLike from './isObjectLike'
+import isObjectLike from './isObjectOrArray'
 
 /**
  * 获取值的粗略类型（以小写形式）（不会显示是什么对象）

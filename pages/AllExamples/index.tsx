@@ -18,8 +18,8 @@ import TransformExample from './TransformExample'
 
 const AllExamples = () => (
   <GlobalSettings>
-    <HoverableExample />
     <AppLayoutExample />
+    {/* <HoverableExample />
     <KeyboardShortcutExample />
     <DrawerExample />
     <MaskExample />
@@ -32,7 +32,7 @@ const AllExamples = () => (
     <CardExample />
     <InputExample />
     <DropdownExample />
-    <TagExample />
+    <TagExample /> */}
   </GlobalSettings>
 )
 export default AllExamples

@@ -1,3 +1,5 @@
+import { AnyFn } from "typings/constants";
+
 /**
  *
  * 类别: typegard
@@ -6,6 +8,6 @@
  *
  * @param value 需要检测的值
  */
-export default function isFunction<T>(value: T): value is Extract<T, (...any: any[]) => void> {
+export default function isFunction(value: unknown): value is AnyFn {
   return typeof value === 'function'
 }
