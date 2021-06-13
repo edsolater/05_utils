@@ -24,7 +24,7 @@ export interface FeatureHoverOptions<El extends HTMLElement = HTMLDivElement> {
   onHover?: (event: { el: El; nativeEvent: PointerEvent; now: 'start' | 'end' }) => void
 }
 
-export function useFeatureHover<El extends HTMLElement = HTMLDivElement>(
+export default function useFeatureHover<El extends HTMLElement = HTMLDivElement>(
   domRef: RefObject<El>,
   { disable = false, onHoverStart, onHoverEnd, onHovering, onHover }: FeatureHoverOptions<El>
 ) {

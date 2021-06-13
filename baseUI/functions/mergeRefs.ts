@@ -9,7 +9,7 @@ function loadRef(ref, el) {
   }
 }
 // IDEA: Maybe, proxy can replace callback ref
-export function mergeRefs<T = any>(...refs: Array<IRefs<T>>): RefCallback<T> {
+export default function mergeRefs<T = any>(...refs: Array<IRefs<T>>): RefCallback<T> {
   return useCallback((el) => {
     if (el) {
       refs.flat(Infinity).forEach((ref) => loadRef(ref, el))

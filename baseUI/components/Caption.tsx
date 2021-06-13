@@ -1,13 +1,12 @@
 import React from 'react'
-import { mixCSSObjects } from '../style/cssParser'
-import { BaseUIDiv, divProps, DivProps } from './Div'
-import cache from 'utils/functions/functionFactory/cache'
-import cssDefaults from 'baseUI/settings/cssDefaults'
-import { CSSObject } from '@emotion/react'
+import { mergeProps, addDefaultProps } from 'baseUI/functions'
+import { cssDefaults } from 'baseUI/settings'
+import { CSSPropertyValue, mixCSSObjects } from 'baseUI/style'
+import { cache } from 'utils/functions/functionFactory'
+import { pick } from 'utils/functions/object'
 import { useAppSettings } from './AppSettings'
-import pick from 'utils/functions/object/pick'
-import mergeProps from 'baseUI/functions/mergeProps'
-import addDefaultProps from 'baseUI/functions/addDefaultProps'
+import { DivProps, divProps } from './Div'
+import { BaseUIDiv } from '.'
 
 export interface CaptionProps extends DivProps {
   /**
@@ -18,7 +17,7 @@ export interface CaptionProps extends DivProps {
 }
 
 export interface CaptionSprops extends CaptionProps {
-  textColor?: Extract<CSSObject['color'], string>
+  textColor?: CSSPropertyValue<'color'>
 }
 
 const defaultSprops: CaptionSprops = {

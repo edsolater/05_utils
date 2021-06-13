@@ -1,17 +1,12 @@
 import React from 'react'
+import { mergeProps, addDefaultProps } from 'baseUI/functions'
+import { cssSize, cssFont, cssDefaults } from 'baseUI/settings'
+import { CSSPropertyValue, cssColor, mixCSSObjects, cssBrightness } from 'baseUI/style'
 import { useAppSettings } from './AppSettings'
-import { BaseUIDiv, divProps, DivProps } from './Div'
-import cssDefaults from 'baseUI/settings/cssDefaults'
-import cssFont from 'baseUI/settings/cssFont'
-import cssSize from 'baseUI/settings/cssSize'
-import cssColor from 'baseUI/style/cssColor'
-import { cssBrightness } from 'baseUI/style/cssFunctions'
-import { mixCSSObjects } from 'baseUI/style/cssParser'
-import cache from 'utils/functions/functionFactory/cache'
-import { CSSObject } from '@emotion/serialize'
-import pick from 'utils/functions/object/pick'
-import mergeProps from 'baseUI/functions/mergeProps'
-import addDefaultProps from 'baseUI/functions/addDefaultProps'
+import { DivProps, divProps } from './Div'
+import { cache } from 'utils/functions/functionFactory'
+import { pick } from 'utils/functions/object'
+import BaseUIDiv from './BaseUIDiv'
 
 export interface ButtonProps extends DivProps<'button'> {
   /**
@@ -27,25 +22,25 @@ export interface ButtonProps extends DivProps<'button'> {
 }
 
 export interface ButtonSprops extends ButtonProps {
-  'padding--small'?: Extract<CSSObject['padding'], string>
-  'fontSize--small'?: Extract<CSSObject['fontSize'], string>
-  'borderRadius--small'?: Extract<CSSObject['borderRadius'], string>
+  'padding--small'?: CSSPropertyValue<'padding'>
+  'fontSize--small'?: CSSPropertyValue<'fontSize'>
+  'borderRadius--small'?: CSSPropertyValue<'borderRadius'>
 
-  'padding--medium'?: Extract<CSSObject['padding'], string>
-  'fontSize--medium'?: Extract<CSSObject['fontSize'], string>
-  'borderRadius--medium'?: Extract<CSSObject['borderRadius'], string>
+  'padding--medium'?: CSSPropertyValue<'padding'>
+  'fontSize--medium'?: CSSPropertyValue<'fontSize'>
+  'borderRadius--medium'?: CSSPropertyValue<'borderRadius'>
 
-  'padding--large'?: Extract<CSSObject['padding'], string>
-  'fontSize--large'?: Extract<CSSObject['fontSize'], string>
-  'borderRadius--large'?: Extract<CSSObject['borderRadius'], string>
+  'padding--large'?: CSSPropertyValue<'padding'>
+  'fontSize--large'?: CSSPropertyValue<'fontSize'>
+  'borderRadius--large'?: CSSPropertyValue<'borderRadius'>
 
-  'textColor--fill'?: Extract<CSSObject['color'], string>
-  'background--fill'?: Extract<CSSObject['background'], string>
-  'textColor--outline'?: Extract<CSSObject['color'], string>
-  'borderColor--outline'?: Extract<CSSObject['borderColor'], string>
-  'textColor--text'?: Extract<CSSObject['color'], string>
-  'borderWidth--outline'?: Extract<CSSObject['borderWidth'], string>
-  'borderOpacity--outline'?: Extract<CSSObject['opacity'], string>
+  'textColor--fill'?: CSSPropertyValue<'color'>
+  'background--fill'?: CSSPropertyValue<'background'>
+  'textColor--outline'?: CSSPropertyValue<'color'>
+  'borderColor--outline'?: CSSPropertyValue<'borderColor'>
+  'textColor--text'?: CSSPropertyValue<'color'>
+  'borderWidth--outline'?: CSSPropertyValue<'borderWidth'>
+  'borderOpacity--outline'?: CSSPropertyValue<'opacity'>
 }
 
 const defaultSprops: ButtonSprops = {

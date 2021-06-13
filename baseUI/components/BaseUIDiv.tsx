@@ -1,6 +1,6 @@
 import React from 'react'
 import { DivProps, Div, TagMap } from './Div'
-import mergeProps from 'baseUI/functions/mergeProps'
+import { mergeProps } from '../functions'
 
 /**
  * 基础组件专用Div，其  _props 会自动 merge

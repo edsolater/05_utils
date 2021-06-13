@@ -3,12 +3,11 @@ import { jsx } from '@emotion/react'
 import { useRef } from 'react'
 import { parseCSS } from '../style/cssParser'
 import { ICSS } from '../style/ICSS'
-import { ClassName, classname } from '../functions/classname'
-import { useFeatureHover, FeatureHoverOptions } from '../hooks/useFeatureHover'
-import { IRefs, mergeRefs } from '../functions/mergeRefs'
+import classname, { ClassName } from '../functions/classname'
+import useFeatureHover, { FeatureHoverOptions } from '../hooks/useFeatureHover'
+import mergeRefs, { IRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
-import useEventClick, { ListenerClickOptions } from 'baseUI/hooks/useEventClick'
-export { default as BaseUIDiv } from './BaseUIDiv'
+import useEventClick, { ListenerClickOptions } from '../hooks/useEventClick'
 
 /**
  *

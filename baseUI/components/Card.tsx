@@ -1,14 +1,11 @@
+import { mergeProps, addDefaultProps } from 'baseUI/functions'
+import { CSSPropertyValue, mixCSSObjects, toCssValue, cssValues } from 'baseUI/style'
 import React from 'react'
-import { mixCSSObjects } from '../style/cssParser'
-import { DivProps, BaseUIDiv, divProps } from './Div'
+import { cache } from 'utils/functions/functionFactory'
+import { pick } from 'utils/functions/object'
+import { BaseUIDiv } from '.'
 import { useAppSettings } from './AppSettings'
-import { CSSObject } from '@emotion/serialize'
-import { toCssValue } from 'baseUI/style/cssUnits'
-import { cssValues } from 'baseUI/style/cssValue'
-import cache from 'utils/functions/functionFactory/cache'
-import pick from 'utils/functions/object/pick'
-import mergeProps from 'baseUI/functions/mergeProps'
-import addDefaultProps from 'baseUI/functions/addDefaultProps'
+import { DivProps, divProps } from './Div'
 
 export interface CardProps extends DivProps {
   /**
@@ -42,12 +39,12 @@ export interface CardProps extends DivProps {
 }
 
 export interface CardSprops extends CardProps {
-  width?: Extract<CSSObject['width'], string>
-  height?: Extract<CSSObject['height'], string>
+  width?: CSSPropertyValue<'width'>
+  height?: CSSPropertyValue<'height'>
 
-  'borderRadius--small'?: Extract<CSSObject['borderRadius'], string>
-  'borderRadius--medium'?: Extract<CSSObject['borderRadius'], string>
-  'borderRadius--large'?: Extract<CSSObject['borderRadius'], string>
+  'borderRadius--small'?: CSSPropertyValue<'borderRadius'>
+  'borderRadius--medium'?: CSSPropertyValue<'borderRadius'>
+  'borderRadius--large'?: CSSPropertyValue<'borderRadius'>
 }
 
 const defaultSprops: CardSprops = {

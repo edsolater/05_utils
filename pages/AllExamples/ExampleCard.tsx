@@ -1,7 +1,8 @@
-import { BaseUIDiv, DivProps } from 'baseUI/components/Div'
+import {  DivProps } from 'baseUI/components/Div'
 import React from 'react'
 import { toPx } from 'baseUI/style/cssUnits'
 import { cssValues } from 'baseUI/style/cssValue'
+import { BaseUIDiv } from 'baseUI/components'
 export interface ExampleCardProps extends DivProps {
   category?: 'hooks' | 'baseUI/componentComponent' | 'SideEffectComponent' | 'TemplateComponent'
   title?: string

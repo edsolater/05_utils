@@ -1,14 +1,15 @@
 import React from 'react'
 import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
-import { BaseUIDiv, DivProps, divProps } from './Div'
+import {  DivProps, divProps } from './Div'
 import Image, { ImageProps } from './Image'
 import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
 import { useAppSettings } from './AppSettings'
-import { CSSPropertyValue } from 'baseUI/style/cssValue'
-import mergeProps from 'baseUI/functions/mergeProps'
-import addDefaultProps from 'baseUI/functions/addDefaultProps'
+import { CSSPropertyValue } from '../style/cssValue'
+import mergeProps from '../functions/mergeProps'
+import addDefaultProps from '../functions/addDefaultProps'
+import { BaseUIDiv } from '.'
 
 const iconFileBasePath = '/icons' //CONFIG 配置项
 const iconFileType = 'svg' //CONFIG 配置项

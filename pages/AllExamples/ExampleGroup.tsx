@@ -1,5 +1,6 @@
+import { BaseUIDiv } from 'baseUI/components'
 import Caption from 'baseUI/components/Caption'
-import Div, { BaseUIDiv, DivProps } from 'baseUI/components/Div'
+import Div, { DivProps } from 'baseUI/components/Div'
 import Row from 'baseUI/components/Row'
 import React from 'react'
 export interface ExampleGroupProps extends DivProps {

@@ -1,14 +1,13 @@
 import React from 'react'
-import { BaseUIDiv, divProps, DivProps } from './Div'
-import pick from 'utils/functions/object/pick'
-import Icon, { IconProps } from './Icon'
-import cache from 'utils/functions/functionFactory/cache'
-import { mixCSSObjects } from 'baseUI/style/cssParser'
-import cssColor from 'baseUI/style/cssColor'
-import cssDefaults from 'baseUI/settings/cssDefaults'
-import addDefaultProps from 'baseUI/functions/addDefaultProps'
-import mergeProps from 'baseUI/functions/mergeProps'
+import { mergeProps, addDefaultProps } from 'baseUI/functions'
+import { cssDefaults } from 'baseUI/settings'
+import { mixCSSObjects, cssColor } from 'baseUI/style'
+import { cache } from 'utils/functions/functionFactory'
+import { pick } from 'utils/functions/object'
+import { BaseUIDiv, Icon } from '.'
 import { useAppSettings } from './AppSettings'
+import { DivProps, divProps } from './Div'
+import { IconProps } from './Icon'
 
 // 应该就是一种 Card 的特殊呈现形式
 export interface TagProps extends DivProps {

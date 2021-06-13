@@ -5,7 +5,7 @@ import flat from 'utils/functions/array/flat'
 
 export type ClassName = any | { [classname: string]: boolean }
 // <Div> 专用
-export function classname(classNameArray: MayDeepArray<ClassName>) {
+export default function classname(classNameArray: MayDeepArray<ClassName>) {
   return flat([classNameArray])
     .filter(isExist)
     .flatMap((classItem) =>

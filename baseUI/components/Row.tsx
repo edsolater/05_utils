@@ -1,12 +1,11 @@
 import React from 'react'
-import { BaseUIDiv, divProps, DivProps } from './Div'
-import { mixCSSObjects } from '../style/cssParser'
-import pick from 'utils/functions/object/pick'
-import cache from 'utils/functions/functionFactory/cache'
-import { CSSPropertyValue } from 'baseUI/style/cssValue'
+import { mergeProps, addDefaultProps } from 'baseUI/functions'
+import { CSSPropertyValue, mixCSSObjects } from 'baseUI/style'
+import { cache } from 'utils/functions/functionFactory'
+import { pick } from 'utils/functions/object'
+import { BaseUIDiv } from '.'
 import { useAppSettings } from './AppSettings'
-import mergeProps from 'baseUI/functions/mergeProps'
-import addDefaultProps from 'baseUI/functions/addDefaultProps'
+import { DivProps, divProps } from './Div'
 
 export interface RowProps extends DivProps {
   /**
@@ -49,7 +48,7 @@ const Row = (props: RowProps) => {
   const appSettings = useAppSettings()
   const _sprops = mergeProps(appSettings.globalProps?.Row, props)
   const sprops = addDefaultProps(_sprops, defaultSprops)
-  
+
   return <BaseUIDiv {...pick(sprops, divProps)} css={getCSS(sprops)}></BaseUIDiv>
 }
 

@@ -1,10 +1,9 @@
-import useEventScroll from '../hooks/useEventScroll'
-import useToggle from '../hooks/useToggle'
-import React, { ReactElement, ReactNode, useRef } from 'react'
+import { pickReactChild, mergeProps } from 'baseUI/functions'
+import { useToggle, useEventScroll } from 'baseUI/hooks'
+import React, { ReactNode, ReactElement, useRef } from 'react'
 import { ReactProps } from 'typings/constants'
-import { BaseUIDiv, DivProps } from './Div'
-import pickReactChild from '../functions/pickReactChild'
-import mergeProps from 'baseUI/functions/mergeProps'
+import  BaseUIDiv  from './BaseUIDiv'
+import { DivProps } from './Div'
 
 interface SideMenuController {
   collapse(): void

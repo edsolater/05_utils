@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { shrinkToValue } from 'utils/functions/magic/shrinkToValue'
+import shrinkToValue from 'utils/functions/magic/shrinkToValue'
 
 type MayStateFn<T, S extends StoreTemplate> = T | ((prev: T, store: S) => T)
 

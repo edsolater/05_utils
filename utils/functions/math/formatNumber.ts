@@ -1,5 +1,5 @@
 import fall from '../magic/fall'
-import { partlyInvoke } from '../functionFactory/partlyInvoke'
+import partlyInvoke from '../functionFactory/partlyInvoke'
 import addDefault from '../magic/addDefault'
 
 type FormatOptions = {

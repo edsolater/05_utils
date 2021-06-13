@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { BaseUIDiv, divProps, DivProps } from './Div'
+import {  divProps, DivProps } from './Div'
 import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
 import isArray from 'utils/functions/judgers/isArray'
 import cache from 'utils/functions/functionFactory/cache'
 import { useAppSettings } from './AppSettings'
-import mergeProps from 'baseUI/functions/mergeProps'
-import addDefaultProps from 'baseUI/functions/addDefaultProps'
+import mergeProps from '../functions/mergeProps'
+import addDefaultProps from '../functions/addDefaultProps'
+import { BaseUIDiv } from '.'
 
 export interface ImageProps extends DivProps<'img'> {
   /**

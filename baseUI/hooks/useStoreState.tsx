@@ -1,1 +1,1 @@
-export { useStoreState } from './createStore'
+export { useStoreState as default } from './createStore'
