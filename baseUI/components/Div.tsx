@@ -1,15 +1,30 @@
 import React, { ReactNode } from 'react'
 import { jsx } from '@emotion/react'
 import { useRef } from 'react'
-import { parseCSS } from '../../style/cssParser'
-import { ICSS } from '../../style/ICSS'
-import { ClassName, classname } from './util/classname'
-import { useFeatureHover, FeatureHoverOptions } from '../../hooks/useFeatureHover'
-import { IRefs, mergeRefs } from './util/mergeRefs'
-import { TagMap } from './TagMap'
+import { parseCSS } from '../style/cssParser'
+import { ICSS } from '../style/ICSS'
+import { ClassName, classname } from '../functions/classname'
+import { useFeatureHover, FeatureHoverOptions } from '../hooks/useFeatureHover'
+import { IRefs, mergeRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
 import useEventClick, { ListenerClickOptions } from 'baseUI/hooks/useEventClick'
 export { default as BaseUIDiv } from './BaseUIDiv'
+
+/**
+ *
+ * 这个纯粹是 tag名 与相应的 HTMLElement 转换
+ */
+ export interface TagMap {
+  div: HTMLDivElement
+  main: HTMLDivElement
+
+  button: HTMLButtonElement
+  img: HTMLImageElement
+  input: HTMLInputElement
+  textarea: HTMLTextAreaElement
+  video: HTMLVideoElement
+}
+
 
 // 设立BaseProps是为了给其他baseUI如Img用的
 export interface DivProps<TagName extends keyof TagMap = 'div'> {

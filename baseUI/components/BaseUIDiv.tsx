@@ -1,6 +1,5 @@
 import React from 'react'
-import { TagMap } from './TagMap'
-import { DivProps, Div } from './index'
+import { DivProps, Div, TagMap } from './Div'
 import mergeProps from 'baseUI/functions/mergeProps'
 
 /**

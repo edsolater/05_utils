@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { DivProps } from '../../../baseUI/components/Div'
-import { IRef } from '../../../baseUI/components/Div/util/mergeRefs'
+import { IRef } from '../../../baseUI/functions/mergeRefs'
 
 export interface ScrollState {
   clientWidth: number
