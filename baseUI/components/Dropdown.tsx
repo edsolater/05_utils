@@ -27,6 +27,7 @@ export interface DropdownSprops extends DropdownProps {
   cardColor?: CSSPropertyValue<'color'>
 }
 
+
 const defaultSprops: DropdownSprops = {
   distance: '16px',
   cardColor: cssDefaults.whiteCard
