@@ -21,8 +21,7 @@ const componentDefault = {
       '0px 16px 64px rgba(0, 0, 0, 0.025)'
     ].join(', ')
   },
-  maskBg: cssColor.black,
-  maskOpacity: '0.2',
+  maskBg: 'hsla(0deg 0% 0% / 0.2)',
   scrollbar: {
     thumbColor: 'hsla(0deg 0% 0% / 0.2)',
     thumbColorHover: 'hsla(0deg 0% 0% / 0.3)',

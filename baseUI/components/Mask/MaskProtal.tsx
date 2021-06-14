@@ -1,19 +1,11 @@
 import ReactDOM from 'react-dom'
-import { useEffect, useRef } from 'react'
-import { ReactProps } from 'typings/constants'
+import { ReactNode, useEffect, useRef } from 'react'
+import { createElement, createMaskRoot } from '../../functions/createElement'
 
-function createElementByString<T extends HTMLElement = HTMLDivElement>(innerHTMLStr): T {
-  const tempNode = document.createElement('div')
-  tempNode.innerHTML = innerHTMLStr
-  if (tempNode.firstElementChild === null) throw "can't create an element. Wrong string!"
-  return tempNode.firstElementChild as any
-}
-
-const maskRoot = createElementByString(
-  '<div id="mask-root" style="position:fixed; inset:0; pointer-events: none"></div>'
-)
+const maskRoot = createMaskRoot()
 document.body.append(maskRoot)
 
+const reactNodeStack: ReactNode[] = []
 /**
  * @todo 感觉这个文件应该提出去，不应该再在Mask文件夹中
  * @SideEffectSubComponent
@@ -30,15 +22,21 @@ document.body.append(maskRoot)
  *    </div>
  * </div>
  */
-const MaskProtal = (props: ReactProps) => {
-  const wrapperDiv = useRef(createElementByString('<div style="display:contents"></div>'))
+const MaskProtal = (props: { children?: ReactNode; hidden?: boolean }) => {
+  const wrapperDiv = useRef(
+    createElement({ className: 'mask-box', style: { display: 'contents' } })
+  )
 
   useEffect(() => {
+    if (props.hidden) return
     maskRoot.append(wrapperDiv.current)
-    return () => wrapperDiv.current.remove()
-  }, [])
-
-  return ReactDOM.createPortal(props.children, wrapperDiv.current)
+    const idx = reactNodeStack.push(props.children) - 1
+    return () => {
+      wrapperDiv.current.remove()
+      reactNodeStack.splice(idx, 1, undefined)
+    }
+  }, [props.children])
+  return props.hidden ? null : ReactDOM.createPortal(props.children, wrapperDiv.current)
 }
 
 export default MaskProtal

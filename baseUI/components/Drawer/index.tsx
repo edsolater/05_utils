@@ -20,23 +20,11 @@ export interface DrawerCardProps extends DivProps {
    */
   direction?: 'top' | 'right' | 'bottom' | 'left'
 
-  // /**
-  //  * 打开的瞬间（可能还是完全透明的）
-  //  */
-  // onOpen?: (info: { el: HTMLDivElement }) => void
-  // /**
-  //  * 打开，过渡动画结束（此时已完全可见）
-  //  */
-  // onOpenTransitionEnd?: (info: { el: HTMLDivElement }) => void
 
   /**
    * 点击关闭
    */
-  onClose?: (info: { el: HTMLDivElement }) => void
-  // /**
-  //  * 关闭，过渡动画结束（此时已完全不可见）
-  //  */
-  // onCloseTransitionEnd?: (info: { el: HTMLDivElement }) => void
+  onClose?: (info: {  }) => void
 }
 
 const _Drawer = (props: ReactProps<DrawerCardProps>) => {

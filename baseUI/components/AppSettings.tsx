@@ -9,6 +9,7 @@ import { InputSprops } from './Input'
 import { MaskSprops } from './Mask'
 import { RowSprops } from './Row'
 import { TagSprops } from './Tag'
+import { TransitionProps } from './Transition'
 
 //#region ------------------- props声明 -------------------
 
@@ -27,6 +28,7 @@ export interface AppSetting {
     Dropdown?: DropdownSprops
     Tag?: TagSprops
     Mask?: MaskSprops
+    Transition?: TransitionProps
   }
 }
 //#endregion
