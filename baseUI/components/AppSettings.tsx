@@ -6,6 +6,7 @@ import { DropdownSprops } from './Dropdown'
 import { IconSprops } from './Icon'
 import { ImageSprops } from './Image'
 import { InputSprops } from './Input'
+import { MaskSprops } from './Mask'
 import { RowSprops } from './Row'
 import { TagSprops } from './Tag'
 
@@ -25,6 +26,7 @@ export interface AppSetting {
     Row?: RowSprops
     Dropdown?: DropdownSprops
     Tag?: TagSprops
+    Mask?: MaskSprops
   }
 }
 //#endregion
