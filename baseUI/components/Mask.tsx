@@ -1,14 +1,13 @@
-import React, { ReactNode, useEffect, useRef } from 'react'
-import Div, { divProps, DivProps } from '../Div'
-import cssDefaults from '../../settings/cssDefaults'
-import useUpdateEffect from '../../hooks/useUpdateEffect'
-import MaskProtal from './MaskProtal'
+import React, { ReactNode, useRef } from 'react'
+import Div, { divProps, DivProps } from './Div'
+import cssDefaults from '../settings/cssDefaults'
+import Protal from './Protal'
 import { CSSPropertyValue, mixCSSObjects } from 'baseUI/style'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { useAppSettings } from '../AppSettings'
+import { useAppSettings } from './AppSettings'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
-import Transition from '../Transition'
+import Transition from './Transition'
 
 export interface MaskProps extends DivProps {
   /**
@@ -80,7 +79,7 @@ export default function Mask(props: MaskProps) {
   const isCloseBySelf = useRef(false)
 
   return (
-    <MaskProtal hidden={!sprops.isOpen}>
+    <Protal hidden={!sprops.isOpen} protalName="Mask-protal">
       <Transition
         show={sprops.isOpen}
         preset='fade-in/out'
@@ -101,6 +100,6 @@ export default function Mask(props: MaskProps) {
           )}
         />
       </Transition>
-    </MaskProtal>
+    </Protal>
   )
 }

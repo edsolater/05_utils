@@ -1,7 +1,6 @@
 import React, { FC, useRef } from 'react'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import Div, { DivProps } from '../Div'
-import cssColor from '../../style/cssColor'
 import cssDefaults from '../../settings/cssDefaults'
 import DrawerCardProtal from './DrawerCardProtal'
 

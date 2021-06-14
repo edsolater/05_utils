@@ -5,7 +5,7 @@ import { DivProps } from '../Div'
 import Mask from '../Mask'
 import createStore from '../../hooks/createStore'
 import DrawerCard from './DrawerCard'
-import isChildrenContain from './isChildrenContain'
+import isChildrenContain from '../../functions/isChildrenContain'
 const { Provider, useStore: useDrawerContext } = createStore({ currentMaskId: null })
 export interface DrawerCardProps extends DivProps {
   /**

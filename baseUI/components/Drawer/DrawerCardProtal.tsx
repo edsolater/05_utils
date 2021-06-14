@@ -2,6 +2,8 @@ import ReactDOM from 'react-dom'
 import { useEffect, useRef } from 'react'
 import { ReactProps } from 'typings/constants'
 
+// TODO: 需要用 <Protal> 统一
+
 function createElementByString<T extends HTMLElement = HTMLDivElement>(innerHTMLStr): T {
   const tempNode = document.createElement('div')
   tempNode.innerHTML = innerHTMLStr
