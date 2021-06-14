@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Button from 'baseUI/components/Button'
-import { _Notifications, _spawnNotification } from 'baseUI/components/Notification'
+import { _Notifications, _spawnNotification } from 'baseUI/components/_Notification'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
