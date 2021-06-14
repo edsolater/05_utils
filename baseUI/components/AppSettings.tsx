@@ -7,9 +7,10 @@ import { IconSprops } from './Icon'
 import { ImageSprops } from './Image'
 import { InputSprops } from './Input'
 import { MaskSprops } from './Mask'
+import { NotificationSprops } from './Notification'
 import { RowSprops } from './Row'
 import { TagSprops } from './Tag'
-import { TransitionProps } from './Transition'
+import { TransitionSprops } from './Transition'
 
 //#region ------------------- props声明 -------------------
 
@@ -28,7 +29,8 @@ export interface AppSetting {
     Dropdown?: DropdownSprops
     Tag?: TagSprops
     Mask?: MaskSprops
-    Transition?: TransitionProps
+    Transition?: TransitionSprops
+    Notification?: NotificationSprops
   }
 }
 //#endregion

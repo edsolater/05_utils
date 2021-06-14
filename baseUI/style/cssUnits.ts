@@ -21,6 +21,7 @@ export type CSSNumber = string
  * changeUnit('40px', 'vw') // '40vw'
  */
 function changeUnit(val: number | string, unit: string) {
+  if (val === undefined) return undefined
   if (typeof val === 'number') {
     if (val === 0) return '0'
     else return `${val}${unit}`
@@ -28,8 +29,6 @@ function changeUnit(val: number | string, unit: string) {
     return `${Number.parseFloat(val)}${unit}`
   }
 }
-
-
 
 export const fromPx = (rule: string): number => parseFloat(rule)
 

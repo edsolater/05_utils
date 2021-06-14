@@ -1,4 +1,5 @@
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
+import { cssDefaults } from 'baseUI/settings'
 import { CSSPropertyValue, mixCSSObjects, toCssValue, cssValues } from 'baseUI/style'
 import React from 'react'
 import { cache } from 'utils/functions/functionFactory'
@@ -11,17 +12,12 @@ export interface CardProps extends DivProps {
   /**
    * @cssProps 卡片的颜色
    */
-  color?: string
+  color?: CSSPropertyValue<'color'>
 
   /**
    * @cssProps 卡片的背景图片（background能接收即可）
    */
-  bgImg?: string
-
-  /**
-   * @cssProps 卡片的渐变图片
-   */
-  gradient?: string
+  bg?: CSSPropertyValue<'background'>
 
   /**
    * @cssProps 卡片的宽度
@@ -49,6 +45,7 @@ export interface CardSprops extends CardProps {
 
 const defaultSprops: CardSprops = {
   borderRadius: 'medium',
+  bg: cssDefaults.whiteCard,
 
   'borderRadius--small': '4px',
   'borderRadius--medium': '8px',
@@ -57,8 +54,8 @@ const defaultSprops: CardSprops = {
 
 const getCSS = cache((sprops: CardSprops) =>
   mixCSSObjects({
-    width: (toCssValue(sprops.width) || sprops?.width) ?? 'unset',
-    height: (toCssValue(sprops.height) || sprops?.height) ?? 'unset',
+    width: toCssValue(sprops.width),
+    height: toCssValue(sprops.height),
     borderRadius:
       sprops.borderRadius === 'small'
         ? sprops['borderRadius--small']
@@ -66,7 +63,7 @@ const getCSS = cache((sprops: CardSprops) =>
         ? sprops['borderRadius--medium']
         : sprops['borderRadius--large'],
     boxShadow: cssValues.smoothShadow,
-    background: sprops.bgImg ? `url(${sprops.bgImg}) center / cover` : sprops.gradient,
+    background: sprops.bg,
     backgroundColor: sprops.color
   })
 )

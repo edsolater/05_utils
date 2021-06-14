@@ -52,6 +52,8 @@ export default function _Notification(props: NotificationProps) {
   )
 }
 
+
+/**这只是个例子 */
 export function _spawnNotification() {
   const wrapperDiv = createElement({ className: 'temp' })
   return ReactDOM.render(<_Notification />, wrapperDiv)

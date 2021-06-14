@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Button from 'baseUI/components/Button'
-import { _Notifications, _spawnNotification } from 'baseUI/components/_Notification'
+import { _Notifications } from 'baseUI/components/_Notification'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
+import { openNoti } from 'baseUI/components/Notification'
 
 /**
  * Button 的使用示例
@@ -12,7 +13,7 @@ const NotificationExample = () => {
   return (
     <ExampleCard category='baseUI/componentComponent' title='Notification'>
       <ExampleGroup caption='JS函数调用'>
-        <Button onClick={() => _spawnNotification()}>toggle</Button>
+        <Button onClick={() => openNoti()}>toggle</Button>
       </ExampleGroup>
       <ExampleGroup caption='模板式调用'>
         <_Notifications count={count} />

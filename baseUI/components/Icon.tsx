@@ -1,7 +1,7 @@
 import React from 'react'
 import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
-import {  DivProps, divProps } from './Div'
+import { DivProps, divProps } from './Div'
 import Image, { ImageProps } from './Image'
 import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
@@ -35,19 +35,25 @@ export interface IconProps extends DivProps {
   hoverColor?: CSSObject['color']
 
   /**@cssProps this will set both width and height */
-  size?: CSSPropertyValue<'width'>
+  size?: 'medium' | 'large'
 }
 
-export interface IconSprops extends IconProps {}
+export interface IconSprops extends IconProps {
+  'size--medium': CSSPropertyValue<'width'>
+  'size--large': CSSPropertyValue<'width'>
+}
 
 const defaultSprops: IconSprops = {
-  size: '24px'
+  size: 'medium',
+
+  'size--medium': '24px',
+  'size--large': '36px'
 }
 
 const getCSS = cache((sprops: IconSprops, core: { src: string }) =>
   mixCSSObjects({
-    width: sprops.size,
-    height: sprops.size,
+    width: sprops[`size--${sprops.size}`],
+    height: sprops[`size--${sprops.size}`],
     position: 'relative',
     borderRadius: '2px',
     transition: 'background 200ms',
