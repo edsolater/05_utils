@@ -79,7 +79,7 @@ export default function Mask(props: MaskProps) {
   const isCloseBySelf = useRef(false)
 
   return (
-    <Protal hidden={!sprops.isOpen} protalName="Mask-protal">
+    <Protal hidden={!sprops.isOpen} protalName='Mask-protal'>
       <Transition
         show={sprops.isOpen}
         preset='fade-in/out'
