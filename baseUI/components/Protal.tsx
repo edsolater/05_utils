@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import { ReactNode, useEffect, useRef } from 'react'
-import { createElement } from '../functions/createElement'
+import createElement from '../functions/createElement'
 import { addDefault } from 'utils/functions/magic'
 
 const ProtalRoot = createElement({

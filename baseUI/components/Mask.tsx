@@ -81,6 +81,7 @@ export default function Mask(props: MaskProps) {
   return (
     <Protal hidden={!sprops.isOpen} protalName='Mask-protal'>
       <Transition
+        appear
         show={sprops.isOpen}
         preset='fade-in/out'
         onAfterEnter={() => sprops.onOpenTransitionEnd?.({})}

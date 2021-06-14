@@ -1,15 +1,12 @@
 import { Transition as Trans } from '@headlessui/react'
 import React, { ReactNode } from 'react'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { CSSPropertyValue, mixCSSObjects, parseCSS } from 'baseUI/style'
 import { cache } from 'utils/functions/functionFactory'
-import { pick } from 'utils/functions/object'
-import { BaseUIDiv } from '.'
 import { useAppSettings } from './AppSettings'
-import { DivProps, divProps } from './Div'
 
 export interface TransitionProps {
   children?: ReactNode
+  appear?: boolean
   show?: boolean
   preset?: 'fade-in/out'
   onBeforeEnter?: () => void
@@ -25,8 +22,7 @@ const defaultSprops: TransitionSprops = {}
 const getCSS = cache((sprops: TransitionSprops) => {})
 /**
  * @BaseUIComponent
- *
- * 将子元素显示在一行，相当于flexbox
+ * @see https://headlessui.dev/react/transition
  */
 const Transition = (props: TransitionProps) => {
   const appSettings = useAppSettings()
@@ -35,6 +31,7 @@ const Transition = (props: TransitionProps) => {
 
   return (
     <Trans
+      appear={sprops.appear}
       show={sprops.show}
       className='Transition'
       enter={'dur'}
