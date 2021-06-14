@@ -57,6 +57,7 @@ export function _spawnNotification() {
   return ReactDOM.render(<_Notification />, wrapperDiv)
 }
 
+/**这只是个例子 */
 export function _Notifications(props: { count?: number }) {
   return (
     <>
