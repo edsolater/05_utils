@@ -8,8 +8,10 @@ import { useAppSettings } from './AppSettings'
 import { cache } from 'utils/functions/functionFactory'
 import Transition from './Transition'
 import createElement from 'baseUI/functions/createElement'
+import { useToggle } from 'baseUI/hooks'
 
 export interface NotificationProps extends DivProps {
+  isOpen?: boolean
   /**
    * 关闭的瞬间（还没有消失完全）
    */
@@ -37,26 +39,34 @@ export default function _Notification(props: NotificationProps) {
   const _sprops = mergeProps(appSettings.globalProps?.Caption, props)
   const sprops = addDefaultProps(_sprops, defaultSprops)
 
+  const [nodeExist, { off }] = useToggle(true)
+  if (!nodeExist) return null
   return (
     <Protal protalName='Notification-protal'>
       <Transition
         appear
-        show
+        show={sprops.isOpen}
         preset='fade-in/out'
         onAfterEnter={() => sprops.onOpenTransitionEnd?.({})}
-        onAfterLeave={() => sprops.onCloseTransitionEnd?.({})}
+        onAfterLeave={() => {
+          sprops.onCloseTransitionEnd?.({})
+          off()
+        }}
       >
-        {sprops.children ?? <span>_Notification 不能直接调用， 需要按照业务定义模板</span>}
+        {sprops.children ?? (
+          <span>
+            {'<'}_Notification{'>'} 不能直接调用， 需要按照业务定义模板
+          </span>
+        )}
       </Transition>
     </Protal>
   )
 }
 
-
 /**这只是个例子 */
 export function _spawnNotification() {
   const wrapperDiv = createElement({ className: 'temp' })
-  return ReactDOM.render(<_Notification />, wrapperDiv)
+  return ReactDOM.render(<_Notification isOpen />, wrapperDiv)
 }
 
 /**这只是个例子 */
@@ -64,7 +74,7 @@ export function _Notifications(props: { count?: number }) {
   return (
     <>
       {Array.from({ length: props.count ?? 0 }, (_, idx) => (
-        <_Notification key={idx} />
+        <_Notification isOpen key={idx} />
       ))}
     </>
   )

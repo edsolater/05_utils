@@ -3,10 +3,13 @@ import { ReactNode, useEffect, useRef } from 'react'
 import createElement from '../functions/createElement'
 import { addDefault } from 'utils/functions/magic'
 
+// TODO: to be extract to a function
 const ProtalRoot = createElement({
   className: 'protal-root',
   style: { position: 'fixed', inset: '0', pointerEvents: 'none' }
 })
+const sheet = window.document.styleSheets[0]
+sheet.insertRule('.protal-root > * { pointer-events: initial }')
 document.body.append(ProtalRoot)
 
 /**

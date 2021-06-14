@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { mixCSSObjects } from 'baseUI/style'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
@@ -8,6 +8,7 @@ import createElement from 'baseUI/functions/createElement'
 import _Notification from './_Notification'
 import Card, { CardProps } from './Card'
 import Icon, { IconProps } from './Icon'
+import { useToggle } from 'baseUI/hooks'
 
 export interface NotificationProps {
   title?: string
@@ -36,19 +37,25 @@ const getCloseIconCSS = cache((sprops: NotificationSprops) =>
   })
 )
 
+// TODO: 失败了?，因为这么做，是组件间是离散的，没法统筹管理。还是得用stack
 export default function Notification(props: NotificationProps) {
   const appSettings = useAppSettings()
   const _sprops = mergeProps(appSettings.globalProps?.Notification, props)
   const sprops = addDefaultProps(_sprops, defaultSprops)
 
+  const [isOpen, { off }] = useToggle(true)
+  useEffect(() => {
+    setTimeout(off, 1000)
+  }, [])
   return (
-    <_Notification>
+    <_Notification isOpen={isOpen}>
       <Card {...mergeProps(sprops._Card, { css: getCardCSS(sprops) })}>
         <Icon
           name='close'
           {...mergeProps(sprops._CloseIcon, { size: 'large', css: getCloseIconCSS(sprops) })}
+          onClick={off}
         />
-        <h3>{sprops.title ?? 'Title here'}</h3>
+        <h3>{sprops.title ?? `Title here`}</h3>
         <p>
           {sprops.detailText ?? 'root knowledge additional then right thought run stiff bicycle'}
         </p>
@@ -57,8 +64,10 @@ export default function Notification(props: NotificationProps) {
   )
 }
 
-/**这只是个例子 */
+const stack: ReactNode[] = []
 export function openNoti(options?: NotificationProps) {
   const ghostDiv = createElement()
+  const thisNode = <Notification {...options} />
+  stack.push(thisNode)
   return ReactDOM.render(<Notification {...options} />, ghostDiv)
 }
