@@ -13,6 +13,7 @@ import { useToggle } from 'baseUI/hooks'
 export interface NotificationProps {
   title?: string
   detailText?: string
+  onClose?: () => void
   _Card?: CardProps
   _CloseIcon?: IconProps
 }
@@ -47,6 +48,12 @@ export default function Notification(props: NotificationProps) {
   useEffect(() => {
     setTimeout(off, 1000)
   }, [])
+
+  useEffect(() => {
+    if (!isOpen) {
+      sprops.onClose?.()
+    }
+  }, [isOpen])
   return (
     <_Notification isOpen={isOpen}>
       <Card {...mergeProps(sprops._Card, { css: getCardCSS(sprops) })}>
@@ -64,10 +71,19 @@ export default function Notification(props: NotificationProps) {
   )
 }
 
+// IDEA: 这个stack要用context维护， 那么， 需要个 <NotificationStack> 组件，统筹
 const stack: ReactNode[] = []
 export function openNoti(options?: NotificationProps) {
   const ghostDiv = createElement()
   const thisNode = <Notification {...options} />
   stack.push(thisNode)
-  return ReactDOM.render(<Notification {...options} />, ghostDiv)
+  return ReactDOM.render(
+    <Notification
+      {...options}
+      onClose={() => {
+        console.log(222) // it works
+      }}
+    />,
+    ghostDiv
+  )
 }
