@@ -1,7 +1,6 @@
 import { AnyFn, AnyObj } from 'typings/constants'
-import { MayDeepArray } from 'typings/tools'
 import flat from 'utils/functions/array/flat'
-import { isUndefined } from 'utils/functions/judgers'
+import { isExist, isOneOf } from 'utils/functions/judgers'
 import isArray from 'utils/functions/judgers/isArray'
 import isFunction from 'utils/functions/judgers/isFunction'
 import isObject from 'utils/functions/judgers/isObject'
@@ -41,8 +40,8 @@ export default function mergeProps<P extends AnyProp | undefined>(
       key,
       [
         [
-          (key) => key === 'className' || 'css' || 'domRef',
-          () => (isUndefined(v1) || isUndefined(v2) ? v1 ?? v2 : [v1, v2].flat)
+          (key) => isOneOf(key, ['className', 'css', 'domRef']) && isExist(v1) && isExist(v2),
+          () => [v1, v2].flat
         ],
         [() => isFunction(v1) && isFunction(v2), () => mergeFunction(v1 as AnyFn, v2 as AnyFn)],
         [() => isObject(v1) && isObject(v2), () => mergeProps(v1 as AnyObj, v2 as AnyObj)],

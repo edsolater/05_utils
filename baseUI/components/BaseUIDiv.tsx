@@ -30,12 +30,8 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
           className: props._className,
           domRef: props._domRef,
           css: props._css,
-          onClick(...params) {
-            props._onClick?.(...params)
-          },
-          onHover(...params) {
-            props._onHover?.(...params)
-          },
+          onClick: props._onClick,
+          onHover: props._onHover,
           htmlProps: props._htmlProps
         },
         props
