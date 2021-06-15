@@ -6,7 +6,7 @@ import { useAppSettings } from './AppSettings'
 import { cache } from 'utils/functions/functionFactory'
 import createElement from 'baseUI/functions/createElement'
 import _Notification from './_Notification'
-import Card, { CardProps } from './Card'
+import Card, { CardProps, CardSprops } from './Card'
 import Icon, { IconProps } from './Icon'
 import { useToggle } from 'baseUI/hooks'
 
@@ -14,7 +14,7 @@ export interface NotificationProps {
   title?: string
   detailText?: string
   onClose?: () => void
-  _Card?: CardProps
+  _Card?: CardSprops
   _CloseIcon?: IconProps
 }
 

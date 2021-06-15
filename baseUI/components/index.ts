@@ -1,5 +1,4 @@
 export { default as AppLayout } from './AppLayout'
-export { default as AppSettings } from './AppSettings'
 export { default as BaseUIDiv } from './BaseUIDiv'
 export { default as Button } from './Button'
 export { default as Caption } from './Caption'

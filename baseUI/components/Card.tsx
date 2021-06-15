@@ -5,7 +5,7 @@ import React from 'react'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import { BaseUIDiv } from '.'
-import { useAppSettings } from './AppSettings'
+import { injectAppSetting, useAppSettings } from './AppSettings'
 import { DivProps, divProps } from './Div'
 
 export interface CardProps extends DivProps {
@@ -35,22 +35,11 @@ export interface CardProps extends DivProps {
 }
 
 export interface CardSprops extends CardProps {
-  width?: CSSPropertyValue<'width'>
-  height?: CSSPropertyValue<'height'>
-
   'borderRadius--small'?: CSSPropertyValue<'borderRadius'>
   'borderRadius--medium'?: CSSPropertyValue<'borderRadius'>
   'borderRadius--large'?: CSSPropertyValue<'borderRadius'>
 }
 
-const defaultSprops: CardSprops = {
-  borderRadius: 'medium',
-  bg: cssDefaults.whiteCard,
-
-  'borderRadius--small': '4px',
-  'borderRadius--medium': '8px',
-  'borderRadius--large': '32px'
-}
 
 const getCSS = cache((sprops: CardSprops) =>
   mixCSSObjects({
@@ -71,9 +60,16 @@ const getCSS = cache((sprops: CardSprops) =>
 /**
  * @BaseUIComponent
  */
-export default function Card(props: CardProps) {
-  const appSettings = useAppSettings()
-  const _sprops = mergeProps(appSettings.globalProps?.Card, props)
-  const sprops = addDefaultProps(_sprops, defaultSprops)
-  return <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops)} />
+function Card(props: CardSprops) {
+  return <BaseUIDiv {...pick(props, divProps)} _css={getCSS(props)} />
 }
+const defaultSprops: CardSprops = {
+  borderRadius: 'medium',
+  bg: cssDefaults.whiteCard,
+
+  'borderRadius--small': '4px', // FIXME: 感觉这个是theme呀，设置在appSetting里不合适
+  'borderRadius--medium': '8px',
+  'borderRadius--large': '32px'
+}
+
+export default injectAppSetting(Card, defaultSprops)

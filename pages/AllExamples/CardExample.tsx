@@ -1,4 +1,4 @@
-import Card from 'baseUI/components/Card'
+import { Card } from 'baseUI/components'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'

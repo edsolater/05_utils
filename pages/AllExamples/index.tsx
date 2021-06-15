@@ -1,5 +1,5 @@
 import React from 'react'
-import GlobalSettings from 'baseUI/components/AppSettings'
+import { AppSettingsProvider as GlobalSettings } from 'baseUI/components/AppSettings'
 import AppLayoutExample from './AppLayoutExample'
 import AppProvidersExample from './AppProvidersExample'
 import ButtonExample from './ButtonExample'
@@ -20,7 +20,7 @@ import TransformExample from './TransformExample'
 const AllExamples = () => (
   <GlobalSettings>
     <NotificationExample />
-    {/* <AppLayoutExample />
+    <AppLayoutExample />
     <HoverableExample />
     <KeyboardShortcutExample />
     <DrawerExample />
@@ -34,7 +34,7 @@ const AllExamples = () => (
     <InputExample />
     <DropdownExample />
     <TagExample />
-    <IconExample /> */}
+    <IconExample />
   </GlobalSettings>
 )
 export default AllExamples
