@@ -3,7 +3,7 @@ import React, { createContext, FC, ReactNode, useContext } from 'react'
 import { overwriteFunctionName } from 'utils/functions/functionFactory'
 import { ButtonSprops } from './Button'
 import { CaptionSprops } from './Caption'
-import { CardSprops } from './Card'
+import { CardProps } from './Card'
 import { DropdownSprops } from './Dropdown'
 import { IconSprops } from './Icon'
 import { ImageSprops } from './Image'
@@ -21,7 +21,7 @@ export interface AppSetting {
   globalProps?: {
     Button?: ButtonSprops
     Caption?: CaptionSprops
-    Card?: CardSprops
+    Card?: CardProps
     Icon?: IconSprops
     Image?: ImageSprops
     Input?: InputSprops

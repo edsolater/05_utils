@@ -1,11 +1,11 @@
-import { mergeProps, addDefaultProps } from 'baseUI/functions'
 import { cssDefaults } from 'baseUI/settings'
+import { cssDefaultColor } from 'baseUI/settings/cssDefaults'
 import { CSSPropertyValue, mixCSSObjects, toCssValue, cssValues } from 'baseUI/style'
 import React from 'react'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import { BaseUIDiv } from '.'
-import { injectAppSetting, useAppSettings } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { DivProps, divProps } from './Div'
 
 export interface CardProps extends DivProps {
@@ -34,42 +34,31 @@ export interface CardProps extends DivProps {
   borderRadius?: 'small' | 'medium' | 'large'
 }
 
-export interface CardSprops extends CardProps {
-  'borderRadius--small'?: CSSPropertyValue<'borderRadius'>
-  'borderRadius--medium'?: CSSPropertyValue<'borderRadius'>
-  'borderRadius--large'?: CSSPropertyValue<'borderRadius'>
-}
-
-
-const getCSS = cache((sprops: CardSprops) =>
+const getCSS = cache((props: CardProps) =>
   mixCSSObjects({
-    width: toCssValue(sprops.width),
-    height: toCssValue(sprops.height),
+    width: toCssValue(props.width),
+    height: toCssValue(props.height),
     borderRadius:
-      sprops.borderRadius === 'small'
-        ? sprops['borderRadius--small']
-        : sprops.borderRadius === 'medium'
-        ? sprops['borderRadius--medium']
-        : sprops['borderRadius--large'],
+      props.borderRadius === 'small'
+        ? cssDefaults.Card['borderRadius--small']
+        : props.borderRadius === 'medium'
+        ? cssDefaults.Card['borderRadius--medium']
+        : cssDefaults.Card['borderRadius--large'],
     boxShadow: cssValues.smoothShadow,
-    background: sprops.bg,
-    backgroundColor: sprops.color
+    background: props.bg,
+    backgroundColor: props.color
   })
 )
 
 /**
  * @BaseUIComponent
  */
-function Card(props: CardSprops) {
+function Card(props: CardProps) {
   return <BaseUIDiv {...pick(props, divProps)} _css={getCSS(props)} />
 }
-const defaultSprops: CardSprops = {
+const defaultSprops: CardProps = {
   borderRadius: 'medium',
-  bg: cssDefaults.whiteCard,
-
-  'borderRadius--small': '4px', // FIXME: 感觉这个是theme呀，设置在appSetting里不合适
-  'borderRadius--medium': '8px',
-  'borderRadius--large': '32px'
+  bg: cssDefaultColor.whiteCard
 }
 
 export default injectAppSetting(Card, defaultSprops)
