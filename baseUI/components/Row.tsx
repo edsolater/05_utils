@@ -1,11 +1,12 @@
 import React from 'react'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { CSSPropertyValue, mixCSSObjects } from 'baseUI/style'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import { BaseUIDiv } from '.'
 import { useAppSettings } from './AppSettings'
 import { DivProps, divProps } from './Div'
+import { mixCSSObjects } from 'baseUI/style/cssParser'
+import { CSSPropertyValue } from 'baseUI/style/cssValue'
 
 export interface RowProps extends DivProps {
   /**

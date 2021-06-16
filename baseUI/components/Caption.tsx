@@ -1,12 +1,13 @@
 import React from 'react'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { CSSPropertyValue, mixCSSObjects } from 'baseUI/style'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import { useAppSettings } from './AppSettings'
 import { DivProps, divProps } from './Div'
 import { BaseUIDiv } from '.'
-import cssDefaults from 'baseUI/settings/cssDefaults'
+import { mixCSSObjects } from 'baseUI/style/cssParser'
+import { CSSPropertyValue } from 'baseUI/style/cssValue'
+import cssTheme from 'baseUI/settings/cssTheme'
 
 export interface CaptionProps extends DivProps {
   /**
@@ -22,7 +23,7 @@ export interface CaptionSprops extends CaptionProps {
 
 const defaultSprops: CaptionSprops = {
   align: 'left',
-  textColor: cssDefaults.color.grayText
+  textColor: cssTheme.color.grayText
 }
 
 const getCSS = cache((sprops: CaptionSprops) =>

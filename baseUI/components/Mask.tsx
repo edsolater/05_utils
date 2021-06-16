@@ -1,13 +1,15 @@
 import React, { ReactNode, useRef } from 'react'
 import Div, { divProps, DivProps } from './Div'
 import Protal from './Protal'
-import { CSSPropertyValue, mixCSSObjects } from 'baseUI/style'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
 import { useAppSettings } from './AppSettings'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import Transition from './Transition'
-import cssDefaults from 'baseUI/settings/cssDefaults'
+import uiCSS from 'baseUI/settings/uiCSS'
+import { mixCSSObjects } from 'baseUI/style/cssParser'
+import { CSSPropertyValue } from 'baseUI/style/cssValue'
+import cssTheme from 'baseUI/settings/cssTheme'
 
 export interface MaskProps extends DivProps {
   /**
@@ -58,9 +60,9 @@ const getCSS = cache((sprops: MaskSprops) =>
   mixCSSObjects({
     position: 'fixed',
     inset: '0',
-    backgroundColor: sprops.maskBg ?? cssDefaults.color.maskBg,
+    backgroundColor: sprops.maskBg ?? uiCSS.Mask.bg,
     pointerEvents: sprops.isOpen ? 'initial' : 'none',
-    transition: sprops.transitonDuration ?? cssDefaults.transition.normal
+    transition: sprops.transitonDuration ?? cssTheme.transition.normal
   })
 )
 

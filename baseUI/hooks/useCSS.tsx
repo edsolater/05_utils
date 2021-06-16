@@ -1,4 +1,4 @@
-import { mixCSSObjects } from 'baseUI/style'
+import { mixCSSObjects } from 'baseUI/style/cssParser'
 import { GetArrayItem } from 'baseUI/typing'
 import { useMemo, useRef } from 'react'
 import { cache } from 'utils/functions/functionFactory'

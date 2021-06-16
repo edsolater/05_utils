@@ -1,10 +1,10 @@
 import React, { ReactChild, useRef, useEffect } from 'react'
 import { useToggle_Ref } from 'baseUI/hooks/useToggle'
-import { CSSLength, toPx } from 'baseUI/style'
 import Div, { DivProps } from './Div'
 import { BaseUIDiv } from '.'
-import { baseUICSS } from "baseUI/settings/baseUICSS"
-import cssDefaults from 'baseUI/settings/cssDefaults'
+import { CSSLength, toPx } from 'baseUI/style/cssUnits'
+import uiCSS from 'baseUI/settings/uiCSS'
+import cssTheme from 'baseUI/settings/cssTheme'
 
 interface ScrollDivProps extends DivProps {
   children: ReactChild
@@ -92,7 +92,7 @@ export default function ScrollDiv({
         '.ScrollDiv-scrollbar-box': {
           // 如果靠组件状态处理的话， 性能堪忧
           opacity: '0.4',
-          transition: cssDefaults.transition.normal
+          transition: cssTheme.transition.normal
         }
       }}
     >
@@ -136,12 +136,12 @@ export default function ScrollDiv({
           '::-webkit-scrollbar-thumb': {
             width: scrollbarWidth,
             borderRadius: scrollbarWidth,
-            background: baseUICSS.ScrollDiv.thumbColor,
+            background: uiCSS.ScrollDiv.thumbColor,
             ':hover': {
-              background: baseUICSS.ScrollDiv.thumbColorHover
+              background: uiCSS.ScrollDiv.thumbColorHover
             },
             ':active': {
-              background: baseUICSS.ScrollDiv.thumbColorActive
+              background: uiCSS.ScrollDiv.thumbColorActive
             }
           }
         }}

@@ -1,13 +1,15 @@
 import React from 'react'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { cssSize, cssFont } from 'baseUI/settings'
-import { CSSPropertyValue, cssColor, mixCSSObjects, cssBrightness } from 'baseUI/style'
 import { useAppSettings } from './AppSettings'
 import { DivProps, divProps } from './Div'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import BaseUIDiv from './BaseUIDiv'
-import cssDefaults from 'baseUI/settings/cssDefaults'
+import cssColor from 'baseUI/style/cssColor'
+import { cssBrightness } from 'baseUI/style/cssFunctions'
+import { mixCSSObjects } from 'baseUI/style/cssParser'
+import { CSSPropertyValue } from 'baseUI/style/cssValue'
+import cssTheme from 'baseUI/settings/cssTheme'
 
 export interface ButtonProps extends DivProps<'button'> {
   /**
@@ -48,20 +50,20 @@ const defaultSprops: ButtonSprops = {
   type: 'fill',
   size: 'medium',
 
-  'padding--small': `${cssSize.mini} ${cssSize.large}`,
-  'fontSize--small': cssFont.medium,
-  'borderRadius--small': cssSize.mini,
+  'padding--small': `${cssTheme.size.mini} ${cssTheme.size.large}`,
+  'fontSize--small': cssTheme.font.medium,
+  'borderRadius--small': cssTheme.size.mini,
 
-  'padding--medium': `${cssSize.mini} ${cssSize.large}`,
-  'fontSize--medium': cssFont.medium,
-  'borderRadius--medium': cssSize.mini,
+  'padding--medium': `${cssTheme.size.mini} ${cssTheme.size.large}`,
+  'fontSize--medium': cssTheme.font.medium,
+  'borderRadius--medium': cssTheme.size.mini,
 
-  'padding--large': `${cssSize.mini} ${cssSize.large}`,
-  'fontSize--large': cssFont.medium,
-  'borderRadius--large': cssSize.mini,
+  'padding--large': `${cssTheme.size.mini} ${cssTheme.size.large}`,
+  'fontSize--large': cssTheme.font.medium,
+  'borderRadius--large': cssTheme.size.mini,
 
   'textColor--fill': cssColor.white,
-  'background--fill': cssDefaults.color.defaultBackgroundGray,
+  'background--fill': cssTheme.color.defaultBackgroundGray,
   'borderWidth--outline': '1px',
   'borderColor--outline': 'currentcolor',
   'borderOpacity--outline': '0.3'

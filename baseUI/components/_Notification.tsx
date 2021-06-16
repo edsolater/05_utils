@@ -2,13 +2,13 @@ import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import { DivProps } from './Div'
 import Protal from './Protal'
-import { mixCSSObjects } from 'baseUI/style'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
 import { useAppSettings } from './AppSettings'
 import { cache } from 'utils/functions/functionFactory'
 import Transition from './Transition'
 import createElement from 'baseUI/functions/createElement'
 import { useToggle } from 'baseUI/hooks'
+import { mixCSSObjects } from 'baseUI/style/cssParser'
 
 export interface NotificationProps extends DivProps {
   isOpen?: boolean

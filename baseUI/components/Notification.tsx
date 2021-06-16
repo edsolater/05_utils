@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import { mixCSSObjects } from 'baseUI/style'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
 import { useAppSettings } from './AppSettings'
 import { cache } from 'utils/functions/functionFactory'
@@ -9,6 +8,7 @@ import _Notification from './_Notification'
 import Card, { CardProps } from './Card'
 import Icon, { IconProps } from './Icon'
 import { useToggle } from 'baseUI/hooks'
+import { mixCSSObjects } from 'baseUI/style/cssParser'
 
 export interface NotificationProps {
   title?: string

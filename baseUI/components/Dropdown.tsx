@@ -5,11 +5,11 @@ import Card, { CardProps } from './Card'
 import cache from 'utils/functions/functionFactory/cache'
 import { mixCSSObjects } from '../style/cssParser'
 import { CSSPropertyValue } from '../style/cssValue'
-import cssDefaults from '../settings/cssDefaults'
 import { useAppSettings } from './AppSettings'
 import mergeProps from '../functions/mergeProps'
 import addDefaultProps from '../functions/addDefaultProps'
 import { BaseUIDiv } from '.'
+import cssTheme from 'baseUI/settings/cssTheme'
 
 // 应该就是一种 Card 的特殊呈现形式
 /**
@@ -34,7 +34,7 @@ export interface DropdownSprops extends DropdownProps {
 
 const defaultSprops: DropdownSprops = {
   gapFromButton: '16px',
-  cardBg: cssDefaults.color.whiteCard
+  cardBg: cssTheme.color.whiteCard
 }
 
 const getCSS = cache((sprops: DropdownSprops) =>

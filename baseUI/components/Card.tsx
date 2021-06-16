@@ -1,12 +1,13 @@
-import cssDefaults from 'baseUI/settings/cssDefaults'
-import { baseUICSS } from "baseUI/settings/baseUICSS"
-import { CSSPropertyValue, toCssValue, cssValues } from 'baseUI/style'
 import React from 'react'
 import { pick } from 'utils/functions/object'
 import { BaseUIDiv } from '.'
 import { injectAppSetting } from './AppSettings'
 import { DivProps, divProps } from './Div'
 import { useCSS } from '../hooks/useCSS'
+import uiCSS from 'baseUI/settings/uiCSS'
+import { toCssValue } from 'baseUI/style/cssUnits'
+import { CSSPropertyValue } from 'baseUI/style/cssValue'
+import cssTheme from 'baseUI/settings/cssTheme'
 
 export interface CardProps extends DivProps {
   /**
@@ -43,12 +44,12 @@ function Card(props: CardProps) {
     height: toCssValue(props.height),
     borderRadius:
       props.borderRadius === 'small'
-        ? baseUICSS.Card['borderRadius--small']
+        ? uiCSS.Card['borderRadius--small']
         : props.borderRadius === 'medium'
-        ? baseUICSS.Card['borderRadius--medium']
-        : baseUICSS.Card['borderRadius--large'],
-    boxShadow: cssValues.smoothShadow,
-    background: props.bg ?? cssDefaults.color.whiteCard,
+        ? uiCSS.Card['borderRadius--medium']
+        : uiCSS.Card['borderRadius--large'],
+    boxShadow: cssTheme.shadow.smooth,
+    background: props.bg ?? cssTheme.color.whiteCard,
     backgroundColor: props.color
   }))
   return <BaseUIDiv {...pick(props, divProps)} _css={css} />

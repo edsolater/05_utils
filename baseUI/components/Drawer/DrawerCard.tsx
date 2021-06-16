@@ -1,5 +1,5 @@
-import { baseUICSS } from "baseUI/settings/baseUICSS"
-import cssDefaults from "baseUI/settings/cssDefaults"
+import cssTheme from 'baseUI/settings/cssTheme'
+import uiCSS from 'baseUI/settings/uiCSS'
 import React, { FC, useRef } from 'react'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import Div, { DivProps } from '../Div'
@@ -80,10 +80,10 @@ const DrawerCard: FC<DrawerCardProps> = (props) => {
           left: isOpen ? '0' : '-30%',
           width: '30%',
           height: '100%',
-          backgroundColor: cssDefaults.color.whiteCard,
-          boxShadow: baseUICSS.Drawer.shadow,
+          backgroundColor: cssTheme.color.whiteCard,
+          boxShadow: uiCSS.Drawer.shadow,
           opacity: isOpen ? '1' : '0',
-          transition: cssDefaults.transition.slow,
+          transition: cssTheme.transition.slow,
           pointerEvents: 'initial'
         }}
       >
