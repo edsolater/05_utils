@@ -2,7 +2,7 @@ import AppLayout from 'baseUI/components/AppLayout'
 import Div from 'baseUI/components/Div'
 import ScrollDiv from 'baseUI/components/ScrollDiv'
 import cssColor from 'baseUI/style/cssColor'
-import cssDefaults from 'baseUI/settings/cssDefaults'
+import { cssDefaultTransition } from 'baseUI/settings/cssDefaults'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
@@ -20,7 +20,7 @@ const AppLayoutExample = () => (
               css={{
                 height: isHidden ? '0' : '56px',
                 background: cssColor.dodgerblueLight,
-                transition: cssDefaults.transiton.normal
+                transition: cssDefaultTransition.normal
               }}
             />
           )}
@@ -34,7 +34,7 @@ const AppLayoutExample = () => (
                   height: '200vh',
                   width: collapsed ? '50px' : 'clamp(200px, 15vw, 300px)',
                   background: cssColor.dodgerblue,
-                  transition: cssDefaults.transiton.normal
+                  transition: cssDefaultTransition.normal
                 }}
               >
                 Menu

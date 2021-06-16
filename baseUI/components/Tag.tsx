@@ -1,6 +1,5 @@
 import React from 'react'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { cssDefaults } from 'baseUI/settings'
 import { mixCSSObjects, cssColor } from 'baseUI/style'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
@@ -8,6 +7,7 @@ import { BaseUIDiv, Icon } from '.'
 import { useAppSettings } from './AppSettings'
 import { DivProps, divProps } from './Div'
 import { IconProps } from './Icon'
+import { cssDefaultColor } from 'baseUI/settings/cssDefaults'
 
 // 应该就是一种 Card 的特殊呈现形式
 export interface TagProps extends DivProps {
@@ -44,7 +44,7 @@ export default function Tag(props: TagProps) {
       {sprops.controls && (
         <Icon
           {...sprops.closeIconProp}
-          color={sprops.closeIconProp?.color ?? cssDefaults.darkText} // 因为这里的color需要用来开启自定义颜色的功能，故不能转而使用cssVariable
+          color={sprops.closeIconProp?.color ?? cssDefaultColor.darkText} // 因为这里的color需要用来开启自定义颜色的功能，故不能转而使用cssVariable
           onClick={(...params) => {
             sprops.onClose?.()
             sprops.closeIconProp?.onClick?.(...params)

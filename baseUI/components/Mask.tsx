@@ -1,6 +1,6 @@
 import React, { ReactNode, useRef } from 'react'
 import Div, { divProps, DivProps } from './Div'
-import cssDefaults from '../settings/cssDefaults'
+import { cssDefaultColor, cssDefaultTransition } from '../settings/cssDefaults'
 import Protal from './Protal'
 import { CSSPropertyValue, mixCSSObjects } from 'baseUI/style'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
@@ -52,17 +52,15 @@ export interface MaskSprops extends MaskProps {
 }
 
 const defaultSprops: MaskSprops = {
-  maskBg: cssDefaults.maskBg, // TODO：如此具体的自定义不能放在CSSDefault上
-  transitonDuration: cssDefaults.transiton.normal
 }
 
 const getCSS = cache((sprops: MaskSprops) =>
   mixCSSObjects({
     position: 'fixed',
     inset: '0',
-    backgroundColor: sprops.maskBg,
+    backgroundColor: sprops.maskBg ?? cssDefaultColor.maskBg,
     pointerEvents: sprops.isOpen ? 'initial' : 'none',
-    transition: sprops.transitonDuration
+    transition: sprops.transitonDuration ?? cssDefaultTransition.normal
   })
 )
 

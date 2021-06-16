@@ -1,5 +1,4 @@
-import { cssDefaults } from 'baseUI/settings'
-import { cssDefaultColor } from 'baseUI/settings/cssDefaults'
+import { cssDefaultColor, cssDefaultUI } from 'baseUI/settings/cssDefaults'
 import { CSSPropertyValue, mixCSSObjects, toCssValue, cssValues } from 'baseUI/style'
 import React from 'react'
 import { cache } from 'utils/functions/functionFactory'
@@ -40,12 +39,12 @@ const getCSS = cache((props: CardProps) =>
     height: toCssValue(props.height),
     borderRadius:
       props.borderRadius === 'small'
-        ? cssDefaults.Card['borderRadius--small']
+        ? cssDefaultUI.Card['borderRadius--small']
         : props.borderRadius === 'medium'
-        ? cssDefaults.Card['borderRadius--medium']
-        : cssDefaults.Card['borderRadius--large'],
+        ? cssDefaultUI.Card['borderRadius--medium']
+        : cssDefaultUI.Card['borderRadius--large'],
     boxShadow: cssValues.smoothShadow,
-    background: props.bg,
+    background: props.bg ?? cssDefaultColor.whiteCard,
     backgroundColor: props.color
   })
 )
@@ -58,7 +57,6 @@ function Card(props: CardProps) {
 }
 const defaultSprops: CardProps = {
   borderRadius: 'medium',
-  bg: cssDefaultColor.whiteCard
 }
 
 export default injectAppSetting(Card, defaultSprops)

@@ -1,12 +1,13 @@
 import React from 'react'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { cssSize, cssFont, cssDefaults } from 'baseUI/settings'
+import { cssSize, cssFont } from 'baseUI/settings'
 import { CSSPropertyValue, cssColor, mixCSSObjects, cssBrightness } from 'baseUI/style'
 import { useAppSettings } from './AppSettings'
 import { DivProps, divProps } from './Div'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import BaseUIDiv from './BaseUIDiv'
+import { cssDefaultColor } from 'baseUI/settings/cssDefaults'
 
 export interface ButtonProps extends DivProps<'button'> {
   /**
@@ -60,7 +61,7 @@ const defaultSprops: ButtonSprops = {
   'borderRadius--large': cssSize.mini,
 
   'textColor--fill': cssColor.white,
-  'background--fill': cssDefaults.defaultBackgroundGray,
+  'background--fill': cssDefaultColor.defaultBackgroundGray,
   'borderWidth--outline': '1px',
   'borderColor--outline': 'currentcolor',
   'borderOpacity--outline': '0.3'

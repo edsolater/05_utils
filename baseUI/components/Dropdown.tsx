@@ -5,7 +5,7 @@ import Card, { CardProps } from './Card'
 import cache from 'utils/functions/functionFactory/cache'
 import { mixCSSObjects } from '../style/cssParser'
 import { CSSPropertyValue } from '../style/cssValue'
-import cssDefaults from '../settings/cssDefaults'
+import { cssDefaultColor } from '../settings/cssDefaults'
 import { useAppSettings } from './AppSettings'
 import mergeProps from '../functions/mergeProps'
 import addDefaultProps from '../functions/addDefaultProps'
@@ -34,7 +34,7 @@ export interface DropdownSprops extends DropdownProps {
 
 const defaultSprops: DropdownSprops = {
   gapFromButton: '16px',
-  cardBg: cssDefaults.whiteCard
+  cardBg: cssDefaultColor.whiteCard
 }
 
 const getCSS = cache((sprops: DropdownSprops) =>
