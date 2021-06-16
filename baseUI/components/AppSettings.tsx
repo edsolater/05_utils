@@ -5,12 +5,12 @@ import { ButtonProps } from './Button'
 import { CaptionProps } from './Caption'
 import { CardProps } from './Card'
 import { DropdownProps } from './Dropdown'
-import { IconSprops } from './Icon'
+import { IconProps } from './Icon'
 import { ImageProps } from './Image'
 import { InputProps } from './Input'
 import { MaskProps } from './Mask'
 import { NotificationSprops } from './Notification'
-import { RowSprops } from './Row'
+import { RowProps } from './Row'
 import { TagSprops } from './Tag'
 import { TransitionSprops } from './Transition'
 
@@ -22,10 +22,10 @@ export interface AppSetting {
     Button?: ButtonProps
     Caption?: CaptionProps
     Card?: CardProps
-    Icon?: IconSprops
+    Icon?: IconProps
     Image?: ImageProps
     Input?: InputProps
-    Row?: RowSprops
+    Row?: RowProps
     Dropdown?: DropdownProps
     Tag?: TagSprops
     Mask?: MaskProps

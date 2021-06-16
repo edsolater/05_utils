@@ -1,12 +1,10 @@
 import React from 'react'
-import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import { BaseUIDiv } from '.'
-import { useAppSettings } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { DivProps, divProps } from './Div'
-import { mixCSSObjects } from 'baseUI/style/cssParser'
-import { CSSPropertyValue } from 'baseUI/style/cssValue'
+import uiCSS from 'baseUI/settings/uiCSS'
+import useCSS from 'baseUI/hooks/useCSS'
 
 export interface RowProps extends DivProps {
   /**
@@ -19,38 +17,16 @@ export interface RowProps extends DivProps {
   noStratch?: boolean
 }
 
-export interface RowSprops extends RowProps {
-  'gapSize--small'?: CSSPropertyValue<'gap'>
-  'gapSize--medium'?: CSSPropertyValue<'gap'>
-  'gapSize--large'?: CSSPropertyValue<'gap'>
-}
-
-const defaultSprops: RowSprops = {
-  'gapSize--small': '4px',
-  'gapSize--medium': '8px',
-  'gapSize--large': '16px'
-}
-
-const getCSS = cache((sprops: RowSprops) =>
-  mixCSSObjects(
-    { display: 'flex' },
-    sprops.gapSize === 'small' && { gap: sprops['gapSize--small'] },
-    sprops.gapSize === 'medium' && { gap: sprops['gapSize--medium'] },
-    sprops.gapSize === 'large' && { gap: sprops['gapSize--large'] },
-    sprops.noStratch && { alignItems: 'center' }
-  )
-)
 /**
  * @BaseUIComponent
  *
  * 将子元素显示在一行，相当于flexbox
  */
 const Row = (props: RowProps) => {
-  const appSettings = useAppSettings()
-  const _sprops = mergeProps(appSettings.globalProps?.Row, props)
-  const sprops = addDefaultProps(_sprops, defaultSprops)
-
-  return <BaseUIDiv {...pick(sprops, divProps)} css={getCSS(sprops)}></BaseUIDiv>
+  const css = useCSS(props, (props) => [
+    { display: 'flex', gap: uiCSS.Row[`gapSize--${props.gapSize}`] },
+    props.noStratch && { alignItems: 'center' }
+  ])
+  return <BaseUIDiv {...pick(props, divProps)} _css={css} />
 }
-
-export default Row
+export default injectAppSetting(Row)

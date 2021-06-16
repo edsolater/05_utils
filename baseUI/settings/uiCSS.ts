@@ -5,12 +5,14 @@ const uiCSS = {
   Drawer: {
     shadow: cssTheme.shadow.smooth
   },
+
   Card: {
     bg: cssTheme.color.whiteCard,
     'borderRadius--small': '4px',
     'borderRadius--medium': '8px',
     'borderRadius--large': '32px'
   },
+
   ScrollDiv: {
     thumbColor: 'hsla(0deg 0% 0% / 0.2)',
     thumbColorHover: 'hsla(0deg 0% 0% / 0.3)',
@@ -18,6 +20,7 @@ const uiCSS = {
     // exclusive color for dark mode
     // thumbColor_darkMode:
   },
+
   Button: {
     'padding--small': `${cssTheme.size.mini} ${cssTheme.size.large}`,
     'fontSize--small': cssTheme.font.medium,
@@ -37,13 +40,16 @@ const uiCSS = {
     'borderColor--outline': 'currentcolor',
     'borderOpacity--outline': '0.3'
   },
+
   Caption: {
     textColor: cssTheme.color.grayText
   },
+
   Icon: {
     'size--medium': '24px',
     'size--large': '36px'
   },
+
   Input: {
     /**
      * @cssProps 输入框颜色
@@ -54,6 +60,7 @@ const uiCSS = {
      */
     caretColor: undefined
   },
+
   Mask: {
     /**
      * @cssProps
@@ -61,12 +68,18 @@ const uiCSS = {
      * It should be non-transparent color/gradiant
      */
     bg: 'hsla(0deg 0% 0% / 0.2)',
-    
+
     /**
      * @cssProps
      * the transition time of animation when open/close the mask
      */
     transitonDuration: cssTheme.transition.normal
+  },
+
+  Row: {
+    'gapSize--small': '4px',
+    'gapSize--medium': '8px',
+    'gapSize--large': '16px'
   }
 }
 
