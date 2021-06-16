@@ -7,8 +7,8 @@ import { CardProps } from './Card'
 import { DropdownProps } from './Dropdown'
 import { IconSprops } from './Icon'
 import { ImageProps } from './Image'
-import { InputSprops } from './Input'
-import { MaskSprops } from './Mask'
+import { InputProps } from './Input'
+import { MaskProps } from './Mask'
 import { NotificationSprops } from './Notification'
 import { RowSprops } from './Row'
 import { TagSprops } from './Tag'
@@ -24,11 +24,11 @@ export interface AppSetting {
     Card?: CardProps
     Icon?: IconSprops
     Image?: ImageProps
-    Input?: InputSprops
+    Input?: InputProps
     Row?: RowSprops
     Dropdown?: DropdownProps
     Tag?: TagSprops
-    Mask?: MaskSprops
+    Mask?: MaskProps
     Transition?: TransitionSprops
     Notification?: NotificationSprops
   }

@@ -7,12 +7,12 @@ import { toPx } from '../style/cssUnits'
 import { CSSObject } from '@emotion/react'
 import cssColor from '../style/cssColor'
 import { mixCSSObjects } from '../style/cssParser'
-import cache from 'utils/functions/functionFactory/cache'
 import cssMixins from '../style/cssMixins'
-import { useAppSettings } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import mergeProps from '../functions/mergeProps'
-import addDefaultProps from '../functions/addDefaultProps'
 import { BaseUIDiv, Div } from '.'
+import uiCSS from 'baseUI/settings/uiCSS'
+import useCSS from 'baseUI/hooks/useCSS'
 
 export interface InputProps extends DivProps {
   //TODO: 需要加入min-height之类，得有个最小高度
@@ -39,73 +39,16 @@ export interface InputProps extends DivProps {
    * @default '10px'
    */
   width?: Extract<CSSObject['width'], string>
-
-  /**
-   * @cssProps 输入框颜色
-   */
-  focusColor?: Extract<CSSObject['color'], string>
-  /**
-   * @cssProps 光标颜色
-   */
-  caretColor?: Extract<CSSObject['color'], string>
 }
-
-export interface InputSprops extends InputProps {
-  borderColor?: Extract<CSSObject['color'], string>
-}
-
-const defaultSprops: InputSprops = {
-  borderColor: cssColor.whitesmoke
-}
-
-const getCSS = cache((sprops: InputSprops) =>
-  mixCSSObjects({
-    width: sprops.width,
-    cursor: 'text',
-    border: `1px solid ${cssColor.whitesmoke}`,
-    ':focus-within': {
-      borderColor: sprops.focusColor
-    },
-    padding: '4px 8px',
-    borderRadius: 4,
-    display: 'flex',
-    alignItems: 'center'
-  })
-)
-const getIconCSS = cache((sprops: InputSprops) =>
-  mixCSSObjects({
-    flex: 'none'
-  })
-)
-const getBodyCSS = cache((sprops: InputSprops, detail: { isTextarea: boolean }) =>
-  mixCSSObjects(
-    {
-      cursor: 'inherit',
-      flex: '1 0 auto',
-      background: 'transparent',
-      caretColor: sprops.caretColor ?? 'unset',
-      outline: 'none',
-      border: 'none'
-    },
-    detail.isTextarea &&
-      mixCSSObjects(cssMixins.noScrollbar, {
-        resize: 'none'
-      })
-  )
-)
 
 /**
  * @BaseUIComponent
  */
-export default function Input(props: InputProps) {
-  const appSettings = useAppSettings()
-  const _sprops = mergeProps(appSettings.globalProps?.Input, props)
-  const sprops = addDefaultProps(_sprops, defaultSprops)
-
+function Input(props: InputProps) {
   const [value, setValue] = useState('')
   const inputBodyRef = useRef<HTMLInputElement | HTMLTextAreaElement>()
 
-  const isTextarea = Boolean(sprops.row && sprops.row !== 1)
+  const isTextarea = Boolean(props.row && props.row !== 1)
 
   // textarea模式下，需要同步高度以免出现滚动条
   const syncHeight = () => {
@@ -117,30 +60,60 @@ export default function Input(props: InputProps) {
     }
   }
 
+  const css = useCSS(props, (props) => ({
+    width: props.width,
+    cursor: 'text',
+    border: `1px solid ${cssColor.whitesmoke}`,
+    ':focus-within': {
+      borderColor: uiCSS.Input.focusColor
+    },
+    padding: '4px 8px',
+    borderRadius: 4,
+    display: 'flex',
+    alignItems: 'center'
+  }))
+  const IconCSS = useCSS(props, (props) => ({
+    flex: 'none'
+  }))
+  const BodyCSS = useCSS(props, (props) => [
+    {
+      cursor: 'inherit',
+      flex: '1 0 auto',
+      background: 'transparent',
+      caretColor: uiCSS.Input.caretColor,
+      outline: 'none',
+      border: 'none'
+    },
+    isTextarea &&
+      mixCSSObjects(cssMixins.noScrollbar, {
+        resize: 'none'
+      })
+  ])
+
   return (
-    <BaseUIDiv {...pick(sprops, divProps)} _className='Input' css={getCSS(sprops)}>
-      {sprops.prefixNode}
-      {sprops.props_Icon && (
+    <BaseUIDiv {...pick(props, divProps)} _className='Input' css={css}>
+      {props.prefixNode}
+      {props.props_Icon && (
         <Icon
-          {...mergeProps(sprops.props_Icon, {
+          {...mergeProps(props.props_Icon, {
             classNames: 'Input-Icon',
-            css: getIconCSS(sprops)
+            css: IconCSS
           })}
         />
       )}
       <Div
-        {...mergeProps(sprops.props_body, {
+        {...mergeProps(props.props_body, {
           as: isTextarea ? 'textarea' : 'input',
           className: 'Input-body',
           domRef: inputBodyRef,
-          css: getBodyCSS(sprops, { isTextarea }),
+          css: BodyCSS,
           htmlProps: {
-            rows: typeof sprops.row === 'number' ? sprops.row : 1,
-            placeholder: sprops.placeholder,
-            disabled: sprops.disabled,
+            rows: typeof props.row === 'number' ? props.row : 1,
+            placeholder: props.placeholder,
+            disabled: props.disabled,
             value,
             onChange: (e) => {
-              if (sprops.row === 'auto-increase') syncHeight()
+              if (props.row === 'auto-increase') syncHeight()
               return setValue(e.target.value)
             }
           }
@@ -149,3 +122,4 @@ export default function Input(props: InputProps) {
     </BaseUIDiv>
   )
 }
+export default injectAppSetting(Input)

@@ -2,9 +2,6 @@ import cssColor from 'baseUI/style/cssColor'
 import cssTheme from './cssTheme'
 
 const uiCSS = {
-  Mask: {
-    bg: 'hsla(0deg 0% 0% / 0.2)'
-  },
   Drawer: {
     shadow: cssTheme.shadow.smooth
   },
@@ -46,6 +43,30 @@ const uiCSS = {
   Icon: {
     'size--medium': '24px',
     'size--large': '36px'
+  },
+  Input: {
+    /**
+     * @cssProps 输入框颜色
+     */
+    focusColor: undefined,
+    /**
+     * @cssProps 光标颜色
+     */
+    caretColor: undefined
+  },
+  Mask: {
+    /**
+     * @cssProps
+     * mask's background.
+     * It should be non-transparent color/gradiant
+     */
+    bg: 'hsla(0deg 0% 0% / 0.2)',
+    
+    /**
+     * @cssProps
+     * the transition time of animation when open/close the mask
+     */
+    transitonDuration: cssTheme.transition.normal
   }
 }
 

@@ -1,15 +1,13 @@
 import React, { ReactNode, useRef } from 'react'
 import Div, { divProps, DivProps } from './Div'
 import Protal from './Protal'
-import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { useAppSettings } from './AppSettings'
-import { cache } from 'utils/functions/functionFactory'
+import { mergeProps } from 'baseUI/functions'
+import { injectAppSetting } from './AppSettings'
 import { pick } from 'utils/functions/object'
 import Transition from './Transition'
 import uiCSS from 'baseUI/settings/uiCSS'
-import { mixCSSObjects } from 'baseUI/style/cssParser'
-import { CSSPropertyValue } from 'baseUI/style/cssValue'
 import cssTheme from 'baseUI/settings/cssTheme'
+import useCSS from 'baseUI/hooks/useCSS'
 
 export interface MaskProps extends DivProps {
   /**
@@ -34,73 +32,39 @@ export interface MaskProps extends DivProps {
   children?: ReactNode
 }
 
-export interface MaskSprops extends MaskProps {
-  /**
-   * @cssProps
-   * mask's background.
-   * It should be non-transparent color/gradiant
-   *
-   * @default cssDefault.maskBg
-   */
-  maskBg?: CSSPropertyValue<'background'>
-
-  /**
-   * @cssProps
-   * the transition time of animation when open/close the mask
-   *
-   * @default cssDefaults.transiton.normal
-   */
-  transitonDuration?: CSSPropertyValue<'transitionDuration'>
-}
-
-const defaultSprops: MaskSprops = {
-}
-
-const getCSS = cache((sprops: MaskSprops) =>
-  mixCSSObjects({
+function Mask(props: MaskProps) {
+  const isCloseBySelf = useRef(false)
+  const css = useCSS(props, (props) => ({
     position: 'fixed',
     inset: '0',
-    backgroundColor: sprops.maskBg ?? uiCSS.Mask.bg,
-    pointerEvents: sprops.isOpen ? 'initial' : 'none',
-    transition: sprops.transitonDuration ?? cssTheme.transition.normal
-  })
-)
-
-/**
- * 打开时，会生成一个 <Mask> 在 mask-root
- * (可能同时存在多个Mask)
- * @todo 这里的实现虽然干净，但可能存在一堆没有 open 的 mask
- */
-export default function Mask(props: MaskProps) {
-  const appSettings = useAppSettings()
-  const _sprops = mergeProps(appSettings.globalProps?.Caption, props)
-  const sprops = addDefaultProps(_sprops, defaultSprops)
-
-  const isCloseBySelf = useRef(false)
-
+    backgroundColor: uiCSS.Mask.bg ?? uiCSS.Mask.bg,
+    pointerEvents: props.isOpen ? 'initial' : 'none',
+    transition: uiCSS.Mask.transitonDuration ?? cssTheme.transition.normal
+  }))
   return (
-    <Protal hidden={!sprops.isOpen} protalName='Mask-protal'>
+    <Protal hidden={!props.isOpen} protalName='Mask-protal'>
       <Transition
         appear
-        show={sprops.isOpen}
+        show={props.isOpen}
         preset='fade-in/out'
-        onAfterEnter={() => sprops.onOpenTransitionEnd?.({})}
-        onAfterLeave={() => sprops.onCloseTransitionEnd?.({})}
+        onAfterEnter={() => props.onOpenTransitionEnd?.({})}
+        onAfterLeave={() => props.onCloseTransitionEnd?.({})}
       >
         <Div
           {...mergeProps(
             {
               className: 'Mask',
-              css: getCSS(sprops),
+              css,
               onClick(event) {
                 isCloseBySelf.current = true
-                sprops.onClose?.(event)
+                props.onClose?.(event)
               }
             },
-            pick(sprops, divProps)
+            pick(props, divProps)
           )}
         />
       </Transition>
     </Protal>
   )
 }
+export default injectAppSetting(Mask)

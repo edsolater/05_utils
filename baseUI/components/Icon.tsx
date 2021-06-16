@@ -4,7 +4,6 @@ import { DivProps, divProps } from './Div'
 import Image, { ImageProps } from './Image'
 import { CSSObject } from '@emotion/serialize'
 import { injectAppSetting } from './AppSettings'
-import { CSSPropertyValue } from '../style/cssValue'
 import { BaseUIDiv } from '.'
 import useCSS from 'baseUI/hooks/useCSS'
 import uiCSS from 'baseUI/settings/uiCSS'
@@ -36,10 +35,6 @@ export interface IconProps extends DivProps {
   size?: 'medium' | 'large'
 }
 
-export interface IconSprops extends IconProps {
-  'size--medium': CSSPropertyValue<'width'>
-  'size--large': CSSPropertyValue<'width'>
-}
 
 /**
  * @BaseUIComponent
