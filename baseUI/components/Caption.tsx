@@ -6,7 +6,7 @@ import { pick } from 'utils/functions/object'
 import { useAppSettings } from './AppSettings'
 import { DivProps, divProps } from './Div'
 import { BaseUIDiv } from '.'
-import { cssDefaultColor } from 'baseUI/settings/cssDefaults'
+import cssDefaults from 'baseUI/settings/cssDefaults'
 
 export interface CaptionProps extends DivProps {
   /**
@@ -22,7 +22,7 @@ export interface CaptionSprops extends CaptionProps {
 
 const defaultSprops: CaptionSprops = {
   align: 'left',
-  textColor: cssDefaultColor.grayText
+  textColor: cssDefaults.color.grayText
 }
 
 const getCSS = cache((sprops: CaptionSprops) =>

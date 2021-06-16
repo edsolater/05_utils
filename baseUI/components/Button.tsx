@@ -7,7 +7,7 @@ import { DivProps, divProps } from './Div'
 import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import BaseUIDiv from './BaseUIDiv'
-import { cssDefaultColor } from 'baseUI/settings/cssDefaults'
+import cssDefaults from 'baseUI/settings/cssDefaults'
 
 export interface ButtonProps extends DivProps<'button'> {
   /**
@@ -61,7 +61,7 @@ const defaultSprops: ButtonSprops = {
   'borderRadius--large': cssSize.mini,
 
   'textColor--fill': cssColor.white,
-  'background--fill': cssDefaultColor.defaultBackgroundGray,
+  'background--fill': cssDefaults.color.defaultBackgroundGray,
   'borderWidth--outline': '1px',
   'borderColor--outline': 'currentcolor',
   'borderOpacity--outline': '0.3'

@@ -1,4 +1,5 @@
-import { cssDefaultColor, cssDefaultUI } from 'baseUI/settings/cssDefaults'
+import cssDefaults from 'baseUI/settings/cssDefaults'
+import { baseUICSS } from "baseUI/settings/baseUICSS"
 import { CSSPropertyValue, toCssValue, cssValues } from 'baseUI/style'
 import React from 'react'
 import { pick } from 'utils/functions/object'
@@ -42,12 +43,12 @@ function Card(props: CardProps) {
     height: toCssValue(props.height),
     borderRadius:
       props.borderRadius === 'small'
-        ? cssDefaultUI.Card['borderRadius--small']
+        ? baseUICSS.Card['borderRadius--small']
         : props.borderRadius === 'medium'
-        ? cssDefaultUI.Card['borderRadius--medium']
-        : cssDefaultUI.Card['borderRadius--large'],
+        ? baseUICSS.Card['borderRadius--medium']
+        : baseUICSS.Card['borderRadius--large'],
     boxShadow: cssValues.smoothShadow,
-    background: props.bg ?? cssDefaultColor.whiteCard,
+    background: props.bg ?? cssDefaults.color.whiteCard,
     backgroundColor: props.color
   }))
   return <BaseUIDiv {...pick(props, divProps)} _css={css} />

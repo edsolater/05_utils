@@ -1,4 +1,5 @@
-import { cssDefaultColor, cssDefaultTransition, cssDefaultUI } from 'baseUI/settings/cssDefaults'
+import { baseUICSS } from "baseUI/settings/baseUICSS"
+import cssDefaults from "baseUI/settings/cssDefaults"
 import React, { FC, useRef } from 'react'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import Div, { DivProps } from '../Div'
@@ -79,10 +80,10 @@ const DrawerCard: FC<DrawerCardProps> = (props) => {
           left: isOpen ? '0' : '-30%',
           width: '30%',
           height: '100%',
-          backgroundColor: cssDefaultColor.whiteCard,
-          boxShadow: cssDefaultUI.Drawer.shadow,
+          backgroundColor: cssDefaults.color.whiteCard,
+          boxShadow: baseUICSS.Drawer.shadow,
           opacity: isOpen ? '1' : '0',
-          transition: cssDefaultTransition.slow,
+          transition: cssDefaults.transition.slow,
           pointerEvents: 'initial'
         }}
       >
