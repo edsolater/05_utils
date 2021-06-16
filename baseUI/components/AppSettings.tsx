@@ -2,11 +2,11 @@ import { addDefaultProps, mergeProps } from 'baseUI/functions'
 import React, { ComponentProps, createContext, FC, ReactNode, useContext } from 'react'
 import { overwriteFunctionName } from 'utils/functions/functionFactory'
 import { ButtonProps } from './Button'
-import { CaptionSprops } from './Caption'
+import { CaptionProps } from './Caption'
 import { CardProps } from './Card'
-import { DropdownSprops } from './Dropdown'
+import { DropdownProps } from './Dropdown'
 import { IconSprops } from './Icon'
-import { ImageSprops } from './Image'
+import { ImageProps } from './Image'
 import { InputSprops } from './Input'
 import { MaskSprops } from './Mask'
 import { NotificationSprops } from './Notification'
@@ -20,13 +20,13 @@ export interface AppSetting {
    */
   globalProps?: {
     Button?: ButtonProps
-    Caption?: CaptionSprops
+    Caption?: CaptionProps
     Card?: CardProps
     Icon?: IconSprops
-    Image?: ImageSprops
+    Image?: ImageProps
     Input?: InputSprops
     Row?: RowSprops
-    Dropdown?: DropdownSprops
+    Dropdown?: DropdownProps
     Tag?: TagSprops
     Mask?: MaskSprops
     Transition?: TransitionSprops

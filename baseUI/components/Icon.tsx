@@ -1,15 +1,13 @@
 import React from 'react'
-import { mixCSSObjects } from '../style/cssParser'
 import pick from 'utils/functions/object/pick'
 import { DivProps, divProps } from './Div'
 import Image, { ImageProps } from './Image'
-import cache from 'utils/functions/functionFactory/cache'
 import { CSSObject } from '@emotion/serialize'
-import { useAppSettings } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { CSSPropertyValue } from '../style/cssValue'
-import mergeProps from '../functions/mergeProps'
-import addDefaultProps from '../functions/addDefaultProps'
 import { BaseUIDiv } from '.'
+import useCSS from 'baseUI/hooks/useCSS'
+import uiCSS from 'baseUI/settings/uiCSS'
 
 const iconFileBasePath = '/icons' //CONFIG 配置项
 const iconFileType = 'svg' //CONFIG 配置项
@@ -43,17 +41,16 @@ export interface IconSprops extends IconProps {
   'size--large': CSSPropertyValue<'width'>
 }
 
-const defaultSprops: IconSprops = {
-  size: 'medium',
-
-  'size--medium': '24px',
-  'size--large': '36px'
-}
-
-const getCSS = cache((sprops: IconSprops, core: { src: string }) =>
-  mixCSSObjects({
-    width: sprops[`size--${sprops.size}`],
-    height: sprops[`size--${sprops.size}`],
+/**
+ * @BaseUIComponent
+ * Icon's basicPath need to be setted
+ */
+function Icon(props: IconProps) {
+  const src = `${iconFileBasePath}/${props.name}.${iconFileType}`
+  const sholdUseRaw = !props.color
+  const css = useCSS(props, (props) => ({
+    width: uiCSS.Icon[`size--${props.size}`],
+    height: uiCSS.Icon[`size--${props.size}`],
     position: 'relative',
     borderRadius: '2px',
     transition: 'background 200ms',
@@ -61,44 +58,31 @@ const getCSS = cache((sprops: IconSprops, core: { src: string }) =>
       content: "''",
       position: 'absolute',
       inset: '0',
-      mask: sprops.color ?? sprops.hoverColor ? `url(${core.src})  0% 0% / contain no-repeat` : '',
-      background: sprops.color,
+      mask: props.color ?? props.hoverColor ? `url(${src})  0% 0% / contain no-repeat` : '',
+      background: props.color,
       transition: 'background 200ms',
       ':hover': {
-        background: sprops.hoverColor ?? sprops.color
+        background: props.hoverColor ?? props.color
       }
     }
-  })
-)
-const getImageCSS = cache(() =>
-  mixCSSObjects({
+  }))
+  const ImageCss = useCSS(props, (props) => ({
     width: '100%',
     height: '100%',
     objectFit: 'contain'
-  })
-)
-
-/**
- * @BaseUIComponent
- * Icon's basicPath need to be setted
- */
-export default function Icon(props: IconProps) {
-  const appSettings = useAppSettings()
-  const _sprops = mergeProps(appSettings.globalProps?.Icon, props)
-  const sprops = addDefaultProps(_sprops, defaultSprops)
-
-  const src = `${iconFileBasePath}/${sprops.name}.${iconFileType}`
-  const sholdUseRaw = !sprops.color
+  }))
   return (
-    <BaseUIDiv {...pick(sprops, divProps)} _css={getCSS(sprops, { src })}>
+    <BaseUIDiv {...pick(props, divProps)} _css={css}>
       {sholdUseRaw && (
         <Image
-          {...sprops.imageProps}
+          {...props.imageProps}
           src={src}
-          alt={sprops.name}
-          css={[getImageCSS(), sprops.imageProps?.css]}
+          alt={props.name}
+          css={[ImageCss, props.imageProps?.css]}
         />
       )}
     </BaseUIDiv>
   )
 }
+
+export default injectAppSetting(Icon, { size: 'medium' })

@@ -39,6 +39,13 @@ const uiCSS = {
     'borderWidth--outline': '1px',
     'borderColor--outline': 'currentcolor',
     'borderOpacity--outline': '0.3'
+  },
+  Caption: {
+    textColor: cssTheme.color.grayText
+  },
+  Icon: {
+    'size--medium': '24px',
+    'size--large': '36px'
   }
 }
 
