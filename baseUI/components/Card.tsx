@@ -1,11 +1,11 @@
 import { cssDefaultColor, cssDefaultUI } from 'baseUI/settings/cssDefaults'
-import { CSSPropertyValue, mixCSSObjects, toCssValue, cssValues } from 'baseUI/style'
+import { CSSPropertyValue, toCssValue, cssValues } from 'baseUI/style'
 import React from 'react'
-import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import { BaseUIDiv } from '.'
 import { injectAppSetting } from './AppSettings'
 import { DivProps, divProps } from './Div'
+import { useCSS } from '../hooks/useCSS'
 
 export interface CardProps extends DivProps {
   /**
@@ -33,8 +33,11 @@ export interface CardProps extends DivProps {
   borderRadius?: 'small' | 'medium' | 'large'
 }
 
-const getCSS = cache((props: CardProps) =>
-  mixCSSObjects({
+/**
+ * @BaseUIComponent
+ */
+function Card(props: CardProps) {
+  const css = useCSS(props, (props) => ({
     width: toCssValue(props.width),
     height: toCssValue(props.height),
     borderRadius:
@@ -46,17 +49,8 @@ const getCSS = cache((props: CardProps) =>
     boxShadow: cssValues.smoothShadow,
     background: props.bg ?? cssDefaultColor.whiteCard,
     backgroundColor: props.color
-  })
-)
-
-/**
- * @BaseUIComponent
- */
-function Card(props: CardProps) {
-  return <BaseUIDiv {...pick(props, divProps)} _css={getCSS(props)} />
-}
-const defaultSprops: CardProps = {
-  borderRadius: 'medium',
+  }))
+  return <BaseUIDiv {...pick(props, divProps)} _css={css} />
 }
 
-export default injectAppSetting(Card, defaultSprops)
+export default injectAppSetting(Card, { borderRadius: 'medium' })

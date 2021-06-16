@@ -1,5 +1,5 @@
 import { addDefaultProps, mergeProps } from 'baseUI/functions'
-import React, { createContext, FC, ReactNode, useContext } from 'react'
+import React, { ComponentProps, createContext, FC, ReactNode, useContext } from 'react'
 import { overwriteFunctionName } from 'utils/functions/functionFactory'
 import { ButtonSprops } from './Button'
 import { CaptionSprops } from './Caption'
@@ -63,7 +63,7 @@ export function useAppSettings() {
  * @param defaultProps (optional)
  * @returns a new component that will digest appSetting then pass the merged props to original component.
  */
-export function injectAppSetting<C extends FC>(Component: C, defaultProps?: any) {
+export function injectAppSetting<C extends FC>(Component: C, defaultProps?: ComponentProps<C>) {
   const componentName = Component.name || Component.displayName || ''
   const InjectedComponent = (props: Parameters<C>[0]) => {
     const appSettings = useAppSettings()
