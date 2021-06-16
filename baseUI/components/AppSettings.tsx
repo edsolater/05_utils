@@ -1,7 +1,7 @@
 import { addDefaultProps, mergeProps } from 'baseUI/functions'
 import React, { ComponentProps, createContext, FC, ReactNode, useContext } from 'react'
 import { overwriteFunctionName } from 'utils/functions/functionFactory'
-import { ButtonSprops } from './Button'
+import { ButtonProps } from './Button'
 import { CaptionSprops } from './Caption'
 import { CardProps } from './Card'
 import { DropdownSprops } from './Dropdown'
@@ -19,7 +19,7 @@ export interface AppSetting {
    * baseUI的css的具体值（可能不包含在props中， 是CSS的尺寸细节）
    */
   globalProps?: {
-    Button?: ButtonSprops
+    Button?: ButtonProps
     Caption?: CaptionSprops
     Card?: CardProps
     Icon?: IconSprops

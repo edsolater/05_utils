@@ -1,15 +1,12 @@
 import React from 'react'
-import { mergeProps, addDefaultProps } from 'baseUI/functions'
-import { useAppSettings } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { DivProps, divProps } from './Div'
-import { cache } from 'utils/functions/functionFactory'
 import { pick } from 'utils/functions/object'
 import BaseUIDiv from './BaseUIDiv'
 import cssColor from 'baseUI/style/cssColor'
 import { cssBrightness } from 'baseUI/style/cssFunctions'
-import { mixCSSObjects } from 'baseUI/style/cssParser'
-import { CSSPropertyValue } from 'baseUI/style/cssValue'
-import cssTheme from 'baseUI/settings/cssTheme'
+import useCSS from 'baseUI/hooks/useCSS'
+import uiCSS from 'baseUI/settings/uiCSS'
 
 export interface ButtonProps extends DivProps<'button'> {
   /**
@@ -24,53 +21,11 @@ export interface ButtonProps extends DivProps<'button'> {
   size?: 'small' | 'medium' | 'large'
 }
 
-export interface ButtonSprops extends ButtonProps {
-  'padding--small'?: CSSPropertyValue<'padding'>
-  'fontSize--small'?: CSSPropertyValue<'fontSize'>
-  'borderRadius--small'?: CSSPropertyValue<'borderRadius'>
-
-  'padding--medium'?: CSSPropertyValue<'padding'>
-  'fontSize--medium'?: CSSPropertyValue<'fontSize'>
-  'borderRadius--medium'?: CSSPropertyValue<'borderRadius'>
-
-  'padding--large'?: CSSPropertyValue<'padding'>
-  'fontSize--large'?: CSSPropertyValue<'fontSize'>
-  'borderRadius--large'?: CSSPropertyValue<'borderRadius'>
-
-  'textColor--fill'?: CSSPropertyValue<'color'>
-  'background--fill'?: CSSPropertyValue<'background'>
-  'textColor--outline'?: CSSPropertyValue<'color'>
-  'borderColor--outline'?: CSSPropertyValue<'borderColor'>
-  'textColor--text'?: CSSPropertyValue<'color'>
-  'borderWidth--outline'?: CSSPropertyValue<'borderWidth'>
-  'borderOpacity--outline'?: CSSPropertyValue<'opacity'>
-}
-
-const defaultSprops: ButtonSprops = {
-  type: 'fill',
-  size: 'medium',
-
-  'padding--small': `${cssTheme.size.mini} ${cssTheme.size.large}`,
-  'fontSize--small': cssTheme.font.medium,
-  'borderRadius--small': cssTheme.size.mini,
-
-  'padding--medium': `${cssTheme.size.mini} ${cssTheme.size.large}`,
-  'fontSize--medium': cssTheme.font.medium,
-  'borderRadius--medium': cssTheme.size.mini,
-
-  'padding--large': `${cssTheme.size.mini} ${cssTheme.size.large}`,
-  'fontSize--large': cssTheme.font.medium,
-  'borderRadius--large': cssTheme.size.mini,
-
-  'textColor--fill': cssColor.white,
-  'background--fill': cssTheme.color.defaultBackgroundGray,
-  'borderWidth--outline': '1px',
-  'borderColor--outline': 'currentcolor',
-  'borderOpacity--outline': '0.3'
-}
-
-const getCSS = cache((sprops: ButtonSprops) =>
-  mixCSSObjects(
+/**
+ * @UIComponent Button
+ */
+const Button = (props: ButtonProps) => {
+  const css = useCSS(props, (props) => [
     {
       style: 'none',
       borderWidth: 0,
@@ -79,23 +34,23 @@ const getCSS = cache((sprops: ButtonSprops) =>
       width: 'max-content',
       boxSizing: 'border-box'
     },
-    sprops.size === 'small' && {
-      padding: sprops['padding--small'],
-      fontSize: sprops['fontSize--small'],
-      borderRadius: sprops['borderRadius--small']
+    props.size === 'small' && {
+      padding: uiCSS.Button['padding--small'],
+      fontSize: uiCSS.Button['fontSize--small'],
+      borderRadius: uiCSS.Button['borderRadius--small']
     },
-    sprops.size === 'medium' && {
-      padding: sprops['padding--medium'],
-      fontSize: sprops['fontSize--medium'],
-      borderRadius: sprops['borderRadius--medium']
+    props.size === 'medium' && {
+      padding: uiCSS.Button['padding--medium'],
+      fontSize: uiCSS.Button['fontSize--medium'],
+      borderRadius: uiCSS.Button['borderRadius--medium']
     },
-    sprops.size === 'large' && {
-      padding: sprops['padding--large'],
-      fontSize: sprops['fontSize--large'],
-      borderRadius: sprops['borderRadius--large']
+    props.size === 'large' && {
+      padding: uiCSS.Button['padding--large'],
+      fontSize: uiCSS.Button['fontSize--large'],
+      borderRadius: uiCSS.Button['borderRadius--large']
     },
-    sprops.type === 'fill' && {
-      color: sprops['textColor--fill'],
+    props.type === 'fill' && {
+      color: uiCSS.Button['textColor--fill'],
       position: 'relative',
       background: 'none',
       '::before': {
@@ -104,44 +59,38 @@ const getCSS = cache((sprops: ButtonSprops) =>
         inset: '0',
         borderRadius: 'inherit',
         zIndex: '-1',
-        background: sprops['background--fill']
+        background: uiCSS.Button['background--fill']
       },
       ':hover::before': { filter: cssBrightness(1.4) },
       ':active::before': { filter: cssBrightness(0.8) }
     },
-    sprops.type === 'outline' && {
+    props.type === 'outline' && {
       position: 'relative',
       background: cssColor.transparent,
-      color: sprops['textColor--outline'],
+      color: uiCSS.Button['textColor--outline'],
       '::before': {
         content: "''",
         position: 'absolute',
         inset: '0',
         borderRadius: 'inherit',
-        borderWidth: sprops['borderWidth--outline'] ?? '1px',
+        borderWidth: uiCSS.Button['borderWidth--outline'] ?? '1px',
         borderStyle: 'solid',
-        borderColor: sprops['borderColor--outline'] ?? 'currentcolor',
-        opacity: sprops['borderOpacity--outline'] ?? '0.3',
+        borderColor: uiCSS.Button['borderColor--outline'] ?? 'currentcolor',
+        opacity: uiCSS.Button['borderOpacity--outline'] ?? '0.3',
         color: 'inherit'
       }
     },
-    sprops.type === 'text' && {
-      color: sprops['textColor--text'],
+    props.type === 'text' && {
+      color: uiCSS.Button['textColor--text'],
       background: 'transparent'
     }
-  )
-)
+  ])
 
-/**
- * @UIComponent Button
- */
-export default function Button(props: ButtonProps) {
-  const appSettings = useAppSettings()
-  const _sprops = mergeProps(appSettings.globalProps?.Button, props)
-  const sprops = addDefaultProps(_sprops, defaultSprops)
   return (
-    <BaseUIDiv {...pick(sprops, divProps)} as='button' _css={getCSS(sprops)}>
-      {sprops.children ?? '🤨'}
+    <BaseUIDiv {...pick(props, divProps)} as='button' _css={css}>
+      {props.children ?? '🤨'}
     </BaseUIDiv>
   )
 }
+
+export default injectAppSetting(Button, { type: 'fill', size: 'medium' })
