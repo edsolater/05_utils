@@ -11,8 +11,8 @@ import { InputProps } from './Input'
 import { MaskProps } from './Mask'
 import { NotificationSprops } from './Notification'
 import { RowProps } from './Row'
-import { TagSprops } from './Tag'
-import { TransitionSprops } from './Transition'
+import { TagProps } from './Tag'
+import { TransitionProps } from './Transition'
 
 export interface AppSetting {
   /**
@@ -27,9 +27,9 @@ export interface AppSetting {
     Input?: InputProps
     Row?: RowProps
     Dropdown?: DropdownProps
-    Tag?: TagSprops
+    Tag?: TagProps
     Mask?: MaskProps
-    Transition?: TransitionSprops
+    Transition?: TransitionProps
     Notification?: NotificationSprops
   }
 }
