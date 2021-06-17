@@ -8,6 +8,7 @@ import uiCSS from 'baseUI/settings/uiCSS'
 import { toCssValue } from 'baseUI/style/cssUnits'
 import { CSSPropertyValue } from 'baseUI/style/cssValue'
 import cssTheme from 'baseUI/settings/cssTheme'
+import { Profiler } from 'inspector'
 
 export interface CardProps extends DivProps {
   /**
@@ -39,6 +40,8 @@ export interface CardProps extends DivProps {
  * @BaseUIComponent
  */
 function Card(props: CardProps) {
+  // useCSS should be an global hooks. Or not a hooks at all
+  // TODO: it can have an identifier. @example: useCSS('Card', ()=>ICSS, [dependentList])
   const css = useCSS(props, (props) => ({
     width: toCssValue(props.width),
     height: toCssValue(props.height),
