@@ -6,12 +6,17 @@ const center: TimeoutCenter = new Map()
 
 let idCache = 1
 
+// IDEA： 感觉起这个名字不是很合适，还有setInterval、requestAnimationFrame、requestIdelCallback
 /**用的还是setTimeout，但是返回的是控制器、同actionId的timeout被覆盖 */
 export default function timeout(
   handler: TimeoutHandle,
   timeout?: number,
   options?: {
-    /**具有相同actionId 的settimeout函数会互相覆盖 */
+    /**
+     *  ***少用*** 这容易引发混乱
+     * 
+     * 具有相同actionId 的settimeout函数会互相覆盖
+     */
     actionId?: ActionId
   }
 ) {
