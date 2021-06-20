@@ -6,17 +6,21 @@
  * 该对象有相同的属性数量
  *
  * 类似于array.protoype.map
- * @param target 目标对象
- * @param mapperFn 映射函数
+ * @param target
+ * @param mapperFn
  * @example
- * objectMap({ a: 1, b: 2 }, ([key, value]) => [key, value * 2]) // { a: 2, b: 4 }
+ * objectMap({ a: 1, b: 2 }, (v) => v * 2) // { a: 2, b: 4 }
  */
 export default function objectMap<T extends object, U>(
   target: T,
-  mapperFn: (
-    entry: [key: keyof T, value: T[keyof T]],
-    index: number,
-  ) => [key: string, value: U]
+  mapperFn: (value: T[keyof T], key: keyof T) => U
+): { [P in keyof T]: U } {
+  //@ts-ignore
+  return _objectMapEntry(target, ([key, value]) => [key, mapperFn(value, key)])
+}
+function _objectMapEntry<T extends object>(
+  target: T,
+  mapperFn: (entry: [key: keyof T, value: T[keyof T]]) => [key: string, value: any]
 ) {
   //@ts-ignore
   return Object.fromEntries(Object.entries(target).map(mapperFn))
