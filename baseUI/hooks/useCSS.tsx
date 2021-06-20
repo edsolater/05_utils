@@ -1,5 +1,5 @@
 import { mixCSSObjects } from 'baseUI/style/cssParser'
-import { GetArrayItem } from 'baseUI/typing'
+import { GetArrayItem } from 'baseUI/types/generic'
 import { useMemo, useRef } from 'react'
 import { cache } from 'utils/functions/functionFactory'
 

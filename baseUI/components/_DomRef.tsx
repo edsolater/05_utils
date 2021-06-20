@@ -1,8 +1,8 @@
-import React, { isValidElement, ReactElement, RefObject } from 'react'
+import React, { isValidElement, ReactNode, RefObject } from 'react'
 
 interface _DomRefProps {
   domRef?: RefObject<HTMLElement | null | unknown | undefined>
-  children: ReactElement
+  children?: ReactNode
 }
 
 export default function _DomRef(props: _DomRefProps) {
@@ -13,5 +13,3 @@ export default function _DomRef(props: _DomRefProps) {
   // @ts-ignore
   return React.cloneElement(child, { domRef: [child['domRef'], props.domRef].flat() })
 }
-0
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

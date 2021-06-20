@@ -4,7 +4,7 @@ import { toPx } from 'baseUI/style/cssUnits'
 import { cssValues } from 'baseUI/style/cssValue'
 import { BaseUIDiv } from 'baseUI/components'
 export interface ExampleCardProps extends DivProps {
-  category?: 'hooks' | 'baseUI/componentComponent' | 'SideEffectComponent' | 'TemplateComponent'
+  category?: 'hooks' | 'baseUI/componentComponent' | 'SideEffectComponent' | 'TemplateComponent' | 'WrapperComponent'
   title?: string
 }
 const ExampleCard = (props: ExampleCardProps) => (

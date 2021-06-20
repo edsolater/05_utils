@@ -16,9 +16,11 @@ import MaskExample from './MaskExample'
 import NotificationExample from './NotificationExample'
 import TagExample from './TagExample'
 import TransformExample from './TransformExample'
+import AnimateExample from './AnimateExample'
 
 const AllExamples = () => (
   <GlobalSettings>
+    <AnimateExample />
     <NotificationExample />
     <AppLayoutExample />
     <HoverableExample />
