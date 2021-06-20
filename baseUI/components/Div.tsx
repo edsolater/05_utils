@@ -8,7 +8,6 @@ import useFeatureHover, { FeatureHoverOptions } from '../hooks/useFeatureHover'
 import mergeRefs, { IRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
 import useEventClick, { ListenerClickOptions } from '../hooks/useEventClick'
-import { isExist } from 'utils/functions/judgers'
 
 /**
  *

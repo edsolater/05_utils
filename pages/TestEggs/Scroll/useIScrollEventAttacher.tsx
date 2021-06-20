@@ -55,7 +55,7 @@ export function useIScrollEventAttacher(
             const direction = 'LEFT' //TEMP
             console.log('direction: ', direction)
             listeners.onScrollEnd?.({ ...scrollEvent, type: 'scrollend' })
-            scrollTimestamp.restart()
+            scrollTimestamp.reset()
           },
           100,
           { actionId: actionId.current }
