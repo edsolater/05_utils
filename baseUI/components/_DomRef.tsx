@@ -1,7 +1,8 @@
 import React, { isValidElement, ReactNode, RefObject } from 'react'
+import { MayArray } from 'typings/tools'
 
 interface _DomRefProps {
-  domRef?: RefObject<HTMLElement | null | unknown | undefined>
+  domRef?: MayArray<RefObject<HTMLElement | null | undefined>>
   children?: ReactNode
 }
 
