@@ -7,7 +7,7 @@ import classname, { ClassName } from '../functions/classname'
 import useFeatureHover, { FeatureHoverOptions } from '../hooks/useFeatureHover'
 import mergeRefs, { IRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
-import useEventClick, { ListenerClickOptions } from '../hooks/useEventClick'
+import useClick, { UseClickOptions } from '../hooks/useClick'
 
 /**
  *
@@ -36,7 +36,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> {
   className?: MayDeepArray<ClassName>
   htmlProps?: JSX.IntrinsicElements[TagName]
   onHover?: FeatureHoverOptions<TagMap[TagName]>['onHover']
-  onClick?: ListenerClickOptions<TagMap[TagName]>['onClick']
+  onClick?: UseClickOptions<TagMap[TagName]>['onClick']
 
   children?: ReactNode
 }
@@ -54,7 +54,7 @@ export const divProps: ReadonlyArray<keyof DivProps> = [
 ]
 export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>(null)
-  useEventClick<TagMap[TagName]>(divRef, { onClick: props.onClick })
+  useClick<TagMap[TagName]>(divRef, { onClick: props.onClick })
   useFeatureHover(divRef, { onHover: props.onHover })
   if (props.isFragment) return jsx(React.Fragment, { children: props.children })
   const allProps = {
