@@ -8,7 +8,6 @@ import uiCSS from 'baseUI/settings/uiCSS'
 import { toCssValue } from 'baseUI/style/cssUnits'
 import { CSSPropertyValue } from 'baseUI/style/cssValue'
 import cssTheme from 'baseUI/settings/cssTheme'
-import { Profiler } from 'inspector'
 
 export interface CardProps extends DivProps {
   /**

@@ -1,5 +1,6 @@
 import { MutableRefObject, RefCallback, useCallback } from 'react'
 import { MayDeepArray } from 'typings/tools'
+import { isExist } from 'utils/functions/judgers'
 
 function loadRef(ref, el) {
   if (typeof ref === 'function') {
@@ -12,7 +13,10 @@ function loadRef(ref, el) {
 export default function mergeRefs<T = any>(...refs: Array<IRefs<T>>): RefCallback<T> {
   return useCallback((el) => {
     if (el) {
-      refs.flat(Infinity).forEach((ref) => loadRef(ref, el))
+      refs
+        .flat(Infinity)
+        .filter(isExist)
+        .forEach((ref) => loadRef(ref, el))
     }
   }, refs)
 }
