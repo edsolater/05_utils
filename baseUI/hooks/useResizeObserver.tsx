@@ -8,7 +8,7 @@ import { RefObject, useEffect } from 'react'
  * @param ref
  * @param callback
  */
-export function useResizeObserver(
+export default function useResizeObserver(
   ref: RefObject<HTMLElement | undefined | null> | undefined,
   callback?: (entry: ResizeObserverEntry) => unknown
 ) {
