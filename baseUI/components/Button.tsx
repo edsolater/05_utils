@@ -94,3 +94,4 @@ const Button = (props: ButtonProps) => {
 }
 
 export default injectAppSetting(Button, { type: 'fill', size: 'medium' })
+

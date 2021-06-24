@@ -12,8 +12,8 @@ export default function useAnimate(
   useEffect(() => {
     ref.current?.animate(options?.keyframes ?? null, options?.options)
   }, [])
-} 
-
+}
 
 // TODO: 好像这个更申明式一些
+// 不妥， userAnimate偏向于useRef，而不是useEffect，反而不清晰
 export const useAnimateRef = createRefHook(useAnimate)
