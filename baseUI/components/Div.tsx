@@ -27,7 +27,6 @@ export interface TagMap {
 export interface DivProps<TagName extends keyof TagMap = 'div'> {
   // 只能低层组件使用
   as?: TagName
-
   domRef?: IRefs<TagMap[TagName]>
   isFragment?: boolean // 该节点的行为，就像 React.Fragnment
   css?: ICSS
@@ -36,21 +35,9 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> {
   htmlProps?: JSX.IntrinsicElements[TagName]
   onHover?: FeatureHoverOptions<TagMap[TagName]>['onHover']
   onClick?: UseClickOptions<TagMap[TagName]>['onClick']
-
   children?: ReactNode
 }
 
-export const divProps: ReadonlyArray<keyof DivProps> = [
-  'as',
-  'domRef',
-  'isFragment',
-  'className',
-  'css',
-  'children',
-  'htmlProps',
-  'onHover',
-  'onClick'
-] // TEMP
 export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>(null)
   useClick<TagMap[TagName]>(divRef, { onClick: props.onClick })

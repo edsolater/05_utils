@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { divProps, DivProps } from './Div'
-import pick from 'utils/functions/object/pick'
+import { DivProps } from './Div'
 import isArray from 'utils/functions/judgers/isArray'
 import { injectAppSetting } from './AppSettings'
 import { BaseUIDiv } from '.'
@@ -20,14 +19,13 @@ export interface ImageProps extends DivProps<'img'> {
 /**
  * @BaseUIComponent
  */
-const Image = (props: ImageProps) => {
-  const { src, alt, onSrcFailed } = props
+const Image = ({ src, alt, onSrcFailed, ...restProps }: ImageProps) => {
   const [errorCount, setErrorCount] = useState(0)
   const [failToLoad, setFailToLoad] = useState(false)
   const targetSrc = isArray(src) ? src[errorCount] ?? src[src.length - 1] : src
   return (
     <BaseUIDiv
-      {...pick(props, divProps)}
+      {...restProps}
       as='img'
       _htmlProps={{
         src: targetSrc,
