@@ -1,13 +1,12 @@
 import React, { ReactNode, useRef } from 'react'
-import Div, { divProps, DivProps } from './Div'
+import Div, { DivProps } from './Div'
 import Protal from './Protal'
 import { mergeProps } from 'baseUI/functions'
 import { injectAppSetting } from './AppSettings'
-import { pick } from 'utils/functions/object'
 import Transition from './Transition'
 import uiCSS from 'baseUI/settings/uiCSS'
 import cssTheme from 'baseUI/settings/cssTheme'
-import useCSS from 'baseUI/hooks/useCSS'
+import { toICSS } from 'baseUI/style/cssParser'
 
 export interface MaskProps extends DivProps {
   /**
@@ -32,23 +31,31 @@ export interface MaskProps extends DivProps {
   children?: ReactNode
 }
 
-function Mask(props: MaskProps) {
+const getCSS = toICSS(({ isOpen }: MaskProps) => ({
+  position: 'fixed',
+  inset: '0',
+  backgroundColor: uiCSS.Mask.bg ?? uiCSS.Mask.bg,
+  pointerEvents: isOpen ? 'initial' : 'none',
+  transition: uiCSS.Mask.transitonDuration ?? cssTheme.transition.normal
+}))
+
+function Mask({
+  isOpen,
+  onOpenTransitionEnd,
+  onCloseTransitionEnd,
+  onClose,
+  ...restProps
+}: MaskProps) {
   const isCloseBySelf = useRef(false)
-  const css = useCSS(props, (props) => ({
-    position: 'fixed',
-    inset: '0',
-    backgroundColor: uiCSS.Mask.bg ?? uiCSS.Mask.bg,
-    pointerEvents: props.isOpen ? 'initial' : 'none',
-    transition: uiCSS.Mask.transitonDuration ?? cssTheme.transition.normal
-  }))
+  const css = getCSS({ isOpen })
   return (
-    <Protal hidden={!props.isOpen} protalName='Mask-protal'>
+    <Protal hidden={!isOpen} protalName='Mask-protal'>
       <Transition
         appear
-        show={props.isOpen}
+        show={isOpen}
         preset='fade-in/out'
-        onAfterEnter={() => props.onOpenTransitionEnd?.({})}
-        onAfterLeave={() => props.onCloseTransitionEnd?.({})}
+        onAfterEnter={() => onOpenTransitionEnd?.({})}
+        onAfterLeave={() => onCloseTransitionEnd?.({})}
       >
         <Div
           {...mergeProps(
@@ -57,10 +64,10 @@ function Mask(props: MaskProps) {
               css,
               onClick(event) {
                 isCloseBySelf.current = true
-                props.onClose?.(event)
+                onClose?.(event)
               }
             },
-            pick(props, divProps)
+            restProps
           )}
         />
       </Transition>

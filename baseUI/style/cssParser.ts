@@ -1,4 +1,5 @@
-import { css, SerializedStyles } from '@emotion/react'
+import { CSSObject, SerializedStyles } from '@emotion/react'
+import { css } from '@emotion/css'
 import flat from 'utils/functions/array/flat'
 import isFunction from 'utils/functions/judgers/isFunction'
 import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
@@ -8,6 +9,7 @@ import { ICSS, ICSSObject } from './ICSS'
 import mapValues from 'utils/functions/object/mapValues'
 import { MayDeepArray } from 'typings/tools'
 import isArray from 'utils/functions/judgers/isArray'
+import { cache } from 'utils/functions/functionFactory'
 
 /**
  * 用在非<Div>的组件上，与toCss目的相反
@@ -24,6 +26,13 @@ export function mixCSSObjects(
       .filter(isObjectLike)
   )
 }
+export const toICSS = <
+  T extends (...any: any[]) => MayDeepArray<ICSS | ((...any: any[]) => ICSS) | undefined | {}>
+>(
+  cssFn: T
+): ((...args: Parameters<T>) => ICSS) =>
+  // @ts-expect-error know why
+  cache((...args: Parameters<T>) => mixCSSObjects(cssFn(...args)))
 
 /**在最终解析CSS时，中间件队列 */
 const middlewareList = [middlewareCSSTransform]
@@ -32,8 +41,8 @@ const middlewareList = [middlewareCSSTransform]
  * 用在最终的<Div>, 把css-in-js转换给emotion处理
  * @param icss
  */
-export function parseCSS(icss: ICSS): SerializedStyles {
-  const composed = mergeDeep(icss)
+export function parseICSS(icss: ICSS) {
+  const composed = mergeDeep(icss) as CSSObject
   const middleware = (cssobj: ICSSObject) =>
     middlewareList.reduce((acc, modal) => modal(acc), cssobj)
   const nestedMiddleware = (cssobj: ICSSObject) =>

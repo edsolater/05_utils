@@ -1,13 +1,12 @@
 import React from 'react'
-import { pick } from 'utils/functions/object'
 import { BaseUIDiv } from '.'
 import { injectAppSetting } from './AppSettings'
-import { DivProps, divProps } from './Div'
-import useCSS from '../hooks/useCSS'
+import { DivProps } from './Div'
 import uiCSS from 'baseUI/settings/uiCSS'
 import { toCssValue } from 'baseUI/style/cssUnits'
 import { CSSPropertyValue } from 'baseUI/style/cssValue'
 import cssTheme from 'baseUI/settings/cssTheme'
+import { toICSS } from 'baseUI/style/cssParser'
 
 export interface CardProps extends DivProps {
   /**
@@ -35,26 +34,26 @@ export interface CardProps extends DivProps {
   borderRadius?: 'small' | 'medium' | 'large'
 }
 
+const getCSS = toICSS(({ width, height, borderRadius, bg, color }: CardProps) => ({
+  width: toCssValue(width),
+  height: toCssValue(height),
+  borderRadius:
+    borderRadius === 'small'
+      ? uiCSS.Card['borderRadius--small']
+      : borderRadius === 'medium'
+      ? uiCSS.Card['borderRadius--medium']
+      : uiCSS.Card['borderRadius--large'],
+  boxShadow: cssTheme.shadow.smooth,
+  background: bg ?? cssTheme.color.whiteCard,
+  backgroundColor: color
+}))
+
 /**
  * @BaseUIComponent
  */
-function Card(props: CardProps) {
-  // useCSS should be an global hooks. Or not a hooks at all
-  // TODO: it can have an identifier. @example: useCSS('Card', ()=>ICSS, [dependentList])
-  const css = useCSS(props, (props) => ({
-    width: toCssValue(props.width),
-    height: toCssValue(props.height),
-    borderRadius:
-      props.borderRadius === 'small'
-        ? uiCSS.Card['borderRadius--small']
-        : props.borderRadius === 'medium'
-        ? uiCSS.Card['borderRadius--medium']
-        : uiCSS.Card['borderRadius--large'],
-    boxShadow: cssTheme.shadow.smooth,
-    background: props.bg ?? cssTheme.color.whiteCard,
-    backgroundColor: props.color
-  }))
-  return <BaseUIDiv {...pick(props, divProps)} _css={css} />
+function Card({ width, height, borderRadius, bg, color, ...restProps }: CardProps) {
+  const css = getCSS({ width, height, borderRadius, bg, color })
+  return <BaseUIDiv {...restProps} _css={css} />
 }
 
 export default injectAppSetting(Card, { borderRadius: 'medium' })

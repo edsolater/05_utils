@@ -1,5 +1,5 @@
-/** @jsx jsx */
-import { jsx, css as cssMerge, CSSObject } from '@emotion/react'
+import React from 'react'
+import { CSSObject } from '@emotion/react'
 import { mixCSSObjects } from '../style/cssParser'
 import { CSSProperties, FC, useEffect, useRef } from 'react'
 import Div from './Div'
