@@ -17,26 +17,29 @@ import NotificationExample from './NotificationExample'
 import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 import AnimateExample from './AnimateExample'
+import { Registor as CSSRegistor } from 'baseUI/hooks/useCSS'
 
 const AllExamples = () => (
-  <GlobalSettings>
-    <AnimateExample />
-    <NotificationExample />
-    <AppLayoutExample />
-    <HoverableExample />
-    <KeyboardShortcutExample />
-    <DrawerExample />
-    <MaskExample />
-    <AppProvidersExample />
-    <GlobalStoreExample />
-    <DivExample />
-    <TransformExample />
-    <ButtonExample />
-    <CardExample />
-    <InputExample />
-    <DropdownExample />
-    <TagExample />
-    <IconExample />
-  </GlobalSettings>
+  <CSSRegistor>
+    <GlobalSettings>
+      <AnimateExample />
+      <NotificationExample />
+      <AppLayoutExample />
+      <HoverableExample />
+      <KeyboardShortcutExample />
+      <DrawerExample />
+      <MaskExample />
+      <AppProvidersExample />
+      <GlobalStoreExample />
+      <DivExample />
+      <TransformExample />
+      <ButtonExample />
+      <CardExample />
+      <InputExample />
+      <DropdownExample />
+      <TagExample />
+      <IconExample />
+    </GlobalSettings>
+  </CSSRegistor>
 )
 export default AllExamples

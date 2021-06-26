@@ -5,7 +5,7 @@ import { pick } from 'utils/functions/object'
 import BaseUIDiv from './BaseUIDiv'
 import cssColor from 'baseUI/style/cssColor'
 import { cssBrightness } from 'baseUI/style/cssFunctions'
-import useCSS from 'baseUI/hooks/useCSS'
+import useCSS, { useCSS2 } from 'baseUI/hooks/useCSS'
 import uiCSS from 'baseUI/settings/uiCSS'
 
 export interface ButtonProps extends DivProps<'button'> {
@@ -21,11 +21,9 @@ export interface ButtonProps extends DivProps<'button'> {
   size?: 'small' | 'medium' | 'large'
 }
 
-/**
- * @UIComponent Button
- */
-const Button = (props: ButtonProps) => {
-  const css = useCSS(props, (props) => [
+const cssFn = ({ type, size }: ButtonProps) => {
+  console.log(3)
+  return [
     {
       style: 'none',
       borderWidth: 0,
@@ -34,22 +32,22 @@ const Button = (props: ButtonProps) => {
       width: 'max-content',
       boxSizing: 'border-box'
     },
-    props.size === 'small' && {
+    size === 'small' && {
       padding: uiCSS.Button['padding--small'],
       fontSize: uiCSS.Button['fontSize--small'],
       borderRadius: uiCSS.Button['borderRadius--small']
     },
-    props.size === 'medium' && {
+    size === 'medium' && {
       padding: uiCSS.Button['padding--medium'],
       fontSize: uiCSS.Button['fontSize--medium'],
       borderRadius: uiCSS.Button['borderRadius--medium']
     },
-    props.size === 'large' && {
+    size === 'large' && {
       padding: uiCSS.Button['padding--large'],
       fontSize: uiCSS.Button['fontSize--large'],
       borderRadius: uiCSS.Button['borderRadius--large']
     },
-    props.type === 'fill' && {
+    type === 'fill' && {
       color: uiCSS.Button['textColor--fill'],
       position: 'relative',
       background: 'none',
@@ -64,7 +62,7 @@ const Button = (props: ButtonProps) => {
       ':hover::before': { filter: cssBrightness(1.4) },
       ':active::before': { filter: cssBrightness(0.8) }
     },
-    props.type === 'outline' && {
+    type === 'outline' && {
       position: 'relative',
       background: cssColor.transparent,
       color: uiCSS.Button['textColor--outline'],
@@ -80,18 +78,22 @@ const Button = (props: ButtonProps) => {
         color: 'inherit'
       }
     },
-    props.type === 'text' && {
+    type === 'text' && {
       color: uiCSS.Button['textColor--text'],
       background: 'transparent'
     }
-  ])
-
+  ]
+}
+/**
+ * @UIComponent Button
+ */
+const Button = ({ size, type, children, ...restProps }: ButtonProps) => {
+  const css = useCSS2({size, type}, cssFn)
   return (
-    <BaseUIDiv {...pick(props, divProps)} as='button' _css={css}>
-      {props.children ?? '🤨'}
+    <BaseUIDiv {...restProps} as='button' _css={css}>
+      {children ?? '🤨'}
     </BaseUIDiv>
   )
 }
 
 export default injectAppSetting(Button, { type: 'fill', size: 'medium' })
-

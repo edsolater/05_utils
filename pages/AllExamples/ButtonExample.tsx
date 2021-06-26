@@ -24,7 +24,7 @@ const ButtonExample = () => (
       </Button>
     </ExampleGroup>
 
-    <ExampleGroup caption='外框按钮（主色）'>
+    {/* <ExampleGroup caption='外框按钮（主色）'>
       <Button type='outline' size='large'>
         Large
       </Button>
@@ -42,7 +42,7 @@ const ButtonExample = () => (
       <Button type='text' size='small'>
         small
       </Button>
-    </ExampleGroup>
+    </ExampleGroup> */}
   </ExampleCard>
 )
 
