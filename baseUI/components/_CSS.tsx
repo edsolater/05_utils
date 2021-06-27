@@ -1,5 +1,6 @@
 import React, { ReactNode, RefObject } from 'react'
 import useCallbackRef from '../hooks/useCallbackRef'
+import mapReactChildren from './mapReactChildren'
 
 /**
  * @HollowComponent
@@ -14,12 +15,9 @@ const _CSS = ({
   domRef?: RefObject<any>
   children?: ReactNode
   [otherProps: string]: any
-}): JSX.Element => {
+}) => {
   Reflect.set(domRef ?? {}, 'current', [])
-
-  // @ts-expect-error
-  return React.Children.map(children, (child, idx) =>
-    // @ts-expect-error
+  return mapReactChildren(children, (child, idx) =>
     React.cloneElement(child, {
       domRef: useCallbackRef((dom) => (domRef?.current as any[])?.splice(idx, 1, dom)),
       css: restProps

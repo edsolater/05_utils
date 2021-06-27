@@ -1,7 +1,7 @@
-import createRefHook from 'baseUI/functions/createRefHook'
+import createRefHook from '../functions/createRefHook'
 import { RefObject, useEffect } from 'react'
 import { MayArray } from 'typings/tools'
-import parseRefs from '../functions/parseRefs'
+import parseIRefs from '../functions/parseRefs'
 
 export interface UseAnimateOptions {
   keyframes?: Parameters<Animatable['animate']>[0]
@@ -10,12 +10,15 @@ export interface UseAnimateOptions {
 
 export const animateOptionKeys: Array<keyof UseAnimateOptions> = ['keyframes', 'options']
 
+/**
+ * component version: {@link #_Animate todo}
+ */
 export default function useAnimate(
   ref: RefObject<MayArray<HTMLElement | null | undefined>>,
   options?: UseAnimateOptions
 ) {
   useEffect(() => {
-    parseRefs(ref, (r) => r?.animate(options?.keyframes ?? null, options?.options))
+    parseIRefs(ref, (r) => r.animate(options?.keyframes ?? null, options?.options))
   }, [])
 }
 

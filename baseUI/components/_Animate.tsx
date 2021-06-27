@@ -12,7 +12,7 @@ interface _AnimateProps extends DivProps, UseAnimateOptions {
 
 export default function _Animate({ children, ...restProps }: _AnimateProps) {
   return mapReactChildren(children, (child) => (
-    <_DomRef {...omit(restProps, animateOptionKeys)} _domRef={useAnimateRef(restProps)}>
+    <_DomRef {...omit(restProps, animateOptionKeys)} exRef={useAnimateRef(restProps)}>
       {child}
     </_DomRef>
   ))

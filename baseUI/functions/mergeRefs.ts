@@ -1,5 +1,5 @@
 import { MutableRefObject, RefCallback, useCallback } from 'react'
-import { MayDeepArray } from 'typings/tools'
+import { MayArray } from 'typings/tools'
 import { isExist } from 'utils/functions/judgers'
 
 function loadRef(ref, el) {
@@ -25,9 +25,5 @@ export function parseObjectRefs<T = any>(ref: MutableRefObject<T>): T {
   return ref.current
 }
 
-export type IRef<T = undefined> =
-  | ((el: T) => void)
-  | MutableRefObject<T | null | undefined>
-  | null
-  | undefined
-export type IRefs<T = undefined> = MayDeepArray<IRef<T>>
+export type IRef<T = any> = MutableRefObject<T | null | undefined> | null | undefined
+export type IRefs<T = any> = MayArray<IRef<MayArray<T>>>

@@ -1,14 +1,33 @@
 import { mergeProps } from 'baseUI/functions'
-import React, { RefObject } from 'react'
-import { MayArray } from 'typings/tools'
-import assertSigleChild from '../functions/assertSigleChild'
+import { IRefs } from 'baseUI/functions/mergeRefs'
+import React from 'react'
 import { DivProps } from './Div'
 import _Props from './_Props'
+import useCallbackRef from '../hooks/useCallbackRef'
+import mapReactChildren from './mapReactChildren'
+import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 
 interface _DomRefProps extends DivProps {
-  _domRef?: MayArray<RefObject<HTMLElement | null | undefined>>
+  exRef?: IRefs<HTMLElement>
 }
-export default function _DomRef({ _domRef, children, ...restProps }: _DomRefProps) {
-  assertSigleChild(children, _DomRef.name)
-  return <_Props {...mergeProps(restProps, { domRef: _domRef })}>{children}</_Props>
+
+export default function _DomRef({ exRef, children, domRef, ...restProps }: _DomRefProps) {
+  parseIRefsWrapper(exRef, (r) => {
+    Reflect.set(r ?? {}, 'current', [])
+  })
+  return mapReactChildren(children, (child, idx) => (
+    <_Props
+      {...mergeProps(
+        restProps,
+        { domRef },
+        {
+          domRef: useCallbackRef((dom) =>
+            parseIRefsWrapper(exRef, (ref) => (ref.current as any[])?.splice(idx, 1, dom))
+          )
+        }
+      )}
+    >
+      {child}
+    </_Props>
+  ))
 }

@@ -7,12 +7,16 @@ import { isArray } from 'utils/functions/judgers'
  */
 export default function mapReactChildren(
   children: MayArray<ReactNode>,
-  mapper: (child: ReactElement) => ReactNode
+  mapper: (child: ReactElement, index: number) => ReactNode
 ) {
   return isArray(children) ? (
-    <>{React.Children.map(children, (child) => (isValidElement(child) ? mapper(child) : child))}</>
+    <>
+      {React.Children.map(children, (child, idx) =>
+        isValidElement(child) ? mapper(child, idx) : child
+      )}
+    </>
   ) : isValidElement(children) ? (
-    <>{mapper(children)}</>
+    <>{mapper(children, 0)}</>
   ) : (
     <>{children}</>
   )

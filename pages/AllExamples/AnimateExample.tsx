@@ -39,14 +39,14 @@ const AnimateExample = () => {
       </ExampleGroup>
 
       <ExampleGroup caption='basic case'>
-        <_Animate
-          keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
-          options={{ duration: 1000, iterations: Infinity }}
-        >
-          <_CSS width='60px' height='60px' background={cssColor.dodgerblue}>
+        <_CSS width='60px' height='60px' background={cssColor.dodgerblue}>
+          <_Animate
+            keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
+            options={{ duration: 1000, iterations: Infinity }}
+          >
             <Div />
-          </_CSS>
-        </_Animate>
+          </_Animate>
+        </_CSS>
       </ExampleGroup>
     </ExampleCard>
   )
