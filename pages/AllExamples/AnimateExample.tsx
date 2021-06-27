@@ -1,4 +1,5 @@
-import { Animate, Div, _CSS } from 'baseUI/components'
+import { Div, _CSS } from 'baseUI/components'
+import _Animate from 'baseUI/components/_Animate'
 import cssColor from 'baseUI/style/cssColor'
 import React, { useEffect, useState } from 'react'
 import ExampleCard from './ExampleCard'
@@ -15,7 +16,7 @@ const AnimateExample = () => {
   return (
     <ExampleCard category='WrapperComponent' title='<Animate>'>
       <ExampleGroup caption='basic case'>
-        <Animate
+        <_Animate
           keyframes={[
             { transform: 'rotate(0) scale(0.4)' },
             { transform: 'rotate(180deg) scale(1)' },
@@ -26,22 +27,26 @@ const AnimateExample = () => {
           {/* dfasdf */}
           <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
             <Div />
+            <Div />
           </_CSS>
           <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
             <Div />
           </_CSS>
-        </Animate>
+          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+            <Div />
+          </_CSS>
+        </_Animate>
       </ExampleGroup>
 
       <ExampleGroup caption='basic case'>
-        <Animate
+        <_Animate
           keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
           options={{ duration: 1000, iterations: Infinity }}
         >
           <_CSS width='60px' height='60px' background={cssColor.dodgerblue}>
             <Div />
           </_CSS>
-        </Animate>
+        </_Animate>
       </ExampleGroup>
     </ExampleCard>
   )

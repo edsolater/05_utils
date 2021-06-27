@@ -1,4 +1,3 @@
-export { default as Animate } from './_Animate'
 export { default as AppLayout } from './AppLayout'
 export { default as BaseUIDiv } from './BaseUIDiv'
 export { default as Button } from './Button'

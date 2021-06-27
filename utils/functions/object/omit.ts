@@ -1,4 +1,4 @@
-import { MayDeepReadOnlyArray } from '../../../typings/tools'
+import { MayDeepArray } from '../../../typings/tools'
 import flat from '../array/flat'
 
 /**
@@ -13,7 +13,7 @@ import flat from '../array/flat'
  */
 export default function omit<T extends object, U extends keyof T>(
   obj: T,
-  ...keys: ReadonlyArray<MayDeepReadOnlyArray<U>> //IDEA: maydeep
+  ...keys: Array<MayDeepArray<U>> //IDEA: maydeep
 ): Omit<T, U> {
   const newObj = { ...obj }
   flat(keys).forEach((key) => {
