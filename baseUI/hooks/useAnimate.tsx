@@ -5,6 +5,7 @@ export interface UseAnimateOptions {
   keyframes?: Parameters<Animatable['animate']>[0]
   options?: Parameters<Animatable['animate']>[1]
 }
+export const animateOptionKeys: ReadonlyArray<keyof UseAnimateOptions> = ['keyframes', 'options']
 export default function useAnimate(
   ref: RefObject<HTMLElement | null | undefined>,
   options?: UseAnimateOptions
@@ -14,6 +15,5 @@ export default function useAnimate(
   }, [])
 }
 
-// TODO: 好像这个更申明式一些
-// 不妥， userAnimate偏向于useRef，而不是useEffect，反而不清晰
+// compose style
 export const useAnimateRef = createRefHook(useAnimate)

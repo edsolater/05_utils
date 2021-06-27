@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react'
  *
  * 这是个透明组件，作用是在其上设定的CSS属性，“下沉”到子节点的CSSProps
  */
-const CSS = (props: {
+const _CSS = (props: {
   domRef?: any
   children?: ReactNode
   [otherProps: string]: any
@@ -18,4 +18,4 @@ const CSS = (props: {
   )
 }
 
-export default CSS
+export default _CSS

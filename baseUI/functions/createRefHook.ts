@@ -1,15 +1,21 @@
 import { createRef, RefObject } from 'react'
 
+type RefedHook<T extends HTMLElement, H extends (...any: any[]) => any> = H extends (
+  _,
+  ...rest: infer R
+) => any
+  ? (...params: R) => RefObject<T>
+  : never
+
 export default function createRefHook<
-  T = HTMLElement,
-  H = (ref: RefObject<any>, ...any: any[]) => any
->(hook: H): H extends (ref, ...rest: infer R) => any ? (...params: R) => RefObject<T> : never {
+  T extends HTMLElement,
+  H extends (ref: RefObject<any>, ...any: any[]) => any
+>(hook: H): RefedHook<T, H> {
   const ref = createRef<T>()
   const wrappedHook = (...params) => {
-    //@ts-ignore
     hook(ref, ...params)
     return ref
   }
-  //@ts-ignore
+  // @ts-ignore
   return wrappedHook
 }

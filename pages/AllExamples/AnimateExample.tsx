@@ -1,4 +1,4 @@
-import { Animate, Div, CSS } from 'baseUI/components'
+import { Animate, Div, _CSS } from 'baseUI/components'
 import cssColor from 'baseUI/style/cssColor'
 import React from 'react'
 import ExampleCard from './ExampleCard'
@@ -19,9 +19,9 @@ const AnimateExample = () => {
           ]}
           options={{ duration: 2000, iterations: Infinity }}
         >
-          <CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
             <Div />
-          </CSS>
+          </_CSS>
         </Animate>
       </ExampleGroup>
     </ExampleCard>
