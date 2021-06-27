@@ -6,7 +6,6 @@ import { injectAppSetting } from './AppSettings'
 import mergeProps from '../functions/mergeProps'
 import { BaseUIDiv } from '.'
 import cssTheme from 'baseUI/settings/cssTheme'
-import { useCSS2 } from 'baseUI/hooks/useCSS'
 import { toICSS } from 'baseUI/style/cssParser'
 
 // 应该就是一种 Card 的特殊呈现形式
@@ -16,10 +15,10 @@ import { toICSS } from 'baseUI/style/cssParser'
 export interface DropdownProps extends DivProps {
   toggleBy?: 'click' | 'hover'
 
-  props_Card?: CardProps
+  propsCard?: CardProps
   /**
    * @cssProps
-   * this is just a shorcut of props_Card.css.background
+   * this is just a shorcut of propsCard.css.background
    */
   cardBg?: CSSPropertyValue<'background'>
 
@@ -40,7 +39,7 @@ const getCardCSS = toICSS(({ cardBg, gapFromButton }: DropdownProps) => ({
 
 function Dropdown({
   toggleBy,
-  props_Card,
+  propsCard,
   cardBg,
   gapFromButton,
   children,
@@ -67,7 +66,7 @@ function Dropdown({
               classNames: 'Dropdown-Card',
               css: CardCss
             },
-            props_Card
+            propsCard
           )}
         />
       )}

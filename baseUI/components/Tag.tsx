@@ -11,7 +11,7 @@ import { toICSS } from 'baseUI/style/cssParser'
 export interface TagProps extends DivProps {
   controls?: boolean
   onClose?: () => void // TODO: 应该有提供取消关闭的控制对象的
-  props_closeIcon?: IconProps
+  propscloseIcon?: IconProps
   children?: ReactNode
 }
 
@@ -28,21 +28,21 @@ const getCSS = toICSS(() => ({
 /**
  * @BaseUIComponent
  */
-function Tag({ children, controls, props_closeIcon, onClose, ...restProps }: TagProps) {
+function Tag({ children, controls, propscloseIcon, onClose, ...restProps }: TagProps) {
   const css = getCSS()
   return (
     <BaseUIDiv {...restProps} _className='Tag' _css={css}>
       {children}
       {controls && (
         <Icon
-          {...props_closeIcon}
-          color={props_closeIcon?.color ?? cssTheme.color.darkText} // 因为这里的color需要用来开启自定义颜色的功能，故不能转而使用cssVariable
+          {...propscloseIcon}
+          color={propscloseIcon?.color ?? cssTheme.color.darkText} // 因为这里的color需要用来开启自定义颜色的功能，故不能转而使用cssVariable
           onClick={(...params) => {
             onClose?.()
-            props_closeIcon?.onClick?.(...params)
+            propscloseIcon?.onClick?.(...params)
           }}
-          className={['Tag-Icon', props_closeIcon?.className]}
-          css={props_closeIcon?.css}
+          className={['Tag-Icon', propscloseIcon?.className]}
+          css={propscloseIcon?.css}
           name='close'
         />
       )}

@@ -30,8 +30,8 @@ export interface InputProps extends DivProps {
   placeholder?: string
   prefixNode?: ReactNode
 
-  props_Icon?: IconProps
-  props_body?: DivProps<'input' | 'textarea'>
+  propsIcon?: IconProps
+  propsbody?: DivProps<'input' | 'textarea'>
   /**
    * @cssProps 输入框宽度
    * @default '10px'
@@ -79,8 +79,8 @@ function Input({
   disabled,
   placeholder,
   prefixNode,
-  props_Icon,
-  props_body,
+  propsIcon,
+  propsbody,
   width,
   ...restProps
 }: InputProps) {
@@ -106,17 +106,17 @@ function Input({
   return (
     <BaseUIDiv {...restProps} _className='Input' css={css}>
       {prefixNode}
-      {props_Icon && (
+      {propsIcon && (
         <Icon
-          {...mergeProps(props_Icon, {
+          {...mergeProps(propsIcon, {
             classNames: 'Input-Icon',
             css: IconCSS
           })}
         />
       )}
       <Div
-        {...mergeProps(props_body, {
-          as: isTextarea ? 'textarea' : 'input',
+        as={isTextarea ? 'textarea' : 'input'}
+        {...mergeProps(propsbody, {
           className: 'Input-body',
           domRef: inputBodyRef,
           css: BodyCSS,

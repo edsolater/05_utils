@@ -18,7 +18,7 @@ export interface IconProps extends DivProps {
    */
   name?: AllIconNames | (string & {})
 
-  props_Image?: ImageProps
+  propsImage?: ImageProps
 
   /**
    * ！双重作用props
@@ -63,7 +63,7 @@ const getImageCSS = toICSS(() => ({
  * @BaseUIComponent
  * Icon's basicPath need to be setted
  */
-function Icon({ name, size, color, hoverColor, props_Image, ...restProps }: IconProps) {
+function Icon({ name, size, color, hoverColor, propsImage, ...restProps }: IconProps) {
   const src = `${iconFileBasePath}/${name}.${iconFileType}`
   const sholdUseRaw = notDefined(color)
   const css = getCSS({ size, color, hoverColor }, src)
@@ -71,7 +71,7 @@ function Icon({ name, size, color, hoverColor, props_Image, ...restProps }: Icon
   return (
     <BaseUIDiv {...restProps} _css={css}>
       {sholdUseRaw && (
-        <Image {...props_Image} src={src} alt={name} css={[ImageCss, props_Image?.css]} />
+        <Image {...propsImage} src={src} alt={name} css={[ImageCss, propsImage?.css]} />
       )}
     </BaseUIDiv>
   )

@@ -10,7 +10,7 @@ import ExampleGroup from './ExampleGroup'
 const DropdownExample = () => (
   <ExampleCard category='baseUI/componentComponent' title='Dropdown（依赖于Card）'>
     <ExampleGroup caption='基本'>
-      <Dropdown toggleBy="hover" props_Card={{ height:'100px', width: '300px' }}>
+      <Dropdown toggleBy="hover" propsCard={{ height:'100px', width: '300px' }}>
         <Icon name='smile' />
       </Dropdown>
     </ExampleGroup>
