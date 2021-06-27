@@ -18,7 +18,7 @@ export default function _DomRef({ exRef, children, domRef, ...restProps }: _DomR
   return mapReactChildren(children, (child, idx) => (
     <_Props
       {...mergeProps(
-        restProps,
+        restProps, // TODO 其实这里应该要深拷贝的
         { domRef },
         {
           domRef: useCallbackRef((dom) =>
