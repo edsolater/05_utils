@@ -1,4 +1,4 @@
-import { createRef, RefObject } from 'react'
+import { RefObject, useRef } from 'react'
 
 type RefedHook<T extends HTMLElement, H extends (...any: any[]) => any> = H extends (
   _,
@@ -11,8 +11,8 @@ export default function createRefHook<
   T extends HTMLElement,
   H extends (ref: RefObject<any>, ...any: any[]) => any
 >(hook: H): RefedHook<T, H> {
-  const ref = createRef<T>()
   const wrappedHook = (...params) => {
+    const ref = useRef<T>()
     hook(ref, ...params)
     return ref
   }

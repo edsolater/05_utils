@@ -1,6 +1,5 @@
 export { default as createObserver } from './createObserver'
 export { default as createStore } from './createStore'
-export { default as useAnimate} from './useAnimate'
 export { default as useBreakPoints } from './useBreakPoints'
 export { default as useClick } from './useClick'
 export { default as useClickOutside } from './useClickOutside'

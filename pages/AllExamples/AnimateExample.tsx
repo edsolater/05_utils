@@ -1,6 +1,6 @@
 import { Animate, Div, _CSS } from 'baseUI/components'
 import cssColor from 'baseUI/style/cssColor'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 
@@ -8,6 +8,10 @@ import ExampleGroup from './ExampleGroup'
  * <Animate> 的使用示例
  */
 const AnimateExample = () => {
+  const [count, setcount] = useState(0)
+  useEffect(() => {
+    setInterval(() => setcount((n) => n + 1), 1000)
+  }, [])
   return (
     <ExampleCard category='WrapperComponent' title='<Animate>'>
       <ExampleGroup caption='basic case'>
@@ -20,6 +24,20 @@ const AnimateExample = () => {
           options={{ duration: 2000, iterations: Infinity }}
         >
           <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+            <Div />
+          </_CSS>
+          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+            <Div />
+          </_CSS>
+        </Animate>
+      </ExampleGroup>
+
+      <ExampleGroup caption='basic case'>
+        <Animate
+          keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
+          options={{ duration: 1000, iterations: Infinity }}
+        >
+          <_CSS width='60px' height='60px' background={cssColor.dodgerblue}>
             <Div />
           </_CSS>
         </Animate>
