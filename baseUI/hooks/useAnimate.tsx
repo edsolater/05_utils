@@ -11,7 +11,7 @@ export interface UseAnimateOptions {
 export const animateOptionKeys: Array<keyof UseAnimateOptions> = ['keyframes', 'options']
 
 /**
- * component version: {@link #_Animate todo}
+ * component version: {@link #Animate todo}
  */
 export default function useAnimate(
   ref: RefObject<MayArray<HTMLElement | null | undefined>>,

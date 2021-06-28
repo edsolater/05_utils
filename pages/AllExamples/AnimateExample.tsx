@@ -1,6 +1,6 @@
-import { Div, _CSS } from 'baseUI/components'
-import _Animate from 'baseUI/components/wrappers/_Animate'
-import _Props from 'baseUI/components/wrappers/_Props'
+import { Div, CSS } from 'baseUI/components'
+import Animate from 'baseUI/components/wrappers/Animate'
+import Props from 'baseUI/components/wrappers/Props'
 import cssColor from 'baseUI/style/cssColor'
 import React, { useEffect, useState } from 'react'
 import ExampleCard from './ExampleCard'
@@ -17,7 +17,7 @@ const AnimateExample = () => {
   return (
     <ExampleCard category='WrapperComponent' title='<Animate>'>
       <ExampleGroup caption='basic case'>
-        <_Animate
+        <Animate
           keyframes={[
             { transform: 'rotate(0) scale(0.4)' },
             { transform: 'rotate(180deg) scale(1)' },
@@ -26,44 +26,44 @@ const AnimateExample = () => {
           options={{ duration: 2000, iterations: Infinity }}
         >
           {/* dfasdf */}
-          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+          <CSS width='100px' height='100px' background={cssColor.dodgerblue}>
             <Div />
             <Div />
-          </_CSS>
-          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+          </CSS>
+          <CSS width='100px' height='100px' background={cssColor.dodgerblue}>
             <Div />
-          </_CSS>
-          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+          </CSS>
+          <CSS width='100px' height='100px' background={cssColor.dodgerblue}>
             <Div />
-          </_CSS>
-        </_Animate>
+          </CSS>
+        </Animate>
       </ExampleGroup>
 
       <ExampleGroup caption='basic case'>
-        <_CSS width='60px' height='60px' background={cssColor.dodgerblue}>
-          <_Animate
+        <CSS width='60px' height='60px' background={cssColor.dodgerblue}>
+          <Animate
             keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
             options={{ duration: 1000, iterations: Infinity }}
           >
             <Div />
-          </_Animate>
-        </_CSS>
+          </Animate>
+        </CSS>
       </ExampleGroup>
 
       <ExampleGroup caption='basic case'>
-        <_Animate
+        <Animate
           keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
           options={{ duration: 1000, iterations: Infinity }}
         >
-          <_Props<{ whole: number }> whole={3}>
-            <_CSS width='60px' height='60px' background={cssColor.crimson}>
+          <Props<{ whole: number }> whole={3}>
+            <CSS width='60px' height='60px' background={cssColor.crimson}>
               <Div />
-            </_CSS>
-            <_CSS width='60px' height='60px' background={cssColor.crimson}>
+            </CSS>
+            <CSS width='60px' height='60px' background={cssColor.crimson}>
               <Div />
-            </_CSS>
-          </_Props>
-        </_Animate>
+            </CSS>
+          </Props>
+        </Animate>
       </ExampleGroup>
     </ExampleCard>
   )

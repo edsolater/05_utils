@@ -1,4 +1,4 @@
-import _CSS from 'baseUI/components/wrappers/_CSS'
+import CSS from 'baseUI/components/wrappers/CSS'
 import Div from 'baseUI/components/Div'
 import cssColor from 'baseUI/style/cssColor'
 import createStore from 'baseUI/hooks/createStore'
@@ -15,7 +15,7 @@ const DivExample = () => {
   return (
     <ExampleCard category='baseUI/componentComponent' title='Div'>
       <ExampleGroup caption='onClickOutside'>
-        <_CSS
+        <CSS
           width='100px'
           height='100px'
           background={isFocused ? cssColor.crimson : cssColor.dodgerblue}
@@ -25,11 +25,11 @@ const DivExample = () => {
               setIsFocused(true)
             }}
           />
-        </_CSS>
+        </CSS>
       </ExampleGroup>
 
       <ExampleGroup caption='onResize（使用ResizeObserver）'>
-        <_CSS
+        <CSS
           width='100px'
           height='100px'
           background={cssColor.crimson}
@@ -37,7 +37,7 @@ const DivExample = () => {
           overflow='auto'
         >
           <Div />
-        </_CSS>
+        </CSS>
       </ExampleGroup>
     </ExampleCard>
   )

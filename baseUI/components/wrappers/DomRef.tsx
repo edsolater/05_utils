@@ -2,16 +2,16 @@ import { mergeProps } from 'baseUI/functions'
 import { IRefs } from 'baseUI/functions/mergeRefs'
 import React from 'react'
 import { DivProps } from '../Div'
-import _Props from './_Props'
+import Props from './Props'
 import useCallbackRef from '../../hooks/useCallbackRef'
 import cloneElement from '../../functions/cloneElement'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 
-interface _DomRefProps extends DivProps {
+interface DomRefProps extends DivProps {
   exRef?: IRefs<HTMLElement>
 }
 
-export default function _DomRef({ exRef, children, domRef, ...restProps }: _DomRefProps) {
+export default function DomRef({ exRef, children, domRef, ...restProps }: DomRefProps) {
   const allRefs = [domRef, exRef].flat()
 
   if (!allRefs.length) return <>{children}</>
