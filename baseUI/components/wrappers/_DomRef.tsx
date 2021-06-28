@@ -1,10 +1,10 @@
 import { mergeProps } from 'baseUI/functions'
 import { IRefs } from 'baseUI/functions/mergeRefs'
 import React from 'react'
-import { DivProps } from './Div'
+import { DivProps } from '../Div'
 import _Props from './_Props'
-import useCallbackRef from '../hooks/useCallbackRef'
-import cloneElement from '../functions/cloneElement'
+import useCallbackRef from '../../hooks/useCallbackRef'
+import cloneElement from '../../functions/cloneElement'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 
 interface _DomRefProps extends DivProps {

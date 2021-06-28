@@ -1,6 +1,6 @@
 import { Div, _CSS } from 'baseUI/components'
-import _Animate from 'baseUI/components/_Animate'
-import _Props from 'baseUI/components/_Props'
+import _Animate from 'baseUI/components/wrappers/_Animate'
+import _Props from 'baseUI/components/wrappers/_Props'
 import cssColor from 'baseUI/style/cssColor'
 import React, { useEffect, useState } from 'react'
 import ExampleCard from './ExampleCard'
@@ -55,7 +55,7 @@ const AnimateExample = () => {
           keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
           options={{ duration: 1000, iterations: Infinity }}
         >
-          <_Props hello={3}>
+          <_Props<{ whole: number }> whole={3}>
             <_CSS width='60px' height='60px' background={cssColor.crimson}>
               <Div />
             </_CSS>

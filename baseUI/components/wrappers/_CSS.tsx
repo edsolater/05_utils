@@ -2,7 +2,7 @@ import React, { ReactNode, RefObject } from 'react'
 import _DomRef from './_DomRef'
 
 /**
- * @HollowComponent
+ * @WrapperComponent
  *
  * 这是个透明组件，作用是在其上设定的CSS属性，“下沉”到子节点的CSSProps
  */

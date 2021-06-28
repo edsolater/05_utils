@@ -1,4 +1,4 @@
-import _CSS from 'baseUI/components/_CSS'
+import _CSS from 'baseUI/components/wrappers/_CSS'
 import Div from 'baseUI/components/Div'
 import cssColor from 'baseUI/style/cssColor'
 import createStore from 'baseUI/hooks/createStore'

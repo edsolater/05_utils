@@ -1,7 +1,7 @@
 import { useToggle, useFeatureHover } from 'baseUI/hooks'
 import React, { ReactChild, useRef } from 'react'
 import { shrinkToValue } from 'utils/functions/magic'
-import { BaseUIDiv } from '.'
+import { BaseUIDiv } from '..'
 
 interface HoverableProps {
   children?: ReactChild | ((isHoverd: boolean) => ReactChild)

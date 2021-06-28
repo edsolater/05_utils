@@ -1,4 +1,4 @@
-import Hoverable from 'baseUI/components/Hoverable'
+import Hoverable from 'baseUI/components/wrappers/Hoverable'
 import Icon from 'baseUI/components/Icon'
 import React from 'react'
 import ExampleCard from './ExampleCard'
