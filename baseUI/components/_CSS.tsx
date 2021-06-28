@@ -1,6 +1,4 @@
-import React, { ReactNode, RefObject, useEffect } from 'react'
-import useCallbackRef from '../hooks/useCallbackRef'
-import cloneElement from './mapReactChildren'
+import React, { ReactNode, RefObject } from 'react'
 import _DomRef from './_DomRef'
 
 /**

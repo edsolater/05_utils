@@ -51,14 +51,19 @@ const AnimateExample = () => {
       </ExampleGroup>
 
       <ExampleGroup caption='basic case'>
-        <_Props hello={3}>
-          <_CSS width='60px' height='60px' background={cssColor.crimson}>
-            <Div />
-          </_CSS>
-          <_CSS width='60px' height='60px' background={cssColor.crimson}>
-            <Div />
-          </_CSS>
-        </_Props>
+        <_Animate
+          keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
+          options={{ duration: 1000, iterations: Infinity }}
+        >
+          <_Props hello={3}>
+            <_CSS width='60px' height='60px' background={cssColor.crimson}>
+              <Div />
+            </_CSS>
+            <_CSS width='60px' height='60px' background={cssColor.crimson}>
+              <Div />
+            </_CSS>
+          </_Props>
+        </_Animate>
       </ExampleGroup>
     </ExampleCard>
   )

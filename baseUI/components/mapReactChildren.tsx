@@ -1,7 +1,6 @@
 import React, { isValidElement, ReactElement, ReactNode } from 'react'
 import { MayArray } from 'typings/tools'
 import { isArray } from 'utils/functions/judgers'
-import { shrinkToValue } from 'utils/functions/magic'
 
 /**
  * 比 React.Children.map 优化了类型、当某个Child并非ReactElement时， 直接返回
