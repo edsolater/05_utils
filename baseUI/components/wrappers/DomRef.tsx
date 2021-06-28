@@ -3,7 +3,7 @@ import { IRefs } from 'baseUI/functions/mergeRefs'
 import React from 'react'
 import { DivProps } from "../baseProps"
 import useCallbackRef from '../../hooks/useCallbackRef'
-import cloneElement from '../../functions/cloneElement'
+import cloneElement from '../../functions/applyElementMapper'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 
 interface DomRefProps extends DivProps {
