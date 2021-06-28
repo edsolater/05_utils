@@ -1,5 +1,6 @@
 import React, { ReactNode, useRef } from 'react'
-import Div, { DivProps } from './Div'
+import Div from './Div'
+import { DivProps } from "./baseProps"
 import Protal from './Protal'
 import { mergeProps } from 'baseUI/functions'
 import { injectAppSetting } from './AppSettings'

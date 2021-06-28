@@ -1,10 +1,9 @@
 import React from 'react'
 import { omit } from 'utils/functions/object'
 import { animateOptionKeys, UseAnimateOptions, useAnimateRef } from '../../hooks/useAnimate'
-import { DivProps } from '../Div'
+import { WrapperProps, DivProps } from '../baseProps'
 import cloneElement from '../../functions/cloneElement'
 import DomRef from './DomRef'
-import WrapperProps from './wrapperProps'
 
 interface AnimateProps extends DivProps, WrapperProps, UseAnimateOptions {}
 

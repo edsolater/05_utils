@@ -1,5 +1,5 @@
 import React from 'react'
-import { DivProps } from '../Div'
+import { DivProps } from "../baseProps"
 import DomRef from './DomRef'
 
 interface PropsProps extends DivProps {

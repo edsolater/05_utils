@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DivProps } from './Div'
+import { DivProps } from "./baseProps"
 import isArray from 'utils/functions/judgers/isArray'
 import { injectAppSetting } from './AppSettings'
 import { BaseUIDiv } from '.'

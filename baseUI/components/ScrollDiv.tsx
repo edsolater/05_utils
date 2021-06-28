@@ -1,6 +1,7 @@
 import React, { ReactChild, useRef, useEffect } from 'react'
 import { useToggle_Ref } from 'baseUI/hooks/useToggle'
-import Div, { DivProps } from './Div'
+import Div from './Div'
+import { DivProps } from "./baseProps"
 import { BaseUIDiv } from '.'
 import { CSSLength, toPx } from 'baseUI/style/cssUnits'
 import uiCSS from 'baseUI/settings/uiCSS'

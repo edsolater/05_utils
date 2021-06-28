@@ -26,21 +26,21 @@ const AnimateExample = () => {
           options={{ duration: 2000, iterations: Infinity }}
         >
           {/* dfasdf */}
-          <CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
             <Div />
             <Div />
           </CSS>
-          <CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
             <Div />
           </CSS>
-          <CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
             <Div />
           </CSS>
         </Animate>
       </ExampleGroup>
 
       <ExampleGroup caption='basic case'>
-        <CSS width='60px' height='60px' background={cssColor.dodgerblue}>
+        <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.dodgerblue }}>
           <Animate
             keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
             options={{ duration: 1000, iterations: Infinity }}
@@ -56,10 +56,10 @@ const AnimateExample = () => {
           options={{ duration: 1000, iterations: Infinity }}
         >
           <Props<{ whole: number }> whole={3}>
-            <CSS width='60px' height='60px' background={cssColor.crimson}>
+            <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
               <Div />
             </CSS>
-            <CSS width='60px' height='60px' background={cssColor.crimson}>
+            <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
               <Div />
             </CSS>
           </Props>

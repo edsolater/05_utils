@@ -1,8 +1,7 @@
 import { mergeProps } from 'baseUI/functions'
 import { IRefs } from 'baseUI/functions/mergeRefs'
 import React from 'react'
-import { DivProps } from '../Div'
-import Props from './Props'
+import { DivProps } from "../baseProps"
 import useCallbackRef from '../../hooks/useCallbackRef'
 import cloneElement from '../../functions/cloneElement'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'

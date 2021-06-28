@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { BaseUIDiv, Icon } from '.'
 import { injectAppSetting } from './AppSettings'
-import { DivProps } from './Div'
+import { DivProps } from "./baseProps"
 import { IconProps } from './Icon'
 import cssColor from 'baseUI/style/cssColor'
 import cssTheme from 'baseUI/settings/cssTheme'

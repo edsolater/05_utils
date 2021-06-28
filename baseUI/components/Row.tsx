@@ -1,7 +1,7 @@
 import React from 'react'
 import { BaseUIDiv } from '.'
 import { injectAppSetting } from './AppSettings'
-import { DivProps } from './Div'
+import { DivProps } from "./baseProps"
 import uiCSS from 'baseUI/settings/uiCSS'
 import { toICSS } from 'baseUI/style/cssParser'
 

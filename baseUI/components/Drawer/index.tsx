@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentProps } from 'react'
 import { ReactProps } from 'typings/constants'
-import { DivProps } from '../Div'
+import { DivProps } from '../baseProps'
 import Mask from '../Mask'
 import createStore from '../../hooks/createStore'
 import DrawerCard from './DrawerCard'
@@ -20,11 +20,10 @@ export interface DrawerCardProps extends DivProps {
    */
   direction?: 'top' | 'right' | 'bottom' | 'left'
 
-
   /**
    * 点击关闭
    */
-  onClose?: (info: {  }) => void
+  onClose?: (info: {}) => void
 }
 
 const _Drawer = (props: ReactProps<DrawerCardProps>) => {

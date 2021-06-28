@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { DivProps } from '../../../baseUI/components/Div'
+import { DivProps } from "../../../baseUI/components/baseProps"
 import { IRef } from '../../../baseUI/functions/mergeRefs'
 
 export interface ScrollState {

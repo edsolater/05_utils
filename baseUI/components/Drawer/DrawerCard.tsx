@@ -2,7 +2,8 @@ import cssTheme from 'baseUI/settings/cssTheme'
 import uiCSS from 'baseUI/settings/uiCSS'
 import React, { FC, useRef } from 'react'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
-import Div, { DivProps } from '../Div'
+import Div from '../Div'
+import { DivProps } from "../baseProps"
 import DrawerCardProtal from './DrawerCardProtal'
 
 export interface DrawerCardProps extends DivProps {
