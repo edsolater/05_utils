@@ -5,6 +5,7 @@ import { shrinkToValue } from 'utils/functions/magic'
 
 /**
  * 比 React.Children.map 优化了类型、当某个Child并非ReactElement时， 直接返回
+ * 但
  */
 export default function cloneElement(
   children: MayArray<ReactNode>,
@@ -20,21 +21,5 @@ export default function cloneElement(
     <>{mapper(children, 0)}</>
   ) : (
     <>{children}</>
-  )
-}
-
-type Props = any
-/**
- * 这只是cloneElement的快捷方式， 为了能不写 React.cloneElement // 应该是过度设计了
- * @param children
- * @param newProps
- * @returns
- */
-export function cloneElements(
-  children: MayArray<ReactNode>,
-  newProps: Props | ((childIdx: number) => Props)
-) {
-  return cloneElement(children, (child, idx) =>
-    React.cloneElement(child, shrinkToValue(newProps, [idx]))
   )
 }

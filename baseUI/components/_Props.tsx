@@ -8,5 +8,7 @@ interface _PropsProps extends DivProps {
 }
 
 export default function _Props({ children, ...restProps }: _PropsProps) {
-  return cloneElement(children, (child) => <child.type {...mergeProps(child.props, restProps)} />)
+  return cloneElement(children, (child) => (
+    <child.type key={child.key} {...mergeProps(child.props, restProps)} />
+  ))
 }
