@@ -12,22 +12,22 @@ interface _DomRefProps extends DivProps {
 }
 
 export default function _DomRef({ exRef, children, domRef, ...restProps }: _DomRefProps) {
-  parseIRefsWrapper(exRef, (r) => {
-    Reflect.set(r ?? {}, 'current', [])
+  const allRefs = [domRef, exRef].flat()
+
+  if (!allRefs.length) return <>{children}</>
+
+  parseIRefsWrapper(allRefs, (ref) => {
+    Reflect.set(ref ?? {}, 'current', [])
   })
-  return mapReactChildren(children, (child, idx) => (
-    <_Props
-      {...mergeProps(
-        restProps, // TODO 其实这里应该要深拷贝的
-        { domRef },
-        {
-          domRef: useCallbackRef((dom) =>
-            parseIRefsWrapper(exRef, (ref) => (ref.current as any[])?.splice(idx, 1, dom))
-          )
-        }
-      )}
-    >
-      {child}
-    </_Props>
-  ))
+
+  return mapReactChildren(children, (child, idx) =>
+    React.cloneElement(
+      child,
+      mergeProps(restProps, {
+        domRef: useCallbackRef((dom) =>
+          parseIRefsWrapper(allRefs, (ref) => (ref.current as any[])?.splice(idx, 1, dom))
+        )
+      })
+    )
+  )
 }

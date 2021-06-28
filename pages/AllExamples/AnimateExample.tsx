@@ -1,5 +1,6 @@
 import { Div, _CSS } from 'baseUI/components'
 import _Animate from 'baseUI/components/_Animate'
+import _Props from 'baseUI/components/_Props'
 import cssColor from 'baseUI/style/cssColor'
 import React, { useEffect, useState } from 'react'
 import ExampleCard from './ExampleCard'
@@ -24,17 +25,18 @@ const AnimateExample = () => {
           ]}
           options={{ duration: 2000, iterations: Infinity }}
         >
-          {/* dfasdf */}
-          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
-            <Div />
-            <Div />
-          </_CSS>
-          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
-            <Div />
-          </_CSS>
-          <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
-            <Div />
-          </_CSS>
+
+            {/* dfasdf */}
+            <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+              <Div />
+              <Div />
+            </_CSS>
+            <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+              <Div />
+            </_CSS>
+            <_CSS width='100px' height='100px' background={cssColor.dodgerblue}>
+              <Div />
+            </_CSS>
         </_Animate>
       </ExampleGroup>
 
@@ -47,6 +49,17 @@ const AnimateExample = () => {
             <Div />
           </_Animate>
         </_CSS>
+      </ExampleGroup>
+
+      <ExampleGroup caption='basic case'>
+        <_Props hello={3}>
+          <_CSS width='60px' height='60px' background={cssColor.crimson}>
+            <Div />
+          </_CSS>
+          <_CSS width='60px' height='60px' background={cssColor.crimson}>
+            <Div />
+          </_CSS>
+        </_Props>
       </ExampleGroup>
     </ExampleCard>
   )
