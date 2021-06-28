@@ -2,7 +2,7 @@ import React from 'react'
 import { omit } from 'utils/functions/object'
 import { animateOptionKeys, UseAnimateOptions, useAnimateRef } from '../hooks/useAnimate'
 import { DivProps } from './Div'
-import cloneElement from './mapReactChildren'
+import cloneElement from '../functions/cloneElement'
 import _DomRef from './_DomRef'
 
 interface _AnimateProps extends DivProps, UseAnimateOptions {

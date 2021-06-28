@@ -1,9 +1,9 @@
-export {default as addDefaultProps} from "./addDefaultProps";
-export {default as classname} from "./classname";
-export {default as createElement} from "./createElement";
-export {default as createRefHook} from "./createRefHook";
-export {default as isChildrenContain} from "./isChildrenContain";
-export {default as mergeFunction} from "./mergeFunction";
-export {default as mergeProps} from "./mergeProps";
-export {default as mergeRefs} from "./mergeRefs";
-export {default as pickReactChild} from "./pickReactChild";
+export { default as addDefaultProps } from './addDefaultProps'
+export { default as classname } from './classname'
+export { default as createElement } from './createElement'
+export { default as createRefHook } from './createRefHook'
+export { default as isChildrenContain } from './isChildrenContain'
+export { default as mergeFunction } from './mergeFunction'
+export { default as mergeProps } from './mergeProps'
+export { default as mergeRefs } from './mergeRefs'
+export { default as pickReactChild } from './pickReactChild'

@@ -1,14 +1,14 @@
 import { isValidElement, ReactElement, ReactNode } from 'react'
 import { isArray } from 'utils/functions/judgers'
 
-export default function assertSigleChild(
-  children: ReactNode,
+export default function isSigleChild(
+  child: ReactNode,
   componentName: string
-): asserts children is ReactElement {
-  if (isArray(children)) {
+): asserts child is ReactElement {
+  if (isArray(child)) {
     throw new Error(`<${componentName}> can't accept an array of child`)
   }
-  if (!isValidElement(children)) {
+  if (!isValidElement(child)) {
     throw new Error(`the direct child of <${componentName}> is not ReactElement`)
   }
 }

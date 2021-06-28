@@ -9,16 +9,13 @@ import { isArray } from 'utils/functions/judgers'
 export default function cloneElement(
   children: MayArray<ReactNode>,
   mapper: (child: ReactElement, index: number) => ReactNode
-) {
-  return isArray(children) ? (
-    <>
-      {React.Children.map(children, (child, idx) =>
+): JSX.Element {
+  // @ts-expect-error type has wrong infer, so I force it
+  return isArray(children)
+    ? React.Children.map(children, (child, idx) =>
         isValidElement(child) ? mapper(child, idx) : child
-      )}
-    </>
-  ) : isValidElement(children) ? (
-    <>{mapper(children, 0)}</>
-  ) : (
-    <>{children}</>
-  )
+      )
+    : isValidElement(children)
+    ? mapper(children, 0)
+    : children
 }
