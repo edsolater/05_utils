@@ -6,7 +6,7 @@ import { isArray } from 'utils/functions/judgers'
  * 比 React.Children.map 优化了类型、当某个Child并非ReactElement时， 直接返回
  * 但
  */
-export default function cloneElement(
+export default function cloneElements(
   children: MayArray<ReactNode>,
   mapper: (child: ReactElement, index: number) => ReactNode
 ): JSX.Element {

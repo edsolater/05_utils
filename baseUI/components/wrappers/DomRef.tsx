@@ -2,7 +2,7 @@ import { mergeProps } from 'baseUI/functions'
 import React from 'react'
 import { DivProps, WrapperProps } from '../baseProps'
 import useCallbackRef from '../../hooks/useCallbackRef'
-import cloneElement from '../../functions/applyElementMapper'
+import cloneElements from '../../functions/cloneElements'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 import { IRefs } from 'baseUI/functions/mergeRefs'
 
@@ -20,7 +20,7 @@ export default function DomRef({ extraDomRef, children, domRef, ...restProps }: 
     Reflect.set(ref ?? {}, 'current', [])
   })
 
-  return cloneElement(children, (child, idx) =>
+  return cloneElements(children, (child, idx) =>
     React.cloneElement(
       child,
       mergeProps(restProps, {
