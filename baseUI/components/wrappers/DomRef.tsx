@@ -1,17 +1,18 @@
 import { mergeProps } from 'baseUI/functions'
-import { IRefs } from 'baseUI/functions/mergeRefs'
 import React from 'react'
-import { DivProps } from "../baseProps"
+import { DivProps, WrapperProps } from '../baseProps'
 import useCallbackRef from '../../hooks/useCallbackRef'
 import cloneElement from '../../functions/applyElementMapper'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
+import { IRefs } from 'baseUI/functions/mergeRefs'
 
-interface DomRefProps extends DivProps {
-  exRef?: IRefs<HTMLElement>
+interface DomRefProps extends DivProps, WrapperProps {
+  /** 为了避免与domRef产生覆盖行为，所以以ex为开头 */
+  extraDomRef?: IRefs<HTMLElement>
 }
 
-export default function DomRef({ exRef, children, domRef, ...restProps }: DomRefProps) {
-  const allRefs = [domRef, exRef].flat()
+export default function DomRef({ extraDomRef, children, domRef, ...restProps }: DomRefProps) {
+  const allRefs = [domRef, extraDomRef].flat()
 
   if (!allRefs.length) return <>{children}</>
 

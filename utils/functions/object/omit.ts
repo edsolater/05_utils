@@ -7,9 +7,7 @@ import flat from '../array/flat'
  * @param dismissKeys 需要去除的property（不支持去除sumbol）
  * @returns 已经去除指定key的对象（浅复制得来）
  * @example
- * const obj = { a: 1, b: true }
- * const foo = omit(obj, ['a'])
- * console.log(foo)
+ * console.log(omit({ a: 1, b: true }, ['a'])) //=> { b: true }
  */
 export default function omit<T extends object, U extends keyof T>(
   obj: T,

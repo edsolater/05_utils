@@ -6,6 +6,11 @@ import { IRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
 import { UseClickOptions } from '../hooks/useClick'
 
+/**
+ * 能在wrapper中流通的props
+ * TODO: 如果Wrapper理论上可以流通所有组件的props， 那这里用应该用所有组件的props？
+ * TODO: 要不直接默认UIKit只可使用自身的props？
+ */
 export interface WrapperProps {
   /**
    * 状态开关 。 一般用于 <Button> <Modal> 等需要开关的组件
@@ -27,7 +32,6 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> {
 }
 
 /**
- *
  * 这个纯粹是 tag名 与相应的 HTMLElement 转换
  */
 export interface TagMap {

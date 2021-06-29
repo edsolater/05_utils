@@ -18,24 +18,32 @@ const AnimateExample = () => {
     <ExampleCard category='WrapperComponent' title='<Animate>'>
       <ExampleGroup caption='basic case'>
         <Animate
-          keyframes={[
-            { transform: 'rotate(0) scale(0.4)' },
-            { transform: 'rotate(180deg) scale(1)' },
-            { transform: 'rotate(360deg) scale(0.4)' }
-          ]}
-          options={{ duration: 2000, iterations: Infinity }}
+          keyframes={[{ filter: 'brightness(.4)' }, { filter: 'brightness(1.6)' }]}
+          options={{ duration: 2000, iterations: Infinity, composite: 'accumulate', direction:'alternate' }}
         >
-          {/* dfasdf */}
-          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-            <Div />
-          </CSS>
-          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-          </CSS>
-          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-          </CSS>
+          <Animate
+            keyframes={[
+              { transform: 'rotate(0) scale(0.4)' },
+              { transform: 'rotate(180deg) scale(1)' },
+              { transform: 'rotate(360deg) scale(0.4)' }
+            ]}
+            options={{ duration: 2000, iterations: Infinity, composite: 'accumulate' }}
+            // $debugProps={[['domRef', d=>console.log(d.current)]]} //TODO
+          >
+            {/* dfasdf */}
+            <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Div />
+              <Div />
+              <Div />
+              <Div />
+            </CSS>
+            <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Div />
+            </CSS>
+            <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Div />
+            </CSS>
+          </Animate>
         </Animate>
       </ExampleGroup>
 
