@@ -7,10 +7,17 @@ import ExampleGroup from './ExampleGroup'
 /**
  * Icon 的使用示例
  */
+
+function CurrentIcon({ hover = false }) {
+  return <Icon name={hover ? 'smile' : 'close'} />
+}
+
 const HoverableExample = () => (
   <ExampleCard category='baseUI/componentComponent' title='Hoverable'>
     <ExampleGroup caption=''>
-      <Hoverable>{(hover) => (hover ? <Icon name='smile' /> : <Icon name='close' />)}</Hoverable>
+      <Hoverable>
+        <CurrentIcon />
+      </Hoverable>
     </ExampleGroup>
   </ExampleCard>
 )

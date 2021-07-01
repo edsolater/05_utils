@@ -1,7 +1,7 @@
-import { useToggle, useFeatureHover } from 'baseUI/hooks'
+import { useToggle } from 'baseUI/hooks'
+import useHover from 'baseUI/hooks/useHover'
 import React, { ReactChild, useRef } from 'react'
-import { shrinkToValue } from 'utils/functions/magic'
-import { BaseUIDiv } from '..'
+import DomRef from './DomRef'
 
 interface HoverableProps {
   children?: ReactChild | ((isHoverd: boolean) => ReactChild)
@@ -13,15 +13,15 @@ interface HoverableProps {
 export default function Hoverable({ children }: HoverableProps) {
   const [isHovered, { on, off }] = useToggle(false)
   const ref = useRef<HTMLDivElement>(null)
-  useFeatureHover(ref, {
+  useHover(ref, {
     onHover({ now: state }) {
       if (state === 'start') on()
       if (state === 'end') off()
     }
   })
   return (
-    <BaseUIDiv _domRef={ref} _className='Hoverable' _css={{ display: 'contents' }}>
-      {shrinkToValue(children, [isHovered])}
-    </BaseUIDiv>
+    <DomRef exDomRef={ref} hover={isHovered}>
+      {children}
+    </DomRef>
   )
 }

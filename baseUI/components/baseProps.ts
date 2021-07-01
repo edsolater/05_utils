@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, ReactNode } from 'react'
 import { ICSS } from '../style/ICSS'
 import { ClassName } from '../functions/classname'
-import { FeatureHoverOptions } from '../hooks/useFeatureHover'
+import { HoverOptions } from '../hooks/useHover'
 import { IRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
 import { UseClickOptions } from '../hooks/useClick'
@@ -31,7 +31,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> {
   className?: MayDeepArray<ClassName>
   style?: CSSProperties
   htmlProps?: JSX.IntrinsicElements[TagName]
-  onHover?: FeatureHoverOptions<TagMap[TagName]>['onHover']
+  onHover?: HoverOptions<TagMap[TagName]>['onHover']
   onClick?: UseClickOptions<TagMap[TagName]>['onClick']
   children?: ReactNode
 }

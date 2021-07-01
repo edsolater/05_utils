@@ -7,6 +7,7 @@ interface PropsProps extends DivProps {
 }
 
 /**
+ * TODO: 这个组件有问题
  * @WrapperComponent add props to it's child
  * @example
  * <Props<{ whole: number }> whole={3}>
