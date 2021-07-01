@@ -16,6 +16,11 @@ export interface WrapperProps {
    * 状态开关 。 一般用于 <Button> <Modal> 等需要开关的组件
    */
   open?: boolean
+  /**
+   * hover状态，由 <Hoverable> 传递
+   * 一些交互组件，如 `<Button>` 应该天然 对hover 做出反应
+   */
+  hover?:boolean
 }
 
 export interface DivProps<TagName extends keyof TagMap = 'div'> {

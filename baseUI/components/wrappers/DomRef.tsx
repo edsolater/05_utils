@@ -8,11 +8,11 @@ import { IRefs } from 'baseUI/functions/mergeRefs'
 
 interface DomRefProps extends DivProps, WrapperProps {
   /** 为了避免与domRef产生覆盖行为，所以以ex为开头 */
-  extraDomRef?: IRefs<HTMLElement>
+  exDomRef?: IRefs<HTMLElement>
 }
 
-export default function DomRef({ extraDomRef, children, domRef, ...restProps }: DomRefProps) {
-  const allRefs = [domRef, extraDomRef].flat()
+export default function DomRef({ exDomRef, children, domRef, ...restProps }: DomRefProps) {
+  const allRefs = [domRef, exDomRef].flat()
 
   if (!allRefs.length) return <>{children}</>
 

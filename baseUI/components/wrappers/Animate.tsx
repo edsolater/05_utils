@@ -23,7 +23,7 @@ export default function Animate({ children, /*  $debugProps, */ ...restProps }: 
   //   }
   // }, [$debugProps])
   return (
-    <DomRef {...omit(restProps, animateOptionKeys)} extraDomRef={useAnimateRef(restProps)}>
+    <DomRef {...omit(restProps, animateOptionKeys)} exDomRef={useAnimateRef(restProps)}>
       {children}
     </DomRef>
   )
