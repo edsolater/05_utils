@@ -12,8 +12,9 @@ interface AnimateProps extends DivProps, WrapperProps, UseAnimateOptions {
  * @WrapperComponent a wrapper for web animation API
  */
 export default function Animate({ children, /*  $debugProps, */ ...restProps }: AnimateProps) {
+  const [animateRef] = useAnimateRef(restProps)
   return (
-    <DomRef {...omit(restProps, animateOptionKeys)} exDomRef={useAnimateRef(restProps)}>
+    <DomRef {...omit(restProps, animateOptionKeys)} exDomRef={animateRef}>
       {children}
     </DomRef>
   )

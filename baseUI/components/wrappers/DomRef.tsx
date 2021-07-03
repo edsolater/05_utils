@@ -13,15 +13,14 @@ interface DomRefProps extends DivProps, WrapperProps {
 
 export default function DomRef({ exDomRef, children, domRef, ...restProps }: DomRefProps) {
   const allRefs = [domRef, exDomRef].flat()
-
-  if (!allRefs.length) return <>{children}</>
-
-  return cloneElements(children, (child, idx) => {
-    return React.cloneElement(
+  return cloneElements(children, (child, idx) =>
+    React.cloneElement(
       child,
       mergeProps(restProps, {
-        domRef: useCallbackRef((dom) => parseIRefsWrapper(allRefs, (ref) => ((ref.current ??= [])[idx] = dom)))
+        domRef: useCallbackRef((dom) =>
+          parseIRefsWrapper(allRefs, (ref) => ((ref.current ??= [])[idx] = dom))
+        )
       })
     )
-  })
+  )
 }

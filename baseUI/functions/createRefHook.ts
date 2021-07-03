@@ -3,8 +3,8 @@ import { RefObject, useRef } from 'react'
 type RefedHook<T extends HTMLElement, H extends (...any: any[]) => any> = H extends (
   _,
   ...rest: infer R
-) => any
-  ? (...params: R) => RefObject<T>
+) => infer U
+  ? (...params: R) => [RefObject<T>, U]
   : never
 
 export default function createRefHook<
@@ -13,8 +13,8 @@ export default function createRefHook<
 >(hook: H): RefedHook<T, H> {
   const wrappedHook = (...params) => {
     const ref = useRef<T>()
-    hook(ref, ...params)
-    return ref
+    const result = hook(ref, ...params)
+    return [ref, result]
   }
   // @ts-ignore
   return wrappedHook
