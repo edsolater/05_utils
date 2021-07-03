@@ -19,7 +19,7 @@ export default function Hoverable({
 }: HoverableProps) {
   const [hoverRef, isHovered] = useHoverRef({ onHover, onHoverStart, onHoverEnd })
   return (
-    <Ex {...restProps} hover={isHovered} exDomRef={hoverRef}>
+    <Ex {...restProps} isHovered={isHovered} exDomRef={hoverRef}>
       {children}
     </Ex>
   )

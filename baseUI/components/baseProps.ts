@@ -6,8 +6,6 @@ import { MayDeepArray } from 'typings/tools'
 
 /**
  * 能在wrapper中流通的props
- * TODO: 如果Wrapper理论上可以流通所有组件的props， 那这里用应该用所有组件的props？
- * TODO: 要不直接默认UIKit只可使用自身的props？
  */
 export interface WrapperProps {
   /**
@@ -18,13 +16,13 @@ export interface WrapperProps {
    * hover状态，由 <Hoverable> 传递
    * 一些交互组件，如 `<Button>` 应该天然 对hover 做出反应
    */
-  hover?:boolean
+  isHovered?:boolean
 }
 
 export interface DivProps<TagName extends keyof TagMap = 'div'> {
   // 只能低层组件使用
   as?: TagName | FC | typeof React.Fragment
-  domRef?: IRefs<TagMap[TagName]>
+  domRef?: IRefs<HTMLElement>
   css?: ICSS
   className?: MayDeepArray<ClassName>
   style?: CSSProperties

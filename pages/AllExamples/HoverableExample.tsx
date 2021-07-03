@@ -3,14 +3,14 @@ import Icon from 'baseUI/components/Icon'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
-import { IRefs } from 'baseUI/functions/mergeRefs'
+import { VerboseProps } from 'baseUI/components/wrappers/Ex'
 
 /**
  * Icon 的使用示例
  */
 
-function CurrentIcon({ hover = false, domRef }: { hover?: boolean; domRef?: IRefs<HTMLDivElement> }) {
-  return <Icon domRef={domRef} name={hover ? 'smile' : 'close'} />
+function CurrentIcon({ isHovered = false, domRef }: Partial<VerboseProps>) {
+  return <Icon domRef={domRef} name={isHovered ? 'smile' : 'close'} />
 }
 
 const HoverableExample = () => (

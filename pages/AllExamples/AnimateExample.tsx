@@ -61,13 +61,17 @@ const AnimateExample = () => (
         keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
         options={{ duration: 1000, iterations: Infinity }}
       >
-        <Ex<{ whole: number }> whole={3}>
-          <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-            <Div />
-          </CSS>
-          <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-            <Div />
-          </CSS>
+        <Ex>
+          <Ex>
+            <Ex>
+              <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                <Div />
+              </CSS>
+              <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                <Div />
+              </CSS>
+            </Ex>
+          </Ex>
         </Ex>
       </Animate>
     </ExampleGroup>

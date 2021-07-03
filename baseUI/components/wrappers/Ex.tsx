@@ -13,7 +13,7 @@ type AllProps = WrapperProps & DivProps
 type ExProps = {
   [K in keyof AllProps as `ex${Capitalize<K & string>}`]: AllProps[K]
 }
-interface VerboseProps extends WrapperProps, DivProps, ExProps {}
+export interface VerboseProps extends WrapperProps, DivProps, ExProps {}
 
 /**
  * @WrapperComponent  this <Ex> is this the base of other wrapperComponents
@@ -25,10 +25,7 @@ interface VerboseProps extends WrapperProps, DivProps, ExProps {}
  *   <Div />
  * </Ex>
  */
-export default function Ex<P = never>({
-  children,
-  ...restProps
-}: P extends never ? VerboseProps : P & { children?: ReactNode; exDomRef?: IRefs<HTMLElement> }) {
+export default function Ex({ children, ...restProps }: VerboseProps) {
   const [exProps, originalProps] = splitObject(restProps, (key) => (key as string).startsWith('ex'))
   const parsedExProps = objectMapKey(exProps, (key) => {
     const withoutEX = (key as string).slice('ex'.length)
@@ -37,7 +34,6 @@ export default function Ex<P = never>({
 
   return <Refs {...mergeProps(parsedExProps, originalProps)}>{children}</Refs>
 }
-
 
 interface DomRefProps extends DivProps, WrapperProps {
   /** 为了避免与domRef产生覆盖行为，所以以ex为开头 */
