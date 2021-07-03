@@ -4,6 +4,7 @@ import { DivProps, WrapperProps } from '../baseProps'
 import cloneElements from '../../functions/cloneElements'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 import { IRefs } from 'baseUI/functions/mergeRefs'
+import useCallbackRef from 'baseUI/hooks/useCallbackRef'
 
 interface DomRefProps extends DivProps, WrapperProps {
   /** 为了避免与domRef产生覆盖行为，所以以ex为开头 */
@@ -19,7 +20,7 @@ export default function DomRef({ exDomRef, children, domRef, ...restProps }: Dom
     return React.cloneElement(
       child,
       mergeProps(restProps, {
-        domRef: (dom) => parseIRefsWrapper(allRefs, (ref) => ((ref.current ??= [])[idx] = dom))
+        domRef: useCallbackRef((dom) => parseIRefsWrapper(allRefs, (ref) => ((ref.current ??= [])[idx] = dom)))
       })
     )
   })

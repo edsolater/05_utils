@@ -21,8 +21,8 @@ import AnimateExample from './AnimateExample'
 const AllExamples = () => (
   <GlobalSettings>
     <HoverableExample />
-    {/* <AnimateExample />
-    <NotificationExample />
+    <AnimateExample />
+    {/* <NotificationExample />
     <AppLayoutExample />
     <KeyboardShortcutExample />
     <DrawerExample />

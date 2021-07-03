@@ -30,7 +30,6 @@ const AnimateExample = () => {
             options={{ duration: 2000, iterations: Infinity, composite: 'accumulate' }}
             // $debugProps={[['domRef', d=>console.log(d.current)]]} //TODO
           >
-            {/* dfasdf */}
             <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
               <Div />
               <Div />

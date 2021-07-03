@@ -1,3 +1,4 @@
+import { createRefHook } from 'baseUI/functions'
 import parseIRefs, { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 import { RefObject, useEffect, useRef } from 'react'
 import isHTMLElement from 'utils/helper/domElement/isHTMLElement'
@@ -57,3 +58,7 @@ export default function useHover<El extends HTMLElement = HTMLDivElement>(
 
   return [isHover]
 }
+
+// compose style
+export const useHoverRef = createRefHook(useHover)
+
