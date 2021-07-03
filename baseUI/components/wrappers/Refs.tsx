@@ -11,7 +11,7 @@ interface DomRefProps extends DivProps, WrapperProps {
   exDomRef?: IRefs<HTMLElement>
 }
 
-export default function DomRef({ exDomRef, children, domRef, ...restProps }: DomRefProps) {
+export default function Refs({ exDomRef, children, domRef, ...restProps }: DomRefProps) {
   const allRefs = [domRef, exDomRef].flat()
   return cloneElements(children, (child, idx) =>
     React.cloneElement(

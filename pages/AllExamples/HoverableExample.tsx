@@ -19,6 +19,10 @@ const HoverableExample = () => (
       <Hoverable>
         <CurrentIcon />
       </Hoverable>
+      <Hoverable>
+        <CurrentIcon />
+        <CurrentIcon />
+      </Hoverable>
     </ExampleGroup>
   </ExampleCard>
 )

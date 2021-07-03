@@ -1,6 +1,6 @@
 import React from 'react'
 import { DivProps } from "../baseProps"
-import DomRef from './DomRef'
+import Refs from './Refs'
 
 interface PropsProps extends DivProps {
   [propName: string]: any
@@ -15,5 +15,5 @@ interface PropsProps extends DivProps {
  * </Props>
  */
 export default function Props<P = never>({ children, ...restProps }: PropsProps & P) {
-  return <DomRef {...restProps}>{children}</DomRef>
+  return <Refs {...restProps}>{children}</Refs>
 }

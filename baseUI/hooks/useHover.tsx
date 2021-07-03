@@ -1,27 +1,28 @@
 import { createRefHook } from 'baseUI/functions'
-import parseIRefs, { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
-import { RefObject, useEffect, useRef } from 'react'
-import isHTMLElement from 'utils/helper/domElement/isHTMLElement'
+import { IRefs } from 'baseUI/functions/mergeRefs'
+import parseIRefs from 'baseUI/functions/parseRefs'
+import { useEffect, useRef } from 'react'
+import { isExist } from 'utils/functions/judgers'
 import useToggle from './useToggle'
 
 /**
  * props定义声明
  */
-export interface HoverOptions<El extends HTMLElement = HTMLDivElement> {
+export interface HoverOptions {
   disable?: boolean
   /**
    * hover 开始（鼠标移入的瞬间）
    */
-  onHoverStart?: (event: { el: El; nativeEvent: PointerEvent }) => void
+  onHoverStart?: (event: { el: EventTarget; nativeEvent: PointerEvent }) => void
   /**
    * hover 结束（鼠标移出/取消的瞬间）
    */
-  onHoverEnd?: (event: { el: El; nativeEvent: PointerEvent }) => void
+  onHoverEnd?: (event: { el: EventTarget; nativeEvent: PointerEvent }) => void
 }
 
-export default function useHover<El extends HTMLElement = HTMLDivElement>(
-  domRef: RefObject<El>,
-  { disable = false, onHoverStart, onHoverEnd }: HoverOptions<El>
+export default function useHover(
+  domRef: IRefs<HTMLElement>,
+  { disable = false, onHoverStart, onHoverEnd }: HoverOptions = {}
 ) {
   const eventRef = useRef<PointerEvent>()
   const [isHover, { on: onHover, off: offHover }] = useToggle(false)
@@ -50,15 +51,14 @@ export default function useHover<El extends HTMLElement = HTMLDivElement>(
   }, [])
 
   useEffect(() => {
-    if (domRef.current && eventRef.current && !disable) {
-      if (isHover) onHoverStart?.({ el: domRef.current!, nativeEvent: eventRef.current! })
-      if (!isHover) onHoverEnd?.({ el: domRef.current!, nativeEvent: eventRef.current! })
+    if (isExist(eventRef.current) && !disable) {
+      if (isHover) onHoverStart?.({ el: eventRef.current.target!, nativeEvent: eventRef.current! })
+      if (!isHover) onHoverEnd?.({ el: eventRef.current.target!, nativeEvent: eventRef.current! })
     }
   }, [isHover])
 
-  return [isHover]
+  return isHover
 }
 
 // compose style
 export const useHoverRef = createRefHook(useHover)
-

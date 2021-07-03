@@ -1,11 +1,10 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { omit } from 'utils/functions/object'
 import { animateOptionKeys, UseAnimateOptions, useAnimateRef } from '../../hooks/useAnimate'
-import { WrapperProps, DivProps } from '../baseProps'
-import DomRef from './DomRef'
+import Refs from './Refs'
 
-interface AnimateProps extends DivProps, WrapperProps, UseAnimateOptions {
-  // $debugProps?: Array<boolean | keyof AnimateProps, cb: >// TODO
+interface AnimateProps extends UseAnimateOptions {
+  children?: ReactNode
 }
 
 /**
@@ -14,8 +13,8 @@ interface AnimateProps extends DivProps, WrapperProps, UseAnimateOptions {
 export default function Animate({ children, /*  $debugProps, */ ...restProps }: AnimateProps) {
   const [animateRef] = useAnimateRef(restProps)
   return (
-    <DomRef {...omit(restProps, animateOptionKeys)} exDomRef={animateRef}>
+    <Refs {...omit(restProps, animateOptionKeys)} exDomRef={animateRef}>
       {children}
-    </DomRef>
+    </Refs>
   )
 }

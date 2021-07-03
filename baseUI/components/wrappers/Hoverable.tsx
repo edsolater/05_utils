@@ -1,25 +1,21 @@
-import { useToggle } from 'baseUI/hooks'
-import useHover from 'baseUI/hooks/useHover'
-import React, { ReactChild, useRef } from 'react'
-import DomRef from './DomRef'
+import { useHoverRef } from 'baseUI/hooks/useHover'
+import React, { ReactNode } from 'react'
+import Refs from './Refs'
 
 interface HoverableProps {
-  children?: ReactChild | ((isHoverd: boolean) => ReactChild)
+  children?: ReactNode
 }
 
 /**
- * @HollowComponent make it child hoverable (it's a hollowComponent)
+ * @WrapperComponent make it child hoverable (it's a hollowComponent)
+ *
+ * pass through `hover` prop
  */
 export default function Hoverable({ children, ...restProps }: HoverableProps) {
-  const [isHovered, { on, off }] = useToggle(false)
-  const ref = useRef<HTMLDivElement>(null)
-  useHover(ref, {
-    onHoverStart: on,
-    onHoverEnd: off
-  })
+  const [hoverRef, isHovered] = useHoverRef()
   return (
-    <DomRef {...restProps} hover={isHovered} exDomRef={ref}>
+    <Refs {...restProps} hover={isHovered} exDomRef={hoverRef}>
       {children}
-    </DomRef>
+    </Refs>
   )
 }
