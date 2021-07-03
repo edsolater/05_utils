@@ -6,22 +6,31 @@
  * 该对象有相同的属性数量
  *
  * 类似于array.protoype.map
- * @param target
- * @param mapperFn
+ * @param target target object
+ * @param mapper (value)
  * @example
  * objectMap({ a: 1, b: 2 }, (v) => v * 2) // { a: 2, b: 4 }
  */
-export default function objectMap<T extends object, U>(
+export default function objectMap<T extends object, V>(
   target: T,
-  mapperFn: (value: T[keyof T], key: keyof T) => U
-): { [P in keyof T]: U } {
+  mapper: (value: T[keyof T], key: keyof T) => V
+): { [P in keyof T]: V } {
   //@ts-ignore
-  return _objectMapEntry(target, ([key, value]) => [key, mapperFn(value, key)])
+  return objectMapEntry(target, ([key, value]) => [key, mapper(value, key)])
 }
-function _objectMapEntry<T extends object>(
+
+export function objectMapKey<T extends object, K extends keyof any>(
   target: T,
-  mapperFn: (entry: [key: keyof T, value: T[keyof T]]) => [key: string, value: any]
+  mapper: (key: keyof T, value: T[keyof T]) => K
+): { [P in K]: T[keyof T] } {
+  //@ts-ignore
+  return objectMapEntry(target, ([key, value]) => [mapper(value, key), value])
+}
+
+export function objectMapEntry<T extends object>(
+  target: T,
+  mapper: (entry: [key: keyof T, value: T[keyof T]]) => [key: string, value: any]
 ) {
   //@ts-ignore
-  return Object.fromEntries(Object.entries(target).map(mapperFn))
+  return Object.fromEntries(Object.entries(target).map(mapper))
 }

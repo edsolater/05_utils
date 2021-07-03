@@ -22,6 +22,7 @@ function _parseString(str: string): string[] {
 /**
  * @example
  * 'hello-world' => 'helloWorld'
+ * 'HelloWorld' => 'helloWorld'
  */
 export function toCamelCase(str: string): string {
   return _parseString(str)

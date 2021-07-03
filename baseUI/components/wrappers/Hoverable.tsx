@@ -1,5 +1,6 @@
 import { UseHoverOptions, useHoverRef } from 'baseUI/hooks/useHover'
 import React, { ReactNode } from 'react'
+import Props from './Props'
 import Refs from './Refs'
 
 interface HoverableProps extends UseHoverOptions {
@@ -19,8 +20,10 @@ export default function Hoverable({
 }: HoverableProps) {
   const [hoverRef, isHovered] = useHoverRef({ onHover, onHoverStart, onHoverEnd })
   return (
-    <Refs {...restProps} hover={isHovered} exDomRef={hoverRef}>
-      {children}
-    </Refs>
+    <Props hover={isHovered}>
+      <Refs {...restProps} exDomRef={hoverRef}>
+        {children}
+      </Refs>
+    </Props>
   )
 }

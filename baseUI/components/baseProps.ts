@@ -3,7 +3,6 @@ import { ICSS } from '../style/ICSS'
 import { ClassName } from '../functions/classname'
 import { IRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
-import { UseClickOptions } from '../hooks/useClick'
 
 /**
  * 能在wrapper中流通的props
