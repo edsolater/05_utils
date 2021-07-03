@@ -34,8 +34,8 @@ export default function useHover<El extends HTMLElement = HTMLDivElement>(
       offHover()
       eventRef.current = ev
     }
-    parseIRefs(domRef, (cur) => { // FIXME: 这样太侵入性了， 因为在 DOMRef中， 那所有API就得跟着变。 需要再加一层，封装掉复杂度
-      cur.addEventListener('pointerenter', hoverStartHandler) // 这里不够状态驱动
+    parseIRefs(domRef, (cur) => {
+      cur.addEventListener('pointerenter', hoverStartHandler)
       cur.addEventListener('pointerleave', hoverEndHandler)
       cur.addEventListener('pointercancel', hoverEndHandler)
     })

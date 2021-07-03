@@ -10,17 +10,15 @@ interface HoverableProps {
 /**
  * @HollowComponent make it child hoverable (it's a hollowComponent)
  */
-export default function Hoverable({ children }: HoverableProps) {
+export default function Hoverable({ children, ...restProps }: HoverableProps) {
   const [isHovered, { on, off }] = useToggle(false)
   const ref = useRef<HTMLDivElement>(null)
   useHover(ref, {
-    onHover({ now: state }) {
-      if (state === 'start') on()
-      if (state === 'end') off()
-    }
+    onHoverStart: on,
+    onHoverEnd: off
   })
   return (
-    <DomRef exDomRef={ref} hover={isHovered}>
+    <DomRef {...restProps} hover={isHovered} exDomRef={ref}>
       {children}
     </DomRef>
   )

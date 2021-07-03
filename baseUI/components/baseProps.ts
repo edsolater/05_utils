@@ -1,7 +1,6 @@
 import React, { CSSProperties, FC, ReactNode } from 'react'
 import { ICSS } from '../style/ICSS'
 import { ClassName } from '../functions/classname'
-import { HoverOptions } from '../hooks/useHover'
 import { IRefs } from '../functions/mergeRefs'
 import { MayDeepArray } from 'typings/tools'
 import { UseClickOptions } from '../hooks/useClick'
@@ -31,8 +30,7 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> {
   className?: MayDeepArray<ClassName>
   style?: CSSProperties
   htmlProps?: JSX.IntrinsicElements[TagName]
-  onHover?: HoverOptions<TagMap[TagName]>['onHover']
-  onClick?: UseClickOptions<TagMap[TagName]>['onClick']
+  onClick?: UseClickOptions<TagMap[TagName]>['onClick'] // 基于可访问性的原因，我觉得`onClick`也不能要， 而使用 `<Clickable>` 代替
   children?: ReactNode
 }
 

@@ -20,10 +20,10 @@ import AnimateExample from './AnimateExample'
 
 const AllExamples = () => (
   <GlobalSettings>
-    <AnimateExample />
+    <HoverableExample />
+    {/* <AnimateExample />
     <NotificationExample />
     <AppLayoutExample />
-    <HoverableExample />
     <KeyboardShortcutExample />
     <DrawerExample />
     <MaskExample />
@@ -36,7 +36,7 @@ const AllExamples = () => (
     <InputExample />
     <DropdownExample />
     <TagExample />
-    <IconExample />
+    <IconExample /> */}
   </GlobalSettings>
 )
 export default AllExamples
