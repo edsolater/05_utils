@@ -1,11 +1,12 @@
 import React, { ReactNode } from 'react'
 import { BaseUIDiv, Icon } from '.'
 import { injectAppSetting } from './AppSettings'
-import { DivProps } from "./baseProps"
+import { DivProps } from './baseProps'
 import { IconProps } from './Icon'
 import cssColor from 'baseUI/style/cssColor'
 import cssTheme from 'baseUI/settings/cssTheme'
 import { toICSS } from 'baseUI/style/cssParser'
+import Clickable from './wrappers/Clickable'
 
 // 应该就是一种 Card 的特殊呈现形式
 export interface TagProps extends DivProps {
@@ -34,17 +35,19 @@ function Tag({ children, controls, propscloseIcon, onClose, ...restProps }: TagP
     <BaseUIDiv {...restProps} _className='Tag' _css={css}>
       {children}
       {controls && (
-        <Icon
-          {...propscloseIcon}
-          color={propscloseIcon?.color ?? cssTheme.color.darkText} // 因为这里的color需要用来开启自定义颜色的功能，故不能转而使用cssVariable
-          onClick={(...params) => {
+        <Clickable
+          onClick={() => {
             onClose?.()
-            propscloseIcon?.onClick?.(...params)
           }}
-          className={['Tag-Icon', propscloseIcon?.className]}
-          css={propscloseIcon?.css}
-          name='close'
-        />
+        >
+          <Icon
+            {...propscloseIcon}
+            color={propscloseIcon?.color ?? cssTheme.color.darkText} // 因为这里的color需要用来开启自定义颜色的功能，故不能转而使用cssVariable
+            className={['Tag-Icon', propscloseIcon?.className]}
+            css={propscloseIcon?.css}
+            name='close'
+          />
+        </Clickable>
       )}
     </BaseUIDiv>
   )

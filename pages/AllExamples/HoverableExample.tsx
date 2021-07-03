@@ -14,7 +14,7 @@ function CurrentIcon({ hover = false, domRef }: { hover?: boolean; domRef?: IRef
 }
 
 const HoverableExample = () => (
-  <ExampleCard category='baseUI/componentComponent' title='Hoverable'>
+  <ExampleCard category='WrapperComponent' title='Hoverable'>
     <ExampleGroup caption=''>
       <Hoverable>
         <CurrentIcon />

@@ -11,7 +11,6 @@ export interface BaseUIDivProps<TagName extends keyof TagMap = 'div'> extends Di
   _domRef?: DivProps<TagName>['domRef']
   _className?: DivProps<TagName>['className']
   _css?: DivProps<TagName>['css']
-  _onClick?: DivProps<TagName>['onClick']
   _htmlProps?: DivProps<TagName>['htmlProps']
   _style?: DivProps<TagName>['style']
 }
@@ -32,7 +31,6 @@ export default function BaseUIDiv<TagName extends keyof TagMap = 'div'>(
           domRef: props._domRef,
           css: props._css,
           style: props.style,
-          onClick: props._onClick,
           htmlProps: props._htmlProps
         },
         props

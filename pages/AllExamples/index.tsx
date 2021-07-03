@@ -17,9 +17,11 @@ import NotificationExample from './NotificationExample'
 import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 import AnimateExample from './AnimateExample'
+import ClickableExample from './ClickableExample'
 
 const AllExamples = () => (
   <GlobalSettings>
+    <ClickableExample />
     <HoverableExample />
     <AnimateExample />
     {/* <NotificationExample />

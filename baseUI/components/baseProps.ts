@@ -30,7 +30,6 @@ export interface DivProps<TagName extends keyof TagMap = 'div'> {
   className?: MayDeepArray<ClassName>
   style?: CSSProperties
   htmlProps?: JSX.IntrinsicElements[TagName]
-  onClick?: UseClickOptions<TagMap[TagName]>['onClick'] // 基于可访问性的原因，我觉得`onClick`也不能要， 而使用 `<Clickable>` 代替
   children?: ReactNode
 }
 
