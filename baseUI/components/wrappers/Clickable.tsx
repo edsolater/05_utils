@@ -1,6 +1,6 @@
 import { UseClickOptions, useClickRef } from 'baseUI/hooks/useClick'
 import React, { ReactNode } from 'react'
-import Refs from './Refs'
+import Ex from './Ex'
 
 interface ClickableProps extends UseClickOptions {
   children?: ReactNode
@@ -14,8 +14,8 @@ interface ClickableProps extends UseClickOptions {
 export default function Clickable({ children, onClick, ...restProps }: ClickableProps) {
   const [clickRef] = useClickRef({ onClick })
   return (
-    <Refs {...restProps} exDomRef={clickRef}>
+    <Ex {...restProps} exDomRef={clickRef}>
       {children}
-    </Refs>
+    </Ex>
   )
 }

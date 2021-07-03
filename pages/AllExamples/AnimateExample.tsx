@@ -1,6 +1,6 @@
 import { Div, CSS } from 'baseUI/components'
 import Animate from 'baseUI/components/wrappers/Animate'
-import Props from 'baseUI/components/wrappers/Props'
+import Ex from 'baseUI/components/wrappers/Ex'
 import cssColor from 'baseUI/style/cssColor'
 import React from 'react'
 import ExampleCard from './ExampleCard'
@@ -61,14 +61,14 @@ const AnimateExample = () => (
         keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
         options={{ duration: 1000, iterations: Infinity }}
       >
-        <Props<{ whole: number }> whole={3}>
+        <Ex<{ whole: number }> whole={3}>
           <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
             <Div />
           </CSS>
           <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
             <Div />
           </CSS>
-        </Props>
+        </Ex>
       </Animate>
     </ExampleGroup>
   </ExampleCard>

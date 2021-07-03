@@ -24,7 +24,7 @@ export function objectMapKey<T extends object, K extends keyof any>(
   mapper: (key: keyof T, value: T[keyof T]) => K
 ): { [P in K]: T[keyof T] } {
   //@ts-ignore
-  return objectMapEntry(target, ([key, value]) => [mapper(value, key), value])
+  return objectMapEntry(target, ([key, value]) => [mapper(key, value), value])
 }
 
 export function objectMapEntry<T extends object>(
