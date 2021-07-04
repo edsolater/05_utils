@@ -1,6 +1,6 @@
 import React from 'react'
 import { BaseUIDiv } from '.'
-import { InjectAppSetting } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { DivProps } from "./baseProps"
 import uiCSS from 'baseUI/settings/uiCSS'
 import { toCssValue } from 'baseUI/style/cssUnits'
@@ -56,4 +56,4 @@ function Card({ width, height, borderRadius, bg, color, ...restProps }: CardProp
   return <BaseUIDiv {...restProps} _css={css} />
 }
 
-export default InjectAppSetting(Card, { borderRadius: 'medium' })
+export default injectAppSetting(Card, { borderRadius: 'medium' })

@@ -3,7 +3,7 @@ import Div from './Div'
 import { DivProps } from "./baseProps"
 import Protal from './Protal'
 import { mergeProps } from 'baseUI/functions'
-import { InjectAppSetting } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import Transition from './Transition'
 import uiCSS from 'baseUI/settings/uiCSS'
 import cssTheme from 'baseUI/settings/cssTheme'
@@ -75,4 +75,4 @@ function Mask({
     </Protal>
   )
 }
-export default InjectAppSetting(Mask)
+export default injectAppSetting(Mask)

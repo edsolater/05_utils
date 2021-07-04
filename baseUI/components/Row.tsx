@@ -1,6 +1,6 @@
 import React from 'react'
 import { BaseUIDiv } from '.'
-import { InjectAppSetting } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { DivProps } from "./baseProps"
 import uiCSS from 'baseUI/settings/uiCSS'
 import { toICSS } from 'baseUI/style/cssParser'
@@ -30,4 +30,4 @@ const Row = ({ gapSize, noStratch, ...restProps }: RowProps) => {
   const css = getCSS({ noStratch, gapSize })
   return <BaseUIDiv {...restProps} _css={css} />
 }
-export default InjectAppSetting(Row)
+export default injectAppSetting(Row)

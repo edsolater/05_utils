@@ -7,7 +7,7 @@ import { CSSObject } from '@emotion/react'
 import cssColor from '../style/cssColor'
 import { mixCSSObjects, toICSS } from '../style/cssParser'
 import cssMixins from '../style/cssMixins'
-import { InjectAppSetting } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import mergeProps from '../functions/mergeProps'
 import { BaseUIDiv, Div } from '.'
 import uiCSS from 'baseUI/settings/uiCSS'
@@ -135,4 +135,4 @@ function Input({
     </BaseUIDiv>
   )
 }
-export default InjectAppSetting(Input)
+export default injectAppSetting(Input)

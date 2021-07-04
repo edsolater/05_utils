@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { BaseUIDiv, Icon } from '.'
-import { InjectAppSetting } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { DivProps } from './baseProps'
 import { IconProps } from './Icon'
 import cssColor from 'baseUI/style/cssColor'
@@ -52,4 +52,4 @@ function Tag({ children, controls, propscloseIcon, onClose, ...restProps }: TagP
     </BaseUIDiv>
   )
 }
-export default InjectAppSetting(Tag)
+export default injectAppSetting(Tag)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { InjectAppSetting } from './AppSettings'
+import { injectAppSetting } from './AppSettings'
 import { DivProps } from './baseProps'
 import BaseUIDiv from './BaseUIDiv'
 import cssColor from 'baseUI/style/cssColor'
@@ -92,4 +92,4 @@ const Button = ({ size, type, children, ...restProps }: ButtonProps) => {
   )
 }
 
-export default InjectAppSetting(Button, { type: 'fill', size: 'medium' })
+export default injectAppSetting(Button, { type: 'fill', size: 'medium' })
