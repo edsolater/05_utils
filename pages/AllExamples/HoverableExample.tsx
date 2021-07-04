@@ -3,15 +3,16 @@ import Icon from 'baseUI/components/Icon'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
-import { VerboseProps } from 'baseUI/components/wrappers/Ex'
+import { parseEx, VerboseProps } from 'baseUI/components/wrappers/Ex'
 
 /**
  * Icon 的使用示例
  */
 
-function CurrentIcon({ isHovered = false, domRef }: Partial<VerboseProps>) {
+function _CurrentIcon({ isHovered = false, domRef }: Partial<VerboseProps>) {
   return <Icon domRef={domRef} name={isHovered ? 'smile' : 'close'} />
 }
+const CurrentIcon = parseEx(_CurrentIcon)
 
 const HoverableExample = () => (
   <ExampleCard category='WrapperComponent' title='Hoverable'>

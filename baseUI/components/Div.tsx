@@ -6,6 +6,7 @@ import mergeRefs from '../functions/mergeRefs'
 import { isString, isUndefined } from 'utils/functions/judgers'
 import { omit } from 'utils/functions/object'
 import { TagMap, DivProps } from './baseProps'
+import { parseEx } from './wrappers/Ex'
 
 // TODO: as为组件时 的智能推断还不够好
 export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
@@ -23,4 +24,4 @@ export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagNam
       createElement(props.as, omit(props, 'as'))
 }
 
-export default Div
+export default parseEx(Div)
