@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import ReactDOM from 'react-dom'
-import { DivProps } from './baseProps'
+import { DivProps } from './Div'
 import Protal from './Protal'
 import { mergeProps, addDefaultProps } from 'baseUI/functions'
 import { useAppSettings } from './AppSettings'

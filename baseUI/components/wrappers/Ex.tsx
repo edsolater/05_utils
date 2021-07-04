@@ -1,20 +1,25 @@
 import { mergeProps } from 'baseUI/functions'
-import React, { ReactNode } from 'react'
-import { DivProps, WrapperProps } from '../baseProps'
+import React from 'react'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 import useCallbackRef from 'baseUI/hooks/useCallbackRef'
 import { splitObject } from 'utils/functions/object'
 import { objectMapKey } from 'utils/functions/object/objectMap'
 import { toCamelCase } from 'utils/functions/string/changeCase'
 import mapChildren from 'baseUI/functions/mapChildren'
+import { DivProps } from '../Div'
+import { AnimateInjectProps } from './Animate'
+import { HoveableInjectProps } from './Hoverable'
+import { ClickableInjectProps } from './Clickable'
 
-type AllProps = Omit<WrapperProps & DivProps, 'children'>
 type Exify<T extends Record<string, any>> = {
   [K in keyof T as `ex${Capitalize<K & string>}`]: T[K]
 }
-export interface VerboseProps extends Exify<AllProps>, AllProps {
-  children?: ReactNode
-}
+export interface VerboseProps
+  extends Exify<Omit<DivProps, 'children'>>,
+    DivProps,
+    AnimateInjectProps,
+    HoveableInjectProps,
+    ClickableInjectProps {}
 
 function parseExProp<T extends Record<string, any>>(exProps: T) {
   return objectMapKey(exProps, (key) => {
@@ -35,7 +40,7 @@ function parseExProp<T extends Record<string, any>>(exProps: T) {
  */
 export default function Ex({ children, ...restProps }: VerboseProps) {
   const [exProps, originalProps] = splitObject(restProps, (key) => (key as string).startsWith('ex'))
-  const parsedExProps: AllProps = parseExProp(exProps)
+  const parsedExProps = parseExProp(exProps)
   const { domRef, ...parsedPropsWithoutRef } = mergeProps(originalProps, parsedExProps)
 
   return mapChildren(children, (child, idx) =>

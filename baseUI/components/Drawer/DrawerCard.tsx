@@ -3,7 +3,7 @@ import uiCSS from 'baseUI/settings/uiCSS'
 import React, { FC, useRef } from 'react'
 import useUpdateEffect from '../../hooks/useUpdateEffect'
 import Div from '../Div'
-import { DivProps } from "../baseProps"
+import { DivProps } from "../Div"
 import DrawerCardProtal from './DrawerCardProtal'
 
 export interface DrawerCardProps extends DivProps {

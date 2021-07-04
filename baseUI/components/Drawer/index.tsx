@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentProps } from 'react'
 import { ReactProps } from 'typings/constants'
-import { DivProps } from '../baseProps'
+import { DivProps } from '../Div'
 import Mask from '../Mask'
 import createStore from '../../hooks/createStore'
 import DrawerCard from './DrawerCard'

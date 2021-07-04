@@ -5,7 +5,7 @@ import useFeatureResize, { FeatureResizeOptions } from '../../hooks/useFeatureRe
 import useFeatureMove, { FeatureMoveOptions } from '../../hooks/useFeatureMove'
 import { fullVw, halfPer, toPer } from '../../style/cssUnits'
 import Div from '../Div'
-import { DivProps } from "../baseProps"
+import { DivProps } from "../Div"
 import cssColor from '../../style/cssColor'
 import { cssVar } from 'baseUI/style/cssFunctions'
 import { BaseUIDiv } from '..'

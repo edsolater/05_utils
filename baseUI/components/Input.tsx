@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef, useState } from 'react'
-import { DivProps } from "./baseProps"
+import { DivProps } from "./Div"
 import Icon, { IconProps } from './Icon'
 import { setInlineStyle } from '../style/setCSS'
 import { toPx } from '../style/cssUnits'

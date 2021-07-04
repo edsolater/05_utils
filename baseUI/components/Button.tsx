@@ -1,6 +1,6 @@
 import React from 'react'
 import { injectAppSetting } from './AppSettings'
-import { DivProps } from './baseProps'
+import { DivProps } from './Div'
 import BaseUIDiv from './BaseUIDiv'
 import cssColor from 'baseUI/style/cssColor'
 import { cssBrightness } from 'baseUI/style/cssFunctions'

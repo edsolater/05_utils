@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react'
-import { DivProps } from './baseProps'
+import { DivProps } from './Div'
 import Card, { CardProps } from './Card'
 import { CSSPropertyValue } from '../style/cssValue'
 import { injectAppSetting } from './AppSettings'

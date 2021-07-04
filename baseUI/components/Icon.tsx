@@ -1,5 +1,5 @@
 import React from 'react'
-import { DivProps } from "./baseProps"
+import { DivProps } from "./Div"
 import Image, { ImageProps } from './Image'
 import { CSSObject } from '@emotion/serialize'
 import { injectAppSetting } from './AppSettings'

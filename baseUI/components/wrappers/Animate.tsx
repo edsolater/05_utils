@@ -3,8 +3,11 @@ import { omit } from 'utils/functions/object'
 import { animateOptionKeys, UseAnimateOptions, useAnimateRef } from '../../hooks/useAnimate'
 import Ex from './Ex'
 
-interface AnimateProps extends UseAnimateOptions {
+export interface AnimateProps extends UseAnimateOptions {
   children?: ReactNode
+}
+export interface AnimateInjectProps {
+  isAnimating?: boolean
 }
 
 /**

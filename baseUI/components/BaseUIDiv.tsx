@@ -1,6 +1,6 @@
 import React from 'react'
 import Div from './Div'
-import { TagMap, DivProps } from './baseProps'
+import { TagMap, DivProps } from './Div'
 import { mergeProps } from '../functions'
 
 /**

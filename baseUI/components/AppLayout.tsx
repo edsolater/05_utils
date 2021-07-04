@@ -3,7 +3,7 @@ import { useToggle, useEventScroll } from 'baseUI/hooks'
 import React, { ReactNode, ReactElement, useRef } from 'react'
 import { ReactProps } from 'typings/constants'
 import BaseUIDiv from './BaseUIDiv'
-import { DivProps } from './baseProps'
+import { DivProps } from './Div'
 
 interface SideMenuController {
   collapse(): void
