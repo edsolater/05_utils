@@ -6,10 +6,9 @@ import mergeRefs from '../functions/mergeRefs'
 import { isString, isUndefined } from 'utils/functions/judgers'
 import { omit } from 'utils/functions/object'
 import { TagMap, DivProps } from './baseProps'
-import { parseEx } from './wrappers/Ex'
 
 // TODO: as为组件时 的智能推断还不够好
-export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
+const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagName>) => {
   const divRef = useRef<TagMap[TagName]>(null)
 
   return isUndefined(props.as) || isString(props.as)
@@ -23,5 +22,4 @@ export const Div = <TagName extends keyof TagMap = 'div'>(props: DivProps<TagNam
     : // @ts-expect-error don't know why
       createElement(props.as, omit(props, 'as'))
 }
-
-export default parseEx(Div)
+export default Div

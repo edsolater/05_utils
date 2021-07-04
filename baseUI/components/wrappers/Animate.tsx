@@ -13,7 +13,7 @@ interface AnimateProps extends UseAnimateOptions {
 export default function Animate({ children, /*  $debugProps, */ ...restProps }: AnimateProps) {
   const [animateRef] = useAnimateRef(restProps)
   return (
-    <Ex {...omit(restProps, animateOptionKeys)} domRef={animateRef}>
+    <Ex {...omit(restProps, animateOptionKeys)} exDomRef={animateRef}>
       {children}
     </Ex>
   )
