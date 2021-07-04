@@ -2,7 +2,7 @@ import React from 'react'
 import { DivProps } from "./baseProps"
 import Image, { ImageProps } from './Image'
 import { CSSObject } from '@emotion/serialize'
-import { injectAppSetting } from './AppSettings'
+import { InjectAppSetting } from './AppSettings'
 import { BaseUIDiv } from '.'
 import uiCSS from 'baseUI/settings/uiCSS'
 import { toICSS } from 'baseUI/style/cssParser'
@@ -77,4 +77,4 @@ function Icon({ name, size, color, hoverColor, propsImage, ...restProps }: IconP
   )
 }
 
-export default injectAppSetting(Icon, { size: 'medium' })
+export default InjectAppSetting(Icon, { size: 'medium' })

@@ -1,5 +1,5 @@
 import React from 'react'
-import { injectAppSetting } from './AppSettings'
+import { InjectAppSetting } from './AppSettings'
 import { DivProps } from "./baseProps"
 import { BaseUIDiv } from '.'
 import uiCSS from 'baseUI/settings/uiCSS'
@@ -31,4 +31,4 @@ function Caption({ align, ...restProps }: CaptionProps) {
   return <BaseUIDiv {...restProps} _css={css} />
 }
 
-export default injectAppSetting(Caption, { align: 'left' })
+export default InjectAppSetting(Caption, { align: 'left' })

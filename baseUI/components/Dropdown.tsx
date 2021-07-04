@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react'
 import { DivProps } from './baseProps'
 import Card, { CardProps } from './Card'
 import { CSSPropertyValue } from '../style/cssValue'
-import { injectAppSetting } from './AppSettings'
+import { InjectAppSetting } from './AppSettings'
 import mergeProps from '../functions/mergeProps'
 import { BaseUIDiv } from '.'
 import cssTheme from 'baseUI/settings/cssTheme'
@@ -74,7 +74,7 @@ function Dropdown({
   )
 }
 
-export default injectAppSetting(Dropdown, {
+export default InjectAppSetting(Dropdown, {
   gapFromButton: '16px',
   cardBg: cssTheme.color.whiteCard
 })

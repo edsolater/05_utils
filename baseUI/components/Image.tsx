@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { DivProps } from "./baseProps"
 import isArray from 'utils/functions/judgers/isArray'
-import { injectAppSetting } from './AppSettings'
+import { InjectAppSetting } from './AppSettings'
 import { BaseUIDiv } from '.'
 
 export interface ImageProps extends DivProps<'img'> {
@@ -44,4 +44,4 @@ const Image = ({ src, alt, onSrcFailed, ...restProps }: ImageProps) => {
   )
 }
 
-export default injectAppSetting(Image)
+export default InjectAppSetting(Image)

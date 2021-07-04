@@ -48,7 +48,7 @@ export function AppSettingsProvider(props: { userSetting?: AppSetting; children?
 /**
  * for Easy to use/memorize.
  *
- * U should avoid to use it. instead, jest use {@link injectAppSetting} to accelerate the coding
+ * U should avoid to use it. instead, jest use {@link InjectAppSetting} to accelerate the coding
  */
 export function useAppSettings() {
   return useContext(AppSettings)
@@ -63,13 +63,13 @@ export function useAppSettings() {
  * @param defaultProps (optional)
  * @returns a new component that will digest appSetting then pass the merged props to original component.
  */
-export function injectAppSetting<C extends FC>(Component: C, defaultProps?: ComponentProps<C>) {
+export function InjectAppSetting<C extends FC>(Component: C, defaultProps?: ComponentProps<C>) {
   const componentName = Component.name || Component.displayName || ''
-  const InjectedComponent = (props: Parameters<C>[0]) => {
+  const InjectedAppSetting = (props: Parameters<C>[0]) => {
     const appSettings = useAppSettings()
     const _sprops = mergeProps(appSettings.globalProps?.[componentName], props)
     const sprops = addDefaultProps(_sprops, defaultProps ?? {})
     return <Component {...sprops} />
   }
-  return overwriteFunctionName(InjectedComponent, 'S_' + componentName)
+  return InjectedAppSetting
 }
