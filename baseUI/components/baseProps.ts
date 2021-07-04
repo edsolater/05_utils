@@ -13,10 +13,15 @@ export interface WrapperProps {
    */
   open?: boolean
   /**
-   * hover状态，由 <Hoverable> 传递
-   * 一些交互组件，如 `<Button>` 应该天然 对hover 做出反应
+   * 是否处于hover状态，由 <Hoverable> 传递
+   * 一些交互组件，如 `<Button>` 应该天然 对 hover 做出反应
    */
-  isHovered?:boolean
+  isHovered?: boolean
+  /**
+   * 是否处于hover状态，由 <Clickable> 传递
+   * 一些交互组件，如 `<Button>` 应该天然 对 active 做出反应
+   */
+  isActive?: boolean
 }
 
 export interface DivProps<TagName extends keyof TagMap = 'div'> {

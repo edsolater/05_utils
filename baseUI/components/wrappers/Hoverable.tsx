@@ -8,7 +8,7 @@ interface HoverableProps extends UseHoverOptions {
 
 /**
  * @WrapperComponent make it child hoverable (it's a hollowComponent)
- * pass through `hover` prop
+ * pass through `isHovered` prop
  */
 export default function Hoverable({
   children,

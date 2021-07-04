@@ -9,12 +9,18 @@ interface ClickableProps extends UseClickOptions {
 /**
  * @WrapperComponent make it child clickable (it's a hollowComponent)
  *
- * pass through `hover` prop
+ * pass through `isActive` prop
  */
-export default function Clickable({ children, onClick, ...restProps }: ClickableProps) {
-  const [clickRef] = useClickRef({ onClick })
+export default function Clickable({
+  children,
+  onClick,
+  onActiveStart,
+  onActiveEnd,
+  ...restProps
+}: ClickableProps) {
+  const [clickRef, isActive] = useClickRef({ onClick, onActiveStart, onActiveEnd })
   return (
-    <Ex {...restProps} exDomRef={clickRef}>
+    <Ex {...restProps} isActive={isActive} exDomRef={clickRef}>
       {children}
     </Ex>
   )
