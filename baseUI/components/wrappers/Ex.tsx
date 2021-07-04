@@ -1,5 +1,5 @@
 import { mergeProps } from 'baseUI/functions'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { DivProps, WrapperProps } from '../baseProps'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 import useCallbackRef from 'baseUI/hooks/useCallbackRef'
@@ -8,11 +8,20 @@ import { objectMapKey } from 'utils/functions/object/objectMap'
 import { toCamelCase } from 'utils/functions/string/changeCase'
 import mapChildren from 'baseUI/functions/mapChildren'
 
-type AllProps = WrapperProps & DivProps
-type ExProps = {
-  [K in keyof AllProps as `ex${Capitalize<K & string>}`]: AllProps[K]
+type AllProps = Omit<WrapperProps & DivProps, 'children'>
+type Exify<T extends Record<string, any>> = {
+  [K in keyof T as `ex${Capitalize<K & string>}`]: T[K]
 }
-export interface VerboseProps extends WrapperProps, DivProps, ExProps {}
+export interface VerboseProps extends Exify<AllProps>, AllProps {
+  children?: ReactNode
+}
+
+function parseExProp<T extends Record<string, any>>(exProps: T) {
+  return objectMapKey(exProps, (key) => {
+    const withoutEX = (key as string).slice('ex'.length)
+    return toCamelCase(withoutEX)
+  })
+}
 
 /**
  * @WrapperComponent  this <Ex> is this the base of other wrapperComponents
@@ -26,12 +35,7 @@ export interface VerboseProps extends WrapperProps, DivProps, ExProps {}
  */
 export default function Ex({ children, ...restProps }: VerboseProps) {
   const [exProps, originalProps] = splitObject(restProps, (key) => (key as string).startsWith('ex'))
-
-  const parsedExProps: AllProps = objectMapKey(exProps, (key) => {
-    const withoutEX = (key as string).slice('ex'.length)
-    return toCamelCase(withoutEX)
-  })
-
+  const parsedExProps: AllProps = parseExProp(exProps)
   const { domRef, ...parsedPropsWithoutRef } = mergeProps(originalProps, parsedExProps)
 
   return mapChildren(children, (child, idx) =>

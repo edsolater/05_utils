@@ -6,6 +6,7 @@ import { MayDeepArray } from 'typings/tools'
 
 /**
  * 能在wrapper中流通的props
+ * 因为你无法准确得知wrapper下的Component的props来源， WrapperComponent的类型一定是不完美的
  */
 export interface WrapperProps {
   /**
@@ -13,12 +14,12 @@ export interface WrapperProps {
    */
   open?: boolean
   /**
-   * 是否处于hover状态，由 <Hoverable> 传递
+   * 是否处于 hover 状态，由 <Hoverable> 传递
    * 一些交互组件，如 `<Button>` 应该天然 对 hover 做出反应
    */
   isHovered?: boolean
   /**
-   * 是否处于hover状态，由 <Clickable> 传递
+   * 是否处于 active 状态，由 <Clickable> 传递
    * 一些交互组件，如 `<Button>` 应该天然 对 active 做出反应
    */
   isActive?: boolean
