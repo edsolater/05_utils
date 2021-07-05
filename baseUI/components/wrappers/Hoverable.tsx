@@ -1,3 +1,4 @@
+import { mergeProps } from 'baseUI/functions'
 import { UseHoverOptions, useHoverRef } from 'baseUI/hooks/useHover'
 import React, { ReactNode } from 'react'
 import Ex from './Ex'
@@ -28,7 +29,7 @@ export default function Hoverable({
 }: HoverableProps) {
   const [hoverRef, isHovered] = useHoverRef({ onHover, onHoverStart, onHoverEnd })
   return (
-    <Ex {...restProps} isHovered={isHovered} exDomRef={hoverRef}>
+    <Ex {...mergeProps(restProps, { isHovered, domRef: hoverRef })}>
       {children}
     </Ex>
   )

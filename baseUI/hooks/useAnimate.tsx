@@ -8,7 +8,6 @@ export interface UseAnimateOptions {
   options?: Parameters<Animatable['animate']>[1]
 }
 
-export const animateOptionKeys: Array<keyof UseAnimateOptions> = ['keyframes', 'options']
 
 /**
  * component version: {@link #Animate todo}

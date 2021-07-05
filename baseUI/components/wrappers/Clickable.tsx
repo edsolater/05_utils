@@ -1,3 +1,4 @@
+import { mergeProps } from 'baseUI/functions'
 import { UseClickOptions, useClickRef } from 'baseUI/hooks/useClick'
 import React, { ReactNode } from 'react'
 import Ex from './Ex'
@@ -27,9 +28,5 @@ export default function Clickable({
   ...restProps
 }: ClickableProps) {
   const [clickRef, isActive] = useClickRef({ onClick, onActiveStart, onActiveEnd })
-  return (
-    <Ex {...restProps} isActive={isActive} exDomRef={clickRef}>
-      {children}
-    </Ex>
-  )
+  return <Ex {...mergeProps(restProps, { isActive, domRef: clickRef })}>{children}</Ex>
 }

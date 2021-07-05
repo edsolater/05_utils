@@ -11,22 +11,11 @@ import { AnimateInjectProps } from './Animate'
 import { HoveableInjectProps } from './Hoverable'
 import { ClickableInjectProps } from './Clickable'
 
-type Exify<T extends Record<string, any>> = {
-  [K in keyof T as `ex${Capitalize<K & string>}`]: T[K]
-}
 export interface VerboseProps
-  extends Exify<Omit<DivProps, 'children'>>,
-    DivProps,
+  extends DivProps,
     AnimateInjectProps,
     HoveableInjectProps,
     ClickableInjectProps {}
-
-function parseExProp<T extends Record<string, any>>(exProps: T) {
-  return objectMapByKey(exProps, (key) => {
-    const withoutEX = (key as string).slice('ex'.length)
-    return toCamelCase(withoutEX)
-  })
-}
 
 /**
  * @WrapperComponent  this <Ex> is this the base of other wrapperComponents
@@ -38,16 +27,12 @@ function parseExProp<T extends Record<string, any>>(exProps: T) {
  *   <Div />
  * </Ex>
  */
-export default function Ex({ children, ...restProps }: VerboseProps) {
-  const [exProps, originalProps] = splitObject(restProps, (key) => (key as string).startsWith('ex'))
-  const parsedExProps = parseExProp(exProps)
-  const { domRef, ...parsedPropsWithoutRef } = mergeProps(originalProps, parsedExProps)
-
+export default function Ex({ children, domRef, ...restProps }: VerboseProps) {
   return mapChildren(children, (child, idx) =>
     React.cloneElement(
       child,
       mergeProps(
-        parsedPropsWithoutRef,
+        restProps,
         {
           domRef: useCallbackRef((dom) =>
             parseIRefsWrapper(domRef, (ref) => ((ref.current ??= [])[idx] = dom))

@@ -29,16 +29,16 @@ const AnimateExample = () => (
           ]}
           options={{ duration: 2000, iterations: Infinity, composite: 'accumulate' }}
         >
-          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
             <Div />
             <Div />
             <Div />
             <Div />
           </CSS>
-          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
             <Div />
           </CSS>
-          <CSS exCSS={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
             <Div />
           </CSS>
         </Animate>
@@ -46,7 +46,7 @@ const AnimateExample = () => (
     </ExampleGroup>
 
     <ExampleGroup caption='basic case'>
-      <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.dodgerblue }}>
+      <CSS css={{ width: '60px', height: '60px', background: cssColor.dodgerblue }}>
         <Animate
           keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
           options={{ duration: 1000, iterations: Infinity }}
@@ -64,10 +64,10 @@ const AnimateExample = () => (
         <Ex>
           <Ex>
             <Ex>
-              <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
                 <Div />
               </CSS>
-              <CSS exCSS={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
                 <Div />
               </CSS>
             </Ex>

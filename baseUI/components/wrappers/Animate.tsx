@@ -1,6 +1,6 @@
+import { mergeProps } from 'baseUI/functions'
 import React, { ReactNode } from 'react'
-import { omit } from 'utils/functions/object'
-import { animateOptionKeys, UseAnimateOptions, useAnimateRef } from '../../hooks/useAnimate'
+import { UseAnimateOptions, useAnimateRef } from '../../hooks/useAnimate'
 import Ex from './Ex'
 
 export interface AnimateProps extends UseAnimateOptions {
@@ -13,11 +13,12 @@ export interface AnimateInjectProps {
 /**
  * @WrapperComponent a wrapper for web animation API
  */
-export default function Animate({ children, /*  $debugProps, */ ...restProps }: AnimateProps) {
-  const [animateRef] = useAnimateRef(restProps)
-  return (
-    <Ex {...omit(restProps, animateOptionKeys)} exDomRef={animateRef}>
-      {children}
-    </Ex>
-  )
+export default function Animate({
+  children,
+  keyframes,
+  options,
+  /*  $debugProps, */ ...restProps
+}: AnimateProps) {
+  const [animateRef] = useAnimateRef({ keyframes, options })
+  return <Ex {...mergeProps(restProps, { domRef: animateRef })}>{children}</Ex>
 }
