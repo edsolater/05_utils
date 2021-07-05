@@ -19,7 +19,7 @@ export default function objectMap<T extends object, V>(
   return objectMapEntry(target, ([key, value]) => [key, mapper(value, key)])
 }
 
-export function objectMapKey<T extends object, K extends keyof any>(
+export function objectMapByKey<T extends object, K extends keyof any>(
   target: T,
   mapper: (key: keyof T, value: T[keyof T]) => K
 ): { [P in K]: T[keyof T] } {

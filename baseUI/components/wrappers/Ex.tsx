@@ -3,7 +3,7 @@ import React from 'react'
 import { parseIRefsWrapper } from 'baseUI/functions/parseRefs'
 import useCallbackRef from 'baseUI/hooks/useCallbackRef'
 import { splitObject } from 'utils/functions/object'
-import { objectMapKey } from 'utils/functions/object/objectMap'
+import { objectMapByKey } from 'utils/functions/object/objectMap'
 import { toCamelCase } from 'utils/functions/string/changeCase'
 import mapChildren from 'baseUI/functions/mapChildren'
 import { DivProps } from '../Div'
@@ -22,7 +22,7 @@ export interface VerboseProps
     ClickableInjectProps {}
 
 function parseExProp<T extends Record<string, any>>(exProps: T) {
-  return objectMapKey(exProps, (key) => {
+  return objectMapByKey(exProps, (key) => {
     const withoutEX = (key as string).slice('ex'.length)
     return toCamelCase(withoutEX)
   })
@@ -46,11 +46,15 @@ export default function Ex({ children, ...restProps }: VerboseProps) {
   return mapChildren(children, (child, idx) =>
     React.cloneElement(
       child,
-      mergeProps(parsedPropsWithoutRef, {
-        domRef: useCallbackRef((dom) =>
-          parseIRefsWrapper(domRef, (ref) => ((ref.current ??= [])[idx] = dom))
-        )
-      })
+      mergeProps(
+        parsedPropsWithoutRef,
+        {
+          domRef: useCallbackRef((dom) =>
+            parseIRefsWrapper(domRef, (ref) => ((ref.current ??= [])[idx] = dom))
+          )
+        },
+        child.props
+      )
     )
   )
 }
