@@ -15,7 +15,7 @@ type StringNumberAtom = { decimal: number; all: string }
 export function parseStringNumber(from: number | string | bigint) {
   if (isNumber(from)) return String(from)
   if (isBigInt(from)) return String(from)
-  const parsedString = from.match(/\d*\.?\d+/)?.[0] ?? ''
+  const parsedString = from.match(/-?\d*\.?\d+/)?.[0] ?? ''
   return parsedString
 }
 
@@ -56,11 +56,19 @@ export function composeStringNumberAtom(...params: Parameters<typeof toStringNum
 }
 
 //#region ------------------- basic math -------------------
+
 /**
  * @example
- * stringNumberAdd('33.4', '112.4988') //=> '145.8988'
+ * padZero('30', 3)
  */
-export function stringNumberAdd(a: Numberable, b: Numberable) {
+function padZero(str: string, count: number) {
+  return str + Array(count).fill('0').join('')
+}
+/**
+ * @example
+ * add('9007199254740991.4', '112.4988') //=> '9007199254741103.8988'
+ */
+export function add(a: Numberable, b: Numberable) {
   const { decimal: decimalA, all: allA } = getStringNumberAtom(a)
   const { decimal: decimalB, all: allB } = getStringNumberAtom(b)
 
@@ -69,19 +77,60 @@ export function stringNumberAdd(a: Numberable, b: Numberable) {
   return toStringNumber({
     decimal: biggerDecimal,
     all: String(
-      BigInt(
-        allA +
-          Array(biggerDecimal - decimalA)
-            .fill('0')
-            .join('')
-      ) +
-        BigInt(
-          allB +
-            Array(biggerDecimal - decimalB)
-              .fill('0')
-              .join('')
-        )
+      BigInt(padZero(allA, biggerDecimal - decimalA)) +
+        BigInt(padZero(allB, biggerDecimal - decimalB))
     )
   })
 }
+
+/**
+ * @example
+ * minus('1.22', '112.3') //=> '-111.08'
+ * minus('1.22', '-112.3') //=> '-111.08'
+ * minus('9007199254740991.4', '112.4988') //=> '9007199254740878.9012'
+ */
+export function minus(a: Numberable, b: Numberable) {
+  const { decimal: decimalA, all: allA } = getStringNumberAtom(a)
+  const { decimal: decimalB, all: allB } = getStringNumberAtom(b)
+
+  const biggerDecimal = Math.max(decimalB, decimalA)
+
+  return toStringNumber({
+    decimal: biggerDecimal,
+    all: String(
+      BigInt(padZero(allA, biggerDecimal - decimalA)) -
+        BigInt(padZero(allB, biggerDecimal - decimalB))
+    )
+  })
+}
+
+/**
+ * @example
+ * multiply('1.22', '112.3') //=> '137.006'
+ * multiply('9007199254740991.4', '112.4988') //=> '1013299107519255843.31032'
+ */
+export function multiply(a: Numberable, b: Numberable) {
+  const { decimal: decimalA, all: allA } = getStringNumberAtom(a)
+  const { decimal: decimalB, all: allB } = getStringNumberAtom(b)
+  return toStringNumber({
+    decimal: decimalA + decimalB,
+    all: String(BigInt(allA) * BigInt(allB))
+  })
+}
+
+
+export function divide(
+  a: Numberable,
+  b: Numberable,
+  { decimalPlace = 20 }: { decimalPlace?: number } = {}
+) {
+  const { decimal: decimalA, all: allA } = getStringNumberAtom(a)
+  const { decimal: decimalB, all: allB } = getStringNumberAtom(b)
+  // TODO
+}
+
 //#endregion
+
+console.log(Number.MAX_SAFE_INTEGER)
+console.log(minus('1.22', '-112.3'))
+console.log(minus('9007199254740991.4', '112.4988'))
