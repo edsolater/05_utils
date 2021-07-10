@@ -1,8 +1,8 @@
-import { createElement, CSSProperties, FC, ReactNode } from 'react'
+import { createElement, CSSProperties, FC, ReactNode, RefObject } from 'react'
 import { useRef } from 'react'
 import { parseICSS } from '../style/cssParser'
 import classname, { ClassName } from '../functions/classname'
-import mergeRefs, { IRefs } from '../functions/mergeRefs'
+import mergeRefs from '../functions/mergeRefs'
 import { isString, isUndefined } from 'utils/functions/judgers'
 import { omit } from 'utils/functions/object'
 import { ICSS } from 'baseUI/style/ICSS'
@@ -26,7 +26,7 @@ export interface TagMap {
 export interface DivProps<TagName extends keyof TagMap = 'div'> {
   // 只能低层组件使用
   as?: TagName | FC | typeof React.Fragment
-  domRef?: IRefs<HTMLElement>
+  domRef?: RefObject<HTMLElement>
   css?: ICSS
   className?: MayDeepArray<ClassName>
   style?: CSSProperties

@@ -1,7 +1,6 @@
 export { default as createObserver } from './createObserver'
 export { default as createStore } from './createStore'
 export { default as useBreakPoints } from './useBreakPoints'
-export { default as useClick } from './useClick'
 export { default as useClickOutside } from './useClickOutside'
 export { default as useEventMouseWheel } from './useEventMouseWheel'
 export { default as useEventResize } from './useEventResize'
