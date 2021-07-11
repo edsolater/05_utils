@@ -1,7 +1,7 @@
 import { Div, CSS } from 'baseUI/components'
 import AttachAnimate from 'baseUI/components/wrappers/AttachAnimate'
 import Ex from 'baseUI/components/wrappers/Ex'
-import RefMapper from 'baseUI/components/wrappers/RefMapper'
+import MultiRefs from 'baseUI/components/wrappers/MultiRefs'
 import cssColor from 'baseUI/style/cssColor'
 import React from 'react'
 import ExampleCard from './ExampleCard'
@@ -30,14 +30,14 @@ const AnimateExample = () => (
           ]}
           options={{ duration: 2000, iterations: Infinity, composite: 'accumulate' }}
         >
-          <RefMapper>
+          <MultiRefs>
             <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-              <RefMapper>
+              <MultiRefs>
                 <Div />
                 <Div />
                 <Div />
                 <Div />
-              </RefMapper>
+              </MultiRefs>
             </CSS>
             <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
               <Div />
@@ -45,7 +45,7 @@ const AnimateExample = () => (
             <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
               <Div />
             </CSS>
-          </RefMapper>
+          </MultiRefs>
         </AttachAnimate>
       </AttachAnimate>
     </ExampleGroup>
@@ -69,12 +69,14 @@ const AnimateExample = () => (
         <Ex>
           <Ex>
             <Ex>
-              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-                <Div />
-              </CSS>
-              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-                <Div />
-              </CSS>
+              <MultiRefs>
+                <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                  <Div />
+                </CSS>
+                <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                  <Div />
+                </CSS>
+              </MultiRefs>
             </Ex>
           </Ex>
         </Ex>
