@@ -82,7 +82,13 @@ export default function AttachHoverable({
       {...mergeProps<any, ExProps>(restProps, {
         isHovered,
         domRef: hoverRef,
-        css: { ':hover': { filter: 'brightness(.8)', backdropFilter: 'brightness(.98)' } }
+        css: {
+          ':hover': {
+            filter: 'brightness(.8)',
+            backdropFilter:
+              'brightness(.98)' /* IDEA: use css Houdini to and second background (wrapperBackground) */
+          }
+        }
       })}
     >
       {children}
