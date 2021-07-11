@@ -6,6 +6,8 @@ import { createActionObserver } from 'utils/containers/ActionObserver'
 import { omit } from 'utils/functions/object'
 import { ExProps } from './Ex'
 import objectSafelyGet from '../../../utils/functions/object/objectSafelyGet'
+import { tryCatch } from '../../../utils/functions/magic/tryCatch'
+import isFunction from 'utils/functions/judgers/isFunction'
 
 /**
  * @WrapperComponent  expose a sigle DomRef to outer, but multi DomRefs to inner
@@ -27,7 +29,11 @@ export default function RefMapper({ children, domRef, ...restProps }: ExProps) {
       return objectSafelyGet(firstElement, path)
     },
     apply(path, args) {
-      elementStack.forEach((el) => objectSafelyGet(el, path)?.(...args))
+      elementStack.forEach((el) => {
+        const targetMethod = objectSafelyGet(el, path)
+        console.log('targetMethod: ', targetMethod)
+        tryCatch(() => isFunction(targetMethod) && targetMethod.apply(el, args), console.warn)
+      })
     }
   })
   domRef && Reflect.set(domRef, 'current', actionRecorder)

@@ -1,5 +1,5 @@
-import isFunction from 'utils/functions/judgers/isFunction'
 import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
+import isObjectLikeOrFunction from '../functions/judgers/isObjectLikeOrFunction'
 
 type Value = any
 
@@ -24,18 +24,16 @@ export function createActionObserver(
     get(_target, p: string) {
       const resultValue = actionOptions.get?.($prefixPath.concat([p]))
       console.log('resultValue1: ', resultValue)
-      if (isObjectLike(resultValue) || isFunction(resultValue)) {
-        return createActionObserver(actionOptions, resultValue, $prefixPath.concat([p]))
-      }
-      return resultValue
+      return isObjectLikeOrFunction(resultValue)
+        ? createActionObserver(actionOptions, resultValue, $prefixPath.concat([p]))
+        : resultValue
     },
     apply(_target, _thisArg, args) {
       const resultValue = actionOptions.apply?.($prefixPath, args)
       console.log('resultValue2: ', resultValue)
-      if (isObjectLike(resultValue) || isFunction(resultValue)) {
-        return createActionObserver(actionOptions, resultValue, $prefixPath)
-      }
-      return resultValue
+      return isObjectLikeOrFunction(resultValue)
+        ? createActionObserver(actionOptions, resultValue, $prefixPath)
+        : resultValue
     }
   })
 }

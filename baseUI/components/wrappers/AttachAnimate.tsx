@@ -13,7 +13,7 @@ export interface UseAnimateOptions {
  */
 export function useAnimate(ref: MutableRefObject<HTMLElement>, options?: UseAnimateOptions) {
   useEffect(() => {
-    ref.current.animate(options?.keyframes ?? null, options?.options)
+    ref.current.animate?.(options?.keyframes ?? null, options?.options)
   }, [])
 }
 
