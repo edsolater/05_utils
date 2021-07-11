@@ -1,4 +1,3 @@
-import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
 import isObjectLikeOrFunction from '../functions/judgers/isObjectLikeOrFunction'
 
 type Value = any
@@ -15,7 +14,7 @@ interface ActionOptions {
  * @param $prefixPath (forcely assign by this function itself)
  * @returns
  */
-export function createActionObserver(
+export function createActionTracker(
   actionOptions: ActionOptions,
   $target: object = {},
   $prefixPath: string[] = []
@@ -23,16 +22,14 @@ export function createActionObserver(
   return new Proxy($target, {
     get(_target, p: string) {
       const resultValue = actionOptions.get?.($prefixPath.concat([p]))
-      console.log('resultValue1: ', resultValue)
       return isObjectLikeOrFunction(resultValue)
-        ? createActionObserver(actionOptions, resultValue, $prefixPath.concat([p]))
+        ? createActionTracker(actionOptions, resultValue, $prefixPath.concat([p]))
         : resultValue
     },
     apply(_target, _thisArg, args) {
       const resultValue = actionOptions.apply?.($prefixPath, args)
-      console.log('resultValue2: ', resultValue)
       return isObjectLikeOrFunction(resultValue)
-        ? createActionObserver(actionOptions, resultValue, $prefixPath)
+        ? createActionTracker(actionOptions, resultValue, $prefixPath)
         : resultValue
     }
   })

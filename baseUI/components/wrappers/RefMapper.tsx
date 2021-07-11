@@ -2,12 +2,11 @@ import { mergeProps } from 'baseUI/functions'
 import mapChildren from 'baseUI/functions/mapChildren'
 import useCallbackRef from 'baseUI/hooks/useCallbackRef'
 import React from 'react'
-import { createActionObserver } from 'utils/containers/ActionObserver'
+import { createActionTracker } from 'utils/containers/ActionTracker'
 import { omit } from 'utils/functions/object'
 import { ExProps } from './Ex'
 import objectSafelyGet from '../../../utils/functions/object/objectSafelyGet'
 import { tryCatch } from '../../../utils/functions/magic/tryCatch'
-import isFunction from 'utils/functions/judgers/isFunction'
 
 /**
  * @WrapperComponent  expose a sigle DomRef to outer, but multi DomRefs to inner
@@ -20,23 +19,18 @@ import isFunction from 'utils/functions/judgers/isFunction'
  * </RefMapper>
  */
 export default function RefMapper({ children, domRef, ...restProps }: ExProps) {
-  const childCount = React.Children.count(children)
-  const elementStack = Array(childCount)
+  const elementStack: HTMLElement[] = []
 
-  const actionRecorder = createActionObserver({
-    get(path) {
-      const [firstElement] = elementStack
-      return objectSafelyGet(firstElement, path)
-    },
+  const actionTracker = createActionTracker({
+    get: (path) => objectSafelyGet(elementStack[0], path),
     apply(path, args) {
       elementStack.forEach((el) => {
-        const targetMethod = objectSafelyGet(el, path)
-        console.log('targetMethod: ', targetMethod)
-        tryCatch(() => isFunction(targetMethod) && targetMethod.apply(el, args), console.warn)
+        tryCatch(() => objectSafelyGet(el, path)?.(...args), console.warn)
       })
     }
   })
-  domRef && Reflect.set(domRef, 'current', actionRecorder)
+  domRef && Reflect.set(domRef, 'current', actionTracker)
+
   return mapChildren(children, (child, idx) =>
     React.cloneElement(
       child,
@@ -44,7 +38,7 @@ export default function RefMapper({ children, domRef, ...restProps }: ExProps) {
         mergeProps(
           restProps,
           {
-            domRef: useCallbackRef((el) => {
+            domRef: useCallbackRef((el: HTMLElement) => {
               elementStack[idx] = el
             })
           },

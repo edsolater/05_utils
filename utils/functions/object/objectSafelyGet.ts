@@ -12,9 +12,8 @@ import { isFunction } from '../judgers'
 export default function objectSafelyGet(target: any, path: string | string[]): any {
   return [path].flat().reduce((accValue, currPropertyName) => {
     const result = accValue?.[currPropertyName]
-    console.log('accValue: ', accValue)
-    return  result
+    return isFunction(result) ? (...params) => result.apply(accValue, params)/* this 就是个地雷， 跟proxy一结合就炸了 */ : result
   }, target)
 }
 
-// TODO: let isFunction recognize proxied 
+// TODO: let isFunction recognize proxied
