@@ -3,14 +3,14 @@ import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
 import AttachClickable from 'baseUI/components/wrappers/AttachClickable'
-import { DivProps } from 'baseUI/components/Div'
+import { ExProps } from 'baseUI/components/wrappers/Ex'
 
 /**
  * Icon 的使用示例
  */
 
-function CurrentIcon({ hover = false, domRef }: { hover?: boolean; domRef?: DivProps['domRef'] }) {
-  return <Icon domRef={domRef} name={hover ? 'smile' : 'close'} />
+function CurrentIcon({ isHovered, css,  domRef }:ExProps) {
+  return <Icon css={css} domRef={domRef} name={isHovered ? 'smile' : 'close'} />
 }
 
 const ClickableExample = () => (

@@ -2,7 +2,7 @@ import { createRefHook, mergeProps } from 'baseUI/functions'
 import { useToggle } from 'baseUI/hooks'
 import React, { ReactNode, RefObject, useEffect, useRef } from 'react'
 import notExist from 'utils/functions/judgers/notExist'
-import Ex from './Ex'
+import Ex, { ExProps } from './Ex'
 
 //#region ------------------- hook: useClick -------------------
 export interface UseClickOptions {
@@ -69,8 +69,6 @@ export const htmlAttributes = []
 
 /**
  * @WrapperComponent make it child clickable (it's a hollowComponent)
- *
- * pass through `isActive` prop
  */
 export default function AttachClickable({
   children,
@@ -82,14 +80,19 @@ export default function AttachClickable({
   const [clickRef, isActive] = useClickRef({ onClick, onActiveStart, onActiveEnd })
   return (
     <Ex
-      {...mergeProps(restProps, {
+      {...mergeProps<any, ExProps>(restProps, {
         isActive,
         domRef: clickRef,
-        className: [
-          'cursor-pointer select-none',
-          'active:brightness-75 filter',
-          'active:scale-95 transform transition duration-75'
-        ].join(' ')
+        css: {
+          cursor: 'pointer',
+          userSelect: 'none',
+          transition: '75ms',
+          ':active': {
+            backdropFilter: 'brightness(.75)',
+            filter: 'brightness(.9)',
+            transform: 'scale(.95)' // should use atomic JSS to customize it
+          }
+        }
       })}
     >
       {children}

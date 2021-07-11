@@ -1,6 +1,6 @@
 import Icon from 'baseUI/components/Icon'
 import AttachHoverable from 'baseUI/components/wrappers/AttachHoverable'
-import WrapperInjectProps from 'baseUI/components/wrappers/WrapperInjectProps'
+import { ExProps } from 'baseUI/components/wrappers/Ex'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
@@ -9,8 +9,8 @@ import ExampleGroup from './ExampleGroup'
  * Icon 的使用示例
  */
 
-function CurrentIcon({ isHovered = false, domRef }: Partial<WrapperInjectProps>) {
-  return <Icon domRef={domRef} name={isHovered ? 'smile' : 'close'} />
+function CurrentIcon({ isHovered = false, domRef, css }: ExProps) {
+  return <Icon css={css} domRef={domRef} name={isHovered ? 'smile' : 'close'} />
 }
 
 const HoverableExample = () => (

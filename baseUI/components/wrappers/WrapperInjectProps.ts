@@ -1,8 +1,3 @@
-import { DivProps } from '../Div'
-import { AttachClickableInjectProps } from './AttachClickable'
-import { AttachHoveableInjectProps } from './AttachHoverable'
+import { ExProps } from './Ex'
 
-type WrapperInjectProps = DivProps & AttachHoveableInjectProps & AttachClickableInjectProps
-export default WrapperInjectProps
-
-export const wrapperInjectProps: (keyof WrapperInjectProps)[] = ['isHovered', 'isActive']
+export const wrapperInjectProps: (keyof ExProps)[] = ['isHovered', 'isActive', 'isAnimating']

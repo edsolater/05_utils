@@ -2,7 +2,7 @@ import { createRefHook, mergeProps } from 'baseUI/functions'
 import { useToggle } from 'baseUI/hooks'
 import React, { ReactNode, RefObject, useEffect, useRef } from 'react'
 import notExist from 'utils/functions/judgers/notExist'
-import Ex from './Ex'
+import Ex, { ExProps } from './Ex'
 
 //#region ------------------- hook: useHover() -------------------
 export interface UseHoverOptions {
@@ -68,7 +68,6 @@ export const htmlAttributes = []
 
 /**
  * @WrapperComponent make it child hoverable (it's a hollowComponent)
- * pass through `isHovered` prop
  */
 export default function AttachHoverable({
   children,
@@ -79,7 +78,13 @@ export default function AttachHoverable({
 }: AttachHoverableProps) {
   const [hoverRef, isHovered] = useHoverRef({ onHover, onHoverStart, onHoverEnd })
   return (
-    <Ex {...mergeProps(restProps, { isHovered, domRef: hoverRef, className: 'hover:brightness-95 filter' })}>
+    <Ex
+      {...mergeProps<any, ExProps>(restProps, {
+        isHovered,
+        domRef: hoverRef,
+        css: { ':hover': { filter: 'brightness(.8)', backdropFilter: 'brightness(.98)' } }
+      })}
+    >
       {children}
     </Ex>
   )

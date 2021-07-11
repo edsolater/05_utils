@@ -1,13 +1,19 @@
 import { mergeProps } from 'baseUI/functions'
 import mapChildren from 'baseUI/functions/mapChildren'
-import React, { MutableRefObject, ReactElement, ReactNode } from 'react'
+import { ICSS } from 'baseUI/style/ICSS'
+import React, { MutableRefObject, ReactNode } from 'react'
 import { omit } from 'utils/functions/object'
-import { AttachClickableProps } from './AttachClickable'
-import { AttachHoverableProps } from './AttachHoverable'
+import { AttachAnimateInjectProps } from './AttachAnimate'
+import { AttachClickableInjectProps } from './AttachClickable'
+import { AttachHoveableInjectProps } from './AttachHoverable'
 
-export interface ExProps extends AttachClickableProps, AttachHoverableProps {
-  domRef?: MutableRefObject<any>
+export interface ExProps
+  extends AttachClickableInjectProps,
+    AttachHoveableInjectProps,
+    AttachAnimateInjectProps {
   children?: ReactNode
+  css?: ICSS // DECISION: should use atomic jss instead of tailwindCSS
+  domRef?: MutableRefObject<any>
 }
 
 /**
@@ -21,8 +27,4 @@ export default function Ex({ children, domRef, ...restProps }: ExProps) {
   return mapChildren(children, (child) =>
     React.cloneElement(child, omit(mergeProps(restProps, { domRef }, child.props)))
   )
-}
-
-function isDom(child: ReactElement) {
-  return typeof child.type === 'string'
 }
