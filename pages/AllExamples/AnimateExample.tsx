@@ -1,6 +1,7 @@
 import { Div, CSS } from 'baseUI/components'
 import AttachAnimate from 'baseUI/components/wrappers/AttachAnimate'
 import Ex from 'baseUI/components/wrappers/Ex'
+import RefMapper from 'baseUI/components/wrappers/RefMapper'
 import cssColor from 'baseUI/style/cssColor'
 import React from 'react'
 import ExampleCard from './ExampleCard'
@@ -29,18 +30,22 @@ const AnimateExample = () => (
           ]}
           options={{ duration: 2000, iterations: Infinity, composite: 'accumulate' }}
         >
-          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-            <Div />
-            <Div />
-            <Div />
-          </CSS>
-          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-          </CSS>
-          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-          </CSS>
+          <RefMapper>
+            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <RefMapper>
+                <Div />
+                <Div />
+                <Div />
+                <Div />
+              </RefMapper>
+            </CSS>
+            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Div />
+            </CSS>
+            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Div />
+            </CSS>
+          </RefMapper>
         </AttachAnimate>
       </AttachAnimate>
     </ExampleGroup>
