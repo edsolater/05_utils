@@ -1,6 +1,7 @@
 import { Div, CSS } from 'baseUI/components'
-import Animate from 'baseUI/components/wrappers/Animate'
+import AttachAnimate from 'baseUI/components/wrappers/AttachAnimate'
 import Ex from 'baseUI/components/wrappers/Ex'
+import Multi from 'baseUI/components/wrappers/Multi'
 import cssColor from 'baseUI/style/cssColor'
 import React from 'react'
 import ExampleCard from './ExampleCard'
@@ -12,7 +13,7 @@ import ExampleGroup from './ExampleGroup'
 const AnimateExample = () => (
   <ExampleCard category='WrapperComponent' title='<Animate>'>
     <ExampleGroup caption='basic case'>
-      <Animate
+      <AttachAnimate
         keyframes={[{ filter: 'brightness(.4)' }, { filter: 'brightness(1.6)' }]}
         options={{
           duration: 2000,
@@ -21,7 +22,7 @@ const AnimateExample = () => (
           direction: 'alternate'
         }}
       >
-        <Animate
+        <AttachAnimate
           keyframes={[
             { transform: 'rotate(0) scale(0.4)' },
             { transform: 'rotate(180deg) scale(1)' },
@@ -29,51 +30,57 @@ const AnimateExample = () => (
           ]}
           options={{ duration: 2000, iterations: Infinity, composite: 'accumulate' }}
         >
-          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-            <Div />
-            <Div />
-            <Div />
-          </CSS>
-          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-          </CSS>
-          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-            <Div />
-          </CSS>
-        </Animate>
-      </Animate>
+          <Multi>
+            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Multi>
+                <Div />
+                <Div />
+                <Div />
+                <Div />
+              </Multi>
+            </CSS>
+            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Div />
+            </CSS>
+            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+              <Div />
+            </CSS>
+          </Multi>
+        </AttachAnimate>
+      </AttachAnimate>
     </ExampleGroup>
 
     <ExampleGroup caption='basic case'>
       <CSS css={{ width: '60px', height: '60px', background: cssColor.dodgerblue }}>
-        <Animate
+        <AttachAnimate
           keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
           options={{ duration: 1000, iterations: Infinity }}
         >
           <Div />
-        </Animate>
+        </AttachAnimate>
       </CSS>
     </ExampleGroup>
 
     <ExampleGroup caption='basic case'>
-      <Animate
+      <AttachAnimate
         keyframes={[{ transform: 'scale(0)' }, { transform: 'scale(1)' }]}
         options={{ duration: 1000, iterations: Infinity }}
       >
         <Ex>
           <Ex>
             <Ex>
-              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-                <Div />
-              </CSS>
-              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-                <Div />
-              </CSS>
+              <Multi>
+                <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                  <Div />
+                </CSS>
+                <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                  <Div />
+                </CSS>
+              </Multi>
             </Ex>
           </Ex>
         </Ex>
-      </Animate>
+      </AttachAnimate>
     </ExampleGroup>
   </ExampleCard>
 )

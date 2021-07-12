@@ -1,29 +1,24 @@
-import { MutableRefObject, RefCallback, useCallback } from 'react'
-import { MayArray } from 'typings/tools'
-import { isExist } from 'utils/functions/judgers'
+import { MutableRefObject, RefCallback, RefObject } from 'react'
+import { isArray, isFunction, isNullish } from 'utils/functions/judgers'
+import createCallbackRef from './createCallbackRef'
 
-function loadRef(ref, el) {
-  if (typeof ref === 'function') {
+function loadRef(ref: RefCallback<any> | MutableRefObject<any> | null, el: any) {
+  if (isNullish(ref)) return
+
+  if (isFunction(ref)) {
     ref(el)
-  } else if (ref != null && ref !== undefined) {
+  } else if (isArray(ref.current)) {
+    // 👇 have to do that to pretend the address of variable
+    ref.current.forEach((_, idx) => {
+      ref.current.splice(idx, 1, el)
+    })
+  } else {
     ref.current = el
   }
 }
-// IDEA: Maybe, proxy can replace callback ref
-export default function mergeRefs<T = any>(...refs: Array<IRefs<T>>): RefCallback<T> {
-  return useCallback((el) => {
-    if (el) {
-      refs
-        .flat(Infinity)
-        .filter(isExist)
-        .forEach((ref) => loadRef(ref, el))
-    }
-  }, refs)
-}
 
-export function parseObjectRefs<T = any>(ref: MutableRefObject<T>): T {
-  return ref.current
+export default function mergeRefs<T = any>(
+  ...refs: (MutableRefObject<T> | undefined)[]
+): RefObject<T> {
+  return createCallbackRef((el) => refs.filter(Boolean).forEach((ref) => loadRef(ref!, el)))
 }
-
-export type IRef<T = any> = MutableRefObject<T | null | undefined> | null | undefined
-export type IRefs<T = any> = MayArray<IRef<MayArray<T>>>
