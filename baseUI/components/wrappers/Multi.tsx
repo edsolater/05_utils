@@ -11,14 +11,14 @@ import { tryCatch } from '../../../utils/functions/magic/tryCatch'
 /**
  * @WrapperComponent  expose a sigle DomRef to outer, but multi DomRefs to inner
  * @example
- * <MultiRefs>
+ * <Multi>
  *   <Div />
  *   <Div />
  *   <Div />
  *   <Div />
- * </MultiRefs>
+ * </Multi>
  */
-export default function MultiRefs({ children, domRef, ...restProps }: ExProps) {
+export default function Multi({ children, domRef, ...restProps }: ExProps) {
   const elementStack: HTMLElement[] = []
 
   const actionTracker = createActionTracker({
