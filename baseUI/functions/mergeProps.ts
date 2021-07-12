@@ -8,11 +8,12 @@ import notNullish from 'utils/functions/judgers/notNullish'
 import parallelSwitch from 'utils/functions/magic/parallelSwitch'
 import { _mergeObjects } from 'utils/functions/_mergeObjects'
 import mergeFunction from './mergeFunction'
+import mergeRefs from './mergeRefs'
 
 /**prop may very deep like children */
 export type AnyProp = { [props: string]: any }
 
-export default function mergeProps<P1 = AnyProp, P2  = AnyProp>(
+export default function mergeProps<P1 = AnyProp, P2 = AnyProp>(
   ...propsObjs: [P1, P2]
 ): Exclude<P1 & P2, undefined>
 export default function mergeProps<P1 = AnyProp, P2 = AnyProp, P3 = AnyProp>(
@@ -39,8 +40,9 @@ export default function mergeProps<P extends AnyProp | undefined>(
     parallelSwitch<string, any, any>(
       key,
       [
+        ['domRef', () => (v1 && v2 ? mergeRefs(v1 as any, v2 as any) : v1 ?? v2)],
         [
-          (key) => isOneOf(key, ['className', 'css', 'domRef']) && isExist(v1) && isExist(v2),
+          (key) => isOneOf(key, ['className', 'css']) && isExist(v1) && isExist(v2),
           () => [v1, v2].flat()
         ],
         [() => isFunction(v1) && isFunction(v2), () => mergeFunction(v1 as AnyFn, v2 as AnyFn)],

@@ -1,28 +1,28 @@
-import Hoverable from 'baseUI/components/wrappers/Hoverable'
 import Icon from 'baseUI/components/Icon'
+import AttachHoverable from 'baseUI/components/wrappers/AttachHoverable'
+import { ExProps } from 'baseUI/components/wrappers/Ex'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
-import { VerboseProps } from 'baseUI/components/wrappers/Ex'
 
 /**
  * Icon 的使用示例
  */
 
-function CurrentIcon({ isHovered = false, domRef }: Partial<VerboseProps>) {
-  return <Icon domRef={domRef} name={isHovered ? 'smile' : 'close'} />
+function CurrentIcon({ isHovered = false, domRef, css }: ExProps) {
+  return <Icon css={css} domRef={domRef} name={isHovered ? 'smile' : 'close'} />
 }
 
 const HoverableExample = () => (
   <ExampleCard category='WrapperComponent' title='Hoverable'>
     <ExampleGroup caption=''>
-      <Hoverable>
+      <AttachHoverable>
         <CurrentIcon />
-      </Hoverable>
-      <Hoverable>
+      </AttachHoverable>
+      <AttachHoverable>
         <CurrentIcon />
         <CurrentIcon />
-      </Hoverable>
+      </AttachHoverable>
     </ExampleGroup>
   </ExampleCard>
 )

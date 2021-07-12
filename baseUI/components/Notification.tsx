@@ -9,7 +9,7 @@ import Card, { CardProps } from './Card'
 import Icon, { IconProps } from './Icon'
 import { useToggle } from 'baseUI/hooks'
 import { mixCSSObjects } from 'baseUI/style/cssParser'
-import Clickable from './wrappers/Clickable'
+import AttachClickable from './wrappers/AttachClickable'
 
 export interface NotificationProps {
   title?: string
@@ -58,12 +58,12 @@ export default function Notification(props: NotificationProps) {
   return (
     <_Notification isOpen={isOpen}>
       <Card {...mergeProps(sprops._Card, { css: getCardCSS(sprops) })}>
-        <Clickable onClick={off}>
+        <AttachClickable onClick={off}>
           <Icon
             name='close'
             {...mergeProps(sprops._CloseIcon, { size: 'large', css: getCloseIconCSS(sprops) })}
           />
-        </Clickable>
+        </AttachClickable>
         <h3>{sprops.title ?? `Title here`}</h3>
         <p>
           {sprops.detailText ?? 'root knowledge additional then right thought run stiff bicycle'}

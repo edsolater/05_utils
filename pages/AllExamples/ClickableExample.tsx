@@ -1,34 +1,28 @@
-import Clickable from 'baseUI/components/wrappers/Clickable'
 import Icon from 'baseUI/components/Icon'
 import React from 'react'
 import ExampleCard from './ExampleCard'
 import ExampleGroup from './ExampleGroup'
-import { IRefs } from 'baseUI/functions/mergeRefs'
+import { ExProps } from 'baseUI/components/wrappers/Ex'
+import AttachButtonLike from 'baseUI/components/wrappers/AttachButtonLike'
 
 /**
  * Icon 的使用示例
  */
 
-function CurrentIcon({
-  hover = false,
-  domRef
-}: {
-  hover?: boolean
-  domRef?: IRefs<HTMLDivElement>
-}) {
-  return <Icon domRef={domRef} name={hover ? 'smile' : 'close'} />
+function CurrentIcon({ isHovered, css, domRef }: ExProps) {
+  return <Icon css={css} domRef={domRef} name={isHovered ? 'smile' : 'close'} />
 }
 
 const ClickableExample = () => (
   <ExampleCard category='WrapperComponent' title='Clickable'>
     <ExampleGroup caption=''>
-      <Clickable
+      <AttachButtonLike
         onClick={() => {
           globalThis.alert(3)
         }}
       >
         <CurrentIcon />
-      </Clickable>
+      </AttachButtonLike>
     </ExampleGroup>
   </ExampleCard>
 )
