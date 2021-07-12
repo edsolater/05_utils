@@ -30,22 +30,15 @@ const AnimateExample = () => (
           ]}
           options={{ duration: 2000, iterations: Infinity, composite: 'accumulate' }}
         >
-          <Multi>
-            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-              <Multi>
-                <Div />
-                <Div />
-                <Div />
-                <Div />
-              </Multi>
-            </CSS>
-            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-              <Div />
-            </CSS>
-            <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
-              <Div />
-            </CSS>
-          </Multi>
+          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+            <Div />
+          </CSS>
+          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+            <Div />
+          </CSS>
+          <CSS css={{ width: '100px', height: '100px', background: cssColor.dodgerblue }}>
+            <Div />
+          </CSS>
         </AttachAnimate>
       </AttachAnimate>
     </ExampleGroup>
@@ -69,14 +62,12 @@ const AnimateExample = () => (
         <Ex>
           <Ex>
             <Ex>
-              <Multi>
-                <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-                  <Div />
-                </CSS>
-                <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
-                  <Div />
-                </CSS>
-              </Multi>
+              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                <Div />
+              </CSS>
+              <CSS css={{ width: '60px', height: '60px', background: cssColor.crimson }}>
+                <Div />
+              </CSS>
             </Ex>
           </Ex>
         </Ex>
