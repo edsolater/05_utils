@@ -1,7 +1,7 @@
 import Div from 'baseUI/components/Div'
 import React, { useEffect, useState } from 'react'
 import { toPer } from 'baseUI/style/cssUnits'
-import { cssVar } from 'baseUI/style/cssFunctions'
+import { getCssVariableString } from 'baseUI/style/toolFunctions'
 import { keyframes } from '@emotion/react'
 const status = ['showing', 'blinking'] as const
 const colors = ['red', 'yellow', 'blue'] as const
@@ -41,7 +41,7 @@ const TrafficLight = () => {
         width: 50,
         height: 50,
         borderRadius: toPer(50),
-        background: cssVar('--light-color'),
+        background: getCssVariableString('--light-color'),
         [`&.${status[1]}`]: {
           animation: `${keyframeBlink} ${blinkingTime / 3}ms infinite`
         }

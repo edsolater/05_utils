@@ -3,7 +3,6 @@ import { injectAppSetting } from './AppSettings'
 import { DivProps } from './Div'
 import BaseUIDiv from './BaseUIDiv'
 import cssColor from 'baseUI/style/cssColor'
-import { cssBrightness } from 'baseUI/style/cssFunctions'
 import { toICSS } from 'baseUI/style/cssParser'
 import uiCSS from 'baseUI/settings/uiCSS'
 
@@ -56,8 +55,8 @@ const cssFn = toICSS(({ type, size }: ButtonProps) => [
       zIndex: '-1',
       background: uiCSS.Button['background--fill']
     },
-    ':hover::before': { filter: cssBrightness(1.4) },
-    ':active::before': { filter: cssBrightness(0.8) }
+    ':hover::before': { filter: `brightness(1.4)` },
+    ':active::before': { filter: `brightness(0.8)` }
   },
   type === 'outline' && {
     position: 'relative',

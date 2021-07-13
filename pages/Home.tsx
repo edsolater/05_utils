@@ -5,7 +5,7 @@ import StyledButton from './StyledButton'
 import { initAppWebsocket } from 'utils/helper/createConnect/core'
 import { evokeCamera } from 'utils/helper/evokeMedia'
 import React, { useState } from 'react'
-import { fullPer, toPer } from 'baseUI/style/cssUnits'
+import { toPer } from 'baseUI/style/cssUnits'
 import { ID } from 'typings/constants'
 
 const Home = () => {
@@ -52,7 +52,7 @@ const Home = () => {
         >
           <Video
             fitMode='cover'
-            css={{ width: fullPer, height: fullPer }}
+            css={{ width: '100%', height: '100%' }}
             srcObject={stream}
             shape='circle'
           />

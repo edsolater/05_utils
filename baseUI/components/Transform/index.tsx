@@ -3,11 +3,11 @@ import React, { ReactNode, useRef } from 'react'
 import useFeatureScale, { FeatureScaleOptions } from '../../hooks/useFeatureScale'
 import useFeatureResize, { FeatureResizeOptions } from '../../hooks/useFeatureResize'
 import useFeatureMove, { FeatureMoveOptions } from '../../hooks/useFeatureMove'
-import { fullVw, halfPer, toPer } from '../../style/cssUnits'
+import { toPer } from '../../style/cssUnits'
 import Div from '../Div'
-import { DivProps } from "../Div"
+import { DivProps } from '../Div'
 import cssColor from '../../style/cssColor'
-import { cssVar } from 'baseUI/style/cssFunctions'
+import { getCssVariableString } from 'baseUI/style/toolFunctions'
 import { BaseUIDiv } from '..'
 
 export type BoundingRect = {
@@ -67,7 +67,7 @@ const Transform = ({
         {
           position: 'relative',
           width: 'max-content',
-          borderRadius: innerShape === 'circle' ? fullVw : '',
+          borderRadius: innerShape === 'circle' ? '100vw' : '',
           '&:hover': {
             boxShadow: '0px 0px 0px 2px rgba(30, 143, 255, 0.219)'
           }
@@ -76,7 +76,10 @@ const Transform = ({
           cursor: isMoving ? 'grabbing' : 'grab',
           touchAction: 'none', // 禁用掉浏览器对双指缩放的默认出处理
           userSelect: 'none', // 禁用掉文字的用户选择
-          translate: [cssVar('--x', '0', 'px'), cssVar('--y', '0', 'px')]
+          translate: [
+            getCssVariableString('--x', '0', 'px'),
+            getCssVariableString('--y', '0', 'px')
+          ]
         },
         featureScaleCss
       ]}
@@ -93,16 +96,16 @@ const Transform = ({
             width: 8,
             height: 8,
             background: cssColor.dodgerblue,
-            borderRadius: halfPer,
+            borderRadius: '50%',
             cursor: 'nw-resize',
             opacity: 0,
-            translate: [halfPer, halfPer],
+            translate: ['50%', '50%'],
             transition: '200ms',
             '*:hover > &': {
               opacity: 1
             },
             '&:hover': {
-              translate: [halfPer, halfPer],
+              translate: ['50%', '50%'],
               scale: 2
             }
           }}

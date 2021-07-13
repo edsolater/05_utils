@@ -1,4 +1,4 @@
-import { setCSSVariable } from '../../style/cssVaraiable'
+import { setCSSVariable } from 'baseUI/style/toolFunctions'
 import { Delta2dTranslate } from 'typings/constants'
 import { deleteElementStyle, setElementStyle } from '../../../utils/helper/manageStyle/elementStyle'
 

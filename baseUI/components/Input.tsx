@@ -1,7 +1,7 @@
 import React, { ReactNode, useRef, useState } from 'react'
-import { DivProps } from "./Div"
+import { DivProps } from './Div'
 import Icon, { IconProps } from './Icon'
-import { setInlineStyle } from '../style/setCSS'
+import { setInlineStyle } from '../style/toolFunctions'
 import { toPx } from '../style/cssUnits'
 import { CSSObject } from '@emotion/react'
 import cssColor from '../style/cssColor'

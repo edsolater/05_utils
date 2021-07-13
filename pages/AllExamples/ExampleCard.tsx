@@ -1,8 +1,8 @@
 import { DivProps } from 'baseUI/components/Div'
 import React from 'react'
 import { toPx } from 'baseUI/style/cssUnits'
-import { cssValues } from 'baseUI/style/cssValue'
 import { BaseUIDiv } from 'baseUI/components'
+import cssTheme from 'baseUI/settings/cssTheme'
 export interface ExampleCardProps extends DivProps {
   category?: 'hooks' | 'baseUI/componentComponent' | 'SideEffectComponent' | 'TemplateComponent' | 'WrapperComponent'
   title?: string
@@ -14,7 +14,7 @@ const ExampleCard = (props: ExampleCardProps) => (
       display: 'grid',
       position: 'relative',
       gap: 32,
-      boxShadow: cssValues.smoothShadow,
+      boxShadow: cssTheme.shadow.smooth,
       width: 'clamp(400px, 80vw, 1200px)',
       margin: '32px auto',
       borderRadius: 8,

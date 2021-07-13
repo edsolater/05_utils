@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useMemo } from 'react'
-import { cssVar } from '../style/cssFunctions'
+import { getCssVariableString } from '../style/toolFunctions'
 import { mixCSSObjects } from '../style/cssParser'
 import { Vector, Delta2dTranslate } from 'typings/constants'
 import asyncInvoke from '../components/Transform/helper/asyncInvoke'

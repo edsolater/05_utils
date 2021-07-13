@@ -1,5 +1,4 @@
 import { CSSObject } from '@emotion/react'
-import { cssBrightness, cssScale } from './cssFunctions'
 import { ICSS } from './ICSS'
 export type AllMixinNames = keyof typeof cssMixins
 const cssMixins = {
@@ -69,12 +68,12 @@ const cssMixins = {
       cursor: 'pointer',
       userSelect: 'none',
       ':hover': {
-        filter: cssBrightness(0.9),
-        transform: cssScale(1.1)
+        filter: `brightness(0.9)`,
+        transform: `scale(1.1)`
       },
       ':active': {
-        filter: cssBrightness(0.8),
-        transform: cssScale(0.9)
+        filter: `brightness(0.8)`,
+        transform: `scale(0.9)`
       }
     })
 }

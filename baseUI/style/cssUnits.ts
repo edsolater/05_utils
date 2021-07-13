@@ -52,7 +52,3 @@ export const toPer = (v: MayDeepArray<number | string>) =>
     .flat(Infinity)
     .map((n) => changeUnit(n, '%'))
     .join(' ')
-export const fullVw = '100vw'
-export const fullVh = '100vh'
-export const halfPer = '50%'
-export const fullPer = '100%'

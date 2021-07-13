@@ -38,7 +38,6 @@ const cssWave: CSSObject = {
   background: `radial-gradient(
     circle at center,
     transparent 0 50%,
-    var(--primary-color) 75%,
     transparent 75%
   )`,
   animation: `${KeyframeRadarWave} 1s infinite`
