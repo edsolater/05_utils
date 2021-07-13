@@ -3,50 +3,44 @@ import { ICSS } from './cssParser'
 export type AllMixinNames = keyof typeof cssMixins
 const cssMixins = {
   gridItemTextLabel: (opt: { fontSize?: CSSObject['fontSize'] } = {}) =>
-    ICSS(
-      {
-        textAlign: 'center',
-        left: '50%',
-        top: 0,
-        fontSize: opt.fontSize ?? 34,
-        margin: 8,
-        color: 'gray'
-      },
-      '业务样式：测试的文字'
-    ),
+    ({
+      textAlign: 'center',
+      left: '50%',
+      top: 0,
+      fontSize: opt.fontSize ?? 34,
+      margin: 8,
+      color: 'gray'
+    } as ICSS),
   testGridContainer: () =>
-    ICSS(
-      {
-        display: 'grid',
-        gridTemplate: '1fr 1fr / 1fr 1fr 1fr',
-        gap: 8,
-        overflow: 'hidden',
-        background: 'lightgray',
-        height: '100vh'
-      },
-      '业务样式： 网格的父盒子'
-    ),
+    ({
+      display: 'grid',
+      gridTemplate: '1fr 1fr / 1fr 1fr 1fr',
+      gap: 8,
+      overflow: 'hidden',
+      background: 'lightgray',
+      height: '100vh'
+    } as ICSS),
   testGridItem: () =>
-    ICSS({
+    ({
       background: 'white',
       position: 'relative',
       overflow: 'hidden'
-    }),
+    } as ICSS),
 
   /**禁止 flexItem 伸缩 */
   solidFlexItem: () =>
-    ICSS({
+    ({
       flex: '0 0 auto'
-    }),
+    } as ICSS),
 
   /**组件禁用滚动条 */
   noScrollbar: () =>
-    ICSS({
+    ({
       scrollbarWidth: 'none',
       '&::-webkit-scrollbar': {
         display: 'none'
       }
-    }),
+    } as ICSS),
 
   /**横向布局 */
   horizontalLayout: ({
@@ -56,15 +50,15 @@ const cssMixins = {
     gap?: CSSObject['gap']
     justifyContent?: CSSObject['justifyContent']
   } = {}) =>
-    ICSS({
+    ({
       display: 'flex',
       justifyContent,
       gap
-    }),
+    } as ICSS),
 
   /**表明此元素是个button */
   buttonStyle: ({}: {} = {}) =>
-    ICSS({
+    ({
       cursor: 'pointer',
       userSelect: 'none',
       ':hover': {
@@ -75,6 +69,6 @@ const cssMixins = {
         filter: `brightness(0.8)`,
         transform: `scale(0.9)`
       }
-    })
+    } as ICSS)
 }
 export default cssMixins

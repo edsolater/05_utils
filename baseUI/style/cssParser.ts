@@ -13,14 +13,6 @@ import mergeDeep from 'utils/functions/object/mergeDeep'
 export interface ICSSObject extends CSSObject {}
 export type ICSS = MayDeepArray<ICSSObject | boolean | string | number | null | undefined>
 
-export function ICSS(cssObject: string | number | ICSS, description?: string): ICSS {
-  if (isObjectLike(cssObject)) {
-    return cssObject
-  } else {
-    throw new TypeError(description)
-  }
-}
-
 /**
  * 用在非<Div>的组件上，与toCss目的相反
  * 组合cssMixin
@@ -37,13 +29,14 @@ export function mixCSSObjects(
   )
 }
 
+// just for type
 export const toICSS = <
   T extends (...any: any[]) => MayDeepArray<ICSS | ((...any: any[]) => ICSS) | undefined | {}>
 >(
-  cssFn: T
+  inputCssFn: T
 ): ((...args: Parameters<T>) => ICSS) =>
   // @ts-expect-error know why
-  cache((...args: Parameters<T>) => mixCSSObjects(cssFn(...args)))
+  cache((...args: Parameters<T>) => mixCSSObjects(inputCssFn(...args)))
 
 /**在最终解析CSS时，中间件队列 */
 const middlewareList = [middlewareCSSTransform]
@@ -99,4 +92,3 @@ function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
     return cssObj
   }
 }
-
