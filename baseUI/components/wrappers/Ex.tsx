@@ -1,7 +1,7 @@
 import { mergeProps } from 'baseUI/functions'
 import mapChildren from 'baseUI/functions/mapChildren'
 import useCallbackRef from 'baseUI/hooks/useCallbackRef'
-import { ICSS } from 'baseUI/style/ICSS'
+import { ICSS } from 'baseUI/style/cssParser'
 import React, { MutableRefObject, ReactNode } from 'react'
 import { createActionTracker } from 'utils/containers/ActionTracker'
 import { tryCatch } from 'utils/functions/magic/tryCatch'

@@ -1,5 +1,5 @@
 import { mergeProps } from 'baseUI/functions'
-import { ICSS } from 'baseUI/style/ICSS'
+import { ICSS } from 'baseUI/style/cssParser'
 import React, { ReactNode } from 'react'
 import Ex from './Ex'
 

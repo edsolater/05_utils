@@ -5,7 +5,7 @@ import classname, { ClassName } from '../functions/classname'
 import mergeRefs from '../functions/mergeRefs'
 import { isString, isUndefined } from 'utils/functions/judgers'
 import { omit } from 'utils/functions/object'
-import { ICSS } from 'baseUI/style/ICSS'
+import { ICSS } from 'baseUI/style/cssParser'
 import React from 'react'
 import { MayDeepArray } from 'typings/tools'
 

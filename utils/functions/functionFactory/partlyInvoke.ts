@@ -1,5 +1,5 @@
 import isObjectLike from '../judgers/isObjectOrArray'
-import merge from '../object/merge'
+import mergeShallow from '../object/mergeShallow'
 import { AnyFn } from 'typings/constants'
 
 /**
@@ -18,7 +18,7 @@ export default function partlyInvoke<F extends AnyFn, Index extends number>(
 ): F {
   const partlyInvokedFunction = (...args: Parameters<F>) => {
     const oldParam = args[paramIndex]
-    const newParam = isObjectLike(oldParam) && isObjectLike(param) ? merge(oldParam, param) : param
+    const newParam = isObjectLike(oldParam) && isObjectLike(param) ? mergeShallow(oldParam, param) : param
     return pureFunc(...args.slice(0, paramIndex), newParam, ...args.slice(paramIndex + 1))
   }
   //@ts-ignore

@@ -1,5 +1,4 @@
 import { ObjectNotArray } from 'typings/constants'
-import { isUndefined, notUndefined } from './judgers'
 
 /**
  * （这只是个基础框架，没多少实用价值，需要包装成更强的函数）
@@ -10,30 +9,15 @@ import { isUndefined, notUndefined } from './judgers'
  */
 export function _mergeObjects<T extends ObjectNotArray>(
   objs: T[],
-  transformer: (key: string, valueA: unknown, valueB: unknown) => unknown
+  transformer: (key: string, valueA: any, valueB: any) => any
 ): T {
-  //@ts-ignore
-  if (objs.length === 0) return {}
+  if (objs.length === 0) return {} as T
   if (objs.length === 1) return objs[0]
 
-  const resultObj: any = { ...objs[0] }
-  for (const obj of objs.slice(1)) {
-    for (const [key, valueB] of Object.entries(obj)) {
-      const valueA = resultObj[key]
-      if (isUndefined(valueA) && isUndefined(valueB)) continue
-      const resultValue = transformer(key, valueA, valueB)
-      if (notUndefined(resultValue)) resultObj[key] = resultValue
-    }
-  }
-  return resultObj
+  return objs.reduce((acc, obj) => {
+    Object.entries(obj).forEach(([key, valueB]) => {
+      Reflect.set(acc, key, transformer(key, acc[key], valueB))
+    })
+    return acc
+  }, {} as T)
 }
-
-// const a = mergeObjects(
-//   [
-//     { a: 3, b: 2 },
-//     { a: 1, b: 3 }
-//   ],
-//   (key, v1, v2) => {
-//     return key === 'a' ? [v1, v2] : v2
-//   }
-// )

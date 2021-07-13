@@ -1,5 +1,5 @@
 import { CSSObject } from '@emotion/react'
-import { ICSS } from './ICSS'
+import { ICSS } from './cssParser'
 export type AllMixinNames = keyof typeof cssMixins
 const cssMixins = {
   gridItemTextLabel: (opt: { fontSize?: CSSObject['fontSize'] } = {}) =>

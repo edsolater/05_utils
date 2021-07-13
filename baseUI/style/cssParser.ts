@@ -1,15 +1,25 @@
-import { CSSObject, SerializedStyles } from '@emotion/react'
+import { CSSObject } from '@emotion/react'
 import { css } from '@emotion/css'
 import flat from 'utils/functions/array/flat'
 import isFunction from 'utils/functions/judgers/isFunction'
 import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
 import isObject from 'utils/functions/judgers/isObject'
 import divide from 'utils/functions/object/divide'
-import { ICSS, ICSSObject } from './ICSS'
 import mapValues from 'utils/functions/object/mapValues'
 import { MayDeepArray } from 'typings/tools'
-import isArray from 'utils/functions/judgers/isArray'
 import { cache } from 'utils/functions/functionFactory'
+import mergeDeep from 'utils/functions/object/mergeDeep'
+
+export interface ICSSObject extends CSSObject {}
+export type ICSS = MayDeepArray<ICSSObject | boolean | string | number | null | undefined>
+
+export function ICSS(cssObject: string | number | ICSS, description?: string): ICSS {
+  if (isObjectLike(cssObject)) {
+    return cssObject
+  } else {
+    throw new TypeError(description)
+  }
+}
 
 /**
  * 用在非<Div>的组件上，与toCss目的相反
@@ -26,6 +36,7 @@ export function mixCSSObjects(
       .filter(isObjectLike)
   )
 }
+
 export const toICSS = <
   T extends (...any: any[]) => MayDeepArray<ICSS | ((...any: any[]) => ICSS) | undefined | {}>
 >(
@@ -89,34 +100,3 @@ function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
   }
 }
 
-/**
- * 合并多个对象
- * (如果是数组，则合并)
- * @param objDeepArray 嵌套数组的对象
- * @example
- * mergeDeep({a:3, b:2}, {a:1}) // {a:1, b:2}
- * mergeDeep({a:3, b:2}, undefined, {a:1}) // {a:1, b:2}
- * mergeDeep({a:3, b:2, c:{a:2}}, {a:1, c:{b:3}}) // {a:1, b:2, c:{a:2, b:3}}
- * mergeDeep({a:3, b:2, c:{a:2}}, {a:1, c:{b:3}}, false) // {a:1, b:2, c:{a:2, b:3}}
- * mergeDeep({a:3, b:2, c:{a:2}}, {a:1, c:{b:3}}, {c:false}) // {a:1, b:2, c:false}
- * mergeDeep({a:3, b:2, c:{a:2}}, [{a:1, c:{b:3}}, {c:false}]) // {a:1, b:2, c:false}
- *
- * mergeDeep({a:3, b:2, c:[2]}, {a:1, c:[3]}, {c:[4,5]}) // {a:1, b:2, c:[2,3,4,5]}
- */
-export function mergeDeep<T>(...objDeepArray: MayDeepArray<T>[]): T {
-  const flattedItems = flat(objDeepArray).filter(Boolean)
-  const resultObj = {}
-  for (const obj of flattedItems) {
-    for (const [key, value] of Object.entries(obj ?? {})) {
-      let mergedValue =
-        isArray(resultObj[key]) && isArray(value)
-          ? [...resultObj[key], ...value]
-          : isObjectLike(resultObj[key]) && isObjectLike(value)
-          ? mergeDeep([resultObj[key], value])
-          : value
-      resultObj[key] = mergedValue
-    }
-  }
-  //@ts-expect-error
-  return resultObj
-}
