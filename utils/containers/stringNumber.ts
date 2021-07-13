@@ -1,4 +1,4 @@
-import { isBigInt, isNumber, isString } from '../functions/judgers'
+import { hasProperty, isBigInt, isNumber, isString } from '../functions/judgers'
 import isObjectLike from '../functions/judgers/isObjectOrArray'
 
 // TODO: to be continue...
@@ -10,15 +10,12 @@ type StringNumberAtom = { decimal: number; all: string }
 
 const stringNumberRegex = /-?\d*\.?\d+/
 
-
 export function canTransformToStringNumber(value: any): value is Numberable {
   return isNumber(value) || isBigInt(value) || (isString(value) && stringNumberRegex.test(value))
 }
 
-
 export function isStringNumberAtom(value: any): value is StringNumberAtom {
-  if (!isObjectLike(value)) return false
-  return 'decimal' in value && 'all' in value
+  return isObjectLike(value) && hasProperty(value, ['decimal', 'all'])
 }
 
 /**

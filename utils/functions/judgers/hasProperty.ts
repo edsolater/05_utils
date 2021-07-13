@@ -1,8 +1,10 @@
-/**
- * 检查对象是否具有某个属性
- * @param obj 目标对象
- * @param propName 属性名
- */
-export default function hasProperty(obj: object, propName: string) {
-  return propName in obj
+import { MayArray } from 'typings/tools'
+import isPrimitive from './isPrimitive'
+
+// it type is not intelligent enough
+export default function hasProperty<T>(obj: T, key: MayArray<keyof T | string>) {
+  if (isPrimitive(obj)) {
+    throw new Error(`input object: ${String(obj)} is not object for fn:${hasProperty.name}`)
+  }
+  return [key].flat().every((objKey) => Reflect.has(obj as any, objKey))
 }

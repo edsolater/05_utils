@@ -6,9 +6,9 @@
 
 import { PropsWithChildren } from 'react'
 
-export type Primitive = boolean | number | string
+export type Primitive = boolean | number | string | symbol | bigint | undefined | null
+export type NoNullablePrimitive = NonNullable<Primitive>
 export type ObjectNotArray = { [key: string]: any }
-export type RichPrimitive = Primitive | bigint | symbol
 /**
  * 任何函数
  */
