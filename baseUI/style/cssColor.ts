@@ -12,3 +12,8 @@ const cssColor = {
 } as const
 export default cssColor
 export type CSSColorString = string
+export type CSSColorName = keyof typeof cssColor
+
+export function isColorName(color: string):color is CSSColorName {
+  return Reflect.has(cssColor, color)
+}
