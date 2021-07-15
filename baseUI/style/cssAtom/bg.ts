@@ -1,5 +1,6 @@
 import cssColor, { CSSColorName, isColorName } from '../cssColor'
-import { CSSValueLength, toPxIfNumber } from '../cssUnits'
+import { CSSValueLength } from '../cssUnits'
+import { jssAtomFunctionFactory } from './jssAtomFunctionFactory'
 
 //#region ------------------- backgound-color -------------------
 /**
@@ -10,70 +11,69 @@ function bgColor(colorName: CSSColorName) {
 }
 //#endregion
 
-//#region ------------------- background-size -------------------
-/**
- * @cssAtomGenerator
- * @see https://tailwindcss.com/docs/background-size
- * @see https://developer.mozilla.org/en-US/docs/Web/CSS/background-size
- */
-export function backgroundSize(
-  ...params: ['cover' | 'contain'] | [CSSValueLength, CSSValueLength?]
-): { backgroundSize: string } {
-  return { backgroundSize: params.map(toPxIfNumber).join(' ') }
-}
+export const {
+  mainFunction: backgroundSize,
+  shortcutFunction: {
+    inherit: backgroundSizeInherit,
+    initial: backgroundSizeInitial,
+    revert: backgroundSizeRevert,
+    unset: backgroundSizeUnset,
 
-/** @shortcut origin is {@link backgroundSize}*/
-export const backgroundSizeAuto = () => backgroundSize('auto')
-
-/** @shortcut origin is {@link backgroundSize}*/
-export const backgroundSizeCover = () => backgroundSize('cover')
-
-/** @shortcut origin is {@link backgroundSize}*/
-export const backgroundSizeContain = () => backgroundSize('contain')
-//#endregion
-
-
-//#region ------------------- background-origin -------------------
-/**
- * @cssAtomGenerator
- * @see https://tailwindcss.com/docs/background-origin
- * @see https://developer.mozilla.org/en-US/docs/Web/CSS/background-origin
- */
-export function backgroundOrigin(
-  ...params: ['border-box' | 'padding-box' | 'content-box']
-): { backgroundOrigin: string } {
-  return { backgroundOrigin: params.map(toPxIfNumber).join(' ') }
-}
-
-/** @shortcut origin is {@link backgroundOrigin}*/
-export const backgroundOriginBorderBox = () => backgroundOrigin('border-box')
-
-/** @shortcut origin is {@link backgroundOrigin}*/
-export const backgroundOriginPaddingBox = () => backgroundOrigin('padding-box')
-
-/** @shortcut origin is {@link backgroundOrigin}*/
-export const backgroundOriginContentBox = () => backgroundOrigin('content-box')
-
-//#endregion
-
-//#region ------------------- index -------------------
-/**
- * @see https://tailwindcss.com/docs/background-color
- * @param params
- * @returns
- */
-function bg(params: string) {
-  // param represent a color
-  if (isColorName(params)) {
-    return bgColor(params)
+    auto: backgroundSizeAuto,
+    cover: backgroundSizeCover,
+    contain: backgroundSizeContain
   }
+} = jssAtomFunctionFactory({
+  cssPropertyName: 'background-size',
+  allowKeywords: ['auto', 'cover', 'contain']
+})
 
-  if (isBgSize(params)) {
-    return bgSize(params)
+export const {
+  mainFunction: backgroundOrigin,
+  shortcutFunction: {
+    inherit: backgroundOriginInherit,
+    initial: backgroundOriginInitial,
+    revert: backgroundOriginRevert,
+    unset: backgroundOriginUnset,
+
+    'border-box': backgroundOriginBorderBox,
+    'padding-box': backgroundOriginPaddingBox,
+    'content-box': backgroundOriginContentBox
   }
+} = jssAtomFunctionFactory({
+  cssPropertyName: 'background-origin',
+  allowKeywords: ['border-box', 'padding-box', 'content-box']
+})
 
-  return { background: 'todo' }
-}
-//#endregion
+export const {
+  mainFunction: backgroundPosition,
+  shortcutFunction: {
+    inherit: backgroundPositionInherit,
+    initial: backgroundPositionInitial,
+    revert: backgroundPositionRevert,
+    unset: backgroundPositionUnset,
 
-console.log(backgroundSize)
+    'left top': backgroundPositionLeftTop,
+    'top': backgroundPositionTop,
+    'right top': backgroundPositionRightTop,
+    'left': backgroundPositionLeft,
+    'center': backgroundPositionCenter,
+    'right': backgroundPositionRight,
+    'left bottom': backgroundPositionLeftBottom,
+    'bottom': backgroundPositionBottom,
+    'right bottom': backgroundPositionRightBottom
+  }
+} = jssAtomFunctionFactory({
+  cssPropertyName: 'background-origin',
+  allowKeywords: [
+    'left top',
+    'top',
+    'right top',
+    'left',
+    'center',
+    'right',
+    'left bottom',
+    'bottom',
+    'right bottom'
+  ]
+})
