@@ -1,4 +1,5 @@
 import { MayDeepArray } from 'typings/tools'
+import { isNullish } from 'utils/functions/judgers'
 import isNumber from 'utils/functions/judgers/isNumber'
 import isUndefined from 'utils/functions/judgers/isUndefined'
 export type CSSLength = string
@@ -38,6 +39,9 @@ export const toPx = (v: MayDeepArray<number | string>) =>
     .map((n) => changeUnit(n, 'px'))
     .join(' ')
 
+export function toPxIfNumber(v: number | string | undefined | null): string {
+  return isNullish(v) ? '' : isNumber(v) ? toPx(v) : v
+}
 /**
  * 与 {@link toPx} 的区别在于：如果已有单位，则不做更改
  */
@@ -52,3 +56,5 @@ export const toPer = (v: MayDeepArray<number | string>) =>
     .flat(Infinity)
     .map((n) => changeUnit(n, '%'))
     .join(' ')
+
+export type CSSValueLength = number | `${number}${'' | 'px' | 'vw' | 'em' | 'rem' | '%'}` | 'auto' // TODO: consider max() min() clamp() var() calc()
