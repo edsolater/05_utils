@@ -1,16 +1,17 @@
 import { CSSProperties } from 'react'
-import { ArrayItem, ExtractProperty, SKeyof, SnakeCase } from 'typings/tools'
+import { ExtractProperty, SKeyof, SnakeCase } from 'typings/tools'
 import { objectFlatMapEntry } from '../../utils/functions/object/objectMap'
 import { overwriteFunctionName } from '../../utils/functions/functionFactory'
-import { toCamelCase, toPascalCase, toSnakeCase } from '../../utils/functions/string/changeCase'
+import { toSnakeCase } from '../../utils/functions/string/changeCase'
 import { toPxIfNumber } from './cssUnits'
-import { isString } from '../../utils/functions/judgers'
-
-const globalKeywords = ['inherit', 'initial', 'revert', 'unset'] as const
 
 type Keyword = readonly [jskeyword: string, cssValue: string]
-type GetKeywordString<K extends Keyword> = K extends string ? K : K[0]
-
+type PropertyOption = {
+  [P in keyof CSSProperties]: {
+    keywordPrefix?: string
+    keywords: readonly Keyword[]
+  }
+}
 type GetJSSAtomFromOptions<
   PropertiesOptions extends {
     [P in keyof CSSProperties]: {
@@ -29,7 +30,7 @@ type GetJSSAtomFromOptions<
     /* shortcut css rule */
     {
       [JSSPropertyName in SKeyof<PropertiesOptions> as `${SnakeCase<
-        GetKeywordString<ArrayItem<ExtractProperty<PropertiesOptions[JSSPropertyName], 'keywords'>>>
+        ExtractProperty<PropertiesOptions[JSSPropertyName], 'keywords'>[number][0]
       >}`]: {
         [K in JSSPropertyName]: string
       }
@@ -38,11 +39,11 @@ type GetJSSAtomFromOptions<
 /**
  * how to use the function ? Please see {@link JSSAtoms}
  */
-export default function jssAtomGenerator<
-  PropertiesOptions extends {
-    [P in keyof CSSProperties]: { keywordPrefix?: string; keywords: readonly Keyword[] }
-  }
->({ properties }: { properties: PropertiesOptions }): GetJSSAtomFromOptions<PropertiesOptions> {
+export default function jssAtomGenerator<P extends PropertyOption>({
+  properties
+}: {
+  properties: P
+}): GetJSSAtomFromOptions<P> {
   return objectFlatMapEntry(properties, ([propertyName, { keywords = [] } = {}]) => [
     [propertyName, getMainFunction(propertyName)],
     ...getShortcutFunctions(propertyName, keywords)
@@ -51,14 +52,14 @@ export default function jssAtomGenerator<
 
 function getMainFunction(cssPropertyName: string) {
   return overwriteFunctionName(
-    (...params) => ({ [toCamelCase(cssPropertyName)]: params.map(toPxIfNumber).join(' ') }),
-    toCamelCase(cssPropertyName)
+    (...params) => ({ [cssPropertyName]: params.map(toPxIfNumber).join(' ') }),
+    cssPropertyName
   )
 }
 
 function getShortcutFunctions(cssPropertyName: string, keywords: readonly Keyword[]) {
   return keywords.map(([keywordName, cssValue]) => [
     toSnakeCase(keywordName),
-    { [toCamelCase(cssPropertyName)]: cssValue }
+    { [cssPropertyName]: cssValue }
   ])
 }

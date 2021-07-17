@@ -12,9 +12,9 @@ const JSSAtoms = jssAtomGenerator({
      */
     backgroundSize: {
       keywords: [
-        ['bg_auto', 'auto'],
-        ['bg_cover', 'cover'],
-        ['bg_contain', 'contain']
+        ['bg-auto', 'auto'],
+        ['bg-cover', 'cover'],
+        ['bg-contain', 'contain']
       ]
     },
 
@@ -24,9 +24,9 @@ const JSSAtoms = jssAtomGenerator({
      */
     backgroundOrigin: {
       keywords: [
-        ['bg_origin_border', 'border-box'],
-        ['bg_origin_padding', 'padding-box'],
-        ['bg_origin_content', 'content-box']
+        ['bg-origin-border', 'border-box'],
+        ['bg-origin-padding', 'padding-box'],
+        ['bg-origin-content', 'content-box']
       ]
     },
 
@@ -36,12 +36,12 @@ const JSSAtoms = jssAtomGenerator({
      */
     backgroundRepeat: {
       keywords: [
-        ['bg_repeat', 'repeat'],
-        ['bg_no_repeat', 'no-repeat'],
-        ['bg_repeat_x', 'repeat-x'],
-        ['bg_repeat_y', 'repeat-y'],
-        ['bg_repeat_round', 'round'],
-        ['bg_repeat_space', 'space']
+        ['bg-repeat', 'repeat'],
+        ['bg-no-repeat', 'no-repeat'],
+        ['bg-repeat-x', 'repeat-x'],
+        ['bg-repeat-y', 'repeat-y'],
+        ['bg-repeat-round', 'round'],
+        ['bg-repeat-space', 'space']
       ]
     },
 
@@ -51,10 +51,10 @@ const JSSAtoms = jssAtomGenerator({
      */
     backgroundClip: {
       keywords: [
-        ['bg_clip_border', 'border-box'],
-        ['bg_clip_padding', 'padding-box'],
-        ['bg_clip_content', 'content-box'],
-        ['bg_clip_text', 'text']
+        ['bg-clip-border', 'border-box'],
+        ['bg-clip-padding', 'padding-box'],
+        ['bg-clip-content', 'content-box'],
+        ['bg-clip-text', 'text']
       ]
     },
 
@@ -64,17 +64,17 @@ const JSSAtoms = jssAtomGenerator({
      */
     backgroundPosition: {
       keywords: [
-        ['bg_top', 'top'],
-        ['bg_bottom', 'bottom'],
-        ['bg_left', 'left'],
-        ['bg_right', 'right'],
-        ['bg_center', 'center'],
-        ['bg_top_left', 'top left'],
-        ['bg_top_right', 'top right']
+        ['bg-top', 'top'],
+        ['bg-bottom', 'bottom'],
+        ['bg-left', 'left'],
+        ['bg-right', 'right'],
+        ['bg-center', 'center'],
+        ['bg-top-left', 'top left'],
+        ['bg-top-right', 'top right']
       ]
     }
   }
 } as const)
 export default JSSAtoms
 
-// console.log('JSSAtoms: ', JSSAtoms.bg_origin_border)
+console.log('JSSAtoms: ', JSSAtoms.bg_origin_border)
