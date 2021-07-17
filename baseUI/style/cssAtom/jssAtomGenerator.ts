@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react'
 import { PascalCase } from 'typings/tools'
+import { objectFlatMapEntry } from '../../../utils/functions/object/objectMap'
 import { overwriteFunctionName } from '../../../utils/functions/functionFactory'
 import { toCamelCase, toPascalCase } from '../../../utils/functions/string/changeCase'
 import { toPxIfNumber } from '../cssUnits'
@@ -26,21 +27,19 @@ export function jssAtomGenerator<
     | PascalCase<ExtractKeywordFromPropertyOption<PropertiesOptions[JSSPropertyName]>>
     | ''}`]: any
 } {
-  return Object.fromEntries(
-    Object.entries(properties ?? {}).flatMap(([propertyName, { keywords = [] } = {}]) => {
-      const mainFunction = overwriteFunctionName(
-        (...params) => ({ [toCamelCase(propertyName)]: params.map(toPxIfNumber).join(' ') }),
-        toCamelCase(propertyName)
+  return objectFlatMapEntry(properties, ([propertyName, { keywords }]) => {
+    const mainFunction = overwriteFunctionName(
+      (...params) => ({ [toCamelCase(propertyName)]: params.map(toPxIfNumber).join(' ') }),
+      toCamelCase(propertyName)
+    )
+    const shortcutFunctions = [...keywords, ...globalKeywords].map((keyword) => {
+      const shortcurFunction = overwriteFunctionName(
+        () => mainFunction(keyword),
+        `${toCamelCase(propertyName)}${toPascalCase(keyword)}`
       )
-      const shortcutFunctions = [...keywords, ...globalKeywords].map((keyword) => {
-        const shortcurFunction = overwriteFunctionName(
-          () => mainFunction(keyword),
-          `${toCamelCase(propertyName)}${toPascalCase(keyword)}`
-        )
-        return [shortcurFunction.name, shortcurFunction]
-      })
-
-      return [[propertyName, mainFunction], ...shortcutFunctions]
+      return [shortcurFunction.name, shortcurFunction]
     })
-  )
+
+    return [[propertyName, mainFunction], ...shortcutFunctions]
+  })
 }

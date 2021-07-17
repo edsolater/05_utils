@@ -160,3 +160,14 @@ export type CamelCaseFromPascalCase<S extends string> = Uncapitalize<S>
  * CamelCase<'hello-world-hi-I-am-Ed'> // 'HelloWroldHiIAmEd'
  */
 export type CamelCase<S extends string> = CamelCaseFromKebabCase<Uncapitalize<S>>
+
+export type Keyof<O> = keyof O
+export type Valueof<O> = O[keyof O]
+/**
+ * extract only string and number
+ */
+export type SKeyof<O> = O extends { [s in infer T]: any } ? T : any
+/**
+ * extract only string and number
+ */
+export type SValueof<O> = O extends { [s: string]: infer T } ? T : any
