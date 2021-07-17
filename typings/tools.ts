@@ -76,3 +76,87 @@ export type OmitByValue<T, U> = { [P in keyof T]: T[P] extends U ? never : P }[k
 export type NotUndefinedValue<O> = {
   [Q in OmitByValue<O, undefined>]: O[Q]
 }
+
+/**
+ * @example
+ * PascalCaseFromKebabCase<'hello-world'> // 'HelloWrold'
+ * PascalCaseFromKebabCase<'hello-world-hi'> // 'HelloWroldHi'
+ * PascalCaseFromKebabCase<'hello-world-hi-i'> // 'HelloWroldHiI'
+ * PascalCaseFromKebabCase<'hello-world-hi-I-am'> // 'HelloWroldHiIAm'
+ * PascalCaseFromKebabCase<'hello-world-hi-I-am-Ed'> // 'HelloWroldHiIAmEd'
+ */
+export type PascalCaseFromKebabCase<
+  S extends string
+> = S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}-${infer p6}-${infer p7}`
+  ? `${Capitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}${Capitalize<p5>}${Capitalize<p6>}${Capitalize<p7>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}-${infer p6}`
+  ? `${Capitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}${Capitalize<p5>}${Capitalize<p6>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}`
+  ? `${Capitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}${Capitalize<p5>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}`
+  ? `${Capitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}`
+  ? `${Capitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}`
+  : S extends `${infer p1}-${infer p2}`
+  ? `${Capitalize<p1>}${Capitalize<p2>}`
+  : S
+
+/**
+ * @example
+ * PascalCaseFromCamelCase<'helloWorld'> // 'HelloWrold'
+ */
+export type PascalCaseFromCamelCase<S extends string> = Capitalize<S>
+
+/**
+ * @example
+ * PascalCase<'helloWorld'> // 'HelloWrold'
+ * PascalCase<'helloWorldHi'> // 'HelloWroldHi'
+ * PascalCase<'hello-world'> // 'HelloWrold'
+ * PascalCase<'hello-world-hi'> // 'HelloWroldHi'
+ * PascalCase<'hello-world-hi-i'> // 'HelloWroldHiI'
+ * PascalCase<'hello-world-hi-I-am'> // 'HelloWroldHiIAm'
+ * PascalCase<'hello-world-hi-I-am-Ed'> // 'HelloWroldHiIAmEd'
+ */
+export type PascalCase<S extends string> = PascalCaseFromKebabCase<Capitalize<S>>
+
+/**
+ * @example
+ * PascalCaseFromKebabCase<'hello-world'> // 'helloWrold'
+ * PascalCaseFromKebabCase<'hello-world-hi'> // 'helloWroldHi'
+ * PascalCaseFromKebabCase<'hello-world-hi-i'> // 'helloWroldHiI'
+ * PascalCaseFromKebabCase<'hello-world-hi-I-am'> // 'helloWroldHiIAm'
+ * PascalCaseFromKebabCase<'hello-world-hi-I-am-Ed'> // 'helloWroldHiIAmEd'
+ */
+export type CamelCaseFromKebabCase<
+  S extends string
+> = S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}-${infer p6}-${infer p7}`
+  ? `${Uncapitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}${Capitalize<p5>}${Capitalize<p6>}${Capitalize<p7>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}-${infer p6}`
+  ? `${Uncapitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}${Capitalize<p5>}${Capitalize<p6>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}`
+  ? `${Uncapitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}${Capitalize<p5>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}`
+  ? `${Uncapitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}${Capitalize<p4>}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}`
+  ? `${Uncapitalize<p1>}${Capitalize<p2>}${Capitalize<p3>}`
+  : S extends `${infer p1}-${infer p2}`
+  ? `${Uncapitalize<p1>}${Capitalize<p2>}`
+  : S
+
+/**
+ * @example
+ * CamelCaseFromPascalCase<'HelloWorld'> // 'helloWrold'
+ */
+export type CamelCaseFromPascalCase<S extends string> = Uncapitalize<S>
+
+/**
+ * @example
+ * CamelCase<'helloWorld'> // 'HelloWrold'
+ * CamelCase<'helloWorldHi'> // 'HelloWroldHi'
+ * CamelCase<'hello-world'> // 'HelloWrold'
+ * CamelCase<'hello-world-hi'> // 'HelloWroldHi'
+ * CamelCase<'hello-world-hi-i'> // 'HelloWroldHiI'
+ * CamelCase<'hello-world-hi-I-am'> // 'HelloWroldHiIAm'
+ * CamelCase<'hello-world-hi-I-am-Ed'> // 'HelloWroldHiIAmEd'
+ */
+export type CamelCase<S extends string> = CamelCaseFromKebabCase<Uncapitalize<S>>
