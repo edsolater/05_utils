@@ -81,11 +81,17 @@ export type NotUndefinedValue<O> = {
  * @example
  * ExtractProperty<{ key: 'hello' }, 'key'> // "hello"
  */
-export type ExtractProperty<O, P extends keyof any> = O extends { [Key in P]: infer K }
+export type ExtractProperty<
+  O,
+  P extends keyof any,
+  Fallback extends keyof any = any
+> = O extends {
+  [Key in P]: infer K
+}
   ? K extends any
     ? K
-    : never
-  : any
+    : Fallback
+  : Fallback
 
 /**
  * @example
