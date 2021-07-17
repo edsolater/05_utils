@@ -13,7 +13,7 @@ export type MayFunction<T> = T | (() => T)
  * @example
  * const e = MayEnum<'hello'|'world'> // 'hello' | 'world' | (string & {})
  */
-export type SuggestString<T> = T | (string & {})
+export type MayEnum<T> = T | (string & {})
 
 /**
  * type I = GetRequired<{ foo: number, bar?: string }> // expected to be { foo: number }
@@ -77,6 +77,23 @@ export type NotUndefinedValue<O> = {
   [Q in OmitByValue<O, undefined>]: O[Q]
 }
 
+/**
+ * @example
+ * ExtractProperty<{ key: 'hello' }, 'key'> // "hello"
+ */
+export type ExtractProperty<O, P extends keyof any> = O extends { [Key in P]: infer K }
+  ? K extends any
+    ? K
+    : never
+  : any
+
+/**
+ * @example
+ * ArrayItem<['hello', 'world']> // "hello" | "world"
+ */
+export type ArrayItem<A> = A extends readonly (infer T)[] ? T : any
+
+//#region ------------------- word case -------------------
 /**
  * @example
  * PascalCaseFromKebabCase<'hello-world'> // 'HelloWrold'
@@ -161,6 +178,27 @@ export type CamelCaseFromPascalCase<S extends string> = Uncapitalize<S>
  */
 export type CamelCase<S extends string> = CamelCaseFromKebabCase<Uncapitalize<S>>
 
+/**
+ * !!! only support kebab-case => snake_case yet!!!
+ */
+export type SnakeCase<
+  S extends string
+> = S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}-${infer p6}-${infer p7}`
+  ? `${p1}_${p2}_${p3}_${p4}_${p5}_${p6}_${p7}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}-${infer p6}`
+  ? `${p1}_${p2}_${p3}_${p4}_${p5}_${p6}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}-${infer p5}`
+  ? `${p1}_${p2}_${p3}_${p4}_${p5}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}-${infer p4}`
+  ? `${p1}_${p2}_${p3}_${p4}`
+  : S extends `${infer p1}-${infer p2}-${infer p3}`
+  ? `${p1}_${p2}_${p3}`
+  : S extends `${infer p1}-${infer p2}`
+  ? `${p1}_${p2}`
+  : S
+//#endregion
+
+//#region ------------------- keyof / valueof -------------------
 export type Keyof<O> = keyof O
 export type Valueof<O> = O[keyof O]
 /**
@@ -171,3 +209,4 @@ export type SKeyof<O> = O extends { [s in infer T]: any } ? T : any
  * extract only string and number
  */
 export type SValueof<O> = O extends { [s: string]: infer T } ? T : any
+//#endregion
