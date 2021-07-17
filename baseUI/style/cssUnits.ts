@@ -1,7 +1,7 @@
 import { MayDeepArray } from 'typings/tools'
-import { isNullish } from 'utils/functions/judgers'
-import isNumber from 'utils/functions/judgers/isNumber'
-import isUndefined from 'utils/functions/judgers/isUndefined'
+import isNullish from '../../utils/functions/judgers/isNullish'
+import isNumber from '../../utils/functions/judgers/isNumber'
+import isUndefined from '../../utils/functions/judgers/isUndefined'
 export type CSSLength = string
 export type CSSValue = number | string
 /**

@@ -19,7 +19,9 @@ export default function objectMap<T extends object, V>(
   return objectMapEntry(target, ([key, value]) => [key, mapper(value, key)])
 }
 
-export function objectMapByKey<T extends object, K extends keyof any>(
+export const objectMapValue = objectMap
+
+export function objectMapKey<T extends object, K extends keyof any>(
   target: T,
   mapper: (key: keyof T, value: T[keyof T]) => K
 ): { [P in K]: T[keyof T] } {
@@ -33,4 +35,12 @@ export function objectMapEntry<T extends object>(
 ) {
   //@ts-ignore
   return Object.fromEntries(Object.entries(target).map(mapper))
+}
+
+export function objectFlatMapEntry<T extends object>(
+  target: T,
+  flatMapper: (entry: [key: keyof T, value: T[keyof T]]) => [key: string, value: any]
+) {
+  //@ts-ignore
+  return Object.fromEntries(Object.entries(target).flatMap(flatMapper))
 }
