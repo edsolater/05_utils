@@ -11,9 +11,9 @@ import type { Keyof, SKeyof, SValueof } from 'typings/tools'
  * @param target target object
  * @param mapper (value)
  * @example
- * objectMap({ a: 1, b: 2 }, (v) => v * 2) // { a: 2, b: 4 }
+ * objectMapValue({ a: 1, b: 2 }, (v) => v * 2) // { a: 2, b: 4 }
  */
-export default function objectMap<T, V>(
+export default function objectMapValue<T, V>(
   target: T,
   mapper: (value: SValueof<T>, key: SKeyof<T>) => V
 ): { [P in keyof T]: V } {
@@ -21,7 +21,7 @@ export default function objectMap<T, V>(
   return objectMapEntry(target ?? {}, ([key, value]) => [key, mapper(value, key)])
 }
 
-export const objectMapValue = objectMap
+export const objectMap = objectMapValue
 
 export function objectMapKey<T, K extends string>(
   target: T,

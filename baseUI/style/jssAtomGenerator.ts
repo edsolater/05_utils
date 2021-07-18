@@ -1,86 +1,47 @@
-import { CSSProperties } from 'react'
-import { ExtractProperty, SKeyof, SnakeCase } from 'typings/tools'
-import { objectFlatMapEntry } from '../../utils/functions/object/objectMap'
-import { overwriteFunctionName } from '../../utils/functions/functionFactory'
-import { toSnakeCase } from '../../utils/functions/string/changeCase'
+import { SKeyof } from 'typings/tools'
+import objectMapValue, { objectFlatMapEntry } from '../../utils/functions/object/objectMap'
 import { toPxIfNumber } from './cssUnits'
 
-type AtomCSSRule = {
-  [csskey: string]: any
+type AtomCSSRule = string
+type AtomRules = { [jssKeywordName: string]: AtomCSSRule }
+
+type Options = {
+  raw: Record<string, string>
+  keywords: Record<string, string>
+  pseudoClass: readonly string[]
 }
-
-type AtomRule = [jssKeywordName: string, cssRule: AtomCSSRule]
-
-type Keyword = readonly [jskeyword: string, cssValue: string]
-type Variant = string
-
-type PropertyOption = {
-  [P in keyof CSSProperties]: {
-    keywords: readonly Keyword[]
-  }
-}
-type VariantOption = readonly Variant[]
-
-type GetJSSAtomFromOptions<P extends PropertyOption, V extends VariantOption> =
+type GetJSSAtomFromOptions<O extends Options> = {
   /* main css func */
+  [JSSAtomKey in SKeyof<O['raw']>]: (...cssInputs: (string | number)[]) => O['raw'][JSSAtomKey]
+} &
   {
-    [JSSPropertyName in SKeyof<P>]: (
-      ...cssInputs: (string | number)[]
-    ) => {
-      [K in JSSPropertyName]: string
-    }
-  } &
     /* shortcut css rule */
-    {
-      [JSSPropertyName in SKeyof<P> as `${ExtractProperty<
-        P[JSSPropertyName],
-        'keywords'
-      >[number][0]}`]: {
-        [K in JSSPropertyName]: string
-      }
-    } &
-    {
-      /* variant added css rule */
-      [JSSPropertyName in SKeyof<P> as `${V[number]}:${ExtractProperty<
-        P[JSSPropertyName],
-        'keywords'
-      >[number][0]}`]: {
-        [K in `:hover`]: { [P in JSSPropertyName]: string }
-      }
-    }
+    [JSSAtomKey in SKeyof<O['keywords']>]: O['keywords'][JSSAtomKey]
+  }
+
+type AddPseudoClass<O extends Options, rules extends AtomRules> = rules &
+  { [K in SKeyof<rules> as `${O['pseudoClass'][number]}:${K}`]: string }
 
 /**
  * how to use the function ? Please see {@link JSSAtoms}
  */
-export default function jssAtomGenerator<P extends PropertyOption, V extends VariantOption>({
-  properties,
-  variants
-}: {
-  properties: P
-  variants: V
-}): GetJSSAtomFromOptions<P, V> {
-  return objectFlatMapEntry(properties, ([propertyName, { keywords = [] } = {}]) =>
-    addVariant(variants, [
-      [propertyName, getMainFunction(propertyName)],
-      ...getShortcutFunctions(propertyName, keywords)
-    ])
-  )
+export default function jssAtomGenerator<O extends Options>({
+  raw,
+  keywords,
+  pseudoClass
+}: O): AddPseudoClass<O, GetJSSAtomFromOptions<O>> {
+  // @ts-expect-error
+  return addPseudo(pseudoClass, {
+    ...objectMapValue(raw, (v) => (...params) =>
+      v.replace('$0', params.map(toPxIfNumber).join(' '))
+    ),
+    ...keywords
+  })
 }
 
-function getMainFunction(cssPropertyName: string): (...params: any[]) => AtomCSSRule {
-  return overwriteFunctionName(
-    (...params) => ({ [cssPropertyName]: params.map(toPxIfNumber).join(' ') } as AtomCSSRule),
-    cssPropertyName
+function addPseudo(presudos: Options['pseudoClass'], rules: AtomRules) {
+  const variantedAtomRules = objectFlatMapEntry(rules, ([key, cssRule]) =>
+    presudos.map((presudo) => [`${presudo}:${key}`, `{"&:${presudo}": ${cssRule}}`])
   )
-}
-
-function getShortcutFunctions(cssPropertyName: string, keywords: readonly Keyword[]): AtomRule[] {
-  return keywords.map(([keywordName, cssValue]) => [keywordName, { [cssPropertyName]: cssValue }])
-}
-
-function addVariant(variants: readonly Variant[], originAtomRules: readonly AtomRule[]) {
-  const variantedAtomRules = originAtomRules.flatMap(([key, cssRule]) =>
-    variants.map((variant) => [`${variant}:${key}`, { [`:${variant}`]: cssRule }] as AtomRule)
-  )
-  return [...originAtomRules, ...variantedAtomRules]
+  return { ...rules, ...variantedAtomRules }
 }
