@@ -3,6 +3,14 @@ import jssAtomGenerator from './jssAtomGenerator'
 /**
  * @namespace JSSAtoms
  * mostly it's tailwind style
+ * @example
+ * JSSAtoms['bg-bottom'] //=> {backgroundPosition: "bottom"}
+ * JSSAtoms['hover:bg-bottom'] //=> {"&:hover": {backgroundPosition: "bottom"}}
+ * JSSAtoms('hover')['bg-bottom'] //=> {"&:hover": {backgroundPosition: "bottom"}}
+ *
+ * JSSAtoms['background-position']('top 1px')) //=> {backgroundPostion: "top 1px"}
+ * JSSAtoms['hover:background-position']('top 1px')) //=> {"&:hover": {backgroundPostion: "top 1px"}}
+ * JSSAtoms('hover')['background-position']('top 1px')) //=> {"&:hover": {backgroundPostion: "top 1px"}}
  */
 const JSSAtoms = jssAtomGenerator({
   raw: {
@@ -51,8 +59,21 @@ const JSSAtoms = jssAtomGenerator({
     'placeholder-transparent': '{"&::placeholder": {color: "transparent"}}',
     'placeholder-current': '{"&::placeholder": {color: "currentColor"}}'
   },
-  pseudoClass: ['hover', 'active']
+  pseudoClass: ['hover', 'active', 'empty', 'first-child', 'last-child']
 } as const)
 export default JSSAtoms
 
+export const HoverAtoms = JSSAtoms('hover')
+export const ActiveAtoms = JSSAtoms('active')
+
+console.log('ActiveAtoms: ', ActiveAtoms['bg-bottom'])
+console.log('ActiveAtoms: ', ActiveAtoms['background-position']('top 1px'))
+
+
+console.log('JSSAtoms: ', JSSAtoms['bg-bottom'])
 console.log('JSSAtoms: ', JSSAtoms['hover:bg-bottom'])
+console.log('JSSAtoms: ', JSSAtoms('hover')['bg-bottom'])
+
+console.log('JSSAtoms: ', JSSAtoms['background-position']('top 1px'))
+console.log('JSSAtoms: ', JSSAtoms['hover:background-position']('top 1px'))
+console.log('JSSAtoms: ', JSSAtoms('hover')['background-position']('top 1px'))
