@@ -60,6 +60,7 @@ export default function jssAtomGenerator<O extends Options>({
 function addPseudo(presudos: Options['pseudoClass'], rules: AtomRules) {
   return objectFlatMapEntry(rules, ([key, rule]) =>
     presudos.map((pseudo) => {
+      // TODO: 感觉这里是没有必要的复杂
       if (isString(rule)) return [`${pseudo}:${key}`, `{"&:${pseudo}": ${rule}}`]
       if (isFunction(rule))
         return [`${pseudo}:${key}`, (...params) => `{"&:${pseudo}": ${rule(...params)}}`]
