@@ -67,7 +67,7 @@ export const HoverAtoms = JSSAtoms('hover')
 export const ActiveAtoms = JSSAtoms('active')
 
 console.log('ActiveAtoms: ', ActiveAtoms['bg-bottom'])
-console.log('ActiveAtoms: ', ActiveAtoms['background-position']('top 1px'))
+console.log('ActiveAtoms: ', ActiveAtoms['background-position']('top'))
 
 
 console.log('JSSAtoms: ', JSSAtoms['bg-bottom'])

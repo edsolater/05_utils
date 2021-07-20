@@ -15,25 +15,23 @@ import shrinkToValue from './shrinkToValue'
  * ]) //=> 3
  */
 export default function parallelSwitch<
-  Input,
-  Value extends Primitive, // this type is not correct
-  FallbackValue
+  Base,
+  Value extends Primitive // this type is not correct
 >(
-  value: Input,
+  value: Base,
   conditionPairs: Array<
     [
-      is: NotFunctionValue | ((value: Input) => boolean),
-      returnValue: Value | ((value: Input) => Value)
+      is: NotFunctionValue | ((value: Base) => boolean),
+      returnValue: Value | ((value: Base) => Value)
     ]
   >,
-  fallbackValue?: FallbackValue
-): NotFunctionValue extends Input ? Value : Value | FallbackValue {
+  fallbackValue?: Value
+): Value {
   for (const [is, returnValue] of conditionPairs) {
     if (value === is || shrinkToValue(is, [value]) === true)
       return shrinkToValue(returnValue, [value])
   }
-  // @ts-ignore
-  return fallbackValue
+  return fallbackValue!
 }
 
 //#region ------------------- 测试 -------------------

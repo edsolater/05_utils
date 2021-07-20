@@ -1,7 +1,7 @@
 import { SKeyof } from 'typings/tools'
 import { isFunction, isString } from '../../utils/functions/judgers'
 import objectMapValue, { objectFlatMapEntry } from '../../utils/functions/object/objectMap'
-import { toPxIfNumber } from './cssUnits'
+import { toPxIfNumber } from '../style/cssUnits'
 
 type AtomCSSRule = string // JSONString
 type AtomRules = { [jssKeywordName: string]: AtomCSSRule | ((...params: any[]) => AtomCSSRule) }

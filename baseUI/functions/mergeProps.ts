@@ -6,7 +6,7 @@ import isFunction from 'utils/functions/judgers/isFunction'
 import isObject from 'utils/functions/judgers/isObject'
 import notNullish from 'utils/functions/judgers/notNullish'
 import parallelSwitch from 'utils/functions/magic/parallelSwitch'
-import { _mergeObjects } from 'utils/functions/_mergeObjects'
+import _mergeObjects from 'utils/functions/_mergeObjects'
 import mergeFunction from './mergeFunction'
 import mergeRefs from './mergeRefs'
 
