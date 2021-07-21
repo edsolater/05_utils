@@ -1,13 +1,14 @@
+import { MayArray } from 'typings/tools'
 import isArray from '../judgers/isArray'
 import isObjectLike from '../judgers/isObjectOrArray'
 import isPrimitive from '../judgers/isPrimitive'
 
-type SortOptions<T extends object> = {
+type SortOptions<T extends object> = MayArray<{
   key: keyof T
   direction: 'ascending' | 'descending'
-}[]
+}>
 
-type FilterOptions<T extends object> = ((value: T) => boolean | undefined)[]
+type FilterOptions<T extends object> = MayArray<(value: T) => boolean | undefined>
 
 /**
  * the idea is from notion's database
@@ -29,11 +30,11 @@ export function sortTableList<T extends object>(target: T[], settings: SortOptio
     }
     return 0
   }
-  return target.slice(0).sort((a, b) => getSorter([a, b], settings ?? []))
+  return target.slice(0).sort((a, b) => getSorter([a, b], [settings].flat()))
 }
 
 export function filterTableList<T extends object>(target: T[], settings: FilterOptions<T>) {
-  return settings.reduce((acc, rule) => acc.filter((item) => rule(item)), target.slice(0))
+  return [settings].flat().reduce((acc, rule) => acc.filter((item) => rule(item)), target.slice(0))
 }
 
 /**
