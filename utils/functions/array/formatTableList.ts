@@ -42,11 +42,13 @@ export function filterTableList<T extends object>(target: T[], settings: FilterO
 export function searchFromTableList<T extends object>(
   target: T[],
   text: string,
-  { canFuzzyMatching }: { canFuzzyMatching?: boolean } = {}
+  { canFuzzyMatching = true }: { canFuzzyMatching?: boolean } = {}
 ) {
   const searchFilter = (item: T, targetText: string) => {
     const allValueText = Object.values(item).filter(isPrimitive).join(' ')
-    return allValueText.includes(targetText)
+    return canFuzzyMatching
+      ? new RegExp(`${[...targetText].join('.*')}`).test(allValueText)
+      : allValueText.includes(targetText)
   }
   return filterTableList(target, [(item) => searchFilter(item, text)])
 }
@@ -58,21 +60,22 @@ export function canTreatAsTableList(target: any): target is object[] {
   return isArray(target) && target.every(isObjectLike)
 }
 
-// const foo = [
-//   { key: 2, name: 'alpha' },
-//   { key: 5, name: 'c' },
-//   { key: 3, name: 'd' },
-//   { key: 3, name: 'a' },
-//   { key: 3, name: 'hello' },
-//   { key: 3, name: 'apple' },
+const foo = [
+  { key: 2, name: 'alpha' },
+  { key: 5, name: 'c' },
+  { key: 3, name: 'd' },
+  { key: 3, name: 'a' },
+  { key: 3, name: 'hello' },
+  { key: 3, name: 'apple' },
 
-//   { key: 3, name: 'e' },
-//   { key: 3, name: 'i' }
-// ]
+  { key: 3, name: 'e' },
+  { key: 3, name: 'i' }
+]
 
-// console.log(
-//   sortTableList(foo, [
-//     { key: 'key', direction: 'ascending' },
-//     { key: 'name', direction: 'ascending' }
-//   ])
-// )
+console.log(
+  sortTableList(foo, [
+    { key: 'key', direction: 'ascending' },
+    { key: 'name', direction: 'ascending' }
+  ])
+)
+console.log(searchFromTableList(foo, 'ah'))
