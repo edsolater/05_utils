@@ -32,16 +32,18 @@ export function insertCSSRules(
   )
 }
 
-/**
- *
- * @param p kebab-case string
- * @example
- * splitJSSString('padding-box-80px-top-left') // => ['padding-box', '80px', 'top left']
- */
-export function splitJSSString(p: string) {
-  return p.split('-') // TODO
-}
+// /**
+//  *
+//  * @param p kebab-case string
+//  * @example
+//  * splitJSSString('padding-box-80px-top-left') // => ['padding-box', '80px', 'top left']
+//  */
+// export function splitJSSString(p: string) {
+//   return p.split('-') // TODO
+// }
 
-export function isCSSLength(p: string) {
-  return /^-?\d\w+|0$/.test(p)
-}
+// export function isCSSLength(p: string) {
+//   return /^-?\d\w+|0$/.test(p)
+// }
+
+

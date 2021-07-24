@@ -1,9 +1,12 @@
 import { CSSProperties } from 'react'
 import { toKebabCase } from 'utils/functions/string/changeCase'
-import { toCssValue } from '../cssUnits'
-import { isBackground, parseBackgroundRule } from './background'
-import { insertCSSRules } from './_parser'
+import { toCssValue } from '../../cssUnits'
+import { isBackground, parseBackgroundRule } from '../rules/background'
+import { insertCSSRules } from './cssRegistor'
 
+/**
+ * @namespace JSS
+ */
 export const JSS = new Proxy(
   { _description: 'jss atom generator. Shortcuts(Tailwindcss style, with JIT)' },
   {
@@ -13,6 +16,9 @@ export const JSS = new Proxy(
   }
 )
 
+/**
+ * @namespace JSSC
+ */
 export const JSSC = new Proxy(
   { _description: 'jss atom generator. Full css(CSS style, to pass any word)' },
   {
