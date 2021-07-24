@@ -21,10 +21,10 @@ import ClickableExample from './ClickableExample'
 
 const AllExamples = () => (
   <GlobalSettings>
-    <ClickableExample />
+    {/* <ClickableExample />
     <HoverableExample />
     <AnimateExample />
-    {/* <NotificationExample />
+    <NotificationExample />
     <AppLayoutExample />
     <KeyboardShortcutExample />
     <DrawerExample />
@@ -32,10 +32,10 @@ const AllExamples = () => (
     <AppProvidersExample />
     <GlobalStoreExample />
     <DivExample />
-    <TransformExample />
+    <TransformExample /> */}
     <ButtonExample />
     <CardExample />
-    <InputExample />
+    {/* <InputExample />
     <DropdownExample />
     <TagExample />
     <IconExample /> */}

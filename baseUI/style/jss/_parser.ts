@@ -1,3 +1,5 @@
+import checkInBrowserMainThread from 'utils/functions/dom/checkInBrowserMainThread'
+
 let jssStyleSheet: CSSStyleSheet | undefined = undefined
 
 /**
@@ -13,10 +15,7 @@ export function insertCSSRules(
   selector: string,
   cssPropertyPairs: { [cssProperty: string]: string }
 ) {
-  if (!jssStyleSheet) {
-    // to check if in brower.
-    if (!Reflect.has(globalThis, 'document')) return
-
+  if (!jssStyleSheet && checkInBrowserMainThread()) {
     const styleEl = document.createElement('style')
 
     // Append <style> element to <head>, so it can work
