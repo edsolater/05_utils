@@ -4,6 +4,6 @@ import _getType from './_getType'
  * @param val 检测值
  * @returns 是/否
  */
-export default function isObject(val: unknown): val is Extract<object, Array<any>> {
+export default function isObject(val: unknown): val is object {
   return _getType(val) === 'object'
 }
