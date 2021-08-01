@@ -12,7 +12,15 @@ import { isFunction } from 'utils/functions/judgers'
  */
 export default function useWrapperDebug<T extends (...params) => StatePairArray>(
   hook: T,
-  options: { name?: string } = { name: 'untitle debug' }
+  options: {
+    name?: string
+    inputHooksFormat?: '[state, setState, control]' | '[state, {set}]' // TODO
+    outputFormat?: '[state, setState, control]' | '[state, {set}]' // TODO
+  } = {
+    name: 'untitle debug',
+    inputHooksFormat: '[state, setState, control]',
+    outputFormat: '[state, setState, control]'
+  }
 ): T {
   //@ts-expect-error force type
   return (...args: any[]) => {
