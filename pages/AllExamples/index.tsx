@@ -18,6 +18,7 @@ import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 import AnimateExample from './AnimateExample'
 import ClickableExample from './ClickableExample'
+import add from 'fnkit'
 
 const AllExamples = () => (
   <GlobalSettings>
@@ -42,3 +43,4 @@ const AllExamples = () => (
   </GlobalSettings>
 )
 export default AllExamples
+
