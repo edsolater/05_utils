@@ -1,5 +1,5 @@
 import { MayDeepArray } from 'typings/tools'
-import flat from '../array/flat'
+import flatMayArray from '../array/flatMayArray'
 import isArray from '../judgers/isArray'
 import _mergeObjects from '../_mergeObjects'
 import parallelSwitch from '../magic/parallelSwitch'
@@ -28,5 +28,5 @@ export default function mergeDeep<T>(...objDeepArray: MayDeepArray<T>[]): T {
       ],
       v2 ?? v1
     )
-  return _mergeObjects(flat(objDeepArray).filter(Boolean), mergeRule)
+  return _mergeObjects(flatMayArray(objDeepArray).filter(Boolean), mergeRule)
 }

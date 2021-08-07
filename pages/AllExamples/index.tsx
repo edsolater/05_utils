@@ -18,8 +18,9 @@ import TagExample from './TagExample'
 import TransformExample from './TransformExample'
 import AnimateExample from './AnimateExample'
 import ClickableExample from './ClickableExample'
-import add from 'fnkit'
+import {changeCase} from '@edsolater/fnkit'
 
+console.log(changeCase('hello_world', { to: 'PascalCase' }))
 const AllExamples = () => (
   <GlobalSettings>
     <ClickableExample />
@@ -43,4 +44,3 @@ const AllExamples = () => (
   </GlobalSettings>
 )
 export default AllExamples
-

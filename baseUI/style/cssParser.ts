@@ -1,6 +1,6 @@
 import { CSSObject } from '@emotion/react'
 import { css } from '@emotion/css'
-import flat from 'utils/functions/array/flat'
+import flatMayArray from 'utils/functions/array/flatMayArray'
 import isFunction from 'utils/functions/judgers/isFunction'
 import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
 import isObject from 'utils/functions/judgers/isObject'
@@ -22,7 +22,7 @@ export function mixCSSObjects(
 ): ICSS {
   //@ts-expect-error
   return (
-    flat(icsses)
+    flatMayArray(icsses)
       //@ts-ignore
       .map((icss) => (isFunction(icss) ? icss() : icss))
       .filter(isObjectLike)
@@ -76,13 +76,13 @@ function middlewareCSSTransform(cssObj: ICSSObject): ICSSObject {
       (acc, [property, value]: ['translate' | 'scale' | 'rotate' | 'skew', any[]]) =>
         acc +
         (property === 'translate'
-          ? `translate(${flat(value).join(', ') || 0})`
+          ? `translate(${flatMayArray(value).join(', ') || 0})`
           : property === 'scale'
-          ? `scale(${flat(value).join(', ') || 1})`
+          ? `scale(${flatMayArray(value).join(', ') || 1})`
           : property === 'rotate'
-          ? `rotate(${flat(value).join(', ') || 0})`
+          ? `rotate(${flatMayArray(value).join(', ') || 0})`
           : property === 'skew'
-          ? `skew(${flat(value).join(', ') || 0})`
+          ? `skew(${flatMayArray(value).join(', ') || 0})`
           : ''),
       ''
     )

@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react'
-import flat from 'utils/functions/array/flat'
+import flatMayArray from 'utils/functions/array/flatMayArray'
 
 type ReactComponent = (...params) => ReactElement | null
 /**
@@ -10,7 +10,7 @@ export default function isChildrenContain(
   children: ReactNode,
   targetComponent: string | ReactComponent
 ): boolean {
-  return flat([children]).some(
+  return flatMayArray([children]).some(
     (item) => React.isValidElement(item) && item.type === targetComponent
   )
 }

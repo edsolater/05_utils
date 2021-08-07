@@ -1,12 +1,12 @@
 import { MayDeepArray } from 'typings/tools'
 import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
 import isExist from 'utils/functions/judgers/isExist'
-import flat from 'utils/functions/array/flat'
+import flatMayArray from 'utils/functions/array/flatMayArray'
 
 export type ClassName = any | { [classname: string]: boolean }
 // <Div> 专用
 export default function classname(classNameArray: MayDeepArray<ClassName>) {
-  return flat([classNameArray])
+  return flatMayArray([classNameArray])
     .filter(isExist)
     .flatMap((classItem) =>
       isObjectLike(classItem)

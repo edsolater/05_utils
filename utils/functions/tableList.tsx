@@ -1,7 +1,7 @@
-import { MayArray } from 'typings/tools'
-import isArray from '../judgers/isArray'
-import isObjectLike from '../judgers/isObjectOrArray'
-import isPrimitive from '../judgers/isPrimitive'
+import { MayArray } from '../../typings/tools'
+import isArray from './judgers/isArray'
+import isObjectLike from './judgers/isObjectOrArray'
+import isPrimitive from './judgers/isPrimitive'
 
 type SortOptions<T extends object> = MayArray<{
   key: keyof T
@@ -57,26 +57,28 @@ export function searchFromTableList<T extends object>(
 /**
  * check if target is an object list that can be treated as a database
  */
-export function canTreatAsTableList(target: any): target is object[] {
+export function isTableList(target: any): target is object[] {
   return isArray(target) && target.every(isObjectLike)
 }
 
-const foo = [
-  { key: 2, name: 'alpha' },
-  { key: 5, name: 'c' },
-  { key: 3, name: 'd' },
-  { key: 3, name: 'a' },
-  { key: 3, name: 'hello' },
-  { key: 3, name: 'apple' },
+//#region ------------------- test -------------------
+// const foo = [
+//   { key: 2, name: 'alpha' },
+//   { key: 5, name: 'c' },
+//   { key: 3, name: 'd' },
+//   { key: 3, name: 'a' },
+//   { key: 3, name: 'hello' },
+//   { key: 3, name: 'apple' },
 
-  { key: 3, name: 'e' },
-  { key: 3, name: 'i' }
-]
+//   { key: 3, name: 'e' },
+//   { key: 3, name: 'i' }
+// ]
 
-console.log(
-  sortTableList(foo, [
-    { key: 'key', direction: 'ascending' },
-    { key: 'name', direction: 'ascending' }
-  ])
-)
-console.log(searchFromTableList(foo, 'ah'))
+// console.log(
+//   sortTableList(foo, [
+//     { key: 'key', direction: 'ascending' },
+//     { key: 'name', direction: 'ascending' }
+//   ])
+// )
+// console.log(searchFromTableList(foo, 'ah'))
+//#endregion

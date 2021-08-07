@@ -5,11 +5,11 @@
  * @param step (optional, default is 1) will affect output
  * @returns an array of number
  * @example
- * range(1, 4) //=> [1, 2, 3, 4]
- * range(-1, 4, 3) //=> [-1, 2]
+ * createRange(1, 4) //=> [1, 2, 3, 4]
+ * createRange(-1, 4, 3) //=> [-1, 2]
  */
 
-export default function range(start: number, stop: number, step = 1) {
+export default function createRange(start: number, stop: number, step = 1): number[] {
   return Array.from(
     {
       length: Math.floor((stop - start) / step) + 1

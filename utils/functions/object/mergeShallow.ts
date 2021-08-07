@@ -1,6 +1,6 @@
 import isArray from '../judgers/isArray'
 import isObjectLike from '../judgers/isObjectOrArray'
-import concatArrays from '../array/concat'
+import concatArrays from '../array/concatArray'
 
 /**
  * 合并多个对象/数组（浅合并）【对象会浅复制成新对象，数组会链接成更长的新数组】

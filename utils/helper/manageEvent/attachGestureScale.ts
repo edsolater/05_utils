@@ -3,7 +3,6 @@ import { Delta2dScale } from '../../../typings/constants'
 import calcHypotenuse from '../../functions/math/calcHypotenuse'
 import extract from '../../functions/object/extractProperty'
 import calcDistance from '../../functions/math/getDistance'
-import toArray from '../../functions/array/toArray'
 
 /**
  * 获取专属于某个元素的触摸
@@ -12,7 +11,7 @@ import toArray from '../../functions/array/toArray'
  */
 function getTouchesInEvent(ev: TouchEvent, el: HTMLElement | null) {
   //FIXME: 使用 parentElement
-  return toArray(ev.touches).filter(touch =>
+  return Array.from(ev.touches).filter(touch =>
     areSame(el, (touch.target as HTMLElement).parentElement)
   )
 }

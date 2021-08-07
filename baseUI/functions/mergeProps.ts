@@ -1,5 +1,5 @@
 import { AnyFn, AnyObj } from 'typings/constants'
-import flat from 'utils/functions/array/flat'
+import flatMayArray from 'utils/functions/array/flatMayArray'
 import { isExist, isOneOf } from 'utils/functions/judgers'
 import isArray from 'utils/functions/judgers/isArray'
 import isFunction from 'utils/functions/judgers/isFunction'
@@ -32,7 +32,7 @@ export default function mergeProps<
 export default function mergeProps<P extends AnyProp | undefined>(
   ...propsObjs: P[]
 ): Exclude<P, undefined> {
-  const trimedProps = flat(propsObjs).filter(notNullish)
+  const trimedProps = flatMayArray(propsObjs).filter(notNullish)
   // @ts-ignore
   if (trimedProps.length === 0) return {}
   if (trimedProps.length === 1) return trimedProps[0]

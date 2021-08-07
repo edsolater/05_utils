@@ -3,9 +3,9 @@
  * @param items 原数组
  * @param groupSize 分割的块的容量
  * @example
- * const splited = splitToGroups(['aa', 'bb', 'cc'], 2) // [['aa','bb'], ['cc']]
+ * const splited = groupByAmount(['aa', 'bb', 'cc'], 2) // [['aa','bb'], ['cc']]
  */
-export default function splitToGroups<T>(items: Readonly<T[]>, groupSize: number) {
+export default function groupByAmount<T>(items: readonly T[], groupSize: number) {
   const result: T[][] = []
   let group: T[] = []
   for (let i = 0; i < items.length; i++) {
