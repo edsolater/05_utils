@@ -33,7 +33,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@edsolater/fnkit": "^1.0.2",
+    "@edsolater/fnkit": "^1.0.3",
     "@emotion/css": "^11.1.3",
     "@emotion/react": "^11.4.0",
     "@headlessui/react": "^1.2.0",
