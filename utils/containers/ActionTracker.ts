@@ -1,4 +1,4 @@
-import isObjectLikeOrFunction from '../functions/judgers/isObjectLikeOrFunction'
+import isObjectLikeOrFunction from '@edsolater/fnkit/dist/judgers/isObjectLikeOrFunction'
 
 type Value = any
 

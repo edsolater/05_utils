@@ -1,5 +1,5 @@
 import { StatePairArray } from 'baseUI/types/react'
-import { isFunction } from 'utils/functions/judgers'
+import { isFunction } from '@edsolater/fnkit/dist/judgers'
 
 // TODO: too rude
 export default function isHook(value: any): value is () => StatePairArray {

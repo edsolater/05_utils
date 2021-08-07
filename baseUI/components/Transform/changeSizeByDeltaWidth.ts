@@ -1,4 +1,4 @@
-import clamp from 'utils/functions/math/clamp'
+import clamp from '@edsolater/fnkit/dist/math/clamp'
 import attachSizeIfNeeded from '../../../utils/helper/manageStyle/attachSizeIfNeeded'
 
 //TODO: 这里操作的是真实的width/height，而不是--s这种scale()的缩放比例，是不是会与--x、--y不一致？

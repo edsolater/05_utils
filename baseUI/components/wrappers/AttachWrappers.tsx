@@ -1,9 +1,9 @@
 import { mergeProps } from 'baseUI/functions'
 import React, { isValidElement } from 'react'
 import { ReactNode } from 'react'
-import { isEmptyObject } from 'utils/functions/judgers'
-import notEmptyObject from 'utils/functions/judgers/notEmptyObject'
-import { splitObject } from 'utils/functions/object'
+import { isEmptyObject } from '@edsolater/fnkit/dist/judgers'
+import notEmptyObject from '@edsolater/fnkit/dist/judgers/notEmptyObject'
+import { splitObject } from '@edsolater/fnkit/dist/object'
 import AttachButtonLike, { AttachButtonLikeProps } from './AttachButtonLike'
 import AttachClickable, { AttachClickableProps } from './AttachClickable'
 import AttachCustomizedClassName, {

@@ -1,4 +1,4 @@
-import addDefault from 'utils/functions/magic/addDefault'
+import addDefault from '@edsolater/fnkit/dist/magic/addDefault'
 
 interface ObserverOptions {
   feature?: {

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import shrinkToValue from 'utils/functions/magic/shrinkToValue'
+import shrinkToValue from '@edsolater/fnkit/dist/magic/shrinkToValue'
 
 /**
  * it too widely use that there should be a hook

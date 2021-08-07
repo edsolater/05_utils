@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import { ReactNode, useEffect, useRef } from 'react'
 import createElement from '../functions/createElement'
-import { addDefault } from 'utils/functions/magic'
+import { addDefault } from '@edsolater/fnkit/dist/magic'
 
 // TODO: to be extract to a function
 const ProtalRoot = createElement({

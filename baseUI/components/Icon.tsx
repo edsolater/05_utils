@@ -6,7 +6,7 @@ import { injectAppSetting } from './AppSettings'
 import { BaseUIDiv } from '.'
 import uiCSS from 'baseUI/settings/uiCSS'
 import { toICSS } from 'baseUI/style/cssParser'
-import { notDefined } from 'utils/functions/judgers'
+import { notDefined } from '@edsolater/fnkit/dist/judgers'
 
 const iconFileBasePath = '/icons' //CONFIG 配置项
 const iconFileType = 'svg' //CONFIG 配置项

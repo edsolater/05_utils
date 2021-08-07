@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useMemo } from 'react'
-import { isFunction } from 'utils/functions/judgers'
+import { isFunction } from '@edsolater/fnkit/dist/judgers'
 
 export interface UseClickOutsideOptions {
   disable?: boolean

@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react'
-import flatMayArray from 'utils/functions/array/flatMayArray'
+import flatMayArray from '@edsolater/fnkit/dist/array/flatMayArray'
 
 type ReactComponent = (...params) => ReactElement | null
 /**

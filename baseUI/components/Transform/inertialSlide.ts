@@ -1,7 +1,7 @@
 import { SpeedVector } from 'typings/constants'
-import calcHypotenuse from 'utils/functions/math/calcHypotenuse'
+import calcHypotenuse from '@edsolater/fnkit/dist/math/calcHypotenuse'
 import { BoundingRect } from '.'
-import staySameSign from '../../../utils/functions/math/staySameSign'
+import staySameSign from '@edsolater/fnkit/dist/math/staySameSign'
 import changeTransformTranslate from './changeTransform'
 
 /**

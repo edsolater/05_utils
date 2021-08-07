@@ -1,4 +1,4 @@
-import { isFunction } from 'utils/functions/judgers'
+import { isFunction } from '@edsolater/fnkit/dist/judgers'
 import { CSSValue } from './cssUnits'
 
 /**

@@ -1,7 +1,7 @@
 import { createRefHook, mergeProps } from 'baseUI/functions'
 import { useToggle } from 'baseUI/hooks'
 import React, { ReactNode, RefObject, useEffect, useRef } from 'react'
-import notExist from 'utils/functions/judgers/notExist'
+import notExist from '@edsolater/fnkit/dist/judgers/notExist'
 import Ex, { ExProps } from './Ex'
 
 //#region ------------------- hook: useHover() -------------------

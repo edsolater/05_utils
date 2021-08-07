@@ -1,6 +1,6 @@
 import { StatePairArray } from 'baseUI/types/react'
 import { useRef } from 'react'
-import { isFunction } from 'utils/functions/judgers'
+import { isFunction } from '@edsolater/fnkit/dist/judgers'
 
 /**
  * @param hook need observe hook

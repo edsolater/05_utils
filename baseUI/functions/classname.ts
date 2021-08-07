@@ -1,7 +1,7 @@
 import { MayDeepArray } from 'typings/tools'
-import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
-import isExist from 'utils/functions/judgers/isExist'
-import flatMayArray from 'utils/functions/array/flatMayArray'
+import isObjectLike from '@edsolater/fnkit/dist/judgers/isObjectOrArray'
+import isExist from '@edsolater/fnkit/dist/judgers/isExist'
+import flatMayArray from '@edsolater/fnkit/dist/array/flatMayArray'
 
 export type ClassName = any | { [classname: string]: boolean }
 // <Div> 专用

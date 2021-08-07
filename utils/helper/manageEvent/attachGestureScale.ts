@@ -1,8 +1,8 @@
-import areSame from '../../functions/judgers/areSame'
+import areSame from '@edsolater/fnkit/dist/judgers/areSame'
 import { Delta2dScale } from '../../../typings/constants'
-import calcHypotenuse from '../../functions/math/calcHypotenuse'
-import extract from '../../functions/object/extractProperty'
-import calcDistance from '../../functions/math/getDistance'
+import calcHypotenuse from '@edsolater/fnkit/dist/math/calcHypotenuse'
+import extract from '@edsolater/fnkit/dist/object/extractProperty'
+import calcDistance from '@edsolater/fnkit/dist/math/getDistance'
 
 /**
  * 获取专属于某个元素的触摸

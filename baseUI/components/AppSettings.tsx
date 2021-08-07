@@ -1,6 +1,6 @@
 import { addDefaultProps, mergeProps } from 'baseUI/functions'
 import React, { ComponentProps, createContext, FC, ReactNode, useContext } from 'react'
-import { overwriteFunctionName } from 'utils/functions/functionFactory'
+import { overwriteFunctionName } from '@edsolater/fnkit/dist/functionFactory'
 import { ButtonProps } from './Button'
 import { CaptionProps } from './Caption'
 import { CardProps } from './Card'

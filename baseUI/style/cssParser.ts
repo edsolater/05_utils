@@ -1,14 +1,14 @@
 import { CSSObject } from '@emotion/react'
 import { css } from '@emotion/css'
-import flatMayArray from 'utils/functions/array/flatMayArray'
-import isFunction from 'utils/functions/judgers/isFunction'
-import isObjectLike from 'utils/functions/judgers/isObjectOrArray'
-import isObject from 'utils/functions/judgers/isObject'
-import divide from 'utils/functions/object/divide'
-import mapValues from 'utils/functions/object/mapValues'
+import flatMayArray from '@edsolater/fnkit/dist/array/flatMayArray'
+import isFunction from '@edsolater/fnkit/dist/judgers/isFunction'
+import isObjectLike from '@edsolater/fnkit/dist/judgers/isObjectOrArray'
+import isObject from '@edsolater/fnkit/dist/judgers/isObject'
+import divide from '@edsolater/fnkit/dist/object/divide'
+import mapValues from '@edsolater/fnkit/dist/object/mapValues'
 import { MayDeepArray } from 'typings/tools'
-import { cache } from 'utils/functions/functionFactory'
-import mergeDeep from 'utils/functions/object/mergeDeep'
+import { cache } from '@edsolater/fnkit/dist/functionFactory'
+import mergeDeep from '@edsolater/fnkit/dist/object/mergeDeep'
 
 export interface ICSSObject extends CSSObject {}
 export type ICSS = MayDeepArray<ICSSObject | boolean | string | number | null | undefined>

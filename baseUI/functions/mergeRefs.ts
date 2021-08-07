@@ -1,5 +1,5 @@
 import { MutableRefObject, RefCallback, RefObject } from 'react'
-import { isArray, isFunction, isNullish } from 'utils/functions/judgers'
+import { isArray, isFunction, isNullish } from '@edsolater/fnkit/dist/judgers'
 import createCallbackRef from './createCallbackRef'
 
 function loadRef(ref: RefCallback<any> | MutableRefObject<any> | null, el: any) {
